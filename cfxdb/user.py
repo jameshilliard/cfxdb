@@ -6,18 +6,18 @@ from datetime import datetime
 
 from typing import Optional, List
 
-from crossbarfx.master.database.common import ConfigurationElement
+from cfxdb.common import ConfigurationElement
 
-from crossbarfx.master.database.gen import oid_t
-from crossbarfx.master.database.gen.user import User as UserGenFbs
-# from crossbarfx.master.database.gen.user import UserMrealmRoles as UserMrealmRolesGenFbs
-from crossbarfx.master.database.gen.user import ActivationToken as ActivationTokenGenFbs
-from crossbarfx.master.database.gen.user import Organization as OrganizationGenFbs
+from cfxdb.gen import oid_t
+from cfxdb.gen.user import User as UserGenFbs
+# from cfxdb.gen.user import UserMrealmRoles as UserMrealmRolesGenFbs
+from cfxdb.gen.user import ActivationToken as ActivationTokenGenFbs
+from cfxdb.gen.user import Organization as OrganizationGenFbs
 
-from crossbarfx.master.database.gen.user.ActivationStatus import ActivationStatus
-from crossbarfx.master.database.gen.user.ActivationType import ActivationType
-from crossbarfx.master.database.gen.user.UserRole import UserRole
-from crossbarfx.master.database.gen.user.OrganizationType import OrganizationType
+from cfxdb.gen.user.ActivationStatus import ActivationStatus
+from cfxdb.gen.user.ActivationType import ActivationType
+from cfxdb.gen.user.UserRole import UserRole
+from cfxdb.gen.user.OrganizationType import OrganizationType
 
 import txaio
 txaio.use_twisted()

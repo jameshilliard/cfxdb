@@ -21,7 +21,7 @@ from autobahn import util
 import txaio
 txaio.use_twisted()
 
-from crossbarfx.master.database.user import UserFbs, User, ActivationTokenFbs, ActivationToken
+from cfxdb.user import UserFbs, User, ActivationTokenFbs, ActivationToken
 
 
 @pytest.fixture(scope='function')

@@ -19,7 +19,7 @@ log = txaio.make_logger()
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidCbor
 
-from crossbarfx.master.database.mrealm import WebCluster, WebService, WebClusterNodeMembership, parse_webservice
+from cfxdb.mrealm import WebCluster, WebService, WebClusterNodeMembership, parse_webservice
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 #

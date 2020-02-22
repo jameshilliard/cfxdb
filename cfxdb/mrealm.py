@@ -12,7 +12,7 @@ import pprint
 from datetime import datetime
 from typing import Dict
 
-from crossbarfx.master.database.common import ConfigurationElement
+from cfxdb.common import ConfigurationElement
 
 
 class ManagementRealm(ConfigurationElement):

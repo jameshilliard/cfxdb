@@ -18,8 +18,8 @@ from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapUuidUuidCbor, MapUuidStringUuid,\
     MapTimestampUuidFlatBuffers
 
-from crossbarfx.master.database.mrealm import ManagementRealm, Node
-from crossbarfx.master.database.user import User, ActivationToken, UserMrealmRole, Organization
+from cfxdb.mrealm import ManagementRealm, Node
+from cfxdb.user import User, ActivationToken, UserMrealmRole, Organization
 from cfxdb.usage import MasterNodeUsage
 
 
