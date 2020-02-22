@@ -20,6 +20,13 @@ publish: clean
 	twine upload dist/*
 
 
+test:
+	pytest -v -s ./cfxdb/tests/
+
+test_single:
+	pytest -v -s ./cfxdb/tests//test_user.py::test_user_fbs_roundtrip
+
+
 # auto-format code - WARNING: this my change files, in-place!
 autoformat:
 	yapf -ri --style=yapf.ini \
@@ -27,8 +34,6 @@ autoformat:
 		cfxdb
 
 # flatbuffer schema processing / binding code generation
-#
-#
 flatc_version:
 	$(FLATC) --version
 
@@ -53,14 +58,3 @@ build_fbs_python:
 	# "from .oid_t import oid_t" => "from ..oid_t import oid_t"
 	# "from .ObjRef import ObjRef" => "from ..ObjRef import ObjRef"
 	find $(FBS_OUTPUT) -name "*.py" -exec sed -i'' 's/from .oid_t/from ..oid_t/g' {} \;
-
-
-test_fbs:
-	clear && make clean_fbs build_fbs && find crossbarfx/master/database/ && cloc crossbarfx/master/database/
-
-test_database:
-	clear && pytest -v -s crossbarfx/master/database/tests/test_user.py
-
-test_database_single:
-	pytest -v -s crossbarfx/master/database/tests/test_user.py::test_user_fbs_roundtrip
-
