@@ -15,6 +15,8 @@ import platform
 import flatbuffers
 
 import txaio
+txaio.use_twisted()  # noqa
+
 from txaio import time_ns
 from autobahn import util
 import zlmdb
@@ -22,7 +24,6 @@ import zlmdb
 from cfxdb.eventstore import Session, Publication, Event
 
 zlmdb.TABLES_BY_UUID = {}
-txaio.use_twisted()
 
 
 @pytest.fixture(scope='function')
