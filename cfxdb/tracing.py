@@ -10,7 +10,10 @@ import uuid
 import pprint
 from datetime import datetime
 
-from zlmdb import table, MapUuidUint64Cbor
+from zlmdb import table, MapUuidTimestampCbor
+
+from .common import ConfigurationElement
+from .mrealm import ManagementRealm
 
 
 class TracedMessage(object):
@@ -212,24 +215,23 @@ class TracedMessage(object):
         if cf_container_worker:
             cf_container_worker = uuid.UUID(cf_container_worker)
 
-        obj = ManagementRealm(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            name=name,
-            owner=owner,
-            created=created,
-            cf_node=cf_node,
-            cf_router_worker=cf_router_worker,
-            cf_container_worker=cf_container_worker,
-            _unknown=_unknown)
+        obj = ManagementRealm(oid=obj.oid,
+                              label=obj.label,
+                              description=obj.description,
+                              tags=obj.tags,
+                              name=name,
+                              owner=owner,
+                              created=created,
+                              cf_node=cf_node,
+                              cf_router_worker=cf_router_worker,
+                              cf_container_worker=cf_container_worker,
+                              _unknown=_unknown)
 
         return obj
 
 
 @table('7ff23263-92da-4ca3-b249-0293788bcd4c', marshal=TracedMessage.marshal, parse=TracedMessage.parse)
-class TracedMessages(MapUuidUint64Cbor):
+class TracedMessages(MapUuidTimestampCbor):
     """
     Table: trace_oid, timestamp -> traced_message
     """

@@ -21,7 +21,6 @@ class _Publication(PublicationGen.Publication):
 
     FIXME: comes up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsPublication(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -34,7 +33,7 @@ class _Publication(PublicationGen.Publication):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def KwargsAsBytes(self):
@@ -42,7 +41,7 @@ class _Publication(PublicationGen.Publication):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def PayloadAsBytes(self):
@@ -50,7 +49,7 @@ class _Publication(PublicationGen.Publication):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def EncKeyAsBytes(self):
@@ -58,7 +57,7 @@ class _Publication(PublicationGen.Publication):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -66,7 +65,6 @@ class Session(object):
     """
     Persisted session database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -707,7 +705,9 @@ class Publication(object):
 
     @enc_serializer.setter
     def enc_serializer(self, value):
-        assert value is None or value in [self.ENC_SER_JSON, self.ENC_SER_MSGPACK, self.ENC_SER_CBOR, self.ENC_SER_UBJSON]
+        assert value is None or value in [
+            self.ENC_SER_JSON, self.ENC_SER_MSGPACK, self.ENC_SER_CBOR, self.ENC_SER_UBJSON
+        ]
         self._enc_serializer = value
 
     @staticmethod
@@ -854,7 +854,6 @@ class Event(object):
     """
     Persisted event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 

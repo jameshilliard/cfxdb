@@ -19,8 +19,8 @@ from .usage import MasterNodeUsage
 from .xbr import Member, Members, Market, Markets, Actor, Actors, Transaction, Transactions
 from .xbr import Block, Blocks, TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
 
-
 __all__ = (
+    '__version__',
     'address',
     'uint256',
     'pack_uint256',
@@ -28,13 +28,11 @@ __all__ = (
     'uint128',
     'pack_uint128',
     'unpack_uint128',
-
     'Event',
     'Publication',
     'Session',
     'MNodeLog',
     'MasterNodeUsage',
-
     'Schema',
     'Member',
     'Members',
@@ -42,7 +40,8 @@ __all__ = (
     'Markets',
     'Actor',
     'Actors',
-
+    'Transaction',
+    'Transactions',
     'Block',
     'Blocks',
     'TokenApproval',

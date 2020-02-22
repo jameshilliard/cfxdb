@@ -5,15 +5,6 @@
 #
 ###############################################################################
 
-from __future__ import absolute_import
-
-import txaio
-txaio.use_twisted()
-
-__all__ = ('GlobalSchema',)
-
-log = txaio.make_logger()
-
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapUuidUuidCbor, MapUuidStringUuid,\
     MapTimestampUuidFlatBuffers
@@ -21,6 +12,8 @@ from zlmdb import MapStringUuid, MapUuidCbor, MapUuidUuidCbor, MapUuidStringUuid
 from cfxdb.mrealm import ManagementRealm, Node
 from cfxdb.user import User, ActivationToken, UserMrealmRole, Organization
 from cfxdb.usage import MasterNodeUsage
+
+__all__ = ('GlobalSchema', )
 
 
 @table('1219e71c-a62c-415a-bd15-ddf45e3a658b', marshal=ManagementRealm.marshal, parse=ManagementRealm.parse)
@@ -237,31 +230,22 @@ class GlobalSchema(object):
         schema.organizations = db.attach_table(Organizations)
 
         schema.idx_organizations_by_name = db.attach_table(IndexOrganizationsByName)
-        schema.organizations.attach_index('idx1',
-                                          schema.idx_organizations_by_name,
-                                          lambda org: org.name)
+        schema.organizations.attach_index('idx1', schema.idx_organizations_by_name, lambda org: org.name)
 
         # Users
         #
         schema.users = db.attach_table(Users)
 
         schema.idx_users_by_pubkey = db.attach_table(IndexUsersByPubkey)
-        schema.users.attach_index('idx1',
-                                  schema.idx_users_by_pubkey,
-                                  lambda user: user.pubkey,
-                                  nullable=True)
+        schema.users.attach_index('idx1', schema.idx_users_by_pubkey, lambda user: user.pubkey, nullable=True)
 
         schema.idx_users_by_email = db.attach_table(IndexUsersByEmail)
-        schema.users.attach_index('idx2',
-                                  schema.idx_users_by_email,
-                                  lambda user: user.email,
-                                  nullable=True)
+        schema.users.attach_index('idx2', schema.idx_users_by_email, lambda user: user.email, nullable=True)
 
         schema.activation_tokens = db.attach_table(ActivationTokens)
 
         schema.idx_act_tokens_by_authid_pubkey = db.attach_table(IndexActivationTokensByAuthidPubkey)
-        schema.activation_tokens.attach_index('idx1',
-                                              schema.idx_act_tokens_by_authid_pubkey,
+        schema.activation_tokens.attach_index('idx1', schema.idx_act_tokens_by_authid_pubkey,
                                               lambda token: token.email + token.pubkey)
 
         # Management Realms
@@ -269,9 +253,7 @@ class GlobalSchema(object):
         schema.mrealms = db.attach_table(ManagementRealms)
 
         schema.idx_mrealms_by_name = db.attach_table(IndexManagementRealmByName)
-        schema.mrealms.attach_index('idx1',
-                                    schema.idx_mrealms_by_name,
-                                    lambda mrealm: mrealm.name)
+        schema.mrealms.attach_index('idx1', schema.idx_mrealms_by_name, lambda mrealm: mrealm.name)
 
         schema.users_mrealm_roles = db.attach_table(UserMrealmRoles)
 
@@ -280,9 +262,7 @@ class GlobalSchema(object):
         schema.nodes = db.attach_table(Nodes)
 
         schema.idx_nodes_by_pubkey = db.attach_table(IndexNodesByPubkey)
-        schema.nodes.attach_index('idx1',
-                                  schema.idx_nodes_by_pubkey,
-                                  lambda node: node.pubkey)
+        schema.nodes.attach_index('idx1', schema.idx_nodes_by_pubkey, lambda node: node.pubkey)
 
         schema.idx_nodes_by_authid = db.attach_table(IndexNodesByAuthid)
         schema.nodes.attach_index('idx2',

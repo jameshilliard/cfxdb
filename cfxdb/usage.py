@@ -34,7 +34,7 @@ class _MasterNodeUsage(MasterNodeUsageGen.MasterNodeUsage):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def PubkeyAsBytes(self):
@@ -42,7 +42,7 @@ class _MasterNodeUsage(MasterNodeUsageGen.MasterNodeUsage):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ClientIpAddressAsBytes(self):
@@ -50,7 +50,7 @@ class _MasterNodeUsage(MasterNodeUsageGen.MasterNodeUsage):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MeteringIdAsBytes(self):
@@ -58,7 +58,7 @@ class _MasterNodeUsage(MasterNodeUsageGen.MasterNodeUsage):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -66,7 +66,6 @@ class MasterNodeUsage(object):
     """
     Persisted master node metering record database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -158,7 +157,8 @@ class MasterNodeUsage(object):
         obj = MasterNodeUsage()
 
         timestamp = data.get('timestamp', None)
-        assert timestamp is None or type(timestamp) == int, '"timestamp" must have type int, but was "{}"'.format(type(timestamp))
+        assert timestamp is None or type(
+            timestamp) == int, '"timestamp" must have type int, but was "{}"'.format(type(timestamp))
         if timestamp is None:
             # set current time as default
             obj._timestamp = np.datetime64(time_ns(), 'ns')
@@ -167,33 +167,48 @@ class MasterNodeUsage(object):
             obj._timestamp = np.datetime64(timestamp, 'ns')
 
         timestamp_from = data.get('timestamp_from', None)
-        assert timestamp_from is None or type(timestamp_from) == int, '"timestamp_from" must have type int, but was "{}"'.format(type(timestamp_from))
+        assert timestamp_from is None or type(
+            timestamp_from) == int, '"timestamp_from" must have type int, but was "{}"'.format(
+                type(timestamp_from))
         obj._timestamp_from = np.datetime64(timestamp_from, 'ns') if timestamp_from is not None else None
 
         mrealm_id = data.get('mrealm_id', None)
-        assert mrealm_id is None or type(mrealm_id) == str, '"mrealm_id" must have type str, but was "{}"'.format(type(mrealm_id))
+        assert mrealm_id is None or type(
+            mrealm_id) == str, '"mrealm_id" must have type str, but was "{}"'.format(type(mrealm_id))
         if mrealm_id:
             obj._mrealm_id = uuid.UUID(mrealm_id)
 
         metering_id = data.get('metering_id', None)
-        assert metering_id is None or type(metering_id) == str, '"metering_id" must have type str, but was "{}"'.format(type(metering_id))
+        assert metering_id is None or type(
+            metering_id) == str, '"metering_id" must have type str, but was "{}"'.format(type(metering_id))
         if metering_id:
             obj._metering_id = uuid.UUID(metering_id)
 
         pubkey = data.get('pubkey', None)
-        assert pubkey is None or type(pubkey) == bytes and len(pubkey) == 32, '"pubkey" must have type bytes of length 32, but was "{}" of length {}'.format(type(pubkey), len(pubkey) if type(pubkey) == bytes else None)
+        assert pubkey is None or type(pubkey) == bytes and len(
+            pubkey) == 32, '"pubkey" must have type bytes of length 32, but was "{}" of length {}'.format(
+                type(pubkey),
+                len(pubkey) if type(pubkey) == bytes else None)
         obj._pubkey = pubkey
 
         client_ip_address = data.get('client_ip_address', None)
-        assert client_ip_address is None or type(client_ip_address) == bytes and len(client_ip_address) in [4, 16], '"client_ip_address" must have type bytes of length 4 or 16, but was "{}" of length {}'.format(type(client_ip_address), len(client_ip_address) if type(client_ip_address) == bytes else None)
+        assert client_ip_address is None or type(client_ip_address) == bytes and len(client_ip_address) in [
+            4, 16
+        ], '"client_ip_address" must have type bytes of length 4 or 16, but was "{}" of length {}'.format(
+            type(client_ip_address),
+            len(client_ip_address) if type(client_ip_address) == bytes else None)
         obj._client_ip_address = client_ip_address
 
         client_ip_version = data.get('client_ip_version', None)
-        assert client_ip_version is None or client_ip_version == 0 or (type(client_ip_version) == int and client_ip_version in [4, 6]), '"client_ip_version" must have value [4, 6], but was "{}"'.format(client_ip_version)
+        assert client_ip_version is None or client_ip_version == 0 or (
+            type(client_ip_version) == int and client_ip_version in [4, 6]
+        ), '"client_ip_version" must have value [4, 6], but was "{}"'.format(client_ip_version)
         obj._client_ip_version = client_ip_version
 
         client_ip_port = data.get('client_ip_port', None)
-        assert client_ip_port is None or client_ip_port == 0 or (type(client_ip_port) == int and client_ip_port in range(2**16)), '"client_ip_port" must have value [0, 2**16[, but was "{}"'.format(client_ip_port)
+        assert client_ip_port is None or client_ip_port == 0 or (
+            type(client_ip_port) == int and client_ip_port in range(
+                2**16)), '"client_ip_port" must have value [0, 2**16[, but was "{}"'.format(client_ip_port)
         obj._client_ip_port = client_ip_port
 
         seq = data.get('seq', None)
@@ -206,15 +221,20 @@ class MasterNodeUsage(object):
             obj._sent = np.datetime64(sent, 'ns') if sent else None
 
         processed = data.get('processed', None)
-        assert processed is None or type(processed) == int, '"processed" must have type int, but was "{}"'.format(type(processed))
+        assert processed is None or type(
+            processed) == int, '"processed" must have type int, but was "{}"'.format(type(processed))
         obj._processed = np.datetime64(processed, 'ns') if processed else None
 
         status = data.get('status', 0)
-        assert status is None or (type(status) == int and status in range(4)), '"status" must have type int, but was "{}"'.format(type(status))
+        assert status is None or (type(status) == int
+                                  and status in range(4)), '"status" must have type int, but was "{}"'.format(
+                                      type(status))
         obj._status = status
 
         status_message = data.get('status_message', None)
-        assert status_message is None or type(status_message) == str, '"status_message" must have type str, but was "{}"'.format(type(status_message))
+        assert status_message is None or type(
+            status_message) == str, '"status_message" must have type str, but was "{}"'.format(
+                type(status_message))
         obj._status_message = status_message
 
         # metering data:

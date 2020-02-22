@@ -16,12 +16,12 @@ import pytest
 import cbor
 import flatbuffers
 
+import txaio
 from autobahn import util
 
-import txaio
-txaio.use_twisted()
-
 from cfxdb.user import UserFbs, User, ActivationTokenFbs, ActivationToken
+
+txaio.use_twisted()
 
 
 @pytest.fixture(scope='function')
@@ -33,6 +33,7 @@ def builder():
 #
 # ACTIVATION TOKEN
 #
+
 
 def fill_token(token):
     token.oid = uuid.uuid4()
@@ -135,6 +136,7 @@ def test_token_cbor_roundtrip_perf(token_cbor):
 #
 # USER
 #
+
 
 def fill_user(user):
     user.oid = uuid.uuid4()

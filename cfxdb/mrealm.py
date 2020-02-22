@@ -5,7 +5,6 @@
 #
 ###############################################################################
 
-
 import six
 import uuid
 import pprint
@@ -181,7 +180,10 @@ class ManagementRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'name', 'rtype', 'owner', 'created', 'cf_node', 'cf_router_worker', 'cf_container_worker']:
+            if k not in [
+                    'oid', 'name', 'rtype', 'owner', 'created', 'cf_node', 'cf_router_worker',
+                    'cf_container_worker'
+            ]:
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
@@ -212,18 +214,17 @@ class ManagementRealm(ConfigurationElement):
         if cf_container_worker:
             cf_container_worker = uuid.UUID(cf_container_worker)
 
-        obj = ManagementRealm(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            name=name,
-            owner=owner,
-            created=created,
-            cf_node=cf_node,
-            cf_router_worker=cf_router_worker,
-            cf_container_worker=cf_container_worker,
-            _unknown=_unknown)
+        obj = ManagementRealm(oid=obj.oid,
+                              label=obj.label,
+                              description=obj.description,
+                              tags=obj.tags,
+                              name=name,
+                              owner=owner,
+                              created=created,
+                              cf_node=cf_node,
+                              cf_router_worker=cf_router_worker,
+                              cf_container_worker=cf_container_worker,
+                              _unknown=_unknown)
 
         return obj
 
@@ -232,7 +233,6 @@ class Node(ConfigurationElement):
     """
     CFC Node database configuration object.
     """
-
     def __init__(self,
                  oid=None,
                  label=None,
@@ -393,17 +393,16 @@ class Node(ConfigurationElement):
         authextra = data.get('authextra', None)
         assert authextra is None or type(authextra) == dict
 
-        obj = Node(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            owner_oid=owner_oid,
-            pubkey=pubkey,
-            mrealm_oid=mrealm_oid,
-            authid=authid,
-            authextra=authextra,
-            _unknown=_unknown)
+        obj = Node(oid=obj.oid,
+                   label=obj.label,
+                   description=obj.description,
+                   tags=obj.tags,
+                   owner_oid=owner_oid,
+                   pubkey=pubkey,
+                   mrealm_oid=mrealm_oid,
+                   authid=authid,
+                   authextra=authextra,
+                   _unknown=_unknown)
 
         return obj
 
@@ -669,25 +668,12 @@ class WebCluster(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['name',
-                         'status',
-                         'changed',
-                         'tcp_version',
-                         'tcp_port',
-                         'tcp_shared',
-                         'tcp_interface',
-                         'tcp_backlog',
-                         'tls_key',
-                         'tls_certificate',
-                         'tls_chain_certificates',
-                         'tls_ca_certificates',
-                         'tls_dhparam',
-                         'tls_ciphers',
-                         'http_client_timeout',
-                         'http_hsts',
-                         'http_hsts_max_age',
-                         'http_access_log',
-                         'http_display_tracebacks']:
+            if k not in [
+                    'name', 'status', 'changed', 'tcp_version', 'tcp_port', 'tcp_shared', 'tcp_interface',
+                    'tcp_backlog', 'tls_key', 'tls_certificate', 'tls_chain_certificates',
+                    'tls_ca_certificates', 'tls_dhparam', 'tls_ciphers', 'http_client_timeout', 'http_hsts',
+                    'http_hsts_max_age', 'http_access_log', 'http_display_tracebacks'
+            ]:
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
@@ -748,43 +734,36 @@ class WebCluster(ConfigurationElement):
         http_display_tracebacks = data.get('http_display_tracebacks', None)
         assert http_display_tracebacks is None or (type(http_display_tracebacks) == bool)
 
-        obj = WebCluster(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            name=name,
-            status=status,
-            changed=changed,
-            tcp_version=tcp_version,
-            tcp_port=tcp_port,
-            tcp_shared=tcp_shared,
-            tcp_interface=tcp_interface,
-            tcp_backlog=tcp_backlog,
-            tls_key=tls_key,
-            tls_certificate=tls_certificate,
-            tls_chain_certificates=tls_chain_certificates,
-            tls_ca_certificates=tls_ca_certificates,
-            tls_dhparam=tls_dhparam,
-            tls_ciphers=tls_ciphers,
-            http_client_timeout=http_client_timeout,
-            http_hsts=http_hsts,
-            http_hsts_max_age=http_hsts_max_age,
-            http_access_log=http_access_log,
-            http_display_tracebacks=http_display_tracebacks,
-            _unknown=_unknown)
+        obj = WebCluster(oid=obj.oid,
+                         label=obj.label,
+                         description=obj.description,
+                         tags=obj.tags,
+                         name=name,
+                         status=status,
+                         changed=changed,
+                         tcp_version=tcp_version,
+                         tcp_port=tcp_port,
+                         tcp_shared=tcp_shared,
+                         tcp_interface=tcp_interface,
+                         tcp_backlog=tcp_backlog,
+                         tls_key=tls_key,
+                         tls_certificate=tls_certificate,
+                         tls_chain_certificates=tls_chain_certificates,
+                         tls_ca_certificates=tls_ca_certificates,
+                         tls_dhparam=tls_dhparam,
+                         tls_ciphers=tls_ciphers,
+                         http_client_timeout=http_client_timeout,
+                         http_hsts=http_hsts,
+                         http_hsts_max_age=http_hsts_max_age,
+                         http_access_log=http_access_log,
+                         http_display_tracebacks=http_display_tracebacks,
+                         _unknown=_unknown)
 
         return obj
 
 
 class WebClusterNodeMembership(object):
-
-    def __init__(self,
-                 webcluster_oid=None,
-                 node_oid=None,
-                 parallel=None,
-                 standby=None,
-                 _unknown=None):
+    def __init__(self, webcluster_oid=None, node_oid=None, parallel=None, standby=None, _unknown=None):
         self.webcluster_oid = webcluster_oid
         self.node_oid = node_oid
         self.parallel = parallel
@@ -865,12 +844,11 @@ class WebClusterNodeMembership(object):
         assert webcluster_oid
         assert node_oid
 
-        obj = WebClusterNodeMembership(
-            webcluster_oid=webcluster_oid,
-            node_oid=node_oid,
-            parallel=parallel,
-            standby=standby,
-            _unknown=_unknown)
+        obj = WebClusterNodeMembership(webcluster_oid=webcluster_oid,
+                                       node_oid=node_oid,
+                                       parallel=parallel,
+                                       standby=standby,
+                                       _unknown=_unknown)
 
         return obj
 
@@ -884,7 +862,6 @@ class WebService(ConfigurationElement):
 
     * check_web_path_service
     """
-
     def __init__(self,
                  oid=None,
                  label=None,
@@ -911,7 +888,12 @@ class WebService(ConfigurationElement):
         :param path: HTTP URL path of the Web service, eg ``/myapp`` or ``/myapp/dashboard/72``.
         :type path: str
         """
-        ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags, _unknown=_unknown)
+        ConfigurationElement.__init__(self,
+                                      oid=oid,
+                                      label=label,
+                                      description=description,
+                                      tags=tags,
+                                      _unknown=_unknown)
         self.service_type = service_type
         self.webcluster_oid = webcluster_oid
         self.path = path
@@ -991,15 +973,14 @@ class WebService(ConfigurationElement):
         service_type = data.get('type', None)
         assert service_type is None or (type(service_type) == str)
 
-        obj = WebService(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            service_type=service_type,
-            webcluster_oid=webcluster_oid,
-            path=path,
-            _unknown=_unknown)
+        obj = WebService(oid=obj.oid,
+                         label=obj.label,
+                         description=obj.description,
+                         tags=obj.tags,
+                         service_type=service_type,
+                         webcluster_oid=webcluster_oid,
+                         path=path,
+                         _unknown=_unknown)
 
         return obj
 
@@ -1027,6 +1008,7 @@ class WebServiceStatic(WebService):
     """
     Web service: type "static".
     """
+
     # directory: Optional[str]
     # enable_directory_listing: Optional[bool]
     # mime_types: Optional[Dict[str, str]]
@@ -1038,9 +1020,7 @@ class WebServiceStatic(WebService):
 
     def marshal(self):
         obj = WebService.marshal(self)
-        obj.update({
-            'directory': self.directory
-        })
+        obj.update({'directory': self.directory})
 
     @staticmethod
     def parse(data):
@@ -1058,6 +1038,7 @@ class WebServiceJson(WebService):
     """
     Web service: type "json".
     """
+
     # value: object
     # prettify: Optional[bool]
     # allow_cross_origin: Optional[bool]
@@ -1069,9 +1050,7 @@ class WebServiceJson(WebService):
 
     def marshal(self):
         obj = WebService.marshal(self)
-        obj.update({
-            'value': self.value
-        })
+        obj.update({'value': self.value})
 
     @staticmethod
     def parse(data):

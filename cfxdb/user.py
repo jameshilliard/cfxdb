@@ -4,8 +4,6 @@ import struct
 from pprint import pformat
 from datetime import datetime
 
-from typing import Optional, List
-
 from cfxdb.common import ConfigurationElement
 
 from cfxdb.gen import oid_t
@@ -49,8 +47,15 @@ class User(ConfigurationElement):
     # registered: datetime
     # pubkey: six.text_type
 
-    def __init__(self, oid=None, label=None, description=None, tags=None,
-                 email=None, registered=None, pubkey=None, _unknown=None):
+    def __init__(self,
+                 oid=None,
+                 label=None,
+                 description=None,
+                 tags=None,
+                 email=None,
+                 registered=None,
+                 pubkey=None,
+                 _unknown=None):
         """
 
         :param oid: Object ID of the user
@@ -167,15 +172,14 @@ class User(ConfigurationElement):
         pubkey = data.get('pubkey', None)
         assert pubkey is None or (type(pubkey) == six.text_type and len(pubkey) == 64)
 
-        obj = User(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            email=email,
-            registered=registered,
-            pubkey=pubkey,
-            _unknown=_unknown)
+        obj = User(oid=obj.oid,
+                   label=obj.label,
+                   description=obj.description,
+                   tags=obj.tags,
+                   email=email,
+                   registered=registered,
+                   pubkey=pubkey,
+                   _unknown=_unknown)
         return obj
 
 
@@ -331,7 +335,7 @@ class UserFbs(object):
             val = self._from_fbs.Registered()
             if val:
                 # utcfromtimestamp
-                #self._registered = datetime.utcfromtimestamp(float(val) / 1000000.)
+                # self._registered = datetime.utcfromtimestamp(float(val) / 1000000.)
                 # calendar.timegm(dt.utctimetuple())
                 self._registered = datetime.fromtimestamp(float(val) / 1000000.)
 
@@ -345,7 +349,7 @@ class UserFbs(object):
 
     @property
     def pubkey(self):
-        if self._pubkey is None and  self._from_fbs:
+        if self._pubkey is None and self._from_fbs:
             self._pubkey = self._from_fbs.Pubkey().decode()
 
         return self._pubkey
@@ -438,7 +442,6 @@ class UserMrealmRole(object):
     """
     Database class for CFC user roles on a management realm using CBOR.
     """
-
     def __init__(self, roles=None, _unknown=None):
         self.roles = roles
 
@@ -506,7 +509,6 @@ class UserMrealmRoleFbs(object):
     """
     Database class for CFC user roles on a management realm using Flatbuffers.
     """
-
     def __init__(self):
         raise NotImplementedError('not yet implemented')
 
@@ -515,9 +517,16 @@ class ActivationToken(object):
     """
     CFC user activation token database class for CBOR.
     """
-
-    def __init__(self, oid=None, atype=None, status=None, created=None,
-                 completed=None, code=None, email=None, pubkey=None, _unknown=None):
+    def __init__(self,
+                 oid=None,
+                 atype=None,
+                 status=None,
+                 created=None,
+                 completed=None,
+                 code=None,
+                 email=None,
+                 pubkey=None,
+                 _unknown=None):
         self.oid = oid
         self.atype = atype
         self.status = status
@@ -584,8 +593,7 @@ class ActivationToken(object):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'atype', 'status', 'created', 'completed',
-                         'code', 'email', 'pubkey']:
+            if k not in ['oid', 'atype', 'status', 'created', 'completed', 'code', 'email', 'pubkey']:
                 val = data.pop(k)
                 _unknown[k] = val
 
@@ -606,7 +614,7 @@ class ActivationToken(object):
         # created = datetime.utcfromtimestamp(float(created) / 1000000.)
 
         completed = data.get('completed', None)
-        assert completed is None or type(completed) == float  or type(completed) in six.integer_types
+        assert completed is None or type(completed) == float or type(completed) in six.integer_types
         if completed:
             # https://docs.python.org
             # /3/library/time.html#time.time_ns
@@ -626,16 +634,15 @@ class ActivationToken(object):
         if pubkey:
             assert len(pubkey) == 64
 
-        obj = ActivationToken(
-            oid=oid,
-            atype=atype,
-            status=status,
-            created=created,
-            completed=completed,
-            code=code,
-            email=email,
-            pubkey=pubkey,
-            _unknown=_unknown)
+        obj = ActivationToken(oid=oid,
+                              atype=atype,
+                              status=status,
+                              created=created,
+                              completed=completed,
+                              code=code,
+                              email=email,
+                              pubkey=pubkey,
+                              _unknown=_unknown)
         return obj
 
 
@@ -643,7 +650,6 @@ class ActivationTokenFbs(object):
     """
     CFC user activation token database class for Flatbuffers.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -814,7 +820,8 @@ class ActivationTokenFbs(object):
             ActivationTokenGenFbs.ActivationTokenAddCreated(builder, int(self.created.timestamp() * 1000000))
 
         if self.completed:
-            ActivationTokenGenFbs.ActivationTokenAddCompleted(builder, int(self.completed.timestamp() * 1000000))
+            ActivationTokenGenFbs.ActivationTokenAddCompleted(builder,
+                                                              int(self.completed.timestamp() * 1000000))
 
         if code:
             ActivationTokenGenFbs.ActivationTokenAddCode(builder, code)
@@ -843,10 +850,20 @@ class Organization(ConfigurationElement):
     # otype: int
     # registered: Optional[datetime]
 
-    OTYPES = [OrganizationType.NONE, OrganizationType.BUSINESS, OrganizationType.ACADEMICS, OrganizationType.PERSONAL]
+    OTYPES = [
+        OrganizationType.NONE, OrganizationType.BUSINESS, OrganizationType.ACADEMICS,
+        OrganizationType.PERSONAL
+    ]
 
-    def __init__(self, oid=None, label=None, description=None, tags=None,
-                 name=None, otype=None, registered=None, _unknown=None):
+    def __init__(self,
+                 oid=None,
+                 label=None,
+                 description=None,
+                 tags=None,
+                 name=None,
+                 otype=None,
+                 registered=None,
+                 _unknown=None):
         """
 
         :param oid: Object ID of the organization
@@ -955,15 +972,14 @@ class Organization(ConfigurationElement):
             # registered = datetime.utcfromtimestamp(float(registered) / 1000000.)
             registered = datetime.fromtimestamp(float(registered) / 1000000.)
 
-        obj = Organization(
-            oid=obj.oid,
-            label=obj.label,
-            description=obj.description,
-            tags=obj.tags,
-            name=name,
-            otype=otype,
-            registered=registered,
-            _unknown=_unknown)
+        obj = Organization(oid=obj.oid,
+                           label=obj.label,
+                           description=obj.description,
+                           tags=obj.tags,
+                           name=name,
+                           otype=otype,
+                           registered=registered,
+                           _unknown=_unknown)
         return obj
 
 
@@ -1118,7 +1134,7 @@ class OrganizationFbs(object):
             val = self._from_fbs.Registered()
             if val:
                 # utcfromtimestamp
-                #self._registered = datetime.utcfromtimestamp(float(val) / 1000000.)
+                # self._registered = datetime.utcfromtimestamp(float(val) / 1000000.)
                 # calendar.timegm(dt.utctimetuple())
                 self._registered = datetime.fromtimestamp(float(val) / 1000000.)
 
@@ -1132,7 +1148,7 @@ class OrganizationFbs(object):
 
     @property
     def otype(self):
-        if self._otype is None and  self._from_fbs:
+        if self._otype is None and self._from_fbs:
             self._otype = self._from_fbs.Otype()
 
         return self._otype

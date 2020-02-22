@@ -11,8 +11,6 @@ import six
 import uuid
 import pprint
 
-from typing import Optional, List
-
 
 def unpack_uint256(data):
     assert data is None or type(data) == bytes, 'data must by bytes, was {}'.format(type(data))
@@ -26,7 +24,8 @@ def unpack_uint256(data):
 
 
 def pack_uint256(value):
-    assert value is None or (type(value) == int and value >= 0 and value < 2**256), 'value must be uint256, but was {}'.format(value)
+    assert value is None or (type(value) == int and value >= 0
+                             and value < 2**256), 'value must be uint256, but was {}'.format(value)
 
     if value:
         data = web3.Web3.toBytes(value)
@@ -97,7 +96,7 @@ class address(object):
 
     @value.setter
     def value(self, value):
-        assert(type(value) == int and value >= 0 and value < 2**160)
+        assert (type(value) == int and value >= 0 and value < 2**160)
         w0 = value % 2**64
         value = value >> 8
         w1 = value % 2**64
@@ -152,7 +151,6 @@ class ConfigurationElement(object):
     """
     User tags for object (optional free list of text portions)
     """
-
     def __init__(self, oid=None, label=None, description=None, tags=None, _unknown=None):
         self.oid = oid
 
@@ -204,11 +202,10 @@ class ConfigurationElement(object):
         assert isinstance(self.oid, uuid.UUID)
         assert self.label is None or type(self.label) == six.text_type
         assert self.description is None or type(self.description) == six.text_type
-        assert self.tags is None or (type(self.tags) == list and type(tag) == six.text_type for tag in self.tags)
+        assert self.tags is None or (type(self.tags) == list and type(tag) == six.text_type
+                                     for tag in self.tags)
 
-        obj = {
-            'oid': str(self.oid)
-        }
+        obj = {'oid': str(self.oid)}
         if self.label:
             obj['label'] = self.label
         if self.description:
@@ -254,4 +251,8 @@ class ConfigurationElement(object):
                 assert type(tag) == six.text_type
             tags = data['tags']
 
-        return ConfigurationElement(oid=oid, label=label, description=description, tags=tags, _unknown=_unknown)
+        return ConfigurationElement(oid=oid,
+                                    label=label,
+                                    description=description,
+                                    tags=tags,
+                                    _unknown=_unknown)

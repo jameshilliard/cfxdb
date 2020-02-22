@@ -26,7 +26,9 @@ class Sessions(MapOidFlatBuffers):
     """
 
 
-@table('dd04931a-753b-4fde-8140-d66b93519c73', build=eventstore.Publication.build, cast=eventstore.Publication.cast)
+@table('dd04931a-753b-4fde-8140-d66b93519c73',
+       build=eventstore.Publication.build,
+       cast=eventstore.Publication.cast)
 class Publications(MapOidFlatBuffers):
     """
     Persisted publications archive.
@@ -49,7 +51,6 @@ class Schema(object):
     """
     CFC edge database schema for ZLMDB.
     """
-
     def __init__(self, db):
         self.db = db
 
@@ -70,7 +71,6 @@ class Schema(object):
     """
     Events archive.
     """
-
 
     @staticmethod
     def attach(db):

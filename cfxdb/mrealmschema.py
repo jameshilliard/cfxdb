@@ -5,22 +5,14 @@
 #
 ###############################################################################
 
-from __future__ import absolute_import
-
-import txaio
-txaio.use_twisted()
-
-__all__ = ('MrealmSchema',)
-
-
-log = txaio.make_logger()
-
-
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidCbor
 
 from cfxdb.mrealm import WebCluster, WebService, WebClusterNodeMembership, parse_webservice
 from cfxdb.log import MNodeLogs, MWorkerLogs
+
+__all__ = ('MrealmSchema', )
+
 
 #
 # Web clusters
@@ -42,7 +34,9 @@ class IndexWebClusterByName(MapStringUuid):
 #
 # Web cluster node memberships
 #
-@table('e9801077-a629-470b-a4c9-4292a1f00d43', marshal=WebClusterNodeMembership.marshal, parse=WebClusterNodeMembership.parse)
+@table('e9801077-a629-470b-a4c9-4292a1f00d43',
+       marshal=WebClusterNodeMembership.marshal,
+       parse=WebClusterNodeMembership.parse)
 class WebClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (webcluster_oid, node_oid) -> webcluster_node_membership
@@ -78,6 +72,7 @@ class IndexWebClusterPathToWebService(MapUuidStringUuid):
     """
     Index: (webcluster_oid, path) -> webservice_oid
     """
+
 
 #
 # Docs metadata
@@ -181,8 +176,7 @@ class MrealmSchema(object):
         schema.webclusters = db.attach_table(WebClusters)
 
         schema.idx_webclusters_by_name = db.attach_table(IndexWebClusterByName)
-        schema.webclusters.attach_index('idx1',
-                                        schema.idx_webclusters_by_name,
+        schema.webclusters.attach_index('idx1', schema.idx_webclusters_by_name,
                                         lambda webcluster: webcluster.name)
 
         schema.webcluster_node_memberships = db.attach_table(WebClusterNodeMemberships)
@@ -191,14 +185,12 @@ class MrealmSchema(object):
         schema.webservices = db.attach_table(WebServices)
 
         schema.idx_webservices_by_path = db.attach_table(IndexWebServiceByPath)
-        schema.webservices.attach_index('idx1',
-                                        schema.idx_webservices_by_path,
-                                        lambda webservice: (webservice.webcluster_oid, webservice.path))
+        schema.webservices.attach_index('idx1', schema.idx_webservices_by_path, lambda webservice:
+                                        (webservice.webcluster_oid, webservice.path))
 
         schema.idx_webcluster_webservices = db.attach_table(IndexWebClusterWebServices)
-        schema.webservices.attach_index('idx2',
-                                        schema.idx_webcluster_webservices,
-                                        lambda webservice: (webservice.webcluster_oid, webservice.oid))
+        schema.webservices.attach_index('idx2', schema.idx_webcluster_webservices, lambda webservice:
+                                        (webservice.webcluster_oid, webservice.oid))
 
         schema.mnode_logs = db.attach_table(MNodeLogs)
         schema.mworker_logs = db.attach_table(MWorkerLogs)

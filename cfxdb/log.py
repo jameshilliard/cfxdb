@@ -25,7 +25,6 @@ class _MNodeLogGen(MNodeLogGen.MNodeLog):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsMNodeLog(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -38,7 +37,7 @@ class _MNodeLogGen(MNodeLogGen.MNodeLog):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MrealmIdAsBytes(self):
@@ -46,7 +45,7 @@ class _MNodeLogGen(MNodeLogGen.MNodeLog):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def RunIdAsBytes(self):
@@ -54,12 +53,11 @@ class _MNodeLogGen(MNodeLogGen.MNodeLog):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
 class MNodeLog(object):
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -312,7 +310,6 @@ class MNodeLog(object):
                 'errout': self.network_errout,
                 'packets_recv': self.network_packets_recv,
                 'packets_sent': self.network_packets_sent,
-
             },
         }
         return obj
@@ -362,8 +359,10 @@ class MNodeLog(object):
                 _mrealm_id = self._from_fbs.MrealmIdAsBytes()
                 if _mrealm_id:
                     _mrealm_id = bytes(_mrealm_id)
-                    assert type(_mrealm_id) == bytes, 'mrealm_id must be binary, was "{}"'.format(type(_mrealm_id))
-                    assert len(_mrealm_id) == 16, 'mrealm_id must have length 16, was {} / {}: {}'.format(len(_mrealm_id), self._from_fbs.MrealmIdLength(), _mrealm_id)
+                    assert type(_mrealm_id) == bytes, 'mrealm_id must be binary, was "{}"'.format(
+                        type(_mrealm_id))
+                    assert len(_mrealm_id) == 16, 'mrealm_id must have length 16, was {} / {}: {}'.format(
+                        len(_mrealm_id), self._from_fbs.MrealmIdLength(), _mrealm_id)
                     self._mrealm_id = uuid.UUID(bytes=_mrealm_id)
         return self._mrealm_id
 
@@ -1204,7 +1203,6 @@ class _MWorkerLogGen(MWorkerLogGen.MWorkerLog):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsMWorkerLog(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -1217,7 +1215,7 @@ class _MWorkerLogGen(MWorkerLogGen.MWorkerLog):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MrealmIdAsBytes(self):
@@ -1225,7 +1223,7 @@ class _MWorkerLogGen(MWorkerLogGen.MWorkerLog):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -1646,8 +1644,6 @@ class MWorkerLog(object):
     def seq(self, value):
         assert value is None or type(value) == int
         self._seq = value
-
-    #### actual statistics (worker metering data attributes)
 
     @property
     def num_fds(self):
@@ -2157,13 +2153,15 @@ class MWorkerLog(object):
             MWorkerLogGen.MWorkerLogAddNumCtxSwitchesInvoluntary(builder, self.num_ctx_switches_involuntary)
 
         if self.num_ctx_switches_involuntary_per_sec:
-            MWorkerLogGen.MWorkerLogAddNumCtxSwitchesInvoluntaryPerSec(builder, self.num_ctx_switches_involuntary_per_sec)
+            MWorkerLogGen.MWorkerLogAddNumCtxSwitchesInvoluntaryPerSec(
+                builder, self.num_ctx_switches_involuntary_per_sec)
 
         if self.num_ctx_switches_voluntary:
             MWorkerLogGen.MWorkerLogAddNumCtxSwitchesVoluntary(builder, self.num_ctx_switches_voluntary)
 
         if self.num_ctx_switches_voluntary_per_sec:
-            MWorkerLogGen.MWorkerLogAddNumCtxSwitchesVoluntaryPerSec(builder, self.num_ctx_switches_voluntary_per_sec)
+            MWorkerLogGen.MWorkerLogAddNumCtxSwitchesVoluntaryPerSec(builder,
+                                                                     self.num_ctx_switches_voluntary_per_sec)
 
         if self.cpu_system:
             MWorkerLogGen.MWorkerLogAddCpuSystem(builder, self.cpu_system)
@@ -2285,7 +2283,6 @@ class MWorkerLogs(MapTimestampUuidStringFlatBuffers):
 
 
 class Schema(object):
-
     def __init__(self, db):
         self.db = db
 

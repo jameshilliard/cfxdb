@@ -11,7 +11,6 @@ import uuid
 import flatbuffers
 import numpy as np
 
-from txaio import time_ns
 from zlmdb import table, MapBytes20FlatBuffers, MapBytes32FlatBuffers, MapUuidUuid, MapUuidFlatBuffers,\
     MapBytes16FlatBuffers, MapBytes20Bytes16, MapBytes20TimestampBytes20, MapUuidBytes20Uint8FlatBuffers
 
@@ -42,7 +41,6 @@ class _BlockGen(BlockGen.Block):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsOffer(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -55,7 +53,7 @@ class _BlockGen(BlockGen.Block):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def BlockHashAsBytes(self):
@@ -63,12 +61,11 @@ class _BlockGen(BlockGen.Block):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
 class Block(object):
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -190,7 +187,6 @@ class _MemberGen(MemberGen.Member):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsMember(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -203,7 +199,7 @@ class _MemberGen(MemberGen.Member):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def RegisteredAsBytes(self):
@@ -211,7 +207,7 @@ class _MemberGen(MemberGen.Member):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -219,7 +215,6 @@ class Member(object):
     """
     ``XBRNetwork.Member`` event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -392,7 +387,6 @@ class _MarketGen(MarketGen.Market):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsMarket(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -405,7 +399,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def OwnerAsBytes(self):
@@ -413,7 +407,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MakerAsBytes(self):
@@ -421,7 +415,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ProviderSecurityAsBytes(self):
@@ -429,7 +423,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ConsumerSecurityAsBytes(self):
@@ -437,7 +431,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MarketFeeAsBytes(self):
@@ -445,7 +439,7 @@ class _MarketGen(MarketGen.Market):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -453,7 +447,6 @@ class Market(object):
     """
     ``XBRNetwork.Market`` event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -725,7 +718,6 @@ class _ActorGen(ActorGen.Actor):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsActor(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -738,7 +730,7 @@ class _ActorGen(ActorGen.Actor):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ActorAsBytes(self):
@@ -746,7 +738,7 @@ class _ActorGen(ActorGen.Actor):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def JoinedAsBytes(self):
@@ -754,7 +746,7 @@ class _ActorGen(ActorGen.Actor):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SecurityAsBytes(self):
@@ -762,7 +754,7 @@ class _ActorGen(ActorGen.Actor):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -770,7 +762,6 @@ class Actor(object):
     """
     ``XBRNetwork.Actor`` event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -969,7 +960,6 @@ class _OfferGen(OfferGen.Offer):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsOffer(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -982,7 +972,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SellerAsBytes(self):
@@ -990,7 +980,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def KeyAsBytes(self):
@@ -998,7 +988,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ApiAsBytes(self):
@@ -1006,7 +996,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def UriAsBytes(self):
@@ -1014,7 +1004,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SignatureAsBytes(self):
@@ -1022,7 +1012,7 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def PriceAsBytes(self):
@@ -1030,12 +1020,11 @@ class _OfferGen(OfferGen.Offer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
 class Offer(object):
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -1341,8 +1330,10 @@ class Offer(object):
             categories_keys = []
             categories_values = []
             for _key, _value in sorted(self._categories.items()):
-                assert type(_key) == str, 'category key must be string, but was {}: {}'.format(type(_key), _key)
-                assert type(_value) == str, 'category value must be string, but was {}: {}'.format(type(_value), _value)
+                assert type(_key) == str, 'category key must be string, but was {}: {}'.format(
+                    type(_key), _key)
+                assert type(_value) == str, 'category value must be string, but was {}: {}'.format(
+                    type(_value), _value)
                 categories_keys.append(builder.CreateString(_key))
                 categories_values.append(builder.CreateString(_value))
 
@@ -1433,7 +1424,6 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsTokenApproval(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -1446,7 +1436,7 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def BlockHashAsBytes(self):
@@ -1454,7 +1444,7 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def OwnerAddressAsBytes(self):
@@ -1462,7 +1452,7 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SpenderAddressAsBytes(self):
@@ -1470,7 +1460,7 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ValueAsBytes(self):
@@ -1478,7 +1468,7 @@ class _TokenApprovalGen(TokenApprovalGen.TokenApproval):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -1486,7 +1476,6 @@ class TokenApproval(object):
     """
     ``IERC20.TokenApproval`` event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -1635,7 +1624,6 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsTokenTransfer(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -1648,7 +1636,7 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def BlockHashAsBytes(self):
@@ -1656,7 +1644,7 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def FromAddressAsBytes(self):
@@ -1664,7 +1652,7 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ToAddressAsBytes(self):
@@ -1672,7 +1660,7 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ValueAsBytes(self):
@@ -1680,7 +1668,7 @@ class _TokenTransferGen(TokenTransferGen.TokenTransfer):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -1688,7 +1676,6 @@ class TokenTransfer(object):
     """
     ``IERC20.TokenTransfer`` event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -1837,7 +1824,6 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsPayingChannelRequest(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -1850,7 +1836,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MarketAsBytes(self):
@@ -1858,7 +1844,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SenderAsBytes(self):
@@ -1866,7 +1852,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def DelegateAsBytes(self):
@@ -1874,7 +1860,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def RecipientAsBytes(self):
@@ -1882,7 +1868,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def AmountAsBytes(self):
@@ -1890,7 +1876,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def TimeoutAsBytes(self):
@@ -1898,7 +1884,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ChannelAsBytes(self):
@@ -1906,7 +1892,7 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -1914,7 +1900,6 @@ class PayingChannelRequest(object):
     """
     ``XBRPayingChannelRequest`` record/event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -2174,7 +2159,6 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsPaymentChannel(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -2187,7 +2171,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def MarketAsBytes(self):
@@ -2195,7 +2179,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def SenderAsBytes(self):
@@ -2203,7 +2187,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def DelegateAsBytes(self):
@@ -2211,7 +2195,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def RecipientAsBytes(self):
@@ -2219,7 +2203,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def AmountAsBytes(self):
@@ -2227,7 +2211,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def OpenAtAsBytes(self):
@@ -2235,7 +2219,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ClosingAtAsBytes(self):
@@ -2243,7 +2227,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ClosedAtAsBytes(self):
@@ -2251,7 +2235,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def CloseMmSigAsBytes(self):
@@ -2259,7 +2243,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def CloseDelSigAsBytes(self):
@@ -2267,7 +2251,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def CloseBalanceAsBytes(self):
@@ -2275,7 +2259,7 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def ClosedTxAsBytes(self):
@@ -2291,7 +2275,6 @@ class PaymentChannel(object):
     """
     ``XBRPaymentChannel`` record/event database object.
     """
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -2697,7 +2680,9 @@ class PaymentChannel(object):
         return final
 
 
-@table('8ce6b28c-ad8f-456e-a947-1b19e9b19247', build=PayingChannelRequest.build, cast=PayingChannelRequest.cast)
+@table('8ce6b28c-ad8f-456e-a947-1b19e9b19247',
+       build=PayingChannelRequest.build,
+       cast=PayingChannelRequest.cast)
 class PayingChannelRequests(MapBytes16FlatBuffers):
     """
     XBR paying channel requests by ``paying_channel_adr``.
@@ -2758,7 +2743,6 @@ class _PaymentChannelBalanceGen(PaymentChannelBalanceGen.PaymentChannelBalance):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsPaymentChannelBalance(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -2771,7 +2755,7 @@ class _PaymentChannelBalanceGen(PaymentChannelBalanceGen.PaymentChannelBalance):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def InflightAsBytes(self):
@@ -2779,12 +2763,11 @@ class _PaymentChannelBalanceGen(PaymentChannelBalanceGen.PaymentChannelBalance):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
 class PaymentChannelBalance(object):
-
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -2897,7 +2880,9 @@ class PaymentChannelBalance(object):
         return final
 
 
-@table('878ac002-a830-488b-bfe9-f06371b8eecb', build=PaymentChannelBalance.build, cast=PaymentChannelBalance.cast)
+@table('878ac002-a830-488b-bfe9-f06371b8eecb',
+       build=PaymentChannelBalance.build,
+       cast=PaymentChannelBalance.cast)
 class PaymentChannelBalances(MapBytes20FlatBuffers):
     """
     XBR payment channels current balances by ``payment_channel_adr``.
@@ -2906,7 +2891,9 @@ class PaymentChannelBalances(MapBytes20FlatBuffers):
     """
 
 
-@table('c0931d5d-6d5d-4f9c-b2a3-29664a0f4c07', build=PaymentChannelBalance.build, cast=PaymentChannelBalance.cast)
+@table('c0931d5d-6d5d-4f9c-b2a3-29664a0f4c07',
+       build=PaymentChannelBalance.build,
+       cast=PaymentChannelBalance.cast)
 class PayingChannelBalances(MapBytes20FlatBuffers):
     """
     XBR paying channels current balances by ``paying_channel_adr``.
@@ -2921,7 +2908,6 @@ class _TransactionGen(TransactionGen.Transaction):
 
     FIXME: come up with a PR for flatc to generated this stuff automatically.
     """
-
     @classmethod
     def GetRootAsTransaction(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
@@ -2934,7 +2920,7 @@ class _TransactionGen(TransactionGen.Transaction):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def OfferAsBytes(self):
@@ -2942,7 +2928,7 @@ class _TransactionGen(TransactionGen.Transaction):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def AmountAsBytes(self):
@@ -2950,7 +2936,7 @@ class _TransactionGen(TransactionGen.Transaction):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def PaymentChannelAsBytes(self):
@@ -2958,7 +2944,7 @@ class _TransactionGen(TransactionGen.Transaction):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
     def PayingChannelAsBytes(self):
@@ -2966,7 +2952,7 @@ class _TransactionGen(TransactionGen.Transaction):
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off+_len]
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
 
@@ -3251,7 +3237,8 @@ class Transaction(object):
             TransactionGen.TransactionAddCompleted(builder, int(self.completed))
 
         if self.completed_payment_channel_seq:
-            TransactionGen.TransactionAddCompletedPaymentChannelSeq(builder, self.completed_payment_channel_seq)
+            TransactionGen.TransactionAddCompletedPaymentChannelSeq(builder,
+                                                                    self.completed_payment_channel_seq)
 
         if self.completed_paying_channel_seq:
             TransactionGen.TransactionAddCompletedPayingChannelSeq(builder, self.completed_paying_channel_seq)
@@ -3272,7 +3259,6 @@ class Schema(object):
     """
     CFC edge database schema for ZLMDB.
     """
-
     def __init__(self, db):
         self.db = db
 
@@ -3380,7 +3366,6 @@ class Schema(object):
     """
     """
 
-
     @staticmethod
     def attach(db):
         """
@@ -3408,38 +3393,37 @@ class Schema(object):
         schema.payment_channels = db.attach_table(PaymentChannels)
 
         schema.idx_payment_channel_by_delegate = db.attach_table(IndexPaymentChannelByDelegate)
-        #schema.payment_channels.attach_index('idx1',
-        #                                     schema.idx_payment_channel_by_delegate,
-        #                                     lambda payment_channel: (bytes(payment_channel.delegate), np.datetime64(time_ns(), 'ns')))
+        # schema.payment_channels.attach_index('idx1',
+        #                                      schema.idx_payment_channel_by_delegate,
+        #                                      lambda payment_channel: (bytes(payment_channel.delegate), np.datetime64(time_ns(), 'ns')))
 
         schema.payment_balances = db.attach_table(PaymentChannelBalances)
 
         schema.paying_channel_requests = db.attach_table(PayingChannelRequests)
 
-        schema.idx_paying_channel_requests_by_recipient = db.attach_table(IndexPayingChannelRequestByRecipient)
-        schema.paying_channel_requests.attach_index('idx1',
-                                             schema.idx_paying_channel_requests_by_recipient,
-                                             lambda paying_channel_request: bytes(paying_channel_request.recipient))
+        schema.idx_paying_channel_requests_by_recipient = db.attach_table(
+            IndexPayingChannelRequestByRecipient)
+        schema.paying_channel_requests.attach_index(
+            'idx1', schema.idx_paying_channel_requests_by_recipient,
+            lambda paying_channel_request: bytes(paying_channel_request.recipient))
 
         schema.paying_channels = db.attach_table(PayingChannels)
 
         schema.idx_paying_channel_by_delegate = db.attach_table(IndexPayingChannelByDelegate)
-        #schema.paying_channels.attach_index('idx1',
-        #                                     schema.idx_paying_channel_by_delegate,
-        #                                     lambda paying_channel: (bytes(paying_channel.delegate), np.datetime64(time_ns(), 'ns')))
+        # schema.paying_channels.attach_index('idx1',
+        #                                      schema.idx_paying_channel_by_delegate,
+        #                                      lambda paying_channel: (bytes(paying_channel.delegate), np.datetime64(time_ns(), 'ns')))
 
-        #schema.idx_paying_channel_by_recipient = db.attach_table(IndexPayingChannelByRecipient)
-        #schema.paying_channels.attach_index('idx2',
-        #                                     schema.idx_paying_channel_by_recipient,
-        #                                     lambda paying_channel: (bytes(paying_channel.recipient), np.datetime64(time_ns(), 'ns')))
+        # schema.idx_paying_channel_by_recipient = db.attach_table(IndexPayingChannelByRecipient)
+        # schema.paying_channels.attach_index('idx2',
+        #                                      schema.idx_paying_channel_by_recipient,
+        #                                      lambda paying_channel: (bytes(paying_channel.recipient), np.datetime64(time_ns(), 'ns')))
 
         schema.paying_balances = db.attach_table(PayingChannelBalances)
 
         schema.offers = db.attach_table(Offers)
         schema.idx_offer_by_key = db.attach_table(IndexOfferByKey)
-        schema.offers.attach_index('idx1',
-                                   schema.idx_offer_by_key,
-                                   lambda offer: offer.key)
+        schema.offers.attach_index('idx1', schema.idx_offer_by_key, lambda offer: offer.key)
 
         schema.transactions = db.attach_table(Transactions)
 

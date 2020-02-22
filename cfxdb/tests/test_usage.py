@@ -14,18 +14,14 @@ import timeit
 import flatbuffers
 import numpy as np
 
-import txaio
-txaio.use_twisted()
-
 import zlmdb
-zlmdb.TABLES_BY_UUID = {}
-
-try:
-    from cfxdb.usage import MasterNodeUsage
-except ImportError:
-    from cfxdb.usage import MasterNodeUsage
-
+import txaio
 from txaio import time_ns
+
+from cfxdb.usage import MasterNodeUsage
+
+zlmdb.TABLES_BY_UUID = {}
+txaio.use_twisted()
 
 
 @pytest.fixture(scope='function')
@@ -38,6 +34,7 @@ def builder():
 # Usage
 #
 
+
 def fill_usage(usage):
     usage.timestamp = np.datetime64(time_ns(), 'ns')
     usage.mrealm_id = uuid.uuid4()
@@ -49,7 +46,7 @@ def fill_usage(usage):
         usage.client_ip_address = os.urandom(4)
     else:
         usage.client_ip_address = os.urandom(16)
-    usage.client_ip_port = random.randint(1, 2**16-1)
+    usage.client_ip_port = random.randint(1, 2**16 - 1)
 
     usage.seq = random.randint(0, 1000000)
     usage.sent = np.datetime64(time_ns() - random.randint(0, 10**10), 'ns')

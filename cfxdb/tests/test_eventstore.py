@@ -15,19 +15,14 @@ import platform
 import flatbuffers
 
 import txaio
-txaio.use_twisted()
-
-from autobahn import util
-
-import zlmdb
-zlmdb.TABLES_BY_UUID = {}
-
-try:
-    from cfxdb.eventstore import Session, Publication, Event
-except ImportError:
-    from cfxdb.eventstore import Session, Publication, Event
-
 from txaio import time_ns
+from autobahn import util
+import zlmdb
+
+from cfxdb.eventstore import Session, Publication, Event
+
+zlmdb.TABLES_BY_UUID = {}
+txaio.use_twisted()
 
 
 @pytest.fixture(scope='function')
@@ -39,6 +34,7 @@ def builder():
 #
 # Session
 #
+
 
 def fill_session(session):
     session.session = util.id()
@@ -113,6 +109,7 @@ def test_session_roundtrip_perf(session, builder):
 #
 # Publication
 #
+
 
 def fill_publication(publication):
 
@@ -236,6 +233,7 @@ def test_publication_roundtrip_perf(publication, builder):
 #
 # Event
 #
+
 
 def fill_event(event):
     event.timestamp = time_ns()

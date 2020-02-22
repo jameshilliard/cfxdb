@@ -11,18 +11,17 @@ import binascii
 from datetime import datetime
 
 import pytest
-
 import cbor
 import flatbuffers
 
 from autobahn import util
-
 import txaio
-txaio.use_twisted()
 
 from cfxdb.user import User, UserFbs
 from cfxdb.user import ActivationToken, ActivationTokenFbs
 from cfxdb.user import Organization, OrganizationFbs
+
+txaio.use_twisted()
 
 
 @pytest.fixture(scope='function')
@@ -34,6 +33,7 @@ def builder():
 #
 # ACTIVATION TOKEN
 #
+
 
 def fill_token(token):
     token.oid = uuid.uuid4()
@@ -136,6 +136,7 @@ def test_token_copy_fbs_to_cbor(token_fbs):
 # USER
 #
 
+
 def fill_user(user):
     user.oid = uuid.uuid4()
 
@@ -235,6 +236,7 @@ def test_user_copy_fbs_to_cbor(user_fbs):
 #
 # ORGANIZATION
 #
+
 
 def fill_org(org):
     org.oid = uuid.uuid4()

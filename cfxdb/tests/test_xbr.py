@@ -14,24 +14,17 @@ import hashlib
 
 import numpy as np
 import flatbuffers
-
 import multihash
 
+import zlmdb
 import txaio
-txaio.use_twisted()
 from txaio import time_ns
-
 from autobahn import util
 
-import zlmdb
-zlmdb.TABLES_BY_UUID = {}
+from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
 
-try:
-    from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
-    from cfxdb import uint256, address
-except ImportError:
-    from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
-    from cfxdb import uint256, address
+txaio.use_twisted()
+zlmdb.TABLES_BY_UUID = {}
 
 
 @pytest.fixture(scope='function')
@@ -51,6 +44,7 @@ def _gen_ipfs_hash():
 #
 # Actor
 #
+
 
 def fill_actor(actor):
     actor.timestamp = np.datetime64(time_ns(), 'ns')
@@ -129,6 +123,7 @@ def test_actor_roundtrip_perf(actor, builder):
 # Member
 #
 
+
 def fill_member(member):
     member.address = os.urandom(20)
     member.timestamp = np.datetime64(time_ns(), 'ns')
@@ -202,6 +197,7 @@ def test_member_roundtrip_perf(member, builder):
 #
 # Market
 #
+
 
 def fill_market(market):
     market.market = uuid.uuid4()
@@ -289,6 +285,7 @@ def test_market_roundtrip_perf(market, builder):
 # TokenTransfer
 #
 
+
 def fill_token_transfer(token_transfer):
     token_transfer.tx_hash = os.urandom(32)
     token_transfer.block_hash = os.urandom(32)
@@ -362,6 +359,7 @@ def test_token_transfer_roundtrip_perf(token_transfer, builder):
 # TokenApproval
 #
 
+
 def fill_token_approval(token_approval):
     token_approval.tx_hash = os.urandom(32)
     token_approval.block_hash = os.urandom(32)
@@ -434,6 +432,7 @@ def test_token_approval_roundtrip_perf(token_approval, builder):
 #
 # PaymentChannel
 #
+
 
 def fill_payment_channel(payment_channel):
     payment_channel.type = random.randint(1, 2)
@@ -544,10 +543,10 @@ def test_payment_channel_roundtrip_perf(payment_channel, builder):
     print(scratch['value'])
 
 
-
 #
 # PayingChannelRequest
 #
+
 
 def fill_paying_channel_req(paying_channel_req):
     paying_channel_req.request = os.urandom(16)
@@ -636,10 +635,10 @@ def test_paying_channel_req_roundtrip_perf(paying_channel_req, builder):
     print(scratch['value'])
 
 
-
 #
 # PaymentChannelBalance
 #
+
 
 def fill_payment_channel_bal(payment_channel_bal):
     payment_channel_bal.remaining = random.randint(0, 2**256 - 1)
@@ -702,10 +701,10 @@ def test_payment_channel_bal_roundtrip_perf(payment_channel_bal, builder):
     print(scratch['value'])
 
 
-
 #
 # Offers
 #
+
 
 def fill_offer(offer):
     now = time_ns()
@@ -858,10 +857,10 @@ def test_offer_roundtrip_perf(offer, builder):
     print(scratch['value'])
 
 
-
 #
 # Transactions
 #
+
 
 def fill_transaction(transaction):
     now = time_ns()
