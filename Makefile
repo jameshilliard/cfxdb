@@ -20,6 +20,10 @@ publish: clean
 	twine upload dist/*
 
 
+stats:
+	wc -l cfxdb/*.fbs
+	cloc cfxdb
+
 test:
 	pytest -v -s ./cfxdb/tests/
 
