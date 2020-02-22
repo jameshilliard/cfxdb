@@ -25,7 +25,7 @@ zlmdb.TABLES_BY_UUID = {}
 try:
     from cfxdb.eventstore import Session, Publication, Event
 except ImportError:
-    from crossbarfx.cfxdb.eventstore import Session, Publication, Event
+    from cfxdb.eventstore import Session, Publication, Event
 
 from txaio import time_ns
 

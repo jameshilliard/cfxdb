@@ -27,8 +27,8 @@ import zlmdb
 zlmdb.TABLES_BY_UUID = {}
 
 try:
-    from crossbarfx.cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
-    from crossbarfx.cfxdb import uint256, address
+    from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
+    from cfxdb import uint256, address
 except ImportError:
     from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
     from cfxdb import uint256, address

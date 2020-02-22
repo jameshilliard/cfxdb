@@ -180,7 +180,7 @@ class Blocks(MapBytes32FlatBuffers):
     """
     Blockchain blocks processed.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``block_number`` to :class:`crossbarfx.cfxdb.xbr.Block`
+    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``block_number`` to :class:`cfxdb.xbr.Block`
     """
 
 
@@ -382,7 +382,7 @@ class Members(MapBytes20FlatBuffers):
     """
     XBR membery by ``member_adr``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``member_adr`` to :class:`crossbarfx.cfxdb.xbr.Member`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``member_adr`` to :class:`cfxdb.xbr.Member`
     """
 
 
@@ -715,7 +715,7 @@ class Markets(MapUuidFlatBuffers):
     """
     Persisted market definitions.
 
-    Map :class:`zlmdb.MapUuidFlatBuffers` from ``market_id`` to :class:`crossbarfx.cfxdb.xbr.Market`
+    Map :class:`zlmdb.MapUuidFlatBuffers` from ``market_id`` to :class:`cfxdb.xbr.Market`
     """
 
 
@@ -959,7 +959,7 @@ class Actors(MapUuidBytes20Uint8FlatBuffers):
     """
     Persisted market actors.
 
-    Map :class:`zlmdb.MapUuidBytes20Uint8FlatBuffers` from ``(market_id, actor_adr, actor_type)`` to :class:`crossbarfx.cfxdb.xbr.Actor`
+    Map :class:`zlmdb.MapUuidBytes20Uint8FlatBuffers` from ``(market_id, actor_adr, actor_type)`` to :class:`cfxdb.xbr.Actor`
     """
 
 
@@ -1416,7 +1416,7 @@ class Offers(MapUuidFlatBuffers):
     """
     Persisted data encryption key offers.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``offer_id`` to :class:`crossbarfx.cfxdb.xbr.Offer`
+    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``offer_id`` to :class:`cfxdb.xbr.Offer`
     """
 
 
@@ -1625,7 +1625,7 @@ class TokenApprovals(MapBytes32FlatBuffers):
     """
     Persisted token approvals archive.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``transaction_hash`` to :class:`crossbarfx.cfxdb.xbr.TokenApproval`
+    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``transaction_hash`` to :class:`cfxdb.xbr.TokenApproval`
     """
 
 
@@ -1827,7 +1827,7 @@ class TokenTransfers(MapBytes32FlatBuffers):
     """
     Persisted token transfers archive.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``transaction_hash`` to :class:`crossbarfx.cfxdb.xbr.TokenTransfer`
+    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``transaction_hash`` to :class:`cfxdb.xbr.TokenTransfer`
     """
 
 
@@ -2702,7 +2702,7 @@ class PayingChannelRequests(MapBytes16FlatBuffers):
     """
     XBR paying channel requests by ``paying_channel_adr``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``paying_channel_adr`` to :class:`crossbarfx.cfxdb.xbr.PayingChannelRequest`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``paying_channel_adr`` to :class:`cfxdb.xbr.PayingChannelRequest`
     """
 
 
@@ -2718,7 +2718,7 @@ class PaymentChannels(MapBytes20FlatBuffers):
     """
     XBR payment channels by ``payment_channel_adr``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`crossbarfx.cfxdb.xbr.PaymentChannel`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`cfxdb.xbr.PaymentChannel`
     """
 
 
@@ -2734,7 +2734,7 @@ class PayingChannels(MapBytes20FlatBuffers):
     """
     XBR paying channels by ``paying_channel_adr``.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``paying_channel_adr`` to :class:`crossbarfx.cfxdb.xbr.PaymentChannel`
+    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``paying_channel_adr`` to :class:`cfxdb.xbr.PaymentChannel`
     """
 
 
@@ -2902,7 +2902,7 @@ class PaymentChannelBalances(MapBytes20FlatBuffers):
     """
     XBR payment channels current balances by ``payment_channel_adr``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`crossbarfx.cfxdb.xbr.Balance`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`cfxdb.xbr.Balance`
     """
 
 
@@ -2911,7 +2911,7 @@ class PayingChannelBalances(MapBytes20FlatBuffers):
     """
     XBR paying channels current balances by ``paying_channel_adr``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``paying_channel_adr`` to :class:`crossbarfx.cfxdb.xbr.Balance`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``paying_channel_adr`` to :class:`cfxdb.xbr.Balance`
     """
 
 

@@ -22,7 +22,7 @@ class Sessions(MapOidFlatBuffers):
     """
     Persisted sessions archive.
 
-    Map :class:`zlmdb.MapOidFlatBuffers` from ``session`` to :class:`crossbarfx.cfxdb.eventstore.Session`
+    Map :class:`zlmdb.MapOidFlatBuffers` from ``session`` to :class:`cfxdb.eventstore.Session`
     """
 
 
@@ -31,7 +31,7 @@ class Publications(MapOidFlatBuffers):
     """
     Persisted publications archive.
 
-    Map :class:`zlmdb.MapOidFlatBuffers` from ``publication`` to :class:`crossbarfx.cfxdb.eventstore.Publication`.
+    Map :class:`zlmdb.MapOidFlatBuffers` from ``publication`` to :class:`cfxdb.eventstore.Publication`.
     """
 
 
@@ -41,7 +41,7 @@ class Events(MapOidTimestampFlatBuffers):
     Persisted events archive.
 
 
-    Map :class:`zlmdb.MapOid3FlatBuffers` from ``(subscription, time_ns)`` to :class:`crossbarfx.cfxdb.eventstore.Event`.
+    Map :class:`zlmdb.MapOid3FlatBuffers` from ``(subscription, time_ns)`` to :class:`cfxdb.eventstore.Event`.
     """
 
 

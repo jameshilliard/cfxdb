@@ -1194,7 +1194,7 @@ class MNodeLogs(MapTimestampUuidFlatBuffers):
     """
     Persisted managed node heartbeat log records.
 
-    Map :class:`zlmdb.MapTimestampUuidFlatBuffers` from ``(timestamp, node_id)`` to :class:`crossbarfx.cfxdb.logs.MNodeLog`
+    Map :class:`zlmdb.MapTimestampUuidFlatBuffers` from ``(timestamp, node_id)`` to :class:`cfxdb.logs.MNodeLog`
     """
 
 
@@ -2280,7 +2280,7 @@ class MWorkerLogs(MapTimestampUuidStringFlatBuffers):
     """
     Persisted managed node worker heartbeat log records.
 
-    Map :class:`zlmdb.MapTimestampUuidStringFlatBuffers` from ``(timestamp, node_id, worker_id)`` to :class:`crossbarfx.cfxdb.logs.MWorkerLog`
+    Map :class:`zlmdb.MapTimestampUuidStringFlatBuffers` from ``(timestamp, node_id, worker_id)`` to :class:`cfxdb.logs.MWorkerLog`
     """
 
 

@@ -23,7 +23,7 @@ zlmdb.TABLES_BY_UUID = {}
 try:
     from cfxdb.usage import MasterNodeUsage
 except ImportError:
-    from crossbarfx.cfxdb.usage import MasterNodeUsage
+    from cfxdb.usage import MasterNodeUsage
 
 from txaio import time_ns
 
