@@ -1,22 +1,21 @@
-CFX-DB
-======
+Crossbar.io FX Database
+=======================
 
-CFX-DB is a CrossbarFX Python support package with core database access classes
+| |Travis|
+
+**cfxdb** is a CrossbarFX Python support package with core database access classes
 written in native Python. The package allows direct in-memory data access from
-Python programs (*including Jupyter notebooks!*) to CrossbarFX edge node data:
+Python programs (including Jupyter notebooks) to CrossbarFX edge node data:
 
 * persisted event history
 * persisted tracing data
 * XBR market maker transaction logs
 * WAMP session cache
 
+--------------
 
-Installation
-------------
+*Copyright (C) 2018-2020 Crossbar.io Technologies GmbH. All rights reserved.
+WAMP, Crossbar.io and XBR are trademarks of Crossbar.io Technologies GmbH.*
 
-To install CFX-DB:
-
-.. code-block:: console
-
-    pip install cfxdb
-
+.. |Travis| image:: https://travis-ci.com/crossbario/cfxdb.svg?token=j7hAwtRPgsvGimmxybzn&branch=master
+   :target: https://travis-ci.com/crossbario/cfxdb
