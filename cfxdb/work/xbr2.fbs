@@ -103,7 +103,7 @@ table Member
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    verified: [uint8] (etheraddress);
+    verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
@@ -137,7 +137,7 @@ table Interface
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    verified: [uint8] (etheraddress);
+    verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
@@ -162,7 +162,7 @@ table Service
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    verified: [uint8] (etheraddress);
+    verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
@@ -185,7 +185,7 @@ table Market
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    verified: [uint8] (etheraddress);
+    verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
@@ -221,7 +221,7 @@ table MarketAdmission
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    verified: [uint8] (etheraddress);
+    verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
@@ -266,7 +266,7 @@ table ServiceRegistration
 
     /// When this objects' metadata has been confirmed on Ethereum, the address of
     /// the confirmed Ethereum transaction, and empty until then.
-    eth_verified: [uint8] (etheraddress);
+    eth_verified: [uint8] (address);
 
     /// When the objects' metadata has been confirmed on Ethereum, the time when
     /// then transaction was confirmed on Ethereum, and 0 until then.
