@@ -1,0 +1,149 @@
+// CrossbarFX - Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+
+include "common.fbs";
+
+/// Label for this object (not interpreted by CFC).
+// label: string;
+
+/// Description for this object (not interpreted by CFC).
+// description: string;
+
+/// Tags on this object.
+// tags: [string];
+
+
+/// Generic metadata, like documentation, tags, comments and reactions
+/// that can be attach on any object with an UUID.
+namespace meta;
+
+
+/// Documentation (text) formats.
+enum DocFormat: uint8
+{
+    /// Unset documentation format.
+    NONE = 0,
+
+    /// Plain text documentation format (default).
+    TEXT = 1,
+
+    /// Markdown text documentation format.
+    MARKDOWN = 2,
+
+    /// Restructered Text (ReST) text documentation format.
+    REST = 3,
+
+    /// Generic HTML.
+    HTML = 4,
+
+    /// Generic XML.
+    XML = 5,
+
+    /// DocBook XML
+    DOCBOOK = 6,
+
+    /// Jupyter notebook.
+    NOTEBOOK = 7
+}
+
+
+table Doc
+{
+    /// OID of the documentation (version).
+    oid: string (required, uuid);
+
+    /// Slot of the object being documented.
+    object_slot: uint16;
+
+    /// OID of the object being documented.
+    object_oid: string (required, uuid);
+
+    /// When the documentation (version) was created or modified.
+    modified: uint64 (timestamp);
+
+    /// Documentation text format.
+    format: DocFormat;
+
+    /// Documentation title.
+    title: string;
+
+    /// The actual documentation (version).
+    body: string;
+}
+
+
+/// RGBA color.
+struct Color
+{
+    /// Red component of color, 0-255.
+    r: uint8;
+
+    /// Green component of color, 0-255.
+    g: uint8;
+
+    /// Blue component of color, 0-255.
+    b: uint8;
+
+    /// Alpha component of color, 0-255.
+    a: uint8;
+}
+
+
+/// Tags are created and centrally managed, and can be attached to any object.
+table Tag
+{
+    /// OID of the tag.
+    oid: string (required, uuid);
+
+    /// When the documentation (version) was created or modified.
+    modified: uint64 (timestamp);
+
+    /// Slot of the object being documented.
+    object_slot: uint16;
+
+    /// OID of the object being documented.
+    object_oid: string (required, uuid);
+
+
+    /// User that originally created the tag.
+    //created_by: string (uuid);
+
+    /// When the tag was originally created.
+    //created: uint64 (timestamp);
+
+    /// User that last modified the tag.
+    //modified_by: string (uuid);
+
+    /// When the tag was last modified.
+    //modified: uint64 (timestamp);
+
+    /// The actual label text. This must match a simple regex (eg [a-z\-]+ .. tbd).
+    //label: string (required);
+
+    /// Description of the tag (what it means, how it is used, etc).
+    //description: string;
+
+    /// Tag foreground color (eg text).
+    //color: Color;
+
+    /// Tag background color.
+    //background: Color;
+}
+
+
+table Reaction
+{
+}
+
+table Comment
+{
+    /// OID of the comment.
+    oid: string (required, uuid);
+
+    /// If this comment
+    reply_to: string (uuid);
+    author: string;
+    created: uint64;
+    modified: uint64;
+    text: string;
+    reactions: [Reaction];
+}

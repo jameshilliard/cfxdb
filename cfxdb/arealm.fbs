@@ -1,0 +1,326 @@
+// CrossbarFX - Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+
+include "common.fbs";
+
+namespace arealm;
+
+
+enum MatchType : byte
+{
+    /// No match type.
+    NONE = 0,
+
+    /// Match URI exactly.
+    EXACT = 1,
+
+    /// Match by URI prefix.
+    PREFIX = 2,
+
+    /// Match by URI wildcard pattern.
+    WILDCARD = 3
+}
+
+
+enum UriCheckLevel : byte
+{
+    /// No check level.
+    NONE = 0,
+
+    /// Check level "strict".
+    EXACT = 1,
+
+    /// Check level "loose".
+    PREFIX = 2,
+}
+
+
+struct Permission
+{
+    /// URI matching mode.
+    match: MatchType;
+
+    /// Allow/disallow calling procedures on a match.
+    allow_call: bool;
+
+    /// Allow/disallow registering procedures on a match.
+    allow_register: bool;
+
+    /// Allow/disallow publishing events on a match.
+    allow_publish: bool;
+
+    /// Allow/disallow subscribing topics on a match.
+    allow_subscribe: bool;
+
+    /// Disclose the caller on a match (of a procedure) when called.
+    disclose_caller: bool;
+
+    /// Disclose the publisher on a match (of a topic) when published to.
+    disclose_publisher: bool;
+
+    /// Cache the permission on a match in the router worker.
+    cache: bool;
+}
+
+
+table Role
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// Time when the object was created.
+    created: uint64 (timestamp);
+
+    /// Owner organization of this object.
+    owner: oid_t;
+
+    /// Name of this role, must be unique within the management realm at any given point in time.
+    name: string (required, unique);
+
+    /// Set of static permissions on the role.
+    permissions: [Permission];
+
+    /// URIs or URI patterns the permissions must match.
+    permission_uris: [string];
+
+    /// Alternatively to defining a static set of permissions, the WAMP procedure URI of a dynamic authorizer can be specified.
+    authorizer: string;
+}
+
+
+/// Association (N:M) between roles and application realms, both defined independently at the management realm level.
+table ApplicationRealmRole
+{
+    /// ID of the role being associated with an application realm.
+    role_oid: oid_t (required);
+
+    /// ID of the application realm this role is associated with.
+    arealm_oid: oid_t (required);
+}
+
+
+table ApplicationRealm
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// Time when the object was created.
+    created: uint64 (timestamp);
+
+    /// Owner organization of this object.
+    owner: oid_t;
+
+    /// Name of this application realm (must be unique within the management realm at any given point in time).
+    name: string (required, unique);
+
+    /// When dispatching events to receivers, batch sending in chunks of this many events (not all at once).
+    event_dispatching_chunk_size: uint32;
+
+    /// URI check level to enforce by the router.
+    uri_check: UriCheckLevel;
+
+    /// Enable the WAMP meta API on the application realm.
+    enable_meta_api: bool;
+
+    /// Bridge the WAMP meta API from the application realm to the management realm, so that it can be tapped into.
+    bridge_meta_api: bool;
+}
+
+
+table AnonymousPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// WAMP-anonymous specific stuff:
+
+    /// nothing!
+}
+
+
+table TicketPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// WAMP-ticket specific stuff:
+
+    ticket: string;
+}
+
+
+table WampCraPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// WAMP-CRA specific stuff:
+
+    secret: string;
+    salt: string;
+    iterations: uint32;
+    keylen: uint16;
+}
+
+
+enum ScramKdfType : byte
+{
+    /// No SCRAM KDF type.
+    NONE = 0,
+
+    /// Use argon2id-13 KDF.
+    ARGON2ID13 = 1,
+
+    /// Use pbkdf2 KDF.
+    PBKDF2 = 2
+}
+
+
+table ScramPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// WAMP-SCRAM specific stuff:
+
+    kdf: ScramKdfType;
+    iterations: uint32;
+    memory: uint64;
+    salt: string;
+    stored_key: string;
+    server_key: string;
+}
+
+
+table TlsPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// TLS authentication specific stuff:
+
+    /// FIXME
+}
+
+
+table CryptosignPrincipal
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
+
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
+
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// WAMP-cryptosign specific stuff:
+
+    /// Authorized public keys, eg 64 character hex strings of the 32 bytes Ed25519 public keys.
+    authorized_keys: [string];
+}
+
+
+enum AuthenticatorType : byte
+{
+    /// No authentiator type.
+    NONE = 0,
+
+    /// WAMP-anonymous authentication.
+    ANONYMOUS = 1,
+
+    /// WAMP-ticket authentication.
+    TICKET = 2,
+
+    /// WAMP-CRA authentication.
+    WAMPCRA = 3,
+
+    /// TLS client certificate authentication [TRANSPORT LEVEL].
+    TLS = 4,
+
+    /// HTTP cookie authentication [TRANSPORT LEVEL].
+    COOKIE = 5,
+
+    /// WAMP-cryptosign authentication.
+    CRYPTOSIGN = 6,
+
+    /// WAMP-SCRAM authentication.
+    SCRAM = 7,
+}
+
+
+table Authenticator
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// Time when the object was created.
+    created: uint64 (timestamp);
+
+    /// Owner organization of this object.
+    owner: oid_t;
+
+    /// The type of authenticator.
+    authenticator_type: AuthenticatorType;
+
+    /// When a dynamic authenticator shall be used, the WAMP procedure URI of a dynamic authenticator to call.
+    authenticator: string;
+}
+
+
+/// Association (N:M) between principals and authenticators, both defined independently at the management realm level.
+table AuthenticatorPrincipal
+{
+    /// ID of the principal (which must match in type with the authenticator).
+    principal_oid: oid_t (required);
+
+    /// ID of the authenticator the principal is associated with.
+    authenticator_oid: oid_t (required);
+}

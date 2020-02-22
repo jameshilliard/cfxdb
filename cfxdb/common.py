@@ -7,6 +7,11 @@
 
 import web3
 import struct
+import six
+import uuid
+import pprint
+
+from typing import Optional, List
 
 
 def unpack_uint256(data):
@@ -102,3 +107,151 @@ class address(object):
 
     def serialize(self):
         return self._data
+
+
+class ConfigurationElement(object):
+    """
+    CFC configuration element, an abstract "thing" with a unique identifier ("oid",
+    which is of type UUID) and that can be user documented using
+
+    * label
+    * description
+    * tags
+
+    These elements are under user (application) control and not interpreted by
+    the CFC backend code (beyond their basic types of string or list of string).
+
+    Configuration elements can be nearly everything in CFC configuration:
+
+    * Users
+    * Mrealms
+    * Nodes
+    * ...
+    """
+
+    # oid: uuid.UUID
+    oid = None
+    """
+    Object ID.
+    """
+
+    # label: Optional[str]
+    label = None
+    """
+    User label for object (optional free text).
+    """
+
+    # description: Optional[str]
+    description = None
+    """
+    User description for object (optional free text)
+    """
+
+    # tags: Optional[List[str]]
+    tags = None
+    """
+    User tags for object (optional free list of text portions)
+    """
+
+    def __init__(self, oid=None, label=None, description=None, tags=None, _unknown=None):
+        self.oid = oid
+
+        self.label = label
+        self.description = description
+        self.tags = tags
+
+        # private member with unknown/untouched data passing through
+        self._unknown = _unknown
+
+    def __eq__(self, other):
+        if not isinstance(other, self.__class__):
+            return False
+        if other.oid != self.oid:
+            return False
+        if other.label != self.label:
+            return False
+        if other.description != self.description:
+            return False
+        if (self.tags and not other.tags) or (not self.tags and other.tags):
+            return False
+        if other.tags and self.tags:
+            if set(other.tags) ^ set(self.tags):
+                return False
+
+        # _unknown is not part of comparison
+
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return '\n{}\n'.format(pprint.pformat(self.marshal()))
+
+    def copy(self, other, overwrite=False):
+        if (not self.oid and other.oid) or overwrite:
+            self.oid = other.oid
+        if (not self.label and other.label) or overwrite:
+            self.label = other.label
+        if (not self.description and other.description) or overwrite:
+            self.description = other.description
+        if (not self.tags and other.tags) or overwrite:
+            self.tags = other.tags
+
+        # _unknown is not copied
+
+    def marshal(self):
+        assert isinstance(self.oid, uuid.UUID)
+        assert self.label is None or type(self.label) == six.text_type
+        assert self.description is None or type(self.description) == six.text_type
+        assert self.tags is None or (type(self.tags) == list and type(tag) == six.text_type for tag in self.tags)
+
+        obj = {
+            'oid': str(self.oid)
+        }
+        if self.label:
+            obj['label'] = self.label
+        if self.description:
+            obj['description'] = self.description
+        if self.tags:
+            obj['tags'] = self.tags
+
+        if self._unknown:
+            # pass through all attributes unknown
+            obj.update(self._unknown)
+
+        return obj
+
+    @staticmethod
+    def parse(data):
+        assert type(data) == dict
+
+        # future attributes (yet unknown) are not only ignored, but passed through!
+        _unknown = {}
+        for k in data:
+            if k not in ['oid', 'label', 'description', 'tags']:
+                _unknown[k] = data[k]
+
+        oid = None
+        if 'oid' in data:
+            assert type(data['oid']) == six.text_type
+            oid = uuid.UUID(data['oid'])
+
+        label = None
+        if 'label' in data:
+            assert type(data['label']) == six.text_type
+            label = data['label']
+
+        description = None
+        if 'description' in data:
+            assert type(data['description']) == six.text_type
+            description = data['description']
+
+        tags = None
+        if 'tags' in data:
+            assert type(data['tags']) == list
+            for tag in data['tags']:
+                assert type(tag) == six.text_type
+            tags = data['tags']
+
+        return ConfigurationElement(oid=oid, label=label, description=description, tags=tags, _unknown=_unknown)
