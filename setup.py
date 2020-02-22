@@ -5,7 +5,6 @@
 #
 ##############################################################################
 
-import os
 from setuptools import setup, find_packages
 
 
@@ -21,7 +20,7 @@ with open('README.rst') as f:
 setup(
     name='cfxdb',
     version=__version__,  # noqa
-    description='CrossbarFX edge ZLMDB database schema classes',
+    description='Crossbar.io database schemata, based on zLMDB',
     long_description=docstr,
     author='Crossbar.io Technologies GmbH',
     author_email='support@crossbario.com',
@@ -29,10 +28,15 @@ setup(
     license='proprietary',
     classifiers=['License :: Other/Proprietary License'],
     platforms=('Any'),
+    python_requires='>=3.5',
     install_requires=[
+        'flatbuffers>=1.11',
         'numpy==1.15.4',
-        'zlmdb>=19.4.1',
+        'txaio>=20.1.1',
+        'zlmdb>=20.1.1',
     ],
     packages=find_packages(),
+    include_package_data=True,
+    data_files=[('.', ['LICENSE', 'LEGAL', 'README.rst'])],
     zip_safe=True
 )

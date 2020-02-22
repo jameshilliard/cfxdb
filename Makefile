@@ -20,6 +20,12 @@ publish: clean
 	twine upload dist/*
 
 
+# auto-format code - WARNING: this my change files, in-place!
+autoformat:
+	yapf -ri --style=yapf.ini \
+		--exclude="cfxdb/gen/*" \
+		cfxdb
+
 # flatbuffer schema processing / binding code generation
 #
 #

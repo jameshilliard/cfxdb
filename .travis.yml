@@ -1,0 +1,90 @@
+# py3.7/travis: https://github.com/travis-ci/travis-ci/issues/9815#issue-336465122
+language: python
+python: 3.7
+dist: xenial
+
+cache:
+  directories:
+    - $HOME/.cache/pip
+
+before_install:
+  - export PATH=$PATH:$HOME/.local/bin
+
+  # build ID (eg, "20180513-28114a1")
+  - export CROSSBAR_BUILD_ID="$(date --utc "+%Y%m%d")-$(git rev-parse --short ${TRAVIS_COMMIT})"
+
+install:
+  - pip install setuptools wheel tox codecov
+
+script:
+  - tox -c tox.ini -e $TOX_ENV
+
+stages:
+  - test
+  - name: deploy
+    if: repo = crossbario/cfxdb AND branch = master AND type != pull_request
+
+matrix:
+  fast_finish: true
+
+  include:
+    - python: "3.7"
+      env: TOX_ENV=pytest
+
+    - python: "3.7"
+      env: TOX_ENV=flake8
+
+    - python: "3.7"
+      env: TOX_ENV=mypy
+
+    - python: "3.7"
+      env: TOX_ENV=yapf
+
+    # https://docs.travis-ci.com/user/build-stages/matrix-expansion/
+    - stage: deploy
+      python: "3.7"
+      if: repo = crossbario/cfxdb AND branch = master AND type != pull_request
+      #on:
+      #  repo: crossbario/cfxdb
+      #  branch: master
+      #  # tags: true
+      skip_cleanup: true
+      provider: script
+      script: pwd && ls -la && sh .travis-deploy.sh
+
+      # It is important to note that jobs do not share storage, as each job runs in a fresh VM or container.
+      # If your jobs need to share files (e.g., using build artifacts from the “Test” stage for deployment
+      # in the subsequent “Deploy” stage), you need to use an external storage mechanism such as
+      # S3 and a remote scp server.
+      #
+      # https://docs.travis-ci.com/user/build-stages/#Data-persistence-between-stages-and-jobs
+
+# CI notifications
+notifications:
+  # IRC: chat messages on #crossbar-ci @ freenode
+  irc:
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: always    # options: [always|never|change] default: always
+    channels:
+      - "irc.freenode.org#crossbar-ci"
+    use_notice: false
+    skip_join: false
+
+  # Gitter: activity feed on https://gitter.im/crossbario/ci
+  webhooks:
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: always    # options: [always|never|change] default: always
+    urls:
+      # travis encrypt --pro --repo crossbario/cfxdb "https://webhooks.gitter.im/e/7ef088bf5a6e25c4b434"
+      - secure: "MC77VJV1//S9suvvLEKLFy88Aw5YhPqOFEdHvGebTMqeYiqG2d8vWayA7SKUUaMqGw1gJEIIkQ0+jyiZ+RwwX3uBaJgFGXVDN8Z2oQc6L55Yy0Sfmi+YEdQx9thuvy2fZF+cqnYUFHkI/iGx833+v214r/1Hqk/HWRU8FLafwSEu1YgwqksefccsubAAptXs6ZKhB7JjoU4gR4GIwOzN3Hp5+G3PLCyZqe4OtN4qoB+9jKdJ0vUohCRogq8Dx0Fm2eEjYQOQYdFQdhkZlOqA0mPWpgJ2EFM+gteDbCcGc5yOacBnMjlh+dYM87aScqc+oXLPfpj3E4ObrHvOadmH/gnqkpXH738V5lfxCX78/1YOLvYrx70IDAj0/viYMqWkIsBYP8GeMP1TTRnN5D9AVXrOYDN2JjNpeddMbJDvydOkja2vid0tL92UoFTk2kEO8u3mXS8I0dAgj31v9UEkFDr1FjyP1rr+noZ9dWq93sovok2aMPQlzkoQzb1Dkpp+g7Bi+NKLNCzu6iYZkCYZmnCRtmR5GP3IehPLlIcdYw7wMUME1pmPKiT1Z6HovGpw5QziA3K8pizM2sEGYTI3BXpDQOiIrPQ9oFpqNd+UHQBWHuSAwuczkUVgEpA14vQrYTGwlKz07wo8iVH5jLrpG7uxh7UvXL04Mv8IzB7aqNA="
+
+  # Slack: post feed on https://crossbario.slack.com/ in channel #ci
+  slack:
+    on_success: always  # options: [always|never|change] default: always
+    on_failure: always  # options: [always|never|change] default: always
+    on_start: always    # options: [always|never|change] default: always
+    rooms:
+      # travis encrypt "crossbario:<TOKEN>#cd" --pro -r crossbario/cfxdb
+      - secure: "CGty7c0HB4qfsfa6gZpIEN8ZUezlCZAVL2t1lcrKQfqM3yzI2OSWTq1gcYSzNlh7zzthV8RH63yKR4aFhZW23Ws2PQtXu5YrE967WKN5/cnfCtwhW2ZLzsfW/DhBr39aNvl3R4zq0sACs1pLN/DIGZ75q1C1plmQ7DQoPg76JTNhAqZTAU842H3qczbpoo1Xf/WrbPKuwQXNDDjNyDlg+342qGLm6I+tcm+TGuskOB8vFbsLjvPt0/861rzrLt3mvR1dst9ZCaR5wLOOmzP8GXIwrBw2XrjCzZGbBMMF7uKvNEXKM+EpTnYTwM58jiqgJBWn6vai2xoGvgCjeckMXx55YgUiWPOmt2BtRvfdDx00eJqJ4zYeQxnuDay7nJqDOKZdUWuW8UFz1MAXaDC5K3ITSop3krKraWnnu+5Rik7JQjPSdwQD/jtTRa7rwtGb5CNh/fX5bxPqcEL8wQjOCQn3f/QDPP++AMpTJnjr//NiYKOtEzsL9y13Rep/DoApZ0A5M/kOmRt1C4r6a3N9oq4LqmlItAD/cojmvI/EA98lU1kuMOU7g3fnyL88J5ephXUbKmog0RzF1zAtr2IXDT7daaDg7tyY36ELYS1IIk93/s/1azy+eSIEALhpi5F1pzGZkLzIMqC3BVFljAHN35EpLxe0ef4N8khg7Az5KwQ="
