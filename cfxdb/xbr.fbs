@@ -1,0 +1,499 @@
+// CrossbarFX - Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+
+include "common.fbs";
+
+namespace xbr;
+
+
+/// This table stores information about the series of Ethereum blocks that make up the blockchain.
+table Block
+{
+    /// Timestamp when record was inserted (Unix epoch time in ns)
+    timestamp: uint64 (timestamp);
+
+    /// Primary key: block number.
+    block_number: [uint8] (uint256);
+
+    /// Block hash.
+    block_hash: [uint8] (ethhash);
+
+    /// Number of XBR blockchain log events found in the block.
+    cnt_events: uint32;
+}
+
+
+/// This table stores XBRToken._balances state.
+table TokenBalance
+{
+    /// Primary key: XBR token owner address.
+    owner_address: [uint8] (address);
+
+    /// XBR token owned.
+    value: [uint8] (uint256);
+}
+
+
+/// This table stores XBRToken.Transfer events.
+table TokenTransfer
+{
+    /// Primary key: Transaction hash.
+    tx_hash: [uint8] (ethhash);
+
+    /// Block hash.
+    block_hash: [uint8] (ethhash);
+
+    /// XBR token sending address.
+    from_address: [uint8] (address);
+
+    /// XBR token receiving address.
+    to_address: [uint8] (address);
+
+    /// XBR token transferred.
+    value: [uint8] (uint256);
+}
+
+
+/// This table stores XBRToken.Approval events.
+table TokenApproval
+{
+    /// Primary key: Transaction hash.
+    tx_hash: [uint8] (ethhash);
+
+    /// Block hash.
+    block_hash: [uint8] (ethhash);
+
+    /// XBR token sending address.
+    owner_address: [uint8] (address);
+
+    /// XBR token receiving address.
+    spender_address: [uint8] (address);
+
+    /// XBR token transferred.
+    value: [uint8] (uint256);
+}
+
+
+/// XBR Member level.
+enum MemberLevel: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// Member is active.
+    ACTIVE = 1,
+
+    /// Member is active and verified.
+    VERIFIED = 2,
+
+    /// Member is retired.
+    RETIRED = 3,
+
+    /// Member is subject to a temporary penalty.
+    PENALTY = 4,
+
+    /// Member is currently blocked and cannot current actively participate in the market.
+    BLOCKED = 5
+}
+
+
+/// XBR Network members.
+table Member
+{
+    /// Ethereum address of the member.
+    address: [uint8] (address);
+
+    /// Database transaction time (epoch time in ns) of insert or last update.
+    timestamp: uint64 (timestamp);
+
+    /// Block number (on the blockchain) when the member (originally) registered.
+    registered: [uint8] (uint256);
+
+    /// EULA the member agreed to when joining the market (IPFS Multihash string).
+    eula: string (multihash);
+
+    /// Optional member profile (IPFS Multihash string).
+    profile: string (multihash);
+
+    /// Current member level.
+    level: MemberLevel;
+}
+
+
+/// XBR Market Actor type.
+enum ActorType: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// Actor is the XBR Network itself.
+    NETWORK = 1,
+
+    /// Actor is the XBR Market itself.
+    MARKET = 2,
+
+    /// Actor is a XBR Provider.
+    PROVIDER = 3,
+
+    /// Actor is a XBR Consumer.
+    CONSUMER = 4
+}
+
+
+/// XBR Market Actors.
+table Actor
+{
+    /// Database transaction time (epoch time in ns) of insert or last update.
+    timestamp: uint64 (timestamp);
+
+    /// ID of the market this actor is associated with.
+    market: [uint8] (uuid);
+
+    /// Ethereum address of the member.
+    actor: [uint8] (address);
+
+    /// Type of the market actor.
+    actor_type: ActorType;
+
+    /// Block number (on the blockchain) when the actor (originally) joined the market.
+    joined: [uint8] (uint256);
+
+    /// Security (XBR tokens) deposited by the actor in the market.
+    security: [uint8] (uint256);
+
+    /// The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+    meta: string (multihash);
+}
+
+
+/// XBR Markets.
+table Market
+{
+    /// The unique ID of the market.
+    market: [uint8] (uuid);
+
+    /// Database transaction time (epoch time in ns) of insert or last update.
+    timestamp: uint64 (timestamp);
+
+    /// Global market sequence number.
+    seq: uint32;
+
+    /// Market owner.
+    owner: [uint8] (address);
+
+    /// The XBR market terms set by the market owner. IPFS Multihash pointing to a ZIP archive file with market documents.
+    terms: string (multihash);
+
+    /// The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+    meta: string (multihash);
+
+    /// The address of the XBR market maker that will run this market. The delegate of the market owner.
+    maker: [uint8] (address);
+
+    /// The amount of XBR tokens a XBR provider joining the market must deposit.
+    provider_security: [uint8] (uint256);
+
+    /// The amount of XBR tokens a XBR consumer joining the market must deposit.
+    consumer_security: [uint8] (uint256);
+
+    /// The fee taken by the market (beneficiary is the market owner). The fee is a percentage of the revenue of the XBR Provider that receives XBR Token paid for transactions. The fee must be between 0% (inclusive) and 99% (inclusive), and is expressed as a fraction of the total supply of XBR tokens.
+    market_fee: [uint8] (uint256);
+}
+
+
+/// State of a XBR paying channel request.
+enum PayingChannelRequestState: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// The paying channel request is newly created
+    CREATED = 1,
+
+    /// The paying channel request has succeeded and a payment channel contract associated.
+    ASSOCIATED = 2,
+
+    /// The paying channel request has failed (or will not be re-tried).
+    FAILED = 3
+}
+
+
+/// Request to have the market maker open a paying channel (which is a payment channel from the market maker to the data seller).
+table PayingChannelRequest
+{
+    /// ID of the paying channel request.
+    request: [uint8] (uuid);
+
+    /// Offer transaction time (epoch time in ns)
+    timestamp: uint64;
+
+    /// ID of the market this request for a paying channel is associated with.
+    market: [uint8] (uuid);
+
+    /// The sender address of the Ethereum transaction submitting the paying channel request.
+    sender: [uint8] (address);
+
+    /// The address of the buyer delegate allowed to consume the payment channel balance.
+    delegate: [uint8] (address);
+
+    /// The ultimate recipient of this payment channel (for a XBR buyer, this will be the XBR market maker address; for a XBR seller, this will be the seller address).
+    recipient: [uint8] (address);
+
+    /// The initial amount in the (off-chain) payment channel.
+    amount: [uint8] (uint256);
+
+    /// The timeout knob for a non-cooperative close of the payment channel.
+    timeout: [uint8] (uint256);
+
+    /// Paying channel request current state.
+    state: PayingChannelRequestState;
+
+    /// When state is PayingChannelRequestState.FAILED, an optional error message.
+    error_msg: string;
+
+    /// When this request has been fulfulled, the address to the contract of the created payment channel (from the market maker to the data seller).
+    channel: [uint8] (address);
+}
+
+
+/// Type of a XBR payment channel.
+enum PaymentChannelType: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// Payment channel (from buyer delegate to maker maker)
+    PAYMENT = 1,
+
+    /// Paying channel (from market maker to seller delegate)
+    PAYING = 2,
+}
+
+
+/// State of a XBR payment channel.
+enum PaymentChannelState: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// On-chain state: the payment channel is open (and operating off-chain)
+    OPEN = 1,
+
+    /// The payment channel is closing (one of the channel participants has requested to closed the channel)
+    CLOSING = 2,
+
+    /// The payment channel is closed and settled with no errors
+    CLOSED = 3,
+
+    /// The payment channel is closed with an error
+    FAILED = 4,
+}
+
+
+/// XBR payment channel (from XBR consumer to XBR market maker) and XBR paying channels (from XBR market maker to XBR provider).
+table PaymentChannel
+{
+    /// Channel type: payment channel (from XBR consumer to XBR market maker) or paying channel (from XBR market maker to XBR provider).
+    type: PaymentChannelType;
+
+    /// ID of the payment channel.
+    channel: [uint8] (uuid);
+
+    /// ID of the market this payment channel is associated with.
+    market: [uint8] (uuid);
+
+    /// Ethereum address of the sender (either XBR Consumer or XBR Market).
+    sender: [uint8] (address);
+
+    /// Ethereum address of the sender delegate (either XBR Consumer delegate or XBR Market delegate == market maker)
+    delegate: [uint8] (address);
+
+    /// Ethereum address of the recipient (either XBR Market or XBR Provider)
+    recipient: [uint8] (address);
+
+    /// Amount of XBR tokens initially deposited into the payment channel.
+    amount: [uint8] (uint256);
+
+    /// Payment channel (non-cooperative) closed timeout in blocks (on the blockchain).
+    timeout: uint32;
+
+    /// Current state of payment channel.
+    state: PaymentChannelState;
+
+    /// Block number (on the blockchain) when the payment channel was opened.
+    open_at: [uint8] (uint256);
+
+    /// Block number (on the blockchain) when the payment channel will close (at the latest).
+    closing_at: [uint8] (uint256);
+
+    /// Block number (on the blockchain) when the payment channel was finally closed.
+    closed_at: [uint8] (uint256);
+
+    /// Closing signature by market maker.
+    close_mm_sig: [uint8] (ethsig);
+
+    /// Closing signature by (seller or buyer) delegate.
+    close_del_sig: [uint8] (ethsig);
+
+    /// Last off-chain, closing transaction: channel transaction sequence number.
+    close_channel_seq: uint32;
+
+    /// Remaining (closing) channel balance (XBR).
+    close_balance: [uint8] (uint256);
+
+    /// Flag indication if close is final (happens immediately without a channel timeout).
+    close_is_final: bool;
+
+    /// When channel was finally closed on-chain, the Ethereum transaction ID.
+    closed_tx: [uint8] (ethhash);
+}
+
+
+/// XBR payment channel current (off-chain) balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``PaymentChannel.amount``.
+table PaymentChannelBalance
+{
+    /// Amount of XBR tokens currently remaining in the payment channel.
+    remaining: [uint8] (uint256);
+
+    /// Amount of XBR tokens reserved to in-flight purchase transactions.
+    inflight: [uint8] (uint256);
+
+    /// Sequence number of transactions on this balance starting from 0 when the payment channel is created.
+    seq: uint32;
+}
+
+
+/// Data encryption key offerings by XBR providers.
+table Offer
+{
+    /// Offer transaction time (epoch time in ns)
+    timestamp: uint64 (timestamp);
+
+    /// ID of the data encryption key offer.
+    offer: [uint8] (uuid);
+
+    /// ID of the XBR provider offering the data encryption key.
+    seller: [uint8] (address);
+
+    /// WAMP session ID of the caller that originally placed this offer.
+    seller_session_id: uint64;
+
+    /// WAMP session authid of the caller that originally placed this offer.
+    seller_authid: string;
+
+    /// ID of the data encryption key offered.
+    key: [uint8] (uuid);
+
+    /// ID of the API the encrypted data (this key is for) is provided under.
+    api: [uint8] (uuid);
+
+    /// URI under which the data encrypted with the key offered is provided under.
+    uri: string;
+
+    /// Timestamp from which the offer is valid (epoch time in ns).
+    valid_from: uint64 (timestamp);
+
+    /// Seller delegate signature for the offer. The signature covers all information of the original offer placement request and requestor.
+    signature: [uint8] (ethsig);
+
+    /// Price of data encryption key in XBR tokens.
+    price: [uint8] (uint256);
+
+    /// Keys for optional user defined categories the specific data that is provided falls under.
+    categories_key: [string];
+
+    /// Values for optional user defined categories the specific data that is provided falls under.
+    categories_value: [string];
+
+    /// Optional data at which this offer expires (epoch time in ns).
+    expires: uint64 (timestamp);
+
+    /// Optional maximum number of times this data encryption key is to be sold or 0 for unlimited.
+    copies: uint32;
+
+    /// Remaining number of copies to be sold (if "copies" is set >0, otherwise 0).
+    remaining: uint32;
+}
+
+
+/// State of a XBR transaction.
+enum TransactionState: uint8
+{
+    /// Unset
+    NONE = 0,
+
+    /// The transaction is currently in-flight
+    INFLIGHT = 1,
+
+    /// The transaction has completed with error (it failed)
+    FAILED = 2,
+
+    /// The transaction has completed with success
+    SUCCESS = 3
+}
+
+
+/// Data encryption key buy-sell transactions.
+table Transaction
+{
+    /// ID of the transaction..
+    tid: [uint8] (uuid);
+
+    /// Creation time of the transaction (epoch time in ns)
+    created: uint64 (timestamp);
+
+    /// Sequence number of the created-state transaction within the payment channel.
+    created_payment_channel_seq: uint32;
+
+    /// Sequence number of the created-state transaction within the paying channel.
+    created_paying_channel_seq: uint32;
+
+    /// ID of the data encryption key offer this transaction is for.
+    offer: [uint8] (uuid);
+
+    /// Transaction amount in XBR.
+    amount: [uint8] (uint256);
+
+    /// Address of the payment channel (of the buyer) this transaction is transacting on.
+    payment_channel: [uint8] (address);
+
+    /// Address of the paying channel (of the seller) this transaction is transacting on.
+    paying_channel: [uint8] (address);
+
+    /// State of the transaction: TransactionState.INFLIGHT when created, and then either TransactionState.SUCCESS or TransactionState.FAILED.
+    state: TransactionState;
+
+    /// Completion time of the transaction (epoch time in ns)
+    completed: uint64 (timestamp);
+
+    /// Sequence number of the completed-state transaction within the payment channel.
+    completed_payment_channel_seq: uint32;
+
+    /// Sequence number of the completed-state transaction within the paying channel.
+    completed_paying_channel_seq: uint32;
+
+    // SIGN(pubkey, key_id, channel_seq, amount, balance)
+
+    /// ID of the data encryption key sold under the transaction.
+    key: [uint8] (uuid);
+
+    /// Buyer public key (Ed25519).
+    buyer_pubkey: [uint8] (uint256);
+
+    /// Payment channel balance after transaction.
+    payment_channel_after: [uint8] (uint256);
+
+    /// Paying channel balance after transaction.
+    paying_channel_after: [uint8] (uint256);
+
+    /// Payment channel market maker transaction signature.
+    payment_mm_sig: [uint8] (ethsig);
+
+    /// Payment channel (buyer) delegate transaction signature.
+    payment_del_sig: [uint8] (ethsig);
+
+    /// Paying channel market maker transaction signature.
+    paying_mm_sig: [uint8] (ethsig);
+
+    /// Paying channel (seller) delegate transaction signature.
+    paying_del_sig: [uint8] (ethsig);
+}
