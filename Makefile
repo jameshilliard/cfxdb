@@ -6,11 +6,11 @@ FBS_OUTPUT=./cfxdb/gen
 FLATC=/usr/local/bin/flatc
 
 clean:
+	-find . -type d -name "__pycache__" -exec rm -rf {} \;
 	-rm -rf ./.pytest_cache
 	-rm -rf ./build
 	-rm -rf ./dist
 	-rm -rf ./*.egg-info
-	-find . -type d -name "__pycache__" -exec rm -rf {} \;
 
 install:
 	pip install -e .
