@@ -547,12 +547,17 @@ class VerifiedAction(object):
     Verification action type for on-boarding new members via email verification.
     """
 
-    VERIFICATION_TYPE_LOGIN_EMAIL = 1
+    VERIFICATION_TYPE_LOGIN_EMAIL = 2
     """
     Verification action type for login of member (client) via email verification.
     """
 
-    VERIFICATION_TYPE = list(range(3))
+    VERIFICATION_TYPE_CREATEMARKET_EMAIL = 2
+    """
+    Verification action type for creation of new data market via email verification.
+    """
+
+    VERIFICATION_TYPE = list(range(4))
     """
     All valid verification action types.
     """
@@ -1072,3 +1077,5 @@ class VerificationType(object):
     MEMBER_ONBOARD_EMAIL = 1
 
     MEMBER_LOGIN_EMAIL = 2
+
+    CREATE_MARKET_EMAIL = 3

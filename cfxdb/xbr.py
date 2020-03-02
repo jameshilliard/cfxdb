@@ -482,16 +482,16 @@ class Market(object):
 
     def marshal(self):
         obj = {
-            'market': self.market,
-            'timestamp': self.timestamp,
+            'market': self.market.bytes if self.market else None,
+            'timestamp': int(self.timestamp) if self.timestamp else None,
             'seq': self.seq,
-            'owner': self.owner,
+            'owner': bytes(self.owner) if self.owner else None,
             'terms': self.terms,
             'meta': self.meta,
-            'maker': self.maker,
-            'provider_security': self.provider_security,
-            'consumer_security': self.consumer_security,
-            'market_fee': self.market_fee,
+            'maker': bytes(self.maker) if self.maker else None,
+            'provider_security': pack_uint256(self.provider_security) if self.provider_security else None,
+            'consumer_security': pack_uint256(self.consumer_security) if self.consumer_security else None,
+            'market_fee': pack_uint256(self.market_fee) if self.market_fee else None,
         }
         return obj
 
