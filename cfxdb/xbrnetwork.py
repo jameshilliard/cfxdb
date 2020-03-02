@@ -542,22 +542,27 @@ class VerifiedAction(object):
     Unset verification action type ("null").
     """
 
-    VERIFICATION_TYPE_ONBOARD_EMAIL = 1
+    VERIFICATION_TYPE_ONBOARD_MEMBER = 1
     """
     Verification action type for on-boarding new members via email verification.
     """
 
-    VERIFICATION_TYPE_LOGIN_EMAIL = 2
+    VERIFICATION_TYPE_LOGIN_MEMBER = 2
     """
     Verification action type for login of member (client) via email verification.
     """
 
-    VERIFICATION_TYPE_CREATEMARKET_EMAIL = 2
+    VERIFICATION_TYPE_CREATE_MARKET = 3
     """
     Verification action type for creation of new data market via email verification.
     """
 
-    VERIFICATION_TYPE = list(range(4))
+    VERIFICATION_TYPE_JOIN_MARKET = 4
+    """
+    Verification action type for joining an existing market via email verification.
+    """
+
+    VERIFICATION_TYPE = list(range(5))
     """
     All valid verification action types.
     """
