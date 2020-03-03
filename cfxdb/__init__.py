@@ -17,6 +17,11 @@ from .usage import MasterNodeUsage
 from . import xbr
 from .xbr import Member, Members, Market, Markets, Actor, Actors, Transaction, Transactions
 from .xbr import Block, Blocks, TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
+from .xbr import IndexMarketsByActor, IndexMarketsByOwner
+from .xbr import PaymentChannel, PaymentChannels, IndexPaymentChannelByDelegate,\
+    PaymentChannelBalance, PaymentChannelBalances, PayingChannelRequest, PayingChannelRequests,\
+    PayingChannels, IndexPayingChannelByDelegate, IndexPayingChannelByRecipient,\
+    PayingChannelBalances, Offer, Offers, IndexOfferByKey
 
 from . import xbrnetwork
 from .xbrnetwork import Accounts, Account, IndexAccountsByUsername, IndexAccountsByEmail, \
@@ -46,6 +51,8 @@ __all__ = (
     'Members',
     'Market',
     'Markets',
+    'IndexMarketsByOwner',
+    'IndexMarketsByActor',
     'Actor',
     'Actors',
     'Transaction',
@@ -56,6 +63,20 @@ __all__ = (
     'TokenApprovals',
     'TokenTransfer',
     'TokenTransfers',
+    'PaymentChannel',
+    'PaymentChannels',
+    'IndexPaymentChannelByDelegate',
+    'PaymentChannelBalance',
+    'PaymentChannelBalances',
+    'PayingChannelRequest',
+    'PayingChannelRequests',
+    'PayingChannels',
+    'IndexPayingChannelByDelegate',
+    'IndexPayingChannelByRecipient',
+    'PayingChannelBalances',
+    'Offer',
+    'Offers',
+    'IndexOfferByKey',
     'xbrnetwork',
     'Accounts',
     'Account',

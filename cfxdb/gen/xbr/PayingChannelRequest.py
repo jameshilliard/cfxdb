@@ -204,7 +204,7 @@ class PayingChannelRequest(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// When this request has been fulfulled, the address to the contract of the created payment channel (from the market maker to the data seller).
+# /// When this request has been fulfilled, the address to the contract of the created payment channel (from the market maker to the data seller).
     # PayingChannelRequest
     def Channel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))

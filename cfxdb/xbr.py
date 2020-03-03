@@ -12,7 +12,8 @@ import flatbuffers
 import numpy as np
 
 from zlmdb import table, MapBytes20FlatBuffers, MapBytes32FlatBuffers, MapUuidUuid, MapUuidFlatBuffers,\
-    MapBytes16FlatBuffers, MapBytes20Bytes16, MapBytes20TimestampBytes20, MapUuidBytes20Uint8FlatBuffers
+    MapBytes16FlatBuffers, MapBytes20Bytes16, MapBytes20TimestampBytes20, MapUuidBytes20Uint8FlatBuffers,\
+    MapBytes20TimestampUuid
 
 from .common import pack_uint256, unpack_uint256
 from .gen.xbr import PaymentChannelType as PaymentChannelTypeGen
@@ -66,6 +67,9 @@ class _BlockGen(BlockGen.Block):
 
 
 class Block(object):
+    """
+    Blockchain blocks. This table stores information about the series of Ethereum blocks that make up the blockchain.
+    """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -81,7 +85,7 @@ class Block(object):
         # uint32
         self._cnt_events = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'block_number': pack_uint256(self.block_number) if self.block_number else 0,
@@ -93,30 +97,39 @@ class Block(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Timestamp when record was inserted (Unix epoch time in ns).
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
 
     @property
-    def block_hash(self):
+    def block_hash(self) -> bytes:
+        """
+        Block hash.
+        """
         if self._block_hash is None and self._from_fbs:
             if self._from_fbs.BlockHashLength():
                 self._block_hash = self._from_fbs.BlockHashAsBytes()
         return self._block_hash
 
     @block_hash.setter
-    def block_hash(self, value):
+    def block_hash(self, value: bytes):
         assert value is None or type(value) == bytes
         self._block_hash = value
 
     @property
-    def block_number(self):
+    def block_number(self) -> int:
+        """
+        Primary key: block number.
+        """
         if self._block_number is None and self._from_fbs:
             if self._from_fbs.BlockNumberLength():
                 _block_number = self._from_fbs.BlockNumberAsBytes()
@@ -126,16 +139,19 @@ class Block(object):
         return self._block_number
 
     @block_number.setter
-    def block_number(self, value):
+    def block_number(self, value: int):
         assert value is None or type(value) == int
         self._block_number = value
 
     @property
-    def cnt_events(self):
+    def cnt_events(self) -> int:
+        """
+        Number of XBR blockchain log events found in the block.
+        """
         return self._cnt_events
 
     @cnt_events.setter
-    def cnt_events(self, value):
+    def cnt_events(self, value: int):
         assert value is None or type(value) == int
         self._cnt_events = value
 
@@ -213,7 +229,7 @@ class _MemberGen(MemberGen.Member):
 
 class Member(object):
     """
-    ``XBRNetwork.Member`` event database object.
+    XBR Network member database object.
     """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -236,7 +252,7 @@ class Member(object):
         # enum MemberLevel: uint8
         self._level = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'address': self.address,
             'timestamp': self.timestamp,
@@ -251,30 +267,39 @@ class Member(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def address(self):
+    def address(self) -> bytes:
+        """
+        Ethereum address of the member.
+        """
         if self._address is None and self._from_fbs:
             if self._from_fbs.AddressLength():
                 self._address = self._from_fbs.AddressAsBytes()
         return self._address
 
     @address.setter
-    def address(self, value):
+    def address(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._address = value
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Database transaction time (epoch time in ns) of insert or last update.
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
 
     @property
-    def registered(self):
+    def registered(self) -> int:
+        """
+        Block number (on the blockchain) when the member (originally) registered.
+        """
         if self._registered is None and self._from_fbs:
             if self._from_fbs.RegisteredLength():
                 _registered = self._from_fbs.RegisteredAsBytes()
@@ -284,12 +309,15 @@ class Member(object):
         return self._registered
 
     @registered.setter
-    def registered(self, value):
+    def registered(self, value: int):
         assert value is None or type(value) == int
         self._registered = value
 
     @property
-    def eula(self):
+    def eula(self) -> str:
+        """
+        EULA the member agreed to when joining the market (IPFS Multihash string).
+        """
         if self._eula is None and self._from_fbs:
             eula = self._from_fbs.Eula()
             if eula:
@@ -302,7 +330,10 @@ class Member(object):
         self._eula = value
 
     @property
-    def profile(self):
+    def profile(self) -> str:
+        """
+        Optional member profile (IPFS Multihash string).
+        """
         if self._profile is None and self._from_fbs:
             profile = self._from_fbs.Profile()
             if profile:
@@ -315,13 +346,16 @@ class Member(object):
         self._profile = value
 
     @property
-    def level(self):
+    def level(self) -> int:
+        """
+        Current member level.
+        """
         if self._level is None and self._from_fbs:
             self._level = self._from_fbs.Level()
         return self._level
 
     @level.setter
-    def level(self, value):
+    def level(self, value: int):
         assert value is None or type(value) == int
         self._level = value
 
@@ -375,7 +409,7 @@ class Member(object):
 @table('d1808139-5a3b-4a4e-abad-152dd4cd1131', build=Member.build, cast=Member.cast)
 class Members(MapBytes20FlatBuffers):
     """
-    XBR membery by ``member_adr``.
+    XBR members by ``member_adr``.
 
     Map :class:`zlmdb.MapBytes20FlatBuffers` from ``member_adr`` to :class:`cfxdb.xbr.Member`
     """
@@ -445,7 +479,7 @@ class _MarketGen(MarketGen.Market):
 
 class Market(object):
     """
-    ``XBRNetwork.Market`` event database object.
+    ``XBRNetwork.Market`` database object.
     """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -480,7 +514,7 @@ class Market(object):
         # [uint8] (uint256)
         self._market_fee = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'market': self.market.bytes if self.market else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
@@ -499,7 +533,10 @@ class Market(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def market(self):
+    def market(self) -> uuid.UUID:
+        """
+        The unique ID of the market.
+        """
         if self._market is None and self._from_fbs:
             if self._from_fbs.MarketLength():
                 _market = self._from_fbs.MarketAsBytes()
@@ -507,46 +544,58 @@ class Market(object):
         return self._market
 
     @market.setter
-    def market(self, value):
+    def market(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._market = value
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Database transaction time (epoch time in ns) of insert or last update.
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
 
     @property
-    def seq(self):
+    def seq(self) -> int:
+        """
+        Global market sequence number.
+        """
         if self._seq is None and self._from_fbs:
             self._seq = self._from_fbs.Seq()
         return self._seq or 0
 
     @seq.setter
-    def seq(self, value):
+    def seq(self, value: int):
         assert value is None or type(value) == int
         self._seq = value
 
     @property
-    def owner(self):
+    def owner(self) -> bytes:
+        """
+        Market owner.
+        """
         if self._owner is None and self._from_fbs:
             if self._from_fbs.OwnerLength():
                 self._owner = self._from_fbs.OwnerAsBytes()
         return self._owner
 
     @owner.setter
-    def owner(self, value):
+    def owner(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._owner = value
 
     @property
-    def terms(self):
+    def terms(self) -> str:
+        """
+        The XBR market terms set by the market owner. IPFS Multihash pointing to a ZIP archive file with market documents.
+        """
         if self._terms is None and self._from_fbs:
             terms = self._from_fbs.Terms()
             if terms:
@@ -554,12 +603,15 @@ class Market(object):
         return self._terms
 
     @terms.setter
-    def terms(self, value):
+    def terms(self, value: str):
         assert value is None or type(value) == str
         self._terms = value
 
     @property
-    def meta(self):
+    def meta(self) -> str:
+        """
+        The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+        """
         if self._meta is None and self._from_fbs:
             meta = self._from_fbs.Meta()
             if meta:
@@ -572,19 +624,25 @@ class Market(object):
         self._meta = value
 
     @property
-    def maker(self):
+    def maker(self) -> bytes:
+        """
+        The address of the XBR market maker that will run this market. The delegate of the market owner.
+        """
         if self._maker is None and self._from_fbs:
             if self._from_fbs.MakerLength():
                 self._maker = self._from_fbs.MakerAsBytes()
         return self._maker
 
     @maker.setter
-    def maker(self, value):
+    def maker(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._maker = value
 
     @property
-    def provider_security(self):
+    def provider_security(self) -> int:
+        """
+        The amount of XBR tokens a XBR provider joining the market must deposit.
+        """
         if self._provider_security is None and self._from_fbs:
             if self._from_fbs.ProviderSecurityLength():
                 _provider_security = self._from_fbs.ProviderSecurityAsBytes()
@@ -594,12 +652,15 @@ class Market(object):
         return self._provider_security
 
     @provider_security.setter
-    def provider_security(self, value):
+    def provider_security(self, value: int):
         assert value is None or type(value) == int
         self._provider_security = value
 
     @property
-    def consumer_security(self):
+    def consumer_security(self) -> int:
+        """
+        The amount of XBR tokens a XBR consumer joining the market must deposit.
+        """
         if self._consumer_security is None and self._from_fbs:
             if self._from_fbs.ConsumerSecurityLength():
                 _consumer_security = self._from_fbs.ConsumerSecurityAsBytes()
@@ -609,12 +670,15 @@ class Market(object):
         return self._consumer_security
 
     @consumer_security.setter
-    def consumer_security(self, value):
+    def consumer_security(self, value: int):
         assert value is None or type(value) == int
         self._consumer_security = value
 
     @property
-    def market_fee(self):
+    def market_fee(self) -> int:
+        """
+        The fee taken by the market (beneficiary is the market owner). The fee is a percentage of the revenue of the XBR Provider that receives XBR Token paid for transactions. The fee must be between 0% (inclusive) and 99% (inclusive), and is expressed as a fraction of the total supply of XBR tokens.
+        """
         if self._market_fee is None and self._from_fbs:
             if self._from_fbs.MarketFeeLength():
                 _market_fee = self._from_fbs.MarketFeeAsBytes()
@@ -706,9 +770,21 @@ class Market(object):
 @table('861b0942-0c3f-4d41-bc35-d8c86af0b2c9', build=Market.build, cast=Market.cast)
 class Markets(MapUuidFlatBuffers):
     """
-    Persisted market definitions.
+    Markets table, mapping from ``market_id|UUID`` to :class:`cfxdb.xbr.Market`
+    """
 
-    Map :class:`zlmdb.MapUuidFlatBuffers` from ``market_id`` to :class:`cfxdb.xbr.Market`
+
+@table('7c3d67b4-35a3-449f-85a6-2695636fc63e')
+class IndexMarketsByOwner(MapBytes20TimestampUuid):
+    """
+    Markets-by-owner index with ``(owner_adr|bytes[20], created|int) -> market_id|UUID`` mapping.
+    """
+
+
+@table('4f50a97a-4531-4eab-a91b-45cc42b3dd21')
+class IndexMarketsByActor(MapBytes20TimestampUuid):
+    """
+    Markets-by-actor index with ``(actor_adr|bytes[20], joined|int) -> market_id|UUID`` mapping.
     """
 
 
@@ -760,7 +836,7 @@ class _ActorGen(ActorGen.Actor):
 
 class Actor(object):
     """
-    ``XBRNetwork.Actor`` event database object.
+    XBR Market Actors.
     """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -786,7 +862,7 @@ class Actor(object):
         # string (multihash)
         self._meta = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'timestamp': self.timestamp,
             'market': self.market,
@@ -802,18 +878,24 @@ class Actor(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Database transaction time (epoch time in ns) of insert or last update.
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
 
     @property
-    def market(self):
+    def market(self) -> uuid.UUID:
+        """
+        ID of the market this actor is associated with.
+        """
         if self._market is None and self._from_fbs:
             if self._from_fbs.MarketLength():
                 _market = self._from_fbs.MarketAsBytes()
@@ -821,35 +903,44 @@ class Actor(object):
         return self._market
 
     @market.setter
-    def market(self, value):
+    def market(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._market = value
 
     @property
-    def actor(self):
+    def actor(self) -> bytes:
+        """
+        Ethereum address of the member.
+        """
         if self._actor is None and self._from_fbs:
             if self._from_fbs.ActorLength():
                 self._actor = self._from_fbs.ActorAsBytes()
         return self._actor
 
     @actor.setter
-    def actor(self, value):
+    def actor(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._actor = value
 
     @property
-    def actor_type(self):
+    def actor_type(self) -> int:
+        """
+        Type of the market actor.
+        """
         if self._actor_type is None and self._from_fbs:
             self._actor_type = self._from_fbs.ActorType()
         return self._actor_type
 
     @actor_type.setter
-    def actor_type(self, value):
+    def actor_type(self, value: int):
         assert value is None or type(value) == int
         self._actor_type = value
 
     @property
-    def joined(self):
+    def joined(self) -> int:
+        """
+        Block number (on the blockchain) when the actor (originally) joined the market.
+        """
         if self._joined is None and self._from_fbs:
             if self._from_fbs.JoinedLength():
                 _joined = self._from_fbs.JoinedAsBytes()
@@ -859,12 +950,15 @@ class Actor(object):
         return self._joined
 
     @joined.setter
-    def joined(self, value):
+    def joined(self, value: int):
         assert value is None or type(value) == int
         self._joined = value
 
     @property
-    def security(self):
+    def security(self) -> int:
+        """
+        Security (XBR tokens) deposited by the actor in the market.
+        """
         if self._security is None and self._from_fbs:
             if self._from_fbs.SecurityLength():
                 security = self._from_fbs.SecurityAsBytes()
@@ -874,12 +968,15 @@ class Actor(object):
         return self._security
 
     @security.setter
-    def security(self, value):
+    def security(self, value: int):
         assert value is None or type(value) == int, 'security must be int, was: {}'.format(value)
         self._security = value
 
     @property
-    def meta(self):
+    def meta(self) -> str:
+        """
+        The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+        """
         if self._meta is None and self._from_fbs:
             meta = self._from_fbs.Meta()
             if meta:
@@ -887,7 +984,7 @@ class Actor(object):
         return self._meta
 
     @meta.setter
-    def meta(self, value):
+    def meta(self, value: str):
         assert value is None or type(value) == str
         self._meta = value
 
@@ -948,9 +1045,7 @@ class Actor(object):
 @table('1863eb64-322a-42dd-9fce-a59c99d5b40e', build=Actor.build, cast=Actor.cast)
 class Actors(MapUuidBytes20Uint8FlatBuffers):
     """
-    Persisted market actors.
-
-    Map :class:`zlmdb.MapUuidBytes20Uint8FlatBuffers` from ``(market_id, actor_adr, actor_type)`` to :class:`cfxdb.xbr.Actor`
+    Market actors table, mapping from ``(market_id|UUID, actor_adr|bytes[20], actor_type|int)`` to :class:`cfxdb.xbr.Actor`.
     """
 
 
@@ -1025,6 +1120,9 @@ class _OfferGen(OfferGen.Offer):
 
 
 class Offer(object):
+    """
+    Data encryption key offerings by XBR providers.
+    """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -1073,7 +1171,7 @@ class Offer(object):
         # uint32
         self._remaining = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'offer': self.offer.bytes if self.offer else None,
@@ -1097,18 +1195,24 @@ class Offer(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Offer transaction time (epoch time in ns)
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value):
+    def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
 
     @property
-    def offer(self):
+    def offer(self) -> uuid.UUID:
+        """
+        ID of the data encryption key offer.
+        """
         if self._offer is None and self._from_fbs:
             if self._from_fbs.OfferLength():
                 _offer = self._from_fbs.OfferAsBytes()
@@ -1116,35 +1220,44 @@ class Offer(object):
         return self._offer
 
     @offer.setter
-    def offer(self, value):
+    def offer(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._offer = value
 
     @property
-    def seller(self):
+    def seller(self) -> bytes:
+        """
+        Address of the XBR provider offering the data encryption key.
+        """
         if self._seller is None and self._from_fbs:
             if self._from_fbs.SellerLength():
                 self._seller = self._from_fbs.SellerAsBytes()
         return self._seller
 
     @seller.setter
-    def seller(self, value):
+    def seller(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._seller = value
 
     @property
-    def seller_session_id(self):
+    def seller_session_id(self) -> int:
+        """
+        WAMP session ID of the caller that originally placed this offer.
+        """
         if self._seller_session_id is None and self._from_fbs:
             self._seller_session_id = self._from_fbs.SellerSessionId()
         return self._seller_session_id
 
     @seller_session_id.setter
-    def seller_session_id(self, value):
+    def seller_session_id(self, value: int):
         assert value is None or type(value) == int
         self._seller_session_id = value
 
     @property
-    def seller_authid(self):
+    def seller_authid(self) -> str:
+        """
+        WAMP session authid of the caller that originally placed this offer.
+        """
         if self._seller_authid is None and self._from_fbs:
             _seller_authid = self._from_fbs.SellerAuthid()
             if _seller_authid:
@@ -1156,7 +1269,10 @@ class Offer(object):
         self._seller_authid = value
 
     @property
-    def key(self):
+    def key(self) -> uuid.UUID:
+        """
+        ID of the data encryption key offered.
+        """
         if self._key is None and self._from_fbs:
             if self._from_fbs.KeyLength():
                 _key = self._from_fbs.KeyAsBytes()
@@ -1169,7 +1285,12 @@ class Offer(object):
         self._key = value
 
     @property
-    def api(self):
+    def api(self) -> uuid.UUID:
+        """
+        ID of the API the encrypted data (this key is for) is provided under.
+
+        :return:
+        """
         if self._api is None and self._from_fbs:
             if self._from_fbs.ApiLength():
                 _api = self._from_fbs.ApiAsBytes()
@@ -1177,12 +1298,15 @@ class Offer(object):
         return self._api
 
     @api.setter
-    def api(self, value):
+    def api(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._api = value
 
     @property
-    def uri(self):
+    def uri(self) -> str:
+        """
+        URI under which the data encrypted with the key offered is provided under.
+        """
         if self._uri is None and self._from_fbs:
             _uri = self._from_fbs.Uri()
             if _uri:
@@ -1190,34 +1314,43 @@ class Offer(object):
         return self._uri
 
     @uri.setter
-    def uri(self, value):
+    def uri(self, value: str):
         self._uri = value
 
     @property
-    def valid_from(self):
+    def valid_from(self) -> np.datetime64:
+        """
+        Timestamp from which the offer is valid (epoch time in ns).
+        """
         if self._valid_from is None and self._from_fbs:
             self._valid_from = np.datetime64(self._from_fbs.ValidFrom(), 'ns')
         return self._valid_from
 
     @valid_from.setter
-    def valid_from(self, value):
+    def valid_from(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._valid_from = value
 
     @property
-    def signature(self):
+    def signature(self) -> bytes:
+        """
+        Seller delegate signature for the offer. The signature covers all information of the original offer placement request and requestor.
+        """
         if self._signature is None and self._from_fbs:
             if self._from_fbs.SignatureLength():
                 self._signature = self._from_fbs.SignatureAsBytes()
         return self._signature
 
     @signature.setter
-    def signature(self, value):
+    def signature(self, value: bytes):
         assert value is None or type(value) == bytes
         self._signature = value
 
     @property
-    def price(self):
+    def price(self) -> int:
+        """
+        Price of data encryption key in XBR tokens.
+        """
         if self._price is None and self._from_fbs:
             if self._from_fbs.PriceLength():
                 _price = self._from_fbs.PriceAsBytes()
@@ -1227,12 +1360,15 @@ class Offer(object):
         return self._price
 
     @price.setter
-    def price(self, value):
+    def price(self, value: int):
         assert value is None or type(value) == int
         self._price = value
 
     @property
-    def categories(self):
+    def categories(self) -> dict:
+        """
+        Dictionary of optional user defined categories the specific data that is provided falls under.
+        """
         if self._categories is None and self._from_fbs:
             num = self._from_fbs.CategoriesKeyLength()
             if num > 0:
@@ -1245,7 +1381,7 @@ class Offer(object):
         return self._categories
 
     @categories.setter
-    def categories(self, values):
+    def categories(self, values: dict):
         assert values is None or type(values) == dict
         if values:
             assert (type(key) == str for key in values.keys())
@@ -1253,35 +1389,44 @@ class Offer(object):
         self._categories = values
 
     @property
-    def expires(self):
+    def expires(self) -> np.datetime64:
+        """
+        Optional data at which this offer expires (epoch time in ns).
+        """
         if self._expires is None and self._from_fbs:
             self._expires = np.datetime64(self._from_fbs.Expires(), 'ns')
         return self._expires
 
     @expires.setter
-    def expires(self, value):
+    def expires(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._expires = value
 
     @property
-    def copies(self):
+    def copies(self) -> int:
+        """
+        Optional maximum number of times this data encryption key is to be sold or 0 for unlimited.
+        """
         if self._copies is None and self._from_fbs:
             self._copies = self._from_fbs.Copies()
         return self._copies
 
     @copies.setter
-    def copies(self, value):
+    def copies(self, value: int):
         assert value is None or type(value) == int
         self._copies = value
 
     @property
-    def remaining(self):
+    def remaining(self) -> int:
+        """
+        Remaining number of copies to be sold (if "copies" is set >0, otherwise 0).
+        """
         if self._remaining is None and self._from_fbs:
             self._remaining = self._from_fbs.Remaining()
         return self._remaining
 
     @remaining.setter
-    def remaining(self, value):
+    def remaining(self, value: int):
         assert value is None or type(value) == int
         self._remaining = value
 
@@ -1485,7 +1630,7 @@ class TokenApproval(object):
         self._spender_address = None
         self._value = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'tx_hash': self._tx_hash,
             'block_hash': self._block_hash,
@@ -1499,55 +1644,70 @@ class TokenApproval(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def tx_hash(self):
+    def tx_hash(self) -> bytes:
+        """
+        Primary key: Transaction hash.
+        """
         if self._tx_hash is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._tx_hash = self._from_fbs.TxHashAsBytes()
         return self._tx_hash
 
     @tx_hash.setter
-    def tx_hash(self, value):
+    def tx_hash(self, value: bytes):
         assert value is None or type(value) == bytes
         self._tx_hash = value
 
     @property
-    def block_hash(self):
+    def block_hash(self) -> bytes:
+        """
+        Block hash.
+        """
         if self._block_hash is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._block_hash = self._from_fbs.BlockHashAsBytes()
         return self._block_hash
 
     @block_hash.setter
-    def block_hash(self, value):
+    def block_hash(self, value: bytes):
         assert value is None or type(value) == bytes
         self._block_hash = value
 
     @property
-    def owner_address(self):
+    def owner_address(self) -> bytes:
+        """
+         XBR token sending address.
+        """
         if self._owner_address is None and self._from_fbs:
             if self._from_fbs.OwnerAddressLength():
                 self._owner_address = self._from_fbs.OwnerAddressAsBytes()
         return self._owner_address
 
     @owner_address.setter
-    def owner_address(self, value):
+    def owner_address(self, value: bytes):
         assert value is None or type(value) == bytes
         self._owner_address = value
 
     @property
-    def spender_address(self):
+    def spender_address(self) -> bytes:
+        """
+        XBR token receiving address.
+        """
         if self._spender_address is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._spender_address = self._from_fbs.SpenderAddressAsBytes()
         return self._spender_address
 
     @spender_address.setter
-    def spender_address(self, value):
+    def spender_address(self, value: bytes):
         assert value is None or type(value) == bytes
         self._spender_address = value
 
     @property
-    def value(self):
+    def value(self) -> int:
+        """
+        XBR token transferred.
+        """
         if self._value is None and self._from_fbs:
             if self._from_fbs.ValueLength():
                 _value = self._from_fbs.ValueAsBytes()
@@ -1557,7 +1717,7 @@ class TokenApproval(object):
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: int):
         assert value is None or type(value) == int
         self._value = value
 
@@ -1685,7 +1845,7 @@ class TokenTransfer(object):
         self._to_address = None
         self._value = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'tx_hash': self._tx_hash,
             'block_hash': self._block_hash,
@@ -1699,19 +1859,25 @@ class TokenTransfer(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def tx_hash(self):
+    def tx_hash(self) -> bytes:
+        """
+        Primary key: Transaction hash.
+        """
         if self._tx_hash is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._tx_hash = self._from_fbs.TxHashAsBytes()
         return self._tx_hash
 
     @tx_hash.setter
-    def tx_hash(self, value):
+    def tx_hash(self, value: bytes):
         assert value is None or type(value) == bytes
         self._tx_hash = value
 
     @property
-    def block_hash(self):
+    def block_hash(self) -> bytes:
+        """
+        Block hash.
+        """
         if self._block_hash is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._block_hash = self._from_fbs.BlockHashAsBytes()
@@ -1723,31 +1889,40 @@ class TokenTransfer(object):
         self._block_hash = value
 
     @property
-    def from_address(self):
+    def from_address(self) -> bytes:
+        """
+        XBR token sending address.
+        """
         if self._from_address is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._from_address = self._from_fbs.FromAddressAsBytes()
         return self._from_address
 
     @from_address.setter
-    def from_address(self, value):
+    def from_address(self, value: bytes):
         assert value is None or type(value) == bytes
         self._from_address = value
 
     @property
-    def to_address(self):
+    def to_address(self) -> bytes:
+        """
+        XBR token receiving address.
+        """
         if self._to_address is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 self._to_address = self._from_fbs.ToAddressAsBytes()
         return self._to_address
 
     @to_address.setter
-    def to_address(self, value):
+    def to_address(self, value: bytes):
         assert value is None or type(value) == bytes
         self._to_address = value
 
     @property
-    def value(self):
+    def value(self) -> int:
+        """
+        XBR token transferred.
+        """
         if self._value is None and self._from_fbs:
             if self._from_fbs.TxHashLength():
                 _value = self._from_fbs.ValueAsBytes()
@@ -1757,7 +1932,7 @@ class TokenTransfer(object):
         return self._value
 
     @value.setter
-    def value(self, value):
+    def value(self, value: int):
         assert value is None or type(value) == int
         self._value = value
 
@@ -1899,6 +2074,8 @@ class _PayingChannelRequestGen(PayingChannelRequestGen.PayingChannelRequest):
 class PayingChannelRequest(object):
     """
     ``XBRPayingChannelRequest`` record/event database object.
+
+    Request to have the market maker open a paying channel (which is a payment channel from the market maker to the data seller).
     """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -1915,7 +2092,7 @@ class PayingChannelRequest(object):
         self._error_msg = None
         self._channel = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'request': bytes(self.request) if self.request else None,
             'timestamp': self.timestamp,
@@ -1935,19 +2112,25 @@ class PayingChannelRequest(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def request(self):
+    def request(self) -> bytes:
+        """
+        ID of the paying channel request.
+        """
         if self._request is None and self._from_fbs:
             if self._from_fbs.RequestLength():
                 self._request = self._from_fbs.RequestAsBytes()
         return self._request
 
     @request.setter
-    def request(self, value):
+    def request(self, value: bytes):
         assert value is None or type(value) == bytes
         self._request = value
 
     @property
-    def timestamp(self):
+    def timestamp(self) -> np.datetime64:
+        """
+        Offer transaction time (epoch time in ns)
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
@@ -1958,19 +2141,25 @@ class PayingChannelRequest(object):
         self._timestamp = value
 
     @property
-    def market(self):
+    def market(self) -> bytes:
+        """
+        ID of the market this request for a paying channel is associated with.
+        """
         if self._market is None and self._from_fbs:
             if self._from_fbs.MarketLength():
                 self._market = self._from_fbs.MarketAsBytes()
         return self._market
 
     @market.setter
-    def market(self, value):
+    def market(self, value: bytes):
         assert value is None or type(value) == bytes
         self._market = value
 
     @property
-    def sender(self):
+    def sender(self) -> bytes:
+        """
+        The sender address of the Ethereum transaction submitting the paying channel request.
+        """
         if self._sender is None and self._from_fbs:
             if self._from_fbs.SenderLength():
                 self._sender = self._from_fbs.SenderAsBytes()
@@ -1982,31 +2171,40 @@ class PayingChannelRequest(object):
         self._sender = value
 
     @property
-    def delegate(self):
+    def delegate(self) -> bytes:
+        """
+        The address of the buyer delegate allowed to consume the payment channel balance.
+        """
         if self._delegate is None and self._from_fbs:
             if self._from_fbs.DelegateLength():
                 self._delegate = self._from_fbs.DelegateAsBytes()
         return self._delegate
 
     @delegate.setter
-    def delegate(self, value):
+    def delegate(self, value: bytes):
         assert value is None or type(value) == bytes
         self._delegate = value
 
     @property
-    def recipient(self):
+    def recipient(self) -> bytes:
+        """
+        The ultimate recipient of this payment channel (for a XBR buyer, this will be the XBR market maker address; for a XBR seller, this will be the seller address).
+        """
         if self._recipient is None and self._from_fbs:
             if self._from_fbs.RecipientLength():
                 self._recipient = self._from_fbs.RecipientAsBytes()
         return self._recipient
 
     @recipient.setter
-    def recipient(self, value):
+    def recipient(self, value: bytes):
         assert value is None or type(value) == bytes
         self._recipient = value
 
     @property
-    def amount(self):
+    def amount(self) -> int:
+        """
+        The initial amount in the (off-chain) payment channel.
+        """
         if self._amount is None and self._from_fbs:
             if self._from_fbs.AmountLength():
                 _amount = self._from_fbs.AmountAsBytes()
@@ -2016,12 +2214,17 @@ class PayingChannelRequest(object):
         return self._amount
 
     @amount.setter
-    def amount(self, value):
+    def amount(self, value: int):
         assert value is None or type(value) == int, 'amount must be int, was: {}'.format(value)
         self._amount = value
 
     @property
-    def timeout(self):
+    def timeout(self) -> int:
+        """
+        The timeout knob for a non-cooperative close of the payment channel.
+
+        :return:
+        """
         if self._timeout is None and self._from_fbs:
             if self._from_fbs.TimeoutLength():
                 _timeout = self._from_fbs.TimeoutAsBytes()
@@ -2031,23 +2234,29 @@ class PayingChannelRequest(object):
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value):
+    def timeout(self, value: int):
         assert value is None or type(value) == int, 'timeout must be int, was: {}'.format(value)
         self._timeout = value
 
     @property
-    def state(self):
+    def state(self) -> int:
+        """
+        Paying channel request current state.
+        """
         if self._state is None and self._from_fbs:
             self._state = self._from_fbs.State()
         return self._state
 
     @state.setter
-    def state(self, value):
+    def state(self, value: int):
         assert type(value) == int, 'state must be int, was: {}'.format(value)
         self._state = value
 
     @property
-    def error_msg(self):
+    def error_msg(self) -> str:
+        """
+        When state is PayingChannelRequestState.FAILED, an optional error message.
+        """
         if self._error_msg is None and self._from_fbs:
             error_msg = self._from_fbs.ErrorMsg()
             if error_msg:
@@ -2055,19 +2264,22 @@ class PayingChannelRequest(object):
         return self._error_msg
 
     @error_msg.setter
-    def error_msg(self, value):
+    def error_msg(self, value: str):
         assert value is None or type(value) == str
         self._error_msg = value
 
     @property
-    def channel(self):
+    def channel(self) -> bytes:
+        """
+        When this request has been fulfilled, the address to the contract of the created payment channel (from the market maker to the data seller).
+        """
         if self._channel is None and self._from_fbs:
             if self._from_fbs.ChannelLength():
                 self._channel = self._from_fbs.ChannelAsBytes()
         return self._channel
 
     @channel.setter
-    def channel(self, value):
+    def channel(self, value: bytes):
         assert value is None or type(value) == bytes, 'value must be bytes, not "{}"'.format(type(value))
         self._channel = value
 
@@ -2274,6 +2486,8 @@ class _PaymentChannelGen(PaymentChannelGen.PaymentChannel):
 class PaymentChannel(object):
     """
     ``XBRPaymentChannel`` record/event database object.
+
+    XBR payment channel (from XBR consumer to XBR market maker) and XBR paying channels (from XBR market maker to XBR provider).
     """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -2299,7 +2513,7 @@ class PaymentChannel(object):
 
         self._closed_tx = None
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'type': self.type,
             'channel': bytes(self.channel) if self.channel else None,
@@ -2326,25 +2540,23 @@ class PaymentChannel(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def type(self):
+    def type(self) -> int:
+        """
+        Channel type: payment channel (from XBR consumer to XBR market maker) or paying channel (from XBR market maker to XBR provider).
+        """
         if self._type is None and self._from_fbs:
             self._type = self._from_fbs.Type()
         return self._type
 
     @type.setter
-    def type(self, value):
+    def type(self, value: int):
         assert type(value) == int
         self._type = value
 
     @property
-    def channel(self):
+    def channel(self) -> bytes:
         """
-        The address of the payment channel.
-
-        :return: The Ethereum address (32 bytes) of the payment
-            channel contract instance that live on-chain. Here reused
-            as a unique key in this database table as well (off-chain).
-        :rtype: bytes
+        ID of the payment channel.
         """
         if self._channel is None and self._from_fbs:
             if self._from_fbs.ChannelLength():
@@ -2352,60 +2564,75 @@ class PaymentChannel(object):
         return self._channel
 
     @channel.setter
-    def channel(self, value):
+    def channel(self, value: bytes):
         assert value is None or type(value) == bytes
         self._channel = value
 
     @property
-    def market(self):
+    def market(self) -> bytes:
+        """
+        ID of the market this payment channel is associated with.
+        """
         if self._market is None and self._from_fbs:
             if self._from_fbs.MarketLength():
                 self._market = self._from_fbs.MarketAsBytes()
         return self._market
 
     @market.setter
-    def market(self, value):
+    def market(self, value: bytes):
         assert value is None or type(value) == bytes
         self._market = value
 
     @property
-    def sender(self):
+    def sender(self) -> bytes:
+        """
+        Ethereum address of the sender (either XBR Consumer or XBR Market).
+        """
         if self._sender is None and self._from_fbs:
             if self._from_fbs.SenderLength():
                 self._sender = self._from_fbs.SenderAsBytes()
         return self._sender
 
     @sender.setter
-    def sender(self, value):
+    def sender(self, value: bytes):
         assert value is None or type(value) == bytes
         self._sender = value
 
     @property
-    def delegate(self):
+    def delegate(self) -> bytes:
+        """
+        Ethereum address of the sender delegate (either XBR Consumer delegate or XBR Market delegate == market maker)
+        """
         if self._delegate is None and self._from_fbs:
             if self._from_fbs.DelegateLength():
                 self._delegate = self._from_fbs.DelegateAsBytes()
         return self._delegate
 
     @delegate.setter
-    def delegate(self, value):
+    def delegate(self, value: bytes):
         assert value is None or type(value) == bytes
         self._delegate = value
 
     @property
-    def recipient(self):
+    def recipient(self) -> bytes:
+        """
+        Ethereum address of the recipient (either XBR Market or XBR Provider)
+        """
         if self._recipient is None and self._from_fbs:
             if self._from_fbs.RecipientLength():
                 self._recipient = self._from_fbs.RecipientAsBytes()
         return self._recipient
 
     @recipient.setter
-    def recipient(self, value):
+    def recipient(self, value: bytes):
         assert value is None or type(value) == bytes
         self._recipient = value
 
     @property
-    def amount(self):
+    def amount(self) -> int:
+        """
+        Amount of XBR tokens initially deposited into the payment channel.
+        """
         if self._amount is None and self._from_fbs:
             if self._from_fbs.AmountLength():
                 _amount = self._from_fbs.AmountAsBytes()
@@ -2415,34 +2642,43 @@ class PaymentChannel(object):
         return self._amount
 
     @amount.setter
-    def amount(self, value):
+    def amount(self, value: int):
         assert value is None or type(value) == int
         self._amount = value
 
     @property
-    def timeout(self):
+    def timeout(self) -> int:
+        """
+        Payment channel (non-cooperative) closed timeout in blocks (on the blockchain).
+        """
         if self._timeout is None and self._from_fbs:
             self._timeout = self._from_fbs.Timeout()
         return self._timeout
 
     @timeout.setter
-    def timeout(self, value):
+    def timeout(self, value: int):
         assert type(value) == int
         self._timeout = value
 
     @property
-    def state(self):
+    def state(self) -> int:
+        """
+        Current state of payment channel.
+        """
         if self._state is None and self._from_fbs:
             self._state = self._from_fbs.State()
         return self._state
 
     @state.setter
-    def state(self, value):
+    def state(self, value: int):
         assert type(value) == int
         self._state = value
 
     @property
-    def open_at(self):
+    def open_at(self) -> int:
+        """
+        Block number (on the blockchain) when the payment channel was opened.
+        """
         if self._open_at is None and self._from_fbs:
             if self._from_fbs.OpenAtLength():
                 _open_at = self._from_fbs.OpenAtAsBytes()
@@ -2452,12 +2688,15 @@ class PaymentChannel(object):
         return self._open_at
 
     @open_at.setter
-    def open_at(self, value):
+    def open_at(self, value: int):
         assert value is None or type(value) == int
         self._open_at = value
 
     @property
-    def closing_at(self):
+    def closing_at(self) -> int:
+        """
+        Block number (on the blockchain) when the payment channel will close (at the latest).
+        """
         if self._closing_at is None and self._from_fbs:
             if self._from_fbs.ClosingAtLength():
                 _closing_at = self._from_fbs.ClosingAtAsBytes()
@@ -2467,12 +2706,15 @@ class PaymentChannel(object):
         return self._closing_at
 
     @closing_at.setter
-    def closing_at(self, value):
+    def closing_at(self, value: int):
         assert value is None or type(value) == int
         self._closing_at = value
 
     @property
-    def closed_at(self):
+    def closed_at(self) -> int:
+        """
+        Block number (on the blockchain) when the payment channel was finally closed.
+        """
         if self._closed_at is None and self._from_fbs:
             if self._from_fbs.ClosedAtLength():
                 _closed_at = self._from_fbs.ClosedAtAsBytes()
@@ -2482,47 +2724,59 @@ class PaymentChannel(object):
         return self._closed_at
 
     @closed_at.setter
-    def closed_at(self, value):
+    def closed_at(self, value: int):
         assert value is None or type(value) == int
         self._closed_at = value
 
     @property
-    def close_mm_sig(self):
+    def close_mm_sig(self) -> int:
+        """
+        Closing signature by market maker.
+        """
         if self._close_mm_sig is None and self._from_fbs:
             if self._from_fbs.CloseMmSigLength():
                 self._close_mm_sig = self._from_fbs.CloseMmSigAsBytes()
         return self._close_mm_sig
 
     @close_mm_sig.setter
-    def close_mm_sig(self, value):
+    def close_mm_sig(self, value: int):
         assert value is None or type(value) == bytes
         self._close_mm_sig = value
 
     @property
-    def close_del_sig(self):
+    def close_del_sig(self) -> bytes:
+        """
+        Closing signature by (seller or buyer) delegate.
+        """
         if self._close_del_sig is None and self._from_fbs:
             if self._from_fbs.CloseDelSigLength():
                 self._close_del_sig = self._from_fbs.CloseDelSigAsBytes()
         return self._close_del_sig
 
     @close_del_sig.setter
-    def close_del_sig(self, value):
+    def close_del_sig(self, value: bytes):
         assert value is None or type(value) == bytes
         self._close_del_sig = value
 
     @property
-    def close_channel_seq(self):
+    def close_channel_seq(self) -> int:
+        """
+        Last off-chain, closing transaction: channel transaction sequence number.
+        """
         if self._close_channel_seq is None and self._from_fbs:
             self._close_channel_seq = self._from_fbs.CloseChannelSeq()
         return self._close_channel_seq
 
     @close_channel_seq.setter
-    def close_channel_seq(self, value):
+    def close_channel_seq(self, value: int):
         assert type(value) == int
         self._close_channel_seq = value
 
     @property
-    def close_balance(self):
+    def close_balance(self) -> int:
+        """
+        Remaining (closing) channel balance (XBR).
+        """
         if self._close_balance is None and self._from_fbs:
             if self._from_fbs.CloseBalanceLength():
                 _close_balance = self._from_fbs.CloseBalanceAsBytes()
@@ -2535,30 +2789,36 @@ class PaymentChannel(object):
         return self._close_balance
 
     @close_balance.setter
-    def close_balance(self, value):
+    def close_balance(self, value: int):
         assert value is None or type(value) == int
         self._close_balance = value
 
     @property
-    def close_is_final(self):
+    def close_is_final(self) -> bool:
+        """
+        Flag indication if close is final (happens immediately without a channel timeout).
+        """
         if self._close_is_final is None and self._from_fbs:
             self._close_is_final = (self._from_fbs.CloseIsFinal() is True)
         return self._close_is_final
 
     @close_is_final.setter
-    def close_is_final(self, value):
+    def close_is_final(self, value: bool):
         assert value is None or type(value) == bool
         self._close_is_final = value
 
     @property
-    def closed_tx(self):
+    def closed_tx(self) -> bytes:
+        """
+        When channel was finally closed on-chain, the Ethereum transaction ID.
+        """
         if self._closed_tx is None and self._from_fbs:
             if self._from_fbs.ClosedTxLength():
                 self._closed_tx = self._from_fbs.ClosedTxAsBytes()
         return self._closed_tx
 
     @closed_tx.setter
-    def closed_tx(self, value):
+    def closed_tx(self, value: bytes):
         assert value is None or type(value) == bytes
         self._closed_tx = value
 
@@ -2768,6 +3028,9 @@ class _PaymentChannelBalanceGen(PaymentChannelBalanceGen.PaymentChannelBalance):
 
 
 class PaymentChannelBalance(object):
+    """
+    XBR payment channel current (off-chain) balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``PaymentChannel.amount``.
+    """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -2776,7 +3039,7 @@ class PaymentChannelBalance(object):
         self._seq = None
 
     @staticmethod
-    def parse(data):
+    def parse(data: dict):
         assert type(data) == dict
 
         obj = PaymentChannelBalance()
@@ -2798,7 +3061,7 @@ class PaymentChannelBalance(object):
 
         return obj
 
-    def marshal(self):
+    def marshal(self) -> dict:
         obj = {
             'remaining': pack_uint256(self.remaining) if self.remaining else 0,
             'inflight': pack_uint256(self.inflight) if self.inflight else 0,
@@ -2810,7 +3073,10 @@ class PaymentChannelBalance(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def remaining(self):
+    def remaining(self) -> int:
+        """
+        Amount of XBR tokens currently remaining in the payment channel.
+        """
         if self._remaining is None and self._from_fbs:
             if self._from_fbs.RemainingLength():
                 _remaining = self._from_fbs.RemainingAsBytes()
@@ -2820,12 +3086,15 @@ class PaymentChannelBalance(object):
         return self._remaining
 
     @remaining.setter
-    def remaining(self, value):
+    def remaining(self, value: int):
         assert value is None or type(value) == int
         self._remaining = value
 
     @property
-    def inflight(self):
+    def inflight(self) -> int:
+        """
+        Amount of XBR tokens reserved to in-flight purchase transactions.
+        """
         if self._inflight is None and self._from_fbs:
             if self._from_fbs.InflightLength():
                 _inflight = self._from_fbs.InflightAsBytes()
@@ -2835,18 +3104,21 @@ class PaymentChannelBalance(object):
         return self._inflight
 
     @inflight.setter
-    def inflight(self, value):
+    def inflight(self, value: int):
         assert value is None or type(value) == int
         self._inflight = value
 
     @property
-    def seq(self):
+    def seq(self) -> int:
+        """
+        Sequence number of transactions on this balance starting from 0 when the payment channel is created.
+        """
         if self._seq is None and self._from_fbs:
             self._seq = self._from_fbs.Seq()
         return self._seq or 0
 
     @seq.setter
-    def seq(self, value):
+    def seq(self, value: int):
         assert value is None or type(value) == int
         self._seq = value
 
@@ -2958,12 +3230,28 @@ class _TransactionGen(TransactionGen.Transaction):
 
 class Transaction(object):
     """
+    Data encryption key buy-sell transactions.
     """
-    STATUS_NONE = 0
-    STATUS_INFLIGHT = 1
-    STATUS_FAILED = 2
-    STATUS_SUCCESS = 3
 
+    STATUS_NONE = 0
+    """
+    Unset
+    """
+
+    STATUS_INFLIGHT = 1
+    """
+    The transaction is currently in-flight
+    """
+
+    STATUS_FAILED = 2
+    """
+    The transaction has completed with error (it failed)
+    """
+
+    STATUS_SUCCESS = 3
+    """
+    The transaction has completed with success
+    """
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
@@ -3003,19 +3291,6 @@ class Transaction(object):
         # uint32
         self._completed_paying_channel_seq = None
 
-    @staticmethod
-    def parse(data):
-        raise NotImplementedError()
-
-        # obj = Transaction()
-        #
-        # if 'amount' in data:
-        #     amount = data['amount']
-        #     assert type(amount) == bytes and len(amount) == 32
-        #     obj._amount = unpack_uint256(amount)
-        #
-        # return obj
-
     def marshal(self):
         obj = {
             'tid': str(self.tid) if self.tid else None,
@@ -3037,7 +3312,10 @@ class Transaction(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def tid(self):
+    def tid(self) -> uuid.UUID:
+        """
+        ID of the transaction.
+        """
         if self._tid is None and self._from_fbs:
             if self._from_fbs.OfferLength():
                 _tid = self._from_fbs.TidAsBytes()
@@ -3045,45 +3323,57 @@ class Transaction(object):
         return self._tid
 
     @tid.setter
-    def tid(self, value):
+    def tid(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._tid = value
 
     @property
-    def created(self):
+    def created(self) -> np.datetime64:
+        """
+        Creation time of the transaction (epoch time in ns).
+        """
         if self._created is None and self._from_fbs:
             self._created = np.datetime64(self._from_fbs.Created(), 'ns')
         return self._created
 
     @created.setter
-    def created(self, value):
+    def created(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._created = value
 
     @property
-    def created_payment_channel_seq(self):
+    def created_payment_channel_seq(self) -> int:
+        """
+        Sequence number of the created-state transaction within the payment channel.
+        """
         if self._created_payment_channel_seq is None and self._from_fbs:
             self._created_payment_channel_seq = self._from_fbs.CreatedPaymentChannelSeq()
         return self._created_payment_channel_seq or 0
 
     @created_payment_channel_seq.setter
-    def created_payment_channel_seq(self, value):
+    def created_payment_channel_seq(self, value: int):
         assert value is None or type(value) == int
         self._created_payment_channel_seq = value
 
     @property
-    def created_paying_channel_seq(self):
+    def created_paying_channel_seq(self) -> int:
+        """
+        Sequence number of the created-state transaction within the paying channel.
+        """
         if self._created_paying_channel_seq is None and self._from_fbs:
             self._created_paying_channel_seq = self._from_fbs.CreatedPayingChannelSeq()
         return self._created_paying_channel_seq or 0
 
     @created_paying_channel_seq.setter
-    def created_paying_channel_seq(self, value):
+    def created_paying_channel_seq(self, value: int):
         assert value is None or type(value) == int
         self._created_paying_channel_seq = value
 
     @property
-    def offer(self):
+    def offer(self) -> uuid.UUID:
+        """
+        ID of the data encryption key offer this transaction is for.
+        """
         if self._offer is None and self._from_fbs:
             if self._from_fbs.OfferLength():
                 _offer = self._from_fbs.OfferAsBytes()
@@ -3091,12 +3381,15 @@ class Transaction(object):
         return self._offer
 
     @offer.setter
-    def offer(self, value):
+    def offer(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._offer = value
 
     @property
-    def amount(self):
+    def amount(self) -> int:
+        """
+        Transaction amount in XBR.
+        """
         if self._amount is None and self._from_fbs:
             if self._from_fbs.AmountLength():
                 _amount = self._from_fbs.AmountAsBytes()
@@ -3106,75 +3399,93 @@ class Transaction(object):
         return self._amount
 
     @amount.setter
-    def amount(self, value):
+    def amount(self, value: int):
         assert value is None or type(value) == int
         self._amount = value
 
     @property
-    def payment_channel(self):
+    def payment_channel(self) -> bytes:
+        """
+        Address of the payment channel (of the buyer) this transaction is transacting on.
+        """
         if self._payment_channel is None and self._from_fbs:
             if self._from_fbs.PaymentChannelLength():
                 self._payment_channel = self._from_fbs.PaymentChannelAsBytes()
         return self._payment_channel
 
     @payment_channel.setter
-    def payment_channel(self, value):
+    def payment_channel(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._payment_channel = value
 
     @property
-    def paying_channel(self):
+    def paying_channel(self) -> bytes:
+        """
+        Address of the paying channel (of the seller) this transaction is transacting on.
+        """
         if self._payment_channel is None and self._from_fbs:
             if self._from_fbs.PayingChannelLength():
                 self._payment_channel = self._from_fbs.PayingChannelAsBytes()
         return self._payment_channel
 
     @paying_channel.setter
-    def paying_channel(self, value):
+    def paying_channel(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._payment_channel = value
 
     @property
-    def state(self):
+    def state(self) -> int:
+        """
+        State of the transaction: TransactionState.INFLIGHT when created, and then either TransactionState.SUCCESS or TransactionState.FAILED.
+        """
         if self._state is None and self._from_fbs:
             self._state = self._from_fbs.State()
         return self._state or 0
 
     @state.setter
-    def state(self, value):
+    def state(self, value: int):
         assert value is None or type(value) == int
         self._state = value
 
     @property
-    def completed(self):
+    def completed(self) -> np.datetime64:
+        """
+        Completion time of the transaction (epoch time in ns)
+        """
         if self._completed is None and self._from_fbs:
             self._completed = np.datetime64(self._from_fbs.Completed(), 'ns')
         return self._completed
 
     @completed.setter
-    def completed(self, value):
+    def completed(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._completed = value
 
     @property
-    def completed_payment_channel_seq(self):
+    def completed_payment_channel_seq(self) -> int:
+        """
+        Sequence number of the completed-state transaction within the payment channel.
+        """
         if self._completed_payment_channel_seq is None and self._from_fbs:
             self._completed_payment_channel_seq = self._from_fbs.CompletedPaymentChannelSeq()
         return self._completed_payment_channel_seq or 0
 
     @completed_payment_channel_seq.setter
-    def completed_payment_channel_seq(self, value):
+    def completed_payment_channel_seq(self, value: int):
         assert value is None or type(value) == int
         self._completed_payment_channel_seq = value
 
     @property
-    def completed_paying_channel_seq(self):
+    def completed_paying_channel_seq(self) -> int:
+        """
+        Sequence number of the completed-state transaction within the paying channel.
+        """
         if self._completed_paying_channel_seq is None and self._from_fbs:
             self._completed_paying_channel_seq = self._from_fbs.CompletedPayingChannelSeq()
         return self._completed_paying_channel_seq or 0
 
     @completed_paying_channel_seq.setter
-    def completed_paying_channel_seq(self, value):
+    def completed_paying_channel_seq(self, value: int):
         assert value is None or type(value) == int
         self._completed_paying_channel_seq = value
 
@@ -3262,107 +3573,99 @@ class Schema(object):
     def __init__(self, db):
         self.db = db
 
-    # blockchain blocks processed
-    # blocks: Blocks
-    blocks = None
+    blocks: Blocks
     """
     Ethereum blocks basic information.
     """
 
-    # token_approvals: TokenApprovals
-    token_approvals = None
+    token_approvals: TokenApprovals
     """
     Token approvals archive.
     """
 
-    # token_transfers: TokenTransfers
-    token_transfers = None
+    token_transfers: TokenTransfers
     """
     Token transfers archive.
     """
 
-    # members: Members
-    members = None
+    members: Members
     """
     XBR network members.
     """
 
-    # markets: Markets
-    markets = None
+    markets: Markets
     """
     XBR markets.
     """
 
-    # actors: Actors
-    actors = None
+    idx_markets_by_owner: IndexMarketsByOwner
+    """
+    Index ``(owner_adr, created) -> market_oid``.
+    """
+
+    idx_markets_by_actor: IndexMarketsByActor
+    """
+    Index ``(actor_adr, joined) -> market_oid``.
+    """
+
+    actors: Actors
     """
     XBR market actors.
     """
 
-    # payment_channels: PaymentChannels
-    payment_channels = None
+    payment_channels: PaymentChannels
     """
     Payment channels for XBR consumer delegates.
     """
 
-    # idx_payment_channel_by_delegate: IndexPaymentChannelByDelegate
-    idx_payment_channel_by_delegate = None
+    idx_payment_channel_by_delegate: IndexPaymentChannelByDelegate
     """
     Maps from XBR consumer delegate address to the currently active payment
     channel address for the given consumer delegate.
     """
 
-    # payment_balances: PaymentChannelBalances
-    payment_balances = None
+    payment_balances: PaymentChannelBalances
     """
     Current off-chain balances within payment channels.
     """
 
-    # paying_channel_requests: PayingChannelRequests
-    paying_channel_requests = None
+    paying_channel_requests: PayingChannelRequests
     """
     Requests for openng paying channels.
     """
 
-    # paying_channels: PayingChannels
-    paying_channels = None
+    paying_channels: PayingChannels
     """
     Paying channels for XBR provider delegates.
     """
 
-    # idx_paying_channel_by_delegate: IndexPayingChannelByDelegate
-    idx_paying_channel_by_delegate = None
+    idx_paying_channel_by_delegate: IndexPayingChannelByDelegate
     """
     Maps from XBR provider delegate address to the currently active paying
     channel address for the given provider delegate.
     """
 
-    # idx_paying_channel_requests_by_recipient: IndexPayingChannelByRecipient
-    idx_paying_channel_requests_by_recipient = None
+    idx_paying_channel_requests_by_recipient: IndexPayingChannelByRecipient
     """
     """
 
-    # paying_balances: PayingChannelBalances
-    paying_balances = None
+    paying_balances: PayingChannelBalances
     """
     Current off-chain balances within paying channels.
     """
 
-    # key_offers: Offer
-    offers = None
+    key_offers: Offer
     """
     Data encryption key offers.
     """
 
-    # idx_offer_by_key: IndexOfferByKey
-    idx_offer_by_key = None
+    idx_offer_by_key: IndexOfferByKey
     """
     Index of key offers by key ID (rather than offer ID, as the object table
     is indexed by).
     """
 
-    # transaction: Transactions
-    transactions = None
+    transaction: Transactions
     """
     """
 
@@ -3387,6 +3690,13 @@ class Schema(object):
         schema.members = db.attach_table(Members)
 
         schema.markets = db.attach_table(Markets)
+
+        schema.idx_markets_by_owner = db.attach_table(IndexMarketsByOwner)
+
+        schema.markets.attach_index('idx1', schema.idx_markets_by_owner, lambda market:
+                                    (market.owner, market.timestamp))
+
+        schema.idx_markets_by_actor = db.attach_table(IndexMarketsByActor)
 
         schema.actors = db.attach_table(Actors)
 

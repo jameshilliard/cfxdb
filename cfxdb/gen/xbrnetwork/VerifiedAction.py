@@ -18,7 +18,7 @@ class VerifiedAction(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Globally unique and static ID of action .
+# /// Globally unique and static ID of action.
     # VerifiedAction
     def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))

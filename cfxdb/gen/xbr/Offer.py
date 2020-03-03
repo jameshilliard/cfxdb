@@ -50,7 +50,7 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// ID of the XBR provider offering the data encryption key.
+# /// Address of the XBR provider offering the data encryption key.
     # Offer
     def Seller(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))

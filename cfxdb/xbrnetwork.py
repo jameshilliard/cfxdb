@@ -16,7 +16,7 @@ from .gen.xbrnetwork import VerifiedAction as VerifiedActionGen
 from .gen.xbrnetwork import UserKey as UserKeyGen
 
 # FIXME: https://github.com/crossbario/crossbarfx/issues/501
-from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, Actors
+from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner, Actors
 
 
 class _AccountGen(AccountGen.Account):
@@ -59,7 +59,7 @@ class _AccountGen(AccountGen.Account):
 
 class Account(object):
     """
-    XBR member account.
+    XBR Network members.
     """
 
     ACCOUNT_LEVEL_NONE = 0
@@ -208,10 +208,9 @@ class Account(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def oid(self):
+    def oid(self) -> uuid.UUID:
         """
-        :return: Globally unique and static member ID.
-        :rtype: :class:`uuid.UUID`
+        Globally unique and static member ID.
         """
         if self._oid is None and self._from_fbs:
             if self._from_fbs.OidLength():
@@ -222,30 +221,28 @@ class Account(object):
         return self._oid
 
     @oid.setter
-    def oid(self, value):
+    def oid(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._oid = value
 
     @property
-    def created(self):
+    def created(self) -> np.datetime64:
         """
-        :return: Timestamp (epoch time in ns) of initial creation of this record.
-        :rtype: :class:`np.datetime64`
+        Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
             self._created = np.datetime64(self._from_fbs.Created(), 'ns')
         return self._created
 
     @created.setter
-    def created(self, value):
+    def created(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._created = value
 
     @property
-    def username(self):
+    def username(self) -> str:
         """
-        :return: XBR Network username (must be globally unique on https://xbr.network)
-        :rtype: str
+        XBR Network username (must be globally unique on https://xbr.network)
         """
         if self._username is None and self._from_fbs:
             username = self._from_fbs.Username()
@@ -254,15 +251,14 @@ class Account(object):
         return self._username
 
     @username.setter
-    def username(self, value):
+    def username(self, value: str):
         assert value is None or type(value) == str
         self._username = value
 
     @property
-    def email(self):
+    def email(self) -> str:
         """
-        :return: User (primary) email address.
-        :rtype: str
+        User (primary) email address.
         """
         if self._email is None and self._from_fbs:
             email = self._from_fbs.Email()
@@ -271,45 +267,42 @@ class Account(object):
         return self._email
 
     @email.setter
-    def email(self, value):
+    def email(self, value: str):
         assert value is None or type(value) == str
         self._email = value
 
     @property
-    def email_verified(self):
+    def email_verified(self) -> np.datetime64:
         """
-        :return: Timestamp (epoch time in ns) when the user email was (last) verified or 0 if unverified.
-        :rtype: :class:`np.datetime64`
+        Timestamp (epoch time in ns) when the user email was (last) verified or 0 if unverified.
         """
         if self._email_verified is None and self._from_fbs:
             self._email_verified = np.datetime64(self._from_fbs.EmailVerified(), 'ns')
         return self._email_verified
 
     @email_verified.setter
-    def email_verified(self, value):
+    def email_verified(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._email_verified = value
 
     @property
-    def wallet_type(self):
+    def wallet_type(self) -> int:
         """
-        :return: Type of (primary) user crypto wallet in use.
-        :rtype: int
+        Type of (primary) user crypto wallet in use.
         """
         if self._wallet_type is None and self._from_fbs:
             self._wallet_type = self._from_fbs.WalletType()
         return self._wallet_type or 0
 
     @wallet_type.setter
-    def wallet_type(self, value):
+    def wallet_type(self, value: int):
         assert value is None or type(value) == int
         self._wallet_type = value
 
     @property
-    def wallet_address(self):
+    def wallet_address(self) -> bytes:
         """
-        :return: Public address of user crypto wallet in use.
-        :rtype: bytes
+        Public address of user crypto wallet in use.
         """
         if self._wallet_address is None and self._from_fbs:
             if self._from_fbs.WalletAddressLength():
@@ -317,15 +310,14 @@ class Account(object):
         return self._wallet_address
 
     @wallet_address.setter
-    def wallet_address(self, value):
+    def wallet_address(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._wallet_address = value
 
     @property
-    def registered(self):
+    def registered(self) -> int:
         """
-        :return: Block number (on the blockchain) when the member (originally) registered.
-        :rtype: int
+        Block number (on the blockchain) when the member (originally) registered.
         """
         if self._registered is None and self._from_fbs:
             if self._from_fbs.RegisteredLength():
@@ -336,15 +328,14 @@ class Account(object):
         return self._registered
 
     @registered.setter
-    def registered(self, value):
+    def registered(self, value: int):
         assert value is None or type(value) == int
         self._registered = value
 
     @property
-    def eula(self):
+    def eula(self) -> str:
         """
-        :return: EULA the member agreed to when joining the market (IPFS Multihash string).
-        :rtype: str
+        EULA the member agreed to when joining the market (IPFS Multihash string).
         """
         if self._eula is None and self._from_fbs:
             eula = self._from_fbs.Eula()
@@ -353,15 +344,14 @@ class Account(object):
         return self._eula
 
     @eula.setter
-    def eula(self, value):
+    def eula(self, value: str):
         assert value is None or type(value) == str
         self._eula = value
 
     @property
-    def profile(self):
+    def profile(self) -> str:
         """
-        :return: Optional member profile (IPFS Multihash string).
-        :rtype: str
+        Optional member profile (IPFS Multihash string).
         """
         if self._profile is None and self._from_fbs:
             profile = self._from_fbs.Profile()
@@ -370,22 +360,21 @@ class Account(object):
         return self._profile
 
     @profile.setter
-    def profile(self, value):
+    def profile(self, value: str):
         assert value is None or type(value) == str
         self._profile = value
 
     @property
-    def level(self):
+    def level(self) -> int:
         """
-        :return: Current member level, one of :py:attr:`xbrnetwork.Account.ACCOUNT_LEVEL`.
-        :rtype: int
+        Current member level.
         """
         if self._level is None and self._from_fbs:
             self._level = self._from_fbs.Level()
         return self._level
 
     @level.setter
-    def level(self, value):
+    def level(self, value: int):
         assert value is None or type(value) == int
         self._level = value
 
@@ -529,6 +518,29 @@ class _VerifiedActionGen(VerifiedActionGen.VerifiedAction):
         return None
 
 
+class VerificationType(object):
+
+    NONE = 0
+    """
+    Unset
+    """
+
+    MEMBER_ONBOARD_EMAIL = 1
+    """
+    Member onboarded, using verification via member primary email.
+    """
+
+    MEMBER_LOGIN_EMAIL = 2
+    """
+    Member created a market, using verification via member primary email.
+    """
+
+    CREATE_MARKET_EMAIL = 3
+    """
+    Member joined a market, using verification via member primary email.
+    """
+
+
 class VerifiedAction(object):
     """
     User actions (such as "on-board new user") yet to be verified. Actions to be verified are
@@ -643,10 +655,9 @@ class VerifiedAction(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def oid(self):
+    def oid(self) -> uuid.UUID:
         """
-        :return: Verification action ID.
-        :rtype: :class:`uuid.UUID`
+        Globally unique and static ID of action.
         """
         if self._oid is None and self._from_fbs:
             if self._from_fbs.OidLength():
@@ -657,60 +668,56 @@ class VerifiedAction(object):
         return self._oid
 
     @oid.setter
-    def oid(self, value):
+    def oid(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._oid = value
 
     @property
-    def created(self):
+    def created(self) -> np.datetime64:
         """
-        :return: Timestamp when record was created (Unix time in ns).
-        :rtype: :class:`np.datetime64`
+        Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
             self._created = np.datetime64(self._from_fbs.Created(), 'ns')
         return self._created
 
     @created.setter
-    def created(self, value):
+    def created(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._created = value
 
     @property
-    def vtype(self):
+    def vtype(self) -> int:
         """
-        :return: Verification action type, one of :py:attr:`xbrnetwork.VerifiedAction.VERIFICATION_TYPE`
-        :rtype: int
+        Verification type.
         """
         if self._vtype is None and self._from_fbs:
             self._vtype = self._from_fbs.Vtype()
         return self._vtype or 0
 
     @vtype.setter
-    def vtype(self, value):
+    def vtype(self, value: int):
         assert value is None or (type(value) == int and value in self.VERIFICATION_TYPE)
         self._vtype = value
 
     @property
-    def vstatus(self):
+    def vstatus(self) -> int:
         """
-        :return: Verification action status, one of :py:attr:`xbrnetwork.VerifiedAction.VERIFICATION_STATUS`
-        :rtype: int
+        Verification type.
         """
         if self._vstatus is None and self._from_fbs:
             self._vstatus = self._from_fbs.Vstatus()
         return self._vstatus or 0
 
     @vstatus.setter
-    def vstatus(self, value):
+    def vstatus(self, value: int):
         assert value is None or (type(value) == int and value in self.VERIFICATION_STATUS)
         self._vstatus = value
 
     @property
-    def vcode(self):
+    def vcode(self) -> str:
         """
-        :return: Verification action code, eg ``"G9EV-LXQ4-667G"``.
-        :rtype: str
+        Verification code sent.
         """
         if self._vcode is None and self._from_fbs:
             vcode = self._from_fbs.Vcode()
@@ -719,15 +726,14 @@ class VerifiedAction(object):
         return self._vcode
 
     @vcode.setter
-    def vcode(self, value):
+    def vcode(self, value: str):
         assert value is None or type(value) == str
         self._vcode = value
 
     @property
-    def verified_oid(self):
+    def verified_oid(self) -> uuid.UUID:
         """
-        :return: Object ID of the object being verified.
-        :rtype: :class:`uuid.UUID`
+        ID of object of verified action.
         """
         if self._verified_oid is None and self._from_fbs:
             if self._from_fbs.VerifiedOidLength():
@@ -738,15 +744,14 @@ class VerifiedAction(object):
         return self._verified_oid
 
     @verified_oid.setter
-    def verified_oid(self, value):
+    def verified_oid(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._verified_oid = value
 
     @property
-    def verified_data(self):
+    def verified_data(self) -> dict:
         """
-        :return: Data being verified (this is transparently serialized/unserialized to/from CBOR).
-        :rtype: dict
+        Action data, serialized in CBOR.
         """
         if self._verified_data is None and self._from_fbs:
             _verified_data = self._from_fbs.VerifiedDataAsBytes()
@@ -757,7 +762,7 @@ class VerifiedAction(object):
         return self._verified_data
 
     @verified_data.setter
-    def verified_data(self, value):
+    def verified_data(self, value: dict):
         assert value is None or type(value) == dict
         self._verified_data = value
 
@@ -879,10 +884,9 @@ class UserKey(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def pubkey(self):
+    def pubkey(self) -> bytes:
         """
-        :return: Client Ed25519 public key.
-        :rtype: bytes
+        User key - a Ed25519 public key - for authenticating using WAMP-cryptosign.
         """
         if self._pubkey is None and self._from_fbs:
             if self._from_fbs.PubkeyLength():
@@ -890,30 +894,28 @@ class UserKey(object):
         return self._pubkey
 
     @pubkey.setter
-    def pubkey(self, value):
+    def pubkey(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 32)
         self._pubkey = value
 
     @property
-    def created(self):
+    def created(self) -> np.datetime64:
         """
-        :return: Record creation timestamp.
-        :rtype: :class:`np.datetime64`
+        Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
             self._created = np.datetime64(self._from_fbs.Created(), 'ns')
         return self._created
 
     @created.setter
-    def created(self, value):
+    def created(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._created = value
 
     @property
-    def owner(self):
+    def owner(self) -> uuid.UUID:
         """
-        :return: Key owner member ID.
-        :rtype: :class:`uuid.UUID`
+        ID of user account this user key is owned by.
         """
         if self._owner is None and self._from_fbs:
             if self._from_fbs.OwnerLength():
@@ -924,7 +926,7 @@ class UserKey(object):
         return self._owner
 
     @owner.setter
-    def owner(self, value):
+    def owner(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._owner = value
 
@@ -977,52 +979,72 @@ class Schema(object):
     XBR Network backend database schema.
     """
 
-    blocks = None
+    blocks: Blocks
     """
     Ethereum blocks basic information.
     """
 
-    token_approvals = None
+    token_approvals: TokenApprovals
     """
     Token approvals archive.
     """
 
-    token_transfers = None
+    token_transfers: TokenTransfers
     """
     Token transfers archive.
     """
 
-    accounts = None
+    members: Members
+    """
+    XBR network members.
+    """
+
+    markets: Markets
+    """
+    XBR markets.
+    """
+
+    idx_markets_by_owner: IndexMarketsByOwner
+    """
+    XBR markets.
+    """
+
+    actors: Actors
+    """
+    XBR market actors.
+    """
+
+    accounts: Accounts
     """
     Member accounts database table :class:`xbrnetwork.Accounts`.
     """
 
-    idx_accounts_by_username = None
+    idx_accounts_by_username: IndexAccountsByUsername
     """
     Index "by username" of member accounts :class:`xbrnetwork.IndexAccountsByUsername`.
     """
 
-    idx_accounts_by_email = None
+    idx_accounts_by_email: IndexAccountsByEmail
     """
     Index "by email" of member accounts :class:`xbrnetwork.IndexAccountsByEmail`.
     """
 
-    idx_accounts_by_wallet = None
+    idx_accounts_by_wallet: IndexAccountsByWallet
     """
     Index "by wallet" of member accounts :class:`xbrnetwork.IndexAccountsByWallet`.
     """
 
-    verified_actions = None
+    verified_actions: VerifiedActions
     """
     Verified actions database table :class:`xbrnetwork.VerifiedActions`.
     """
 
-    user_keys = None
+    user_keys: UserKeys
     """
     User client keys database table :class:`xbrnetwork.UserKeys`.
     """
 
-    idx_user_key_by_account = None
+    idx_user_key_by_account: IndexUserKeyByAccount
     """
     Index "by pubkey" of user keys :class:`xbrnetwork.IndexUserKeyByAccount`.
     """
@@ -1073,14 +1095,3 @@ class Schema(object):
                                       (user_key.owner, user_key.created))
 
         return schema
-
-
-class VerificationType(object):
-
-    NONE = 0
-
-    MEMBER_ONBOARD_EMAIL = 1
-
-    MEMBER_LOGIN_EMAIL = 2
-
-    CREATE_MARKET_EMAIL = 3
