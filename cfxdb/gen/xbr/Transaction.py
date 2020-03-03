@@ -19,7 +19,7 @@ class Transaction(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of the transaction..
+# /// ID of the transaction.
     # Transaction
     def Tid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +42,7 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Creation time of the transaction (epoch time in ns)
+# /// Creation time of the transaction (epoch time in ns).
     # Transaction
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
