@@ -95,6 +95,9 @@ enum VerificationType: uint8
 
     ///
     MEMBER_CREATEMARKET_EMAIL = 3,
+
+    ///
+    MEMBER_JOINMARKET_EMAIL = 4,
 }
 
 

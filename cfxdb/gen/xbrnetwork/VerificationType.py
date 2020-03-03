@@ -9,4 +9,8 @@ class VerificationType(object):
     MEMBER_ONBOARD_EMAIL = 1
 # ///
     MEMBER_LOGIN_EMAIL = 2
+# ///
+    MEMBER_CREATEMARKET_EMAIL = 3
+# ///
+    MEMBER_JOINMARKET_EMAIL = 4
 
