@@ -12,7 +12,8 @@ import flatbuffers
 import numpy as np
 
 from zlmdb import table, MapBytes20FlatBuffers, MapBytes32FlatBuffers, MapUuidUuid, MapUuidFlatBuffers,\
-    MapBytes16FlatBuffers, MapBytes20Bytes16, MapBytes20TimestampBytes20, MapUuidBytes20Uint8FlatBuffers
+    MapBytes16FlatBuffers, MapBytes20Bytes16, MapBytes20TimestampBytes20, MapUuidBytes20Uint8FlatBuffers,\
+    MapBytes20TimestampUuid
 
 from .common import pack_uint256, unpack_uint256
 from .gen.xbr import PaymentChannelType as PaymentChannelTypeGen
@@ -709,6 +710,20 @@ class Markets(MapUuidFlatBuffers):
     Persisted market definitions.
 
     Map :class:`zlmdb.MapUuidFlatBuffers` from ``market_id`` to :class:`cfxdb.xbr.Market`
+    """
+
+
+@table('7c3d67b4-35a3-449f-85a6-2695636fc63e')
+class IndexMarketsByOwner(MapBytes20TimestampUuid):
+    """
+    Database (index) table for (owner_adr, created) -> market_id mapping.
+    """
+
+
+@table('4f50a97a-4531-4eab-a91b-45cc42b3dd21')
+class IndexMarketsByActor(MapBytes20TimestampUuid):
+    """
+    Database (index) table for (actor_adr, joined) -> market_id mapping.
     """
 
 
@@ -3262,107 +3277,99 @@ class Schema(object):
     def __init__(self, db):
         self.db = db
 
-    # blockchain blocks processed
-    # blocks: Blocks
-    blocks = None
+    blocks: Blocks
     """
     Ethereum blocks basic information.
     """
 
-    # token_approvals: TokenApprovals
-    token_approvals = None
+    token_approvals: TokenApprovals
     """
     Token approvals archive.
     """
 
-    # token_transfers: TokenTransfers
-    token_transfers = None
+    token_transfers: TokenTransfers
     """
     Token transfers archive.
     """
 
-    # members: Members
-    members = None
+    members: Members
     """
     XBR network members.
     """
 
-    # markets: Markets
-    markets = None
+    markets: Markets
     """
     XBR markets.
     """
 
-    # actors: Actors
-    actors = None
+    idx_markets_by_owner: IndexMarketsByOwner
+    """
+    Index ``(owner_adr, created) -> market_oid``.
+    """
+
+    idx_markets_by_actor: IndexMarketsByActor
+    """
+    Index ``(actor_adr, joined) -> market_oid``.
+    """
+
+    actors: Actors
     """
     XBR market actors.
     """
 
-    # payment_channels: PaymentChannels
-    payment_channels = None
+    payment_channels: PaymentChannels
     """
     Payment channels for XBR consumer delegates.
     """
 
-    # idx_payment_channel_by_delegate: IndexPaymentChannelByDelegate
-    idx_payment_channel_by_delegate = None
+    idx_payment_channel_by_delegate: IndexPaymentChannelByDelegate
     """
     Maps from XBR consumer delegate address to the currently active payment
     channel address for the given consumer delegate.
     """
 
-    # payment_balances: PaymentChannelBalances
-    payment_balances = None
+    payment_balances: PaymentChannelBalances
     """
     Current off-chain balances within payment channels.
     """
 
-    # paying_channel_requests: PayingChannelRequests
-    paying_channel_requests = None
+    paying_channel_requests: PayingChannelRequests
     """
     Requests for openng paying channels.
     """
 
-    # paying_channels: PayingChannels
-    paying_channels = None
+    paying_channels: PayingChannels
     """
     Paying channels for XBR provider delegates.
     """
 
-    # idx_paying_channel_by_delegate: IndexPayingChannelByDelegate
-    idx_paying_channel_by_delegate = None
+    idx_paying_channel_by_delegate: IndexPayingChannelByDelegate
     """
     Maps from XBR provider delegate address to the currently active paying
     channel address for the given provider delegate.
     """
 
-    # idx_paying_channel_requests_by_recipient: IndexPayingChannelByRecipient
-    idx_paying_channel_requests_by_recipient = None
+    idx_paying_channel_requests_by_recipient: IndexPayingChannelByRecipient
     """
     """
 
-    # paying_balances: PayingChannelBalances
-    paying_balances = None
+    paying_balances: PayingChannelBalances
     """
     Current off-chain balances within paying channels.
     """
 
-    # key_offers: Offer
-    offers = None
+    key_offers: Offer
     """
     Data encryption key offers.
     """
 
-    # idx_offer_by_key: IndexOfferByKey
-    idx_offer_by_key = None
+    idx_offer_by_key: IndexOfferByKey
     """
     Index of key offers by key ID (rather than offer ID, as the object table
     is indexed by).
     """
 
-    # transaction: Transactions
-    transactions = None
+    transaction: Transactions
     """
     """
 
@@ -3387,6 +3394,13 @@ class Schema(object):
         schema.members = db.attach_table(Members)
 
         schema.markets = db.attach_table(Markets)
+
+        schema.idx_markets_by_owner = db.attach_table(IndexMarketsByOwner)
+
+        schema.markets.attach_index('idx1', schema.idx_markets_by_owner, lambda market:
+                                    (market.owner, market.timestamp))
+
+        schema.idx_markets_by_actor = db.attach_table(IndexMarketsByActor)
 
         schema.actors = db.attach_table(Actors)
 

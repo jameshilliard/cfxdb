@@ -16,7 +16,7 @@ from .gen.xbrnetwork import VerifiedAction as VerifiedActionGen
 from .gen.xbrnetwork import UserKey as UserKeyGen
 
 # FIXME: https://github.com/crossbario/crossbarfx/issues/501
-from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, Actors
+from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner, Actors
 
 
 class _AccountGen(AccountGen.Account):
@@ -529,6 +529,17 @@ class _VerifiedActionGen(VerifiedActionGen.VerifiedAction):
         return None
 
 
+class VerificationType(object):
+
+    NONE = 0
+
+    MEMBER_ONBOARD_EMAIL = 1
+
+    MEMBER_LOGIN_EMAIL = 2
+
+    CREATE_MARKET_EMAIL = 3
+
+
 class VerifiedAction(object):
     """
     User actions (such as "on-board new user") yet to be verified. Actions to be verified are
@@ -977,52 +988,72 @@ class Schema(object):
     XBR Network backend database schema.
     """
 
-    blocks = None
+    blocks: Blocks
     """
     Ethereum blocks basic information.
     """
 
-    token_approvals = None
+    token_approvals: TokenApprovals
     """
     Token approvals archive.
     """
 
-    token_transfers = None
+    token_transfers: TokenTransfers
     """
     Token transfers archive.
     """
 
-    accounts = None
+    members: Members
+    """
+    XBR network members.
+    """
+
+    markets: Markets
+    """
+    XBR markets.
+    """
+
+    idx_markets_by_owner: IndexMarketsByOwner
+    """
+    XBR markets.
+    """
+
+    actors: Actors
+    """
+    XBR market actors.
+    """
+
+    accounts: Accounts
     """
     Member accounts database table :class:`xbrnetwork.Accounts`.
     """
 
-    idx_accounts_by_username = None
+    idx_accounts_by_username: IndexAccountsByUsername
     """
     Index "by username" of member accounts :class:`xbrnetwork.IndexAccountsByUsername`.
     """
 
-    idx_accounts_by_email = None
+    idx_accounts_by_email: IndexAccountsByEmail
     """
     Index "by email" of member accounts :class:`xbrnetwork.IndexAccountsByEmail`.
     """
 
-    idx_accounts_by_wallet = None
+    idx_accounts_by_wallet: IndexAccountsByWallet
     """
     Index "by wallet" of member accounts :class:`xbrnetwork.IndexAccountsByWallet`.
     """
 
-    verified_actions = None
+    verified_actions: VerifiedActions
     """
     Verified actions database table :class:`xbrnetwork.VerifiedActions`.
     """
 
-    user_keys = None
+    user_keys: UserKeys
     """
     User client keys database table :class:`xbrnetwork.UserKeys`.
     """
 
-    idx_user_key_by_account = None
+    idx_user_key_by_account: IndexUserKeyByAccount
     """
     Index "by pubkey" of user keys :class:`xbrnetwork.IndexUserKeyByAccount`.
     """
@@ -1073,14 +1104,3 @@ class Schema(object):
                                       (user_key.owner, user_key.created))
 
         return schema
-
-
-class VerificationType(object):
-
-    NONE = 0
-
-    MEMBER_ONBOARD_EMAIL = 1
-
-    MEMBER_LOGIN_EMAIL = 2
-
-    CREATE_MARKET_EMAIL = 3
