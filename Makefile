@@ -21,8 +21,13 @@ publish: clean
 
 
 stats:
-	wc -l cfxdb/*.fbs
-	cloc cfxdb
+	@clear
+	@find ./cfxdb -name "*.fbs" -exec grep -Hi "^table" {} \; | cut -d" " -f1,2 | sort
+	@echo
+	@wc -l cfxdb/*.fbs
+	@echo
+	@cloc cfxdb
+	@echo
 
 test:
 	pytest -v -s ./cfxdb/tests/
