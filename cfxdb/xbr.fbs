@@ -250,7 +250,7 @@ table PayingChannelRequest
     /// When state is PayingChannelRequestState.FAILED, an optional error message.
     error_msg: string;
 
-    /// When this request has been fulfulled, the address to the contract of the created payment channel (from the market maker to the data seller).
+    /// When this request has been fulfilled, the address to the contract of the created payment channel (from the market maker to the data seller).
     channel: [uint8] (address);
 }
 
@@ -371,7 +371,7 @@ table Offer
     /// ID of the data encryption key offer.
     offer: [uint8] (uuid);
 
-    /// ID of the XBR provider offering the data encryption key.
+    /// Address of the XBR provider offering the data encryption key.
     seller: [uint8] (address);
 
     /// WAMP session ID of the caller that originally placed this offer.
@@ -435,10 +435,10 @@ enum TransactionState: uint8
 /// Data encryption key buy-sell transactions.
 table Transaction
 {
-    /// ID of the transaction..
+    /// ID of the transaction.
     tid: [uint8] (uuid);
 
-    /// Creation time of the transaction (epoch time in ns)
+    /// Creation time of the transaction (epoch time in ns).
     created: uint64 (timestamp);
 
     /// Sequence number of the created-state transaction within the payment channel.
