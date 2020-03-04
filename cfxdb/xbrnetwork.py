@@ -1071,6 +1071,10 @@ class Schema(object):
 
         schema.markets = db.attach_table(Markets)
 
+        schema.idx_markets_by_owner = db.attach_table(IndexMarketsByOwner)
+        schema.markets.attach_index('idx1', schema.idx_markets_by_owner, lambda market:
+                                    (market.owner, market.timestamp))
+
         schema.actors = db.attach_table(Actors)
 
         schema.accounts = db.attach_table(Accounts)

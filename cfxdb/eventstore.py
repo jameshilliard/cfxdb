@@ -718,15 +718,15 @@ class Publication(object):
 
         args = self.args
         if args:
-            args = builder.CreateByteVector(cbor.dumps(args))
+            args = builder.CreateString(cbor.dumps(args))
 
         kwargs = self.kwargs
         if kwargs:
-            kwargs = builder.CreateByteVector(cbor.dumps(kwargs))
+            kwargs = builder.CreateString(cbor.dumps(kwargs))
 
         payload = self.payload
         if payload:
-            payload = builder.CreateByteVector(payload)
+            payload = builder.CreateString(payload)
 
         topic = self.topic
         if topic:
@@ -734,7 +734,7 @@ class Publication(object):
 
         enc_key = self.enc_key
         if enc_key:
-            enc_key = builder.CreateByteVector(enc_key)
+            enc_key = builder.CreateString(enc_key)
 
         # exclude: [int]
         exclude = self.exclude
@@ -811,7 +811,7 @@ class Publication(object):
 
         if args:
             PublicationGen.PublicationAddArgs(builder, args)
-        if kwargs is not None:
+        if kwargs:
             PublicationGen.PublicationAddKwargs(builder, kwargs)
         if payload is not None:
             PublicationGen.PublicationAddPayload(builder, payload)
