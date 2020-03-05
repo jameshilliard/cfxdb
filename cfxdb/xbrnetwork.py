@@ -16,7 +16,7 @@ from .gen.xbrnetwork import VerifiedAction as VerifiedActionGen
 from .gen.xbrnetwork import UserKey as UserKeyGen
 
 # FIXME: https://github.com/crossbario/crossbarfx/issues/501
-from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner, Actors
+from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner, Actors, IndexMarketsByActor
 
 
 class _AccountGen(AccountGen.Account):
@@ -1076,6 +1076,10 @@ class Schema(object):
                                     (market.owner, market.timestamp))
 
         schema.actors = db.attach_table(Actors)
+        schema.idx_markets_by_actor = db.attach_table(IndexMarketsByActor)
+
+        # schema.actors.attach_index('idx1', schema.idx_markets_by_actor, lambda actor:
+        #                            (actor.actor, actor.timestamp))
 
         schema.accounts = db.attach_table(Accounts)
 
