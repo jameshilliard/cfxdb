@@ -1006,7 +1006,12 @@ class Schema(object):
 
     idx_markets_by_owner: IndexMarketsByOwner
     """
-    XBR markets.
+    Index on XBR markets.
+    """
+
+    idx_markets_by_actor: IndexMarketsByActor
+    """
+    Index on XBR markets.
     """
 
     actors: Actors
