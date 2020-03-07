@@ -153,9 +153,9 @@ class Attribute(object):
         self._modified = value
 
     @property
-    def value(self) -> object:
+    def value(self):
         """
-        CBOR-serialized, object-valued attribute.
+        Arbitrary attribute value, stored CBOR-serialized.
         """
         if self._value is None and self._from_fbs:
             if self._from_fbs.ValueLength():
@@ -165,8 +165,7 @@ class Attribute(object):
         return self._value
 
     @value.setter
-    def value(self, new_value: object):
-        assert new_value is None or type(new_value) == object
+    def value(self, new_value):
         self._value = new_value
 
     @staticmethod
