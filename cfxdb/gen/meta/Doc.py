@@ -4,6 +4,7 @@
 
 import flatbuffers
 
+# /// Generic **object documentation** attached to objects in other tables. Primary key of this table is ``oid``.
 class Doc(object):
     __slots__ = ['_tab']
 
@@ -26,21 +27,51 @@ class Doc(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Slot of the object being documented.
+# /// Table of the object being documented.
     # Doc
-    def ObjectSlot(self):
+    def TableOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-# /// OID of the object being documented.
     # Doc
-    def ObjectOid(self):
+    def TableOidAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Doc
+    def TableOidLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+# /// Object (within the table)  being documented.
+    # Doc
+    def ObjectOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Doc
+    def ObjectOidAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Doc
+    def ObjectOidLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
 
 # /// When the documentation (version) was created or modified.
     # Doc
@@ -58,28 +89,37 @@ class Doc(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Documentation title.
+# /// The actual documentation, serialized according to the documentation format.
     # Doc
-    def Title(self):
+    def Body(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
 
-# /// The actual documentation (version).
     # Doc
-    def Body(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+    def BodyAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
 
-def DocStart(builder): builder.StartObject(7)
+    # Doc
+    def BodyLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+def DocStart(builder): builder.StartObject(6)
 def DocAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def DocAddObjectSlot(builder, objectSlot): builder.PrependUint16Slot(1, objectSlot, 0)
+def DocAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
+def DocStartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def DocAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
+def DocStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def DocAddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
 def DocAddFormat(builder, format): builder.PrependUint8Slot(4, format, 0)
-def DocAddTitle(builder, title): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(title), 0)
-def DocAddBody(builder, body): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(body), 0)
+def DocAddBody(builder, body): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(body), 0)
+def DocStartBodyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def DocEnd(builder): return builder.EndObject()

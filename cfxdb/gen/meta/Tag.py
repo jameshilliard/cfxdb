@@ -4,7 +4,7 @@
 
 import flatbuffers
 
-# /// Generic **tags attached to objects** stored in other tables. Primary key of this table is ``(table_oid, object_oid)``.
+# /// Generic **tags attached** to objects in other tables. Primary key of this table is ``(table_oid, object_oid, tag_oid)``.
 class Tag(object):
     __slots__ = ['_tab']
 
@@ -88,11 +88,20 @@ class Tag(object):
             return self._tab.VectorLen(o)
         return 0
 
-def TagStart(builder): builder.StartObject(3)
+# /// Timestamp when the tag was attached to the object referenced.
+    # Tag
+    def Attached(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        if o != 0:
+            return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
+        return 0
+
+def TagStart(builder): builder.StartObject(4)
 def TagAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
 def TagStartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def TagAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
 def TagStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def TagAddTagOid(builder, tagOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(tagOid), 0)
 def TagStartTagOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TagAddAttached(builder, attached): builder.PrependUint64Slot(3, attached, 0)
 def TagEnd(builder): return builder.EndObject()

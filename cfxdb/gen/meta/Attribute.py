@@ -4,7 +4,7 @@
 
 import flatbuffers
 
-# /// Generic **meta data attributes** that can be stored for objects in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
+# /// Generic **meta data attributes** for objects in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
 class Attribute(object):
     __slots__ = ['_tab']
 
