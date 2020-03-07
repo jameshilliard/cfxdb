@@ -16,7 +16,8 @@ from .gen.xbrnetwork import VerifiedAction as VerifiedActionGen
 from .gen.xbrnetwork import UserKey as UserKeyGen
 
 # FIXME: https://github.com/crossbario/crossbarfx/issues/501
-from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner, Actors, IndexMarketsByActor
+from cfxdb import Blocks, TokenApprovals, TokenTransfers, Members, Markets, IndexMarketsByOwner,\
+    Actors, IndexMarketsByActor, Attributes
 
 
 class _AccountGen(AccountGen.Account):
@@ -979,6 +980,11 @@ class Schema(object):
     XBR Network backend database schema.
     """
 
+    attributes: Attributes
+    """
+    Generic meta-data attributes that can be stored on objects in tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
+    """
+
     blocks: Blocks
     """
     Ethereum blocks basic information.
@@ -1065,6 +1071,8 @@ class Schema(object):
         :type db: :class:`zlmdb.Database`
         """
         schema = Schema(db)
+
+        schema.attributes = db.attach_table(Attributes)
 
         schema.blocks = db.attach_table(Blocks)
 

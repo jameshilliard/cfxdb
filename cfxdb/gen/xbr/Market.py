@@ -189,7 +189,30 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-def MarketStart(builder): builder.StartObject(10)
+# /// When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
+    # Market
+    def Signature(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Market
+    def SignatureAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Market
+    def SignatureLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+def MarketStart(builder): builder.StartObject(11)
 def MarketAddMarket(builder, market): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(market), 0)
 def MarketStartMarketVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MarketAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
@@ -206,4 +229,6 @@ def MarketAddConsumerSecurity(builder, consumerSecurity): builder.PrependUOffset
 def MarketStartConsumerSecurityVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MarketAddMarketFee(builder, marketFee): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(marketFee), 0)
 def MarketStartMarketFeeVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def MarketStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MarketEnd(builder): return builder.EndObject()

@@ -2,15 +2,6 @@
 
 include "common.fbs";
 
-/// Label for this object (not interpreted by CFC).
-// label: string;
-
-/// Description for this object (not interpreted by CFC).
-// description: string;
-
-/// Tags on this object.
-// tags: [string];
-
 
 /// Generic metadata, like documentation, tags, comments and reactions
 /// that can be attach on any object with an UUID.
@@ -71,79 +62,99 @@ table Doc
 }
 
 
-/// RGBA color.
-struct Color
+/// Tag definitions are created independent of objects tagged with tags. Primary key of this table is ``oid``.
+table TagDefinition
 {
-    /// Red component of color, 0-255.
-    r: uint8;
+    /// OID of the tag definition within the database.
+    oid: [uint8] (required, uuid);
 
-    /// Green component of color, 0-255.
-    g: uint8;
-
-    /// Blue component of color, 0-255.
-    b: uint8;
-
-    /// Alpha component of color, 0-255.
-    a: uint8;
-}
-
-
-/// Tags are created and centrally managed, and can be attached to any object.
-table Tag
-{
-    /// OID of the tag.
-    oid: string (required, uuid);
-
-    /// When the documentation (version) was created or modified.
+    /// Timestamp when the attribute was last modified (or first created).
     modified: uint64 (timestamp);
 
-    /// Slot of the object being documented.
-    object_slot: uint16;
+    /// Tag name (or URI in general). This is must be globally unique and represents the semantic identifier of the tag.
+    tag: string (required, uri);
 
-    /// OID of the object being documented.
-    object_oid: string (required, uuid);
-
-
-    /// User that originally created the tag.
-    //created_by: string (uuid);
-
-    /// When the tag was originally created.
-    //created: uint64 (timestamp);
-
-    /// User that last modified the tag.
-    //modified_by: string (uuid);
-
-    /// When the tag was last modified.
-    //modified: uint64 (timestamp);
-
-    /// The actual label text. This must match a simple regex (eg [a-z\-]+ .. tbd).
-    //label: string (required);
-
-    /// Description of the tag (what it means, how it is used, etc).
-    //description: string;
-
-    /// Tag foreground color (eg text).
-    //color: Color;
-
-    /// Tag background color.
-    //background: Color;
+    /// CBOR-serialized, object-valued extra data stored along with this tag definition.
+    extra: [uint8] (cbor);
 }
 
 
+/// Generic **tags attached to objects** stored in other tables. Primary key of this table is ``(table_oid, object_oid)``.
+table Tag
+{
+    /// Table of the object with the tag attached.
+    table_oid: [uint8] (required, uuid);
+
+    /// Object (within the table) with the tag attached.
+    object_oid: [uint8] (required, uuid);
+
+    /// Tag definition attached to the object.
+    tag_oid: [uint8] (uuid);
+}
+
+
+
+// Generic **user reactions** attached to objects stored in other tables. Primary key of this table is ``(table_oid, object_oid, voter_oid)``.
 table Reaction
 {
+    /// Table of the object holding the attribute.
+    table_oid: [uint8] (required, uuid);
+
+    /// Object (within the table) holding the attribute
+    object_oid: [uint8] (required, uuid);
+
+    /// Object (within the table) holding the attribute
+    voter_oid: [uint8] (required, uuid);
+
+    /// Reaction name (or URI in general).
+    reaction: string (required, uri);
+
+    /// Timestamp when the reaction was recorded or last modifified.
+    reacted: uint64 (timestamp);
+
+    /// CBOR-serialized, object-valued extra data stored along with this reaction.
+    extra: [uint8] (cbor);
 }
 
+
+// Generic **user comments** stored as threaded conversations attached to objects stored in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
 table Comment
 {
-    /// OID of the comment.
-    oid: string (required, uuid);
+    /// Table of the object holding the comment.
+    table_oid: [uint8] (required, uuid);
 
-    /// If this comment
-    reply_to: string (uuid);
-    author: string;
-    created: uint64;
-    modified: uint64;
-    text: string;
-    reactions: [Reaction];
+    /// Object (within the table) holding the comment
+    object_oid: [uint8] (required, uuid);
+
+    /// User that authored this comment.
+    author_oid: [uint8] (required, uuid);
+
+    /// The comment text of the posting.
+    comment: string;
+
+    /// Timestamp when the comment was posted.
+    posted: uint64 (timestamp);
+
+    /// CBOR-serialized, object-valued extra data stored along with this comment.
+    extra: [uint8] (cbor);
+}
+
+
+/// Generic **meta data attributes** that can be stored for objects in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
+table Attribute
+{
+    /// Table of the object holding the attribute.
+    table_oid: [uint8] (required, uuid);
+
+    /// Object (within the table) holding the attribute.
+    object_oid: [uint8] (required, uuid);
+
+    /// Attribute name (part of the key).
+    attribute: string (required, uri);
+
+    /// Timestamp when the attribute was last modified (or first created).
+    modified: uint64 (timestamp);
+
+    /// CBOR-serialized, object-valued attribute.
+    value: [uint8] (cbor);
 }

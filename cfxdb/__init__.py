@@ -13,6 +13,7 @@ from .common import address, uint256, unpack_uint256, pack_uint256,\
 from .eventstore import Event, Publication, Session
 from .log import MNodeLog
 from .usage import MasterNodeUsage
+from .meta import Attribute, Attributes
 
 from . import xbr
 from .xbr import Member, Members, Market, Markets, Actor, Actors, Transaction, Transactions
@@ -89,4 +90,6 @@ __all__ = (
     'UserKey',
     'UserKeys',
     'IndexUserKeyByAccount',
+    'Attribute',
+    'Attributes',
 )

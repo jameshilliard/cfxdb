@@ -197,6 +197,9 @@ table Market
 
     /// The fee taken by the market (beneficiary is the market owner). The fee is a percentage of the revenue of the XBR Provider that receives XBR Token paid for transactions. The fee must be between 0% (inclusive) and 99% (inclusive), and is expressed as a fraction of the total supply of XBR tokens.
     market_fee: [uint8] (uint256);
+
+    /// When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
+    signature: [uint8] (ethsig);
 }
 
 

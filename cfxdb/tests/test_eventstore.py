@@ -153,7 +153,7 @@ def test_publication_roundtrip(publication, builder):
     obj = publication.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) in [624, 632]
+    assert len(data) in [624, 632, 640]
 
     _publication = Publication.cast(data)
 
