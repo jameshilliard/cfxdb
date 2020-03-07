@@ -33,6 +33,9 @@ attribute references;
 /// At most one record can have this value at any point in time (unique constraint in RDBMS)
 attribute unique;
 
+/// CBOR-serialized object or value.
+attribute cbor;
+
 struct oid_t
 {
     msb: uint64;
@@ -53,7 +56,7 @@ struct ObjRef
 table KeyValue
 {
     /// UTF8 encoded key of KV pair.
-    key: string;
+    key: string (required, key);
 
     /// UTF8 encoded value of KV pair.
     value: string;

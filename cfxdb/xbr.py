@@ -476,6 +476,14 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
 
 class Market(object):
     """
@@ -514,6 +522,9 @@ class Market(object):
         # [uint8] (uint256)
         self._market_fee = None
 
+        # [uint8] (ethsig)
+        self._signature = None
+
     def marshal(self) -> dict:
         obj = {
             'market': self.market.bytes if self.market else None,
@@ -526,6 +537,7 @@ class Market(object):
             'provider_security': pack_uint256(self.provider_security) if self.provider_security else None,
             'consumer_security': pack_uint256(self.consumer_security) if self.consumer_security else None,
             'market_fee': pack_uint256(self.market_fee) if self.market_fee else None,
+            'signature': bytes(self.signature) if self.signature else None,
         }
         return obj
 
@@ -692,6 +704,21 @@ class Market(object):
         assert value is None or type(value) == int
         self._market_fee = value
 
+    @property
+    def signature(self) -> bytes:
+        """
+        When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
+        """
+        if self._signature is None and self._from_fbs:
+            if self._from_fbs.SignatureLength():
+                self._signature = self._from_fbs.SignatureAsBytes()
+        return self._signature
+
+    @signature.setter
+    def signature(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._signature = value
+
     @staticmethod
     def cast(buf):
         return Market(_MarketGen.GetRootAsMarket(buf, 0))
@@ -730,6 +757,10 @@ class Market(object):
         if market_fee:
             market_fee = builder.CreateString(pack_uint256(market_fee))
 
+        signature = self.signature
+        if signature:
+            signature = builder.CreateString(signature)
+
         MarketGen.MarketStart(builder)
 
         if market:
@@ -761,6 +792,9 @@ class Market(object):
 
         if market_fee:
             MarketGen.MarketAddMarketFee(builder, market_fee)
+
+        if signature:
+            MarketGen.MarketAddSignature(builder, signature)
 
         final = MarketGen.MarketEnd(builder)
 
