@@ -75,7 +75,7 @@ table Doc
     format: DocFormat;
 
     /// The actual documentation, serialized according to the documentation format.
-    body: [uint8];
+    document: [uint8];
 }
 
 

@@ -91,7 +91,7 @@ class Doc(object):
 
 # /// The actual documentation, serialized according to the documentation format.
     # Doc
-    def Body(self, j):
+    def Document(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             a = self._tab.Vector(o)
@@ -99,14 +99,14 @@ class Doc(object):
         return 0
 
     # Doc
-    def BodyAsNumpy(self):
+    def DocumentAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Doc
-    def BodyLength(self):
+    def DocumentLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             return self._tab.VectorLen(o)
@@ -120,6 +120,6 @@ def DocAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(2, 
 def DocStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def DocAddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
 def DocAddFormat(builder, format): builder.PrependUint8Slot(4, format, 0)
-def DocAddBody(builder, body): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(body), 0)
-def DocStartBodyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def DocAddDocument(builder, document): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(document), 0)
+def DocStartDocumentVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def DocEnd(builder): return builder.EndObject()
