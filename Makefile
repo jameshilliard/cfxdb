@@ -61,7 +61,7 @@ clean_fbs:
 	rm -rf $(FBS_OUTPUT)
 	mkdir -p $(FBS_OUTPUT)
 
-build_fbs: build_fbs_bfbs build_fbs_python
+build_fbs: build_fbs_bfbs build_fbs_python fix_fbs_python
 
 # generate schema type library (.bfbs binary) from schema files
 build_fbs_bfbs:
@@ -71,10 +71,10 @@ build_fbs_bfbs:
 build_fbs_python:
 	$(FLATC) -o $(FBS_OUTPUT) --python $(FBS_FILES)
 
+fix_fbs_python:
 	# those are not generated, but required
-	#touch $(FBS_OUTPUT)/__init__.py
+	touch $(FBS_OUTPUT)/__init__.py
 
 	# FIXME: wrong import:
-	# "from .oid_t import oid_t" => "from ..oid_t import oid_t"
-	# "from .ObjRef import ObjRef" => "from ..ObjRef import ObjRef"
-	#find $(FBS_OUTPUT) -name "*.py" -exec sed -i'' 's/from .oid_t/from ..oid_t/g' {} \;
+	# "from oid_t import oid_t" => "from ..oid_t import oid_t"
+	find $(FBS_OUTPUT) -name "*.py" -exec sed -i'' 's/from oid_t/from ..oid_t/g' {} \;
