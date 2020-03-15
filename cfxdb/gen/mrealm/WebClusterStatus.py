@@ -2,18 +2,18 @@
 
 # namespace: mrealm
 
-# /// Web cluster status.
+# Web cluster status.
 class WebClusterStatus(object):
-# /// Unset status.
+    # Unset status.
     NONE = 0
-# /// Initial status of a newly created web cluster.
+    # Initial status of a newly created web cluster.
     STOPPED = 1
-# /// The Web cluster is currently starting.
+    # The Web cluster is currently starting.
     STARTING = 2
-# /// The Web cluster is currently running.
+    # The Web cluster is currently running.
     RUNNING = 3
-# /// The Web cluster is currently paused (it is serving, but the watch/change engine doesn't operate).
+    # The Web cluster is currently paused (it is serving, but the watch/change engine doesn't operate).
     PAUSED = 4
-# /// The Web cluster is currently stopping.
+    # The Web cluster is currently stopping.
     STOPPING = 5
 

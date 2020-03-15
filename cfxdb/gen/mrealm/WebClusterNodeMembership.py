@@ -3,6 +3,8 @@
 # namespace: mrealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class WebClusterNodeMembership(object):
     __slots__ = ['_tab']
@@ -18,31 +20,31 @@ class WebClusterNodeMembership(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of the web cluster to which to the node is added. A cluster can have zero or more nodes added.
+    # OID of the web cluster to which to the node is added. A cluster can have zero or more nodes added.
     # WebClusterNodeMembership
     def WebclusterOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// OID of the node to add to the cluster. A node can be added to more than one cluster.
+    # OID of the node to add to the cluster. A node can be added to more than one cluster.
     # WebClusterNodeMembership
     def NodeOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// The desired parallelism (in CPU) that the node should receive (if it is active in the web cluster).
+    # The desired parallelism (in CPU) that the node should receive (if it is active in the web cluster).
     # WebClusterNodeMembership
     def Parallel(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -50,7 +52,7 @@ class WebClusterNodeMembership(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Wheather this node acts as a standby node that only takes over work when an active node fails.
+    # Wheather this node acts as a standby node that only takes over work when an active node fails.
     # WebClusterNodeMembership
     def Standby(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))

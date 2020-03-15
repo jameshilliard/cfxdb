@@ -3,12 +3,12 @@
 # namespace: arealm
 
 class MatchType(object):
-# /// No match type.
+    # No match type.
     NONE = 0
-# /// Match URI exactly.
+    # Match URI exactly.
     EXACT = 1
-# /// Match by URI prefix.
+    # Match by URI prefix.
     PREFIX = 2
-# /// Match by URI wildcard pattern.
+    # Match by URI wildcard pattern.
     WILDCARD = 3
 

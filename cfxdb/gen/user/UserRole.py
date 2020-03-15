@@ -2,7 +2,7 @@
 
 # namespace: user
 
-# /// CFC user roles (built into code, unconfigurable)
+# CFC user roles (built into code, unconfigurable)
 class UserRole(object):
     NONE = 0
     OWNER = 1

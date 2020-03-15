@@ -3,8 +3,10 @@
 # namespace: eventstore
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table store WAMP events dispatched to receivers, under WAMP subscriptions on URIs (or patterns).
+# This table store WAMP events dispatched to receivers, under WAMP subscriptions on URIs (or patterns).
 class Event(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Event(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Timestamp when the event was sent to the receiver. Epoch time in ns.
+    # Timestamp when the event was sent to the receiver. Epoch time in ns.
     # Event
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Event(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// The subscription ID this event is dispatched under.
+    # The subscription ID this event is dispatched under.
     # Event
     def Subscription(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -35,7 +37,7 @@ class Event(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// The publication ID of the dispatched event.
+    # The publication ID of the dispatched event.
     # Event
     def Publication(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -43,7 +45,7 @@ class Event(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// The WAMP session ID of the receiver.
+    # The WAMP session ID of the receiver.
     # Event
     def Receiver(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -51,7 +53,7 @@ class Event(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Whether the message was retained by the broker on the topic, rather than just published.
+    # Whether the message was retained by the broker on the topic, rather than just published.
     # Event
     def Retained(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -59,7 +61,7 @@ class Event(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// Whether this Event was to be acknowledged by the receiver.
+    # Whether this Event was to be acknowledged by the receiver.
     # Event
     def AcknowledgedDelivery(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))

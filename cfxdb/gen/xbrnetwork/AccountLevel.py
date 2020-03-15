@@ -2,18 +2,18 @@
 
 # namespace: xbrnetwork
 
-# /// XBR Account level.
+# XBR Account level.
 class AccountLevel(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// Account is active.
+    # Account is active.
     ACTIVE = 1
-# /// Account is active and verified.
+    # Account is active and verified.
     VERIFIED = 2
-# /// Account is retired.
+    # Account is retired.
     RETIRED = 3
-# /// Account is subject to a temporary penalty.
+    # Account is subject to a temporary penalty.
     PENALTY = 4
-# /// Account is currently blocked and cannot current actively participate in the market.
+    # Account is currently blocked and cannot current actively participate in the market.
     BLOCKED = 5
 

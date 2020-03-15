@@ -3,8 +3,10 @@
 # namespace: log
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Heartbeat log record of managed nodes. Primary key: (timestamp, node_id).
+# Heartbeat log record of managed nodes. Primary key: (timestamp, node_id).
 class MNodeLog(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class MNodeLog(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: Unix time in ns when this log record was received (from CFC node clock).
+    # Primary key: Unix time in ns when this log record was received (from CFC node clock).
     # MNodeLog
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Primary key: CF node ID.
+    # Primary key: CF node ID.
     # MNodeLog
     def NodeId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class MNodeLog(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Heartbeat period in seconds encompassed by this record.
+    # MNodeLog
+    def NodeIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Heartbeat period in seconds encompassed by this record.
     # MNodeLog
     def Period(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Management realm ID.
+    # Management realm ID.
     # MNodeLog
     def MrealmId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +88,12 @@ class MNodeLog(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Current state of CF node.
+    # MNodeLog
+    def MrealmIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Current state of CF node.
     # MNodeLog
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +101,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP session ID of the CF node uplink management session to this CFC instance.
+    # WAMP session ID of the CF node uplink management session to this CFC instance.
     # MNodeLog
     def Session(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -97,7 +109,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
+    # Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
     # MNodeLog
     def Sent(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -105,7 +117,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
+    # Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
     # MNodeLog
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -113,7 +125,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of controllers running in the CF node (this is always 1).
+    # Number of controllers running in the CF node (this is always 1).
     # MNodeLog
     def Controllers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -121,7 +133,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of router workers currently running in the CF node.
+    # Number of router workers currently running in the CF node.
     # MNodeLog
     def Routers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -129,7 +141,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of container workers currently running in the CF node.
+    # Number of container workers currently running in the CF node.
     # MNodeLog
     def Containers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -137,7 +149,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of guest workers currently running in the CF node.
+    # Number of guest workers currently running in the CF node.
     # MNodeLog
     def Guests(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -145,7 +157,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of proxy workers currently running in the CF node.
+    # Number of proxy workers currently running in the CF node.
     # MNodeLog
     def Proxies(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -153,7 +165,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of XBR market maker workers currently running in the CF node.
+    # Number of XBR market maker workers currently running in the CF node.
     # MNodeLog
     def Marketmakers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -161,7 +173,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of hostmonitor workers currently running in the CF node (this is usually either 0 or 1).
+    # Number of hostmonitor workers currently running in the CF node (this is usually either 0 or 1).
     # MNodeLog
     def Hostmonitors(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -169,7 +181,7 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// CF node system statistics.
+    # CF node system statistics.
     # MNodeLog
     def CpuCtxSwitches(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))

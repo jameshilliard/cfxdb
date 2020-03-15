@@ -3,8 +3,10 @@
 # namespace: user
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// User activation tokens.
+# User activation tokens.
 class ActivationToken(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class ActivationToken(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of user object (primary key, never changes).
+    # OID of user object (primary key, never changes).
     # ActivationToken
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class ActivationToken(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Activation type.
+    # Activation type.
     # ActivationToken
     def Atype(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -35,7 +37,7 @@ class ActivationToken(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// Activation status.
+    # Activation status.
     # ActivationToken
     def Status(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -43,7 +45,7 @@ class ActivationToken(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// Time when the activation was created.
+    # Time when the activation was created.
     # ActivationToken
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -51,7 +53,7 @@ class ActivationToken(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Time when the activation was completed. The status will signal the outcome.
+    # Time when the activation was completed. The status will signal the outcome.
     # ActivationToken
     def Completed(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -59,7 +61,7 @@ class ActivationToken(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Activation code that was sent.
+    # Activation code that was sent.
     # ActivationToken
     def Code(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -67,7 +69,7 @@ class ActivationToken(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Email address to which the activation was sent.
+    # Email address to which the activation was sent.
     # ActivationToken
     def Email(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -75,7 +77,7 @@ class ActivationToken(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// User public key for which this activation was created.
+    # User public key for which this activation was created.
     # ActivationToken
     def Pubkey(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))

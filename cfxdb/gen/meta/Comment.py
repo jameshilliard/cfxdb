@@ -3,6 +3,8 @@
 # namespace: meta
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Comment(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class Comment(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Comment OID.
+    # Comment OID.
     # Comment
     def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -41,7 +43,12 @@ class Comment(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Table of the object commented on.
+    # Comment
+    def OidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Table of the object commented on.
     # Comment
     def TableOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -64,7 +71,12 @@ class Comment(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Object (within the table) commented on.
+    # Comment
+    def TableOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Object (within the table) commented on.
     # Comment
     def ObjectOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -87,7 +99,12 @@ class Comment(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// User that authored this comment.
+    # Comment
+    def ObjectOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # User that authored this comment.
     # Comment
     def AuthorOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -110,7 +127,12 @@ class Comment(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When this comment is a reply, the OID of the comment replied to.
+    # Comment
+    def AuthorOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # When this comment is a reply, the OID of the comment replied to.
     # Comment
     def ReplyTo(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -133,7 +155,12 @@ class Comment(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The text of the comment.
+    # Comment
+    def ReplyToIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # The text of the comment.
     # Comment
     def Comment(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -141,7 +168,7 @@ class Comment(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Timestamp when the comment was posted.
+    # Timestamp when the comment was posted.
     # Comment
     def Posted(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))

@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR payment channel current (off-chain) balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``PaymentChannel.amount``.
+# XBR payment channel current (off-chain) balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``PaymentChannel.amount``.
 class PaymentChannelBalance(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class PaymentChannelBalance(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Amount of XBR tokens currently remaining in the payment channel.
+    # Amount of XBR tokens currently remaining in the payment channel.
     # PaymentChannelBalance
     def Remaining(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class PaymentChannelBalance(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Amount of XBR tokens reserved to in-flight purchase transactions.
+    # PaymentChannelBalance
+    def RemainingIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Amount of XBR tokens reserved to in-flight purchase transactions.
     # PaymentChannelBalance
     def Inflight(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -65,7 +72,12 @@ class PaymentChannelBalance(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Sequence number of transactions on this balance starting from 0 when the payment channel is created.
+    # PaymentChannelBalance
+    def InflightIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Sequence number of transactions on this balance starting from 0 when the payment channel is created.
     # PaymentChannelBalance
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))

@@ -3,8 +3,10 @@
 # namespace: 
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// A key-value pair with string keys & values.
+# A key-value pair with string keys & values.
 class KeyValue(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class KeyValue(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// UTF8 encoded key of KV pair.
+    # UTF8 encoded key of KV pair.
     # KeyValue
     def Key(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class KeyValue(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// UTF8 encoded value of KV pair.
+    # UTF8 encoded value of KV pair.
     # KeyValue
     def Value(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))

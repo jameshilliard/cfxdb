@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR Network members.
+# XBR Network members.
 class Member(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Member(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Ethereum address of the member.
+    # Ethereum address of the member.
     # Member
     def Address(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Member(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Database transaction time (epoch time in ns) of insert or last update.
+    # Member
+    def AddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Database transaction time (epoch time in ns) of insert or last update.
     # Member
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class Member(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Block number (on the blockchain) when the member (originally) registered.
+    # Block number (on the blockchain) when the member (originally) registered.
     # Member
     def Registered(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class Member(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// EULA the member agreed to when joining the market (IPFS Multihash string).
+    # Member
+    def RegisteredIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # EULA the member agreed to when joining the market (IPFS Multihash string).
     # Member
     def Eula(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +93,7 @@ class Member(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Optional member profile (IPFS Multihash string).
+    # Optional member profile (IPFS Multihash string).
     # Member
     def Profile(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +101,7 @@ class Member(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Current member level.
+    # Current member level.
     # Member
     def Level(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))

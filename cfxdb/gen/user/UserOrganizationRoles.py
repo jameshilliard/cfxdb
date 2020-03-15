@@ -3,8 +3,10 @@
 # namespace: user
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// CFC user roles on an organization
+# CFC user roles on an organization
 class UserOrganizationRoles(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class UserOrganizationRoles(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// List of roles the user has on the respective organization.
+    # List of roles the user has on the respective organization.
     # UserOrganizationRoles
     def Roles(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -41,6 +43,11 @@ class UserOrganizationRoles(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # UserOrganizationRoles
+    def RolesIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
 
 def UserOrganizationRolesStart(builder): builder.StartObject(1)
 def UserOrganizationRolesAddRoles(builder, roles): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(roles), 0)

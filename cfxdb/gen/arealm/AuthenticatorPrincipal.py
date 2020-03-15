@@ -3,8 +3,10 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Association (N:M) between principals and authenticators, both defined independently at the management realm level.
+# Association (N:M) between principals and authenticators, both defined independently at the management realm level.
 class AuthenticatorPrincipal(object):
     __slots__ = ['_tab']
 
@@ -19,25 +21,25 @@ class AuthenticatorPrincipal(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of the principal (which must match in type with the authenticator).
+    # ID of the principal (which must match in type with the authenticator).
     # AuthenticatorPrincipal
     def PrincipalOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// ID of the authenticator the principal is associated with.
+    # ID of the authenticator the principal is associated with.
     # AuthenticatorPrincipal
     def AuthenticatorOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj

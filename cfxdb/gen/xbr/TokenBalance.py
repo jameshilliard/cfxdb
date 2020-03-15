@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores XBRToken._balances state.
+# This table stores XBRToken._balances state.
 class TokenBalance(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class TokenBalance(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: XBR token owner address.
+    # Primary key: XBR token owner address.
     # TokenBalance
     def OwnerAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class TokenBalance(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token owned.
+    # TokenBalance
+    def OwnerAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # XBR token owned.
     # TokenBalance
     def Value(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -64,6 +71,11 @@ class TokenBalance(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # TokenBalance
+    def ValueIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
 
 def TokenBalanceStart(builder): builder.StartObject(2)
 def TokenBalanceAddOwnerAddress(builder, ownerAddress): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(ownerAddress), 0)

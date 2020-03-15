@@ -2,15 +2,15 @@
 
 # namespace: eventstore
 
-# /// The payload end-to-end encryption algorithm the payload is encrypted.
+# The payload end-to-end encryption algorithm the payload is encrypted.
 class EncAlgo(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// WAMP-cryptobox end-to-end encrypted application payload
+    # WAMP-cryptobox end-to-end encrypted application payload
     CRYPTOBOX = 1
-# /// MQTT passthrough-mode application payload
+    # MQTT passthrough-mode application payload
     MQTT = 2
-# /// XBR end-to-end encrypted application payload
+    # XBR end-to-end encrypted application payload
     XBR = 3
     OPAQUE = 4
 

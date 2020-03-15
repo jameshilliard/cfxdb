@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR Market Actors.
+# XBR Market Actors.
 class Actor(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Actor(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Database transaction time (epoch time in ns) of insert or last update.
+    # Database transaction time (epoch time in ns) of insert or last update.
     # Actor
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Actor(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the market this actor is associated with.
+    # ID of the market this actor is associated with.
     # Actor
     def Market(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class Actor(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Ethereum address of the member.
+    # Actor
+    def MarketIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Ethereum address of the member.
     # Actor
     def Actor(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class Actor(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Type of the market actor.
+    # Actor
+    def ActorIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Type of the market actor.
     # Actor
     def ActorType(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +93,7 @@ class Actor(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Block number (on the blockchain) when the actor (originally) joined the market.
+    # Block number (on the blockchain) when the actor (originally) joined the market.
     # Actor
     def Joined(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -104,7 +116,12 @@ class Actor(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Security (XBR tokens) deposited by the actor in the market.
+    # Actor
+    def JoinedIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Security (XBR tokens) deposited by the actor in the market.
     # Actor
     def Security(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -127,7 +144,12 @@ class Actor(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+    # Actor
+    def SecurityIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
     # Actor
     def Meta(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))

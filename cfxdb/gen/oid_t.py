@@ -3,6 +3,8 @@
 # namespace: 
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class oid_t(object):
     __slots__ = ['_tab']

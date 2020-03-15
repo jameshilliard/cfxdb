@@ -3,8 +3,10 @@
 # namespace: meta
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Tag definitions are created independent of objects tagged with tags. Primary key of this table is ``oid``.
+# Tag definitions are created independent of objects tagged with tags. Primary key of this table is ``oid``.
 class TagDefinition(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class TagDefinition(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of the tag definition within the database.
+    # OID of the tag definition within the database.
     # TagDefinition
     def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class TagDefinition(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp when the attribute was last modified (or first created).
+    # TagDefinition
+    def OidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Timestamp when the attribute was last modified (or first created).
     # TagDefinition
     def Modified(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class TagDefinition(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Tag name (or URI in general). This is must be globally unique and represents the semantic identifier of the tag.
+    # Tag name (or URI in general). This is must be globally unique and represents the semantic identifier of the tag.
     # TagDefinition
     def Tag(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class TagDefinition(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// CBOR-serialized, object-valued extra data stored along with this tag definition.
+    # CBOR-serialized, object-valued extra data stored along with this tag definition.
     # TagDefinition
     def Extra(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -80,6 +87,11 @@ class TagDefinition(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # TagDefinition
+    def ExtraIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
 
 def TagDefinitionStart(builder): builder.StartObject(4)
 def TagDefinitionAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)

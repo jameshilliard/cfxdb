@@ -2,7 +2,7 @@
 
 # namespace: user
 
-# /// User activation status (built into code, unconfigurable)
+# User activation status (built into code, unconfigurable)
 class ActivationStatus(object):
     NONE = 0
     PENDING = 1

@@ -3,6 +3,8 @@
 # namespace: reflection
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Type(object):
     __slots__ = ['_tab']
@@ -13,6 +15,10 @@ class Type(object):
         x = Type()
         x.Init(buf, n + offset)
         return x
+
+    @classmethod
+    def TypeBufferHasIdentifier(cls, buf, offset, size_prefixed=False):
+        return flatbuffers.util.BufferHasIdentifier(buf, offset, b"\x42\x46\x42\x53", size_prefixed=size_prefixed)
 
     # Type
     def Init(self, buf, pos):

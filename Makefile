@@ -5,6 +5,17 @@ FBS_OUTPUT=./cfxdb/gen
 #FLATC=${HOME}/scm/3rdparty/flatbuffers/flatc
 FLATC=/usr/local/bin/flatc
 
+build_flatc:
+	cd /tmp
+	wget https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz
+	tar xvf v1.12.0.tar.gz
+	cd v1.12.0
+	cmake .
+	make
+	sudo cp ./flatc $(FLATC)
+	cd ..
+	rm -rf v1.12.0 && rm v1.12.0.tar.gz
+
 clean:
 	-find . -type d -name "__pycache__" -exec rm -rf {} \;
 	-rm -rf ./.pytest_cache
@@ -61,9 +72,9 @@ build_fbs_python:
 	$(FLATC) -o $(FBS_OUTPUT) --python $(FBS_FILES)
 
 	# those are not generated, but required
-	touch $(FBS_OUTPUT)/__init__.py
+	#touch $(FBS_OUTPUT)/__init__.py
 
 	# FIXME: wrong import:
 	# "from .oid_t import oid_t" => "from ..oid_t import oid_t"
 	# "from .ObjRef import ObjRef" => "from ..ObjRef import ObjRef"
-	find $(FBS_OUTPUT) -name "*.py" -exec sed -i'' 's/from .oid_t/from ..oid_t/g' {} \;
+	#find $(FBS_OUTPUT) -name "*.py" -exec sed -i'' 's/from .oid_t/from ..oid_t/g' {} \;

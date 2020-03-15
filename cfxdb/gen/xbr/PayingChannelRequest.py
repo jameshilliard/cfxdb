@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Request to have the market maker open a paying channel (which is a payment channel from the market maker to the data seller).
+# Request to have the market maker open a paying channel (which is a payment channel from the market maker to the data seller).
 class PayingChannelRequest(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class PayingChannelRequest(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of the paying channel request.
+    # ID of the paying channel request.
     # PayingChannelRequest
     def Request(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Offer transaction time (epoch time in ns)
+    # PayingChannelRequest
+    def RequestIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Offer transaction time (epoch time in ns)
     # PayingChannelRequest
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class PayingChannelRequest(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the market this request for a paying channel is associated with.
+    # ID of the market this request for a paying channel is associated with.
     # PayingChannelRequest
     def Market(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The sender address of the Ethereum transaction submitting the paying channel request.
+    # PayingChannelRequest
+    def MarketIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # The sender address of the Ethereum transaction submitting the paying channel request.
     # PayingChannelRequest
     def Sender(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -96,7 +108,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The address of the buyer delegate allowed to consume the payment channel balance.
+    # PayingChannelRequest
+    def SenderIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # The address of the buyer delegate allowed to consume the payment channel balance.
     # PayingChannelRequest
     def Delegate(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -119,7 +136,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The ultimate recipient of this payment channel (for a XBR buyer, this will be the XBR market maker address; for a XBR seller, this will be the seller address).
+    # PayingChannelRequest
+    def DelegateIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # The ultimate recipient of this payment channel (for a XBR buyer, this will be the XBR market maker address; for a XBR seller, this will be the seller address).
     # PayingChannelRequest
     def Recipient(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -142,7 +164,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The initial amount in the (off-chain) payment channel.
+    # PayingChannelRequest
+    def RecipientIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # The initial amount in the (off-chain) payment channel.
     # PayingChannelRequest
     def Amount(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -165,7 +192,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The timeout knob for a non-cooperative close of the payment channel.
+    # PayingChannelRequest
+    def AmountIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # The timeout knob for a non-cooperative close of the payment channel.
     # PayingChannelRequest
     def Timeout(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -188,7 +220,12 @@ class PayingChannelRequest(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Paying channel request current state.
+    # PayingChannelRequest
+    def TimeoutIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        return o == 0
+
+    # Paying channel request current state.
     # PayingChannelRequest
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -196,7 +233,7 @@ class PayingChannelRequest(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// When state is PayingChannelRequestState.FAILED, an optional error message.
+    # When state is PayingChannelRequestState.FAILED, an optional error message.
     # PayingChannelRequest
     def ErrorMsg(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -204,7 +241,7 @@ class PayingChannelRequest(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// When this request has been fulfilled, the address to the contract of the created payment channel (from the market maker to the data seller).
+    # When this request has been fulfilled, the address to the contract of the created payment channel (from the market maker to the data seller).
     # PayingChannelRequest
     def Channel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -226,6 +263,11 @@ class PayingChannelRequest(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # PayingChannelRequest
+    def ChannelIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        return o == 0
 
 def PayingChannelRequestStart(builder): builder.StartObject(11)
 def PayingChannelRequestAddRequest(builder, request): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(request), 0)

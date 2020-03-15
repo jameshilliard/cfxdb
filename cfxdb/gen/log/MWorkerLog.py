@@ -3,8 +3,10 @@
 # namespace: log
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Heartbeat log record from managed node workers. Primary key: (timestamp, node_id, worker_id).
+# Heartbeat log record from managed node workers. Primary key: (timestamp, node_id, worker_id).
 class MWorkerLog(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class MWorkerLog(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: Unix time in ns when this log record was received (from CFC node clock).
+    # Primary key: Unix time in ns when this log record was received (from CFC node clock).
     # MWorkerLog
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Primary key: CF node ID.
+    # Primary key: CF node ID.
     # MWorkerLog
     def NodeId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class MWorkerLog(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Primary key: Local Worker ID on running CF node.
+    # MWorkerLog
+    def NodeIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Primary key: Local Worker ID on running CF node.
     # MWorkerLog
     def WorkerId(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class MWorkerLog(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Heartbeat period in seconds encompassed by this record.
+    # Heartbeat period in seconds encompassed by this record.
     # MWorkerLog
     def Period(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -66,7 +73,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Management realm ID.
+    # Management realm ID.
     # MWorkerLog
     def MrealmId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +96,12 @@ class MWorkerLog(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Type of worker.
+    # MWorkerLog
+    def MrealmIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Type of worker.
     # MWorkerLog
     def Type(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -97,7 +109,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Current state of worker.
+    # Current state of worker.
     # MWorkerLog
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -105,7 +117,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
+    # Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
     # MWorkerLog
     def Sent(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -113,7 +125,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
+    # Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
     # MWorkerLog
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -121,7 +133,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Current load.
+    # Current load.
     # MWorkerLog
     def NumFds(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -164,7 +176,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// CPU load
+    # CPU load
     # MWorkerLog
     def CpuSystem(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -207,7 +219,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Float32Flags, o + self._tab.Pos)
         return 0.0
 
-# /// Disk load
+    # Disk load
     # MWorkerLog
     def ReadBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
@@ -264,7 +276,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Network load
+    # Network load
     # MWorkerLog
     def SentBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(62))
@@ -321,7 +333,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP roles defined on a router worker
+    # WAMP roles defined on a router worker
     # MWorkerLog
     def RouterRoles(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(78))
@@ -329,7 +341,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP sessions joined on a router worker
+    # WAMP sessions joined on a router worker
     # MWorkerLog
     def RouterSessions(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(80))
@@ -337,7 +349,7 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP messages processed by a router worker
+    # WAMP messages processed by a router worker
     # MWorkerLog
     def RecvCall(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(82))

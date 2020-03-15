@@ -3,6 +3,8 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Role(object):
     __slots__ = ['_tab']
@@ -18,19 +20,19 @@ class Role(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # Role
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Time when the object was created.
+    # Time when the object was created.
     # Role
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,19 +40,19 @@ class Role(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Owner organization of this object.
+    # Owner organization of this object.
     # Role
     def Owner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Name of this role, must be unique within the management realm at any given point in time.
+    # Name of this role, must be unique within the management realm at any given point in time.
     # Role
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -58,14 +60,14 @@ class Role(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Set of static permissions on the role.
+    # Set of static permissions on the role.
     # Role
     def Permissions(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             x = self._tab.Vector(o)
             x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 8
-            from .Permission import Permission
+            from arealm.Permission import Permission
             obj = Permission()
             obj.Init(self._tab.Bytes, x)
             return obj
@@ -78,7 +80,12 @@ class Role(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// URIs or URI patterns the permissions must match.
+    # Role
+    def PermissionsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # URIs or URI patterns the permissions must match.
     # Role
     def PermissionUris(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -94,7 +101,12 @@ class Role(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Alternatively to defining a static set of permissions, the WAMP procedure URI of a dynamic authorizer can be specified.
+    # Role
+    def PermissionUrisIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # Alternatively to defining a static set of permissions, the WAMP procedure URI of a dynamic authorizer can be specified.
     # Role
     def Authorizer(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))

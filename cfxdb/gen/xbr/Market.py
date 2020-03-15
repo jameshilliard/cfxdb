@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR Markets.
+# XBR Markets.
 class Market(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Market(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// The unique ID of the market.
+    # The unique ID of the market.
     # Market
     def Market(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Database transaction time (epoch time in ns) of insert or last update.
+    # Market
+    def MarketIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Database transaction time (epoch time in ns) of insert or last update.
     # Market
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class Market(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Global market sequence number.
+    # Global market sequence number.
     # Market
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class Market(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Market owner.
+    # Market owner.
     # Market
     def Owner(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +88,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The XBR market terms set by the market owner. IPFS Multihash pointing to a ZIP archive file with market documents.
+    # Market
+    def OwnerIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # The XBR market terms set by the market owner. IPFS Multihash pointing to a ZIP archive file with market documents.
     # Market
     def Terms(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +101,7 @@ class Market(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
+    # The XBR market metadata published by the market owner. IPFS Multihash pointing to a RDF/Turtle file with market metadata.
     # Market
     def Meta(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -97,7 +109,7 @@ class Market(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The address of the XBR market maker that will run this market. The delegate of the market owner.
+    # The address of the XBR market maker that will run this market. The delegate of the market owner.
     # Market
     def Maker(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -120,7 +132,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The amount of XBR tokens a XBR provider joining the market must deposit.
+    # Market
+    def MakerIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # The amount of XBR tokens a XBR provider joining the market must deposit.
     # Market
     def ProviderSecurity(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -143,7 +160,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The amount of XBR tokens a XBR consumer joining the market must deposit.
+    # Market
+    def ProviderSecurityIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        return o == 0
+
+    # The amount of XBR tokens a XBR consumer joining the market must deposit.
     # Market
     def ConsumerSecurity(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -166,7 +188,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The fee taken by the market (beneficiary is the market owner). The fee is a percentage of the revenue of the XBR Provider that receives XBR Token paid for transactions. The fee must be between 0% (inclusive) and 99% (inclusive), and is expressed as a fraction of the total supply of XBR tokens.
+    # Market
+    def ConsumerSecurityIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        return o == 0
+
+    # The fee taken by the market (beneficiary is the market owner). The fee is a percentage of the revenue of the XBR Provider that receives XBR Token paid for transactions. The fee must be between 0% (inclusive) and 99% (inclusive), and is expressed as a fraction of the total supply of XBR tokens.
     # Market
     def MarketFee(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -189,7 +216,12 @@ class Market(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
+    # Market
+    def MarketFeeIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
+        return o == 0
+
+    # When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
     # Market
     def Signature(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -211,6 +243,11 @@ class Market(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # Market
+    def SignatureIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        return o == 0
 
 def MarketStart(builder): builder.StartObject(11)
 def MarketAddMarket(builder, market): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(market), 0)

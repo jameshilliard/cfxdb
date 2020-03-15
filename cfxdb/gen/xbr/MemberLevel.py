@@ -2,18 +2,18 @@
 
 # namespace: xbr
 
-# /// XBR Member level.
+# XBR Member level.
 class MemberLevel(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// Member is active.
+    # Member is active.
     ACTIVE = 1
-# /// Member is active and verified.
+    # Member is active and verified.
     VERIFIED = 2
-# /// Member is retired.
+    # Member is retired.
     RETIRED = 3
-# /// Member is subject to a temporary penalty.
+    # Member is subject to a temporary penalty.
     PENALTY = 4
-# /// Member is currently blocked and cannot current actively participate in the market.
+    # Member is currently blocked and cannot current actively participate in the market.
     BLOCKED = 5
 

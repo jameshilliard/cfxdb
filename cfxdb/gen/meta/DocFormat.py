@@ -2,22 +2,22 @@
 
 # namespace: meta
 
-# /// Documentation (text) formats.
+# Documentation (text) formats.
 class DocFormat(object):
-# /// Unset documentation format.
+    # Unset documentation format.
     NONE = 0
-# /// Plain text documentation format (default).
+    # Plain text documentation format (default).
     TEXT = 1
-# /// Markdown text documentation format.
+    # Markdown text documentation format.
     MARKDOWN = 2
-# /// Restructered Text (ReST) text documentation format.
+    # Restructered Text (ReST) text documentation format.
     REST = 3
-# /// Generic HTML.
+    # Generic HTML.
     HTML = 4
-# /// Generic XML.
+    # Generic XML.
     XML = 5
-# /// DocBook XML
+    # DocBook XML
     DOCBOOK = 6
-# /// Jupyter notebook.
+    # Jupyter notebook.
     NOTEBOOK = 7
 

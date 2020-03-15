@@ -3,6 +3,8 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class ApplicationRealm(object):
     __slots__ = ['_tab']
@@ -18,19 +20,19 @@ class ApplicationRealm(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # ApplicationRealm
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Time when the object was created.
+    # Time when the object was created.
     # ApplicationRealm
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,19 +40,19 @@ class ApplicationRealm(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Owner organization of this object.
+    # Owner organization of this object.
     # ApplicationRealm
     def Owner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Name of this application realm (must be unique within the management realm at any given point in time).
+    # Name of this application realm (must be unique within the management realm at any given point in time).
     # ApplicationRealm
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -58,7 +60,7 @@ class ApplicationRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// When dispatching events to receivers, batch sending in chunks of this many events (not all at once).
+    # When dispatching events to receivers, batch sending in chunks of this many events (not all at once).
     # ApplicationRealm
     def EventDispatchingChunkSize(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -66,7 +68,7 @@ class ApplicationRealm(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// URI check level to enforce by the router.
+    # URI check level to enforce by the router.
     # ApplicationRealm
     def UriCheck(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -74,7 +76,7 @@ class ApplicationRealm(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// Enable the WAMP meta API on the application realm.
+    # Enable the WAMP meta API on the application realm.
     # ApplicationRealm
     def EnableMetaApi(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -82,7 +84,7 @@ class ApplicationRealm(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// Bridge the WAMP meta API from the application realm to the management realm, so that it can be tapped into.
+    # Bridge the WAMP meta API from the application realm to the management realm, so that it can be tapped into.
     # ApplicationRealm
     def BridgeMetaApi(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))

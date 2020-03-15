@@ -2,24 +2,24 @@
 
 # namespace: log
 
-# /// Managed node worker types.
+# Managed node worker types.
 class MWorkerType(object):
-# /// Unset worker type.
+    # Unset worker type.
     NONE = 0
-# /// Router worker.
+    # Router worker.
     ROUTER = 1
-# /// Router worker.
+    # Router worker.
     CONTAINER = 2
-# /// Router worker.
+    # Router worker.
     GUEST = 3
-# /// Router worker.
+    # Router worker.
     TESTEE = 4
-# /// Router worker.
+    # Router worker.
     PROXY = 5
-# /// Router worker.
+    # Router worker.
     XBRMM = 6
-# /// Router worker.
+    # Router worker.
     HOSTMONITOR = 7
-# /// Router worker.
+    # Router worker.
     CONTROLLER = 8
 

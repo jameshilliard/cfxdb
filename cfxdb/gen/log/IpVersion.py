@@ -3,10 +3,10 @@
 # namespace: log
 
 class IpVersion(object):
-# /// Unset IP version.
+    # Unset IP version.
     NONE = 0
-# /// IP version 4.
+    # IP version 4.
     IPV4 = 4
-# /// IP version 6.
+    # IP version 6.
     IPV6 = 6
 

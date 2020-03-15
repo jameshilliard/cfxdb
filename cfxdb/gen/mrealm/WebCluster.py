@@ -3,6 +3,8 @@
 # namespace: mrealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class WebCluster(object):
     __slots__ = ['_tab']
@@ -18,19 +20,19 @@ class WebCluster(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # WebCluster
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Label for this object (not interpreted by CFC).
+    # Label for this object (not interpreted by CFC).
     # WebCluster
     def Label(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,7 +40,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Description for this object (not interpreted by CFC).
+    # Description for this object (not interpreted by CFC).
     # WebCluster
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -46,7 +48,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Tags on this object.
+    # Tags on this object.
     # WebCluster
     def Tags(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -62,7 +64,12 @@ class WebCluster(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Unique user assigned name.
+    # WebCluster
+    def TagsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Unique user assigned name.
     # WebCluster
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -70,7 +77,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Current status of web cluster.
+    # Current status of web cluster.
     # WebCluster
     def Status(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -78,7 +85,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// IP version, either 4 for 6
+    # IP version, either 4 for 6
     # WebCluster
     def TcpVersion(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -86,7 +93,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// IP listening port
+    # IP listening port
     # WebCluster
     def TcpPort(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -94,7 +101,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// enable TCP port sharing
+    # enable TCP port sharing
     # WebCluster
     def TcpShared(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -102,7 +109,7 @@ class WebCluster(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// listen on this interface
+    # listen on this interface
     # WebCluster
     def TcpInterface(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -110,7 +117,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// TCP accept backlog queue size
+    # TCP accept backlog queue size
     # WebCluster
     def TcpBacklog(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -118,7 +125,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
-# /// TLS server private key to use
+    # TLS server private key to use
     # WebCluster
     def TlsKey(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -126,7 +133,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// TLS server certificate to use
+    # TLS server certificate to use
     # WebCluster
     def TlsCertificate(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -134,7 +141,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// TLS certificate chain
+    # TLS certificate chain
     # WebCluster
     def TlsChainCertificates(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -150,7 +157,12 @@ class WebCluster(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// CA certificates to use
+    # WebCluster
+    def TlsChainCertificatesIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        return o == 0
+
+    # CA certificates to use
     # WebCluster
     def TlsCaCertificates(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -166,7 +178,12 @@ class WebCluster(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// DH parameter file
+    # WebCluster
+    def TlsCaCertificatesIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
+        return o == 0
+
+    # DH parameter file
     # WebCluster
     def TlsCiphers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -174,7 +191,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Ciphers list
+    # Ciphers list
     # WebCluster
     def TlsDhparam(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
@@ -182,7 +199,7 @@ class WebCluster(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// HTTP client inactivity timeout
+    # HTTP client inactivity timeout
     # WebCluster
     def HttpClientTimeout(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
@@ -190,7 +207,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
-# /// enable HTTP strict transport security (HSTS)
+    # enable HTTP strict transport security (HSTS)
     # WebCluster
     def HttpHsts(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
@@ -198,7 +215,7 @@ class WebCluster(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// HSTS maximum age to announce
+    # HSTS maximum age to announce
     # WebCluster
     def HttpHstsMaxAge(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
@@ -206,7 +223,7 @@ class WebCluster(object):
             return self._tab.Get(flatbuffers.number_types.Int32Flags, o + self._tab.Pos)
         return 0
 
-# /// enable Web request access logging
+    # enable Web request access logging
     # WebCluster
     def HttpAccessLog(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
@@ -214,7 +231,7 @@ class WebCluster(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// enable tracebacks when running into Web errors
+    # enable tracebacks when running into Web errors
     # WebCluster
     def HttpDisplayTracebacks(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))

@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores XBRToken.Transfer events.
+# This table stores XBRToken.Transfer events.
 class TokenTransfer(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class TokenTransfer(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: Transaction hash.
+    # Primary key: Transaction hash.
     # TokenTransfer
     def TxHash(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class TokenTransfer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block hash.
+    # TokenTransfer
+    def TxHashIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Block hash.
     # TokenTransfer
     def BlockHash(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -65,7 +72,12 @@ class TokenTransfer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token sending address.
+    # TokenTransfer
+    def BlockHashIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # XBR token sending address.
     # TokenTransfer
     def FromAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -88,7 +100,12 @@ class TokenTransfer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token receiving address.
+    # TokenTransfer
+    def FromAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # XBR token receiving address.
     # TokenTransfer
     def ToAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -111,7 +128,12 @@ class TokenTransfer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token transferred.
+    # TokenTransfer
+    def ToAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # XBR token transferred.
     # TokenTransfer
     def Value(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -133,6 +155,11 @@ class TokenTransfer(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # TokenTransfer
+    def ValueIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
 
 def TokenTransferStart(builder): builder.StartObject(5)
 def TokenTransferAddTxHash(builder, txHash): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(txHash), 0)

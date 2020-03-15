@@ -3,8 +3,10 @@
 # namespace: xbrnetwork
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR Network members.
+# XBR Network members.
 class Account(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Account(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Globally unique and static member ID.
+    # Globally unique and static member ID.
     # Account
     def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Account(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp (epoch time in ns) of initial creation of this record.
+    # Account
+    def OidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Timestamp (epoch time in ns) of initial creation of this record.
     # Account
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class Account(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// XBR Network username (must be globally unique on https://xbr.network)
+    # XBR Network username (must be globally unique on https://xbr.network)
     # Account
     def Username(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class Account(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// User (primary) email address.
+    # User (primary) email address.
     # Account
     def Email(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -66,7 +73,7 @@ class Account(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Timestamp (epoch time in ns) when the user email was (last) verified or 0 if unverified.
+    # Timestamp (epoch time in ns) when the user email was (last) verified or 0 if unverified.
     # Account
     def EmailVerified(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -74,7 +81,7 @@ class Account(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Type of (primary) user crypto wallet in use.
+    # Type of (primary) user crypto wallet in use.
     # Account
     def WalletType(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -82,7 +89,7 @@ class Account(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Public address of user crypto wallet in use.
+    # Public address of user crypto wallet in use.
     # Account
     def WalletAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -105,7 +112,12 @@ class Account(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block number (on the blockchain) when the member (originally) registered.
+    # Account
+    def WalletAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # Block number (on the blockchain) when the member (originally) registered.
     # Account
     def Registered(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -128,7 +140,12 @@ class Account(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// EULA the member agreed to when joining the market (IPFS Multihash string).
+    # Account
+    def RegisteredIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        return o == 0
+
+    # EULA the member agreed to when joining the market (IPFS Multihash string).
     # Account
     def Eula(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -136,7 +153,7 @@ class Account(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Optional member profile (IPFS Multihash string).
+    # Optional member profile (IPFS Multihash string).
     # Account
     def Profile(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -144,7 +161,7 @@ class Account(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Current member level.
+    # Current member level.
     # Account
     def Level(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))

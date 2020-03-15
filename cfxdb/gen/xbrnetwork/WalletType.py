@@ -3,12 +3,12 @@
 # namespace: xbrnetwork
 
 class WalletType(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// Account (primary) wallet was imported (the user provided the wallet public address).
+    # Account (primary) wallet was imported (the user provided the wallet public address).
     IMPORTED = 1
-# /// Account wallet was configured from Metamask.
+    # Account wallet was configured from Metamask.
     METAMASK = 2
-# /// Account wallet in hosted (in this database).
+    # Account wallet in hosted (in this database).
     HOSTED = 3
 

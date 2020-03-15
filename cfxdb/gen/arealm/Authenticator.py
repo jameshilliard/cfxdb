@@ -3,6 +3,8 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Authenticator(object):
     __slots__ = ['_tab']
@@ -18,19 +20,19 @@ class Authenticator(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # Authenticator
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Time when the object was created.
+    # Time when the object was created.
     # Authenticator
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,19 +40,19 @@ class Authenticator(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Owner organization of this object.
+    # Owner organization of this object.
     # Authenticator
     def Owner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// The type of authenticator.
+    # The type of authenticator.
     # Authenticator
     def AuthenticatorType(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -58,7 +60,7 @@ class Authenticator(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// When a dynamic authenticator shall be used, the WAMP procedure URI of a dynamic authenticator to call.
+    # When a dynamic authenticator shall be used, the WAMP procedure URI of a dynamic authenticator to call.
     # Authenticator
     def Authenticator(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))

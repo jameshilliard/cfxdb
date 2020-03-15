@@ -3,8 +3,10 @@
 # namespace: user
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// A CFC user.
+# A CFC user.
 class User(object):
     __slots__ = ['_tab']
 
@@ -19,19 +21,19 @@ class User(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of object (primary key, never changes).
+    # OID of object (primary key, never changes).
     # User
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Label for this object (not interpreted by CFC).
+    # Label for this object (not interpreted by CFC).
     # User
     def Label(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -39,7 +41,7 @@ class User(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Description for this object (not interpreted by CFC).
+    # Description for this object (not interpreted by CFC).
     # User
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -47,7 +49,7 @@ class User(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Tags on this object.
+    # Tags on this object.
     # User
     def Tags(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -63,7 +65,12 @@ class User(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// User (primary) email.
+    # User
+    def TagsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # User (primary) email.
     # User
     def Email(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -71,7 +78,7 @@ class User(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// When the user was registered. Epoch time, microseconds since 1970/1/1 (UTC).
+    # When the user was registered. Epoch time, microseconds since 1970/1/1 (UTC).
     # User
     def Registered(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -79,7 +86,7 @@ class User(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// User public key. 256 bit Ed25519 in hex encoding (64 characters string).
+    # User public key. 256 bit Ed25519 in hex encoding (64 characters string).
     # User
     def Pubkey(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))

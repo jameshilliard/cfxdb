@@ -3,6 +3,8 @@
 # namespace: mrealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class ManagementRealm(object):
     __slots__ = ['_tab']
@@ -18,19 +20,19 @@ class ManagementRealm(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # ManagementRealm
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// Label for this object (not interpreted by CFC).
+    # Label for this object (not interpreted by CFC).
     # ManagementRealm
     def Label(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,7 +40,7 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Description for this object (not interpreted by CFC).
+    # Description for this object (not interpreted by CFC).
     # ManagementRealm
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -46,7 +48,7 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Tags on this object.
+    # Tags on this object.
     # ManagementRealm
     def Tags(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -62,7 +64,12 @@ class ManagementRealm(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Name of this management realm (must be globally unique within CFC at any given point in time).
+    # ManagementRealm
+    def TagsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Name of this management realm (must be globally unique within CFC at any given point in time).
     # ManagementRealm
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -70,7 +77,7 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Time when the management realm was created.
+    # Time when the management realm was created.
     # ManagementRealm
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -78,19 +85,19 @@ class ManagementRealm(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Owner organization of this management realm.
+    # Owner organization of this management realm.
     # ManagementRealm
     def Owner(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             x = o + self._tab.Pos
-            from ..oid_t import oid_t
+            from oid_t import oid_t
             obj = oid_t()
             obj.Init(self._tab.Bytes, x)
             return obj
         return None
 
-# /// CFC hosting node for this management realm.
+    # CFC hosting node for this management realm.
     # ManagementRealm
     def CfNode(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -98,7 +105,7 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// CFC hosting router worker for this management realm.
+    # CFC hosting router worker for this management realm.
     # ManagementRealm
     def CfRouterWorker(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -106,7 +113,7 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// CFC hosting container worker for this management realm.
+    # CFC hosting container worker for this management realm.
     # ManagementRealm
     def CfContainerWorker(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))

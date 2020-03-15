@@ -125,17 +125,11 @@ enum ActorType: uint8
     /// Unset
     NONE = 0,
 
-    /// Actor is the XBR Network itself.
-    NETWORK = 1,
-
-    /// Actor is the XBR Market itself.
-    MARKET = 2,
-
     /// Actor is a XBR Provider.
-    PROVIDER = 3,
+    PROVIDER = 1,
 
     /// Actor is a XBR Consumer.
-    CONSUMER = 4
+    CONSUMER = 2
 }
 
 
@@ -199,6 +193,61 @@ table Market
     market_fee: [uint8] (uint256);
 
     /// When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
+    signature: [uint8] (ethsig);
+}
+
+
+/// XBR catalogs.
+table Catalog
+{
+    /// The unique ID of the catalog.
+    oid: [uint8] (uuid);
+
+    /// Database transaction time (epoch time in ns).
+    timestamp: uint64 (timestamp);
+
+    /// Block number when the catalog was created.
+    created: [uint8] (uint256);
+
+    /// Catalog sequence number.
+    seq: uint32;
+
+    /// Catalog owner (aka "catalog publisher").
+    owner: [uint8] (address);
+
+    /// Catalog terms (IPFS Multihash).
+    terms: string (multihash);
+
+    /// Catalog metadata (IPFS Multihash).
+    meta: string (multihash);
+
+    /// When signed off-chain and submitted via ``XBRCatalog.createCatalogFor``.
+    signature: [uint8] (ethsig);
+}
+
+
+/// XBR data service APIs published to (part of) catalogs.
+table Api
+{
+    /// The unique ID of the API.
+    oid: [uint8] (uuid);
+
+    /// The ID of the catalog this API is part of (was published to).
+    catalog_oid: [uint8] (uuid);
+
+    /// Database transaction time (epoch time in ns).
+    timestamp: uint64 (timestamp);
+
+    /// Block number when the catalog was created.
+    published: [uint8] (uint256);
+
+    /// Multihash of API Flatbuffers schema (required).
+    schema: string (multihash);
+
+    /// Multihash of API meta-data (optional).
+    meta: string (multihash);
+
+    /// When signed off-chain and submitted via ``XBRCatalog.publishApiFor``.
     signature: [uint8] (ethsig);
 }
 
