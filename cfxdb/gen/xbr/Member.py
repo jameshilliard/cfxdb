@@ -109,7 +109,63 @@ class Member(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-def MemberStart(builder): builder.StartObject(6)
+    # Transaction hash of the transaction this change was committed to the blockchain under.
+    # Member
+    def Tid(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Member
+    def TidAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Member
+    def TidLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Member
+    def TidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # When signed off-chain and submitted via ``XBRNetwork.registerMemberFor``.
+    # Member
+    def Signature(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Member
+    def SignatureAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Member
+    def SignatureLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Member
+    def SignatureIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        return o == 0
+
+def MemberStart(builder): builder.StartObject(8)
 def MemberAddAddress(builder, address): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(address), 0)
 def MemberStartAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MemberAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
@@ -118,4 +174,8 @@ def MemberStartRegisteredVector(builder, numElems): return builder.StartVector(1
 def MemberAddEula(builder, eula): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(eula), 0)
 def MemberAddProfile(builder, profile): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(profile), 0)
 def MemberAddLevel(builder, level): builder.PrependUint8Slot(5, level, 0)
+def MemberAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def MemberStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MemberAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def MemberStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MemberEnd(builder): return builder.EndObject()

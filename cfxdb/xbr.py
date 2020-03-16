@@ -20,6 +20,7 @@ from .gen.xbr import PaymentChannelType as PaymentChannelTypeGen
 from .gen.xbr import PaymentChannelState as PaymentChannelStateGen
 from .gen.xbr import PayingChannelRequestState as PayingChannelRequestStateGen
 from .gen.xbr import Member as MemberGen
+from .gen.xbr.MemberLevel import MemberLevel
 from .gen.xbr import Actor as ActorGen
 from .gen.xbr import TokenApproval as TokenApprovalGen
 from .gen.xbr import TokenTransfer as TokenTransferGen
@@ -357,6 +358,8 @@ class Member(object):
     @level.setter
     def level(self, value: int):
         assert value is None or type(value) == int
+        assert value in [MemberLevel.NONE, MemberLevel.ACTIVE, MemberLevel.VERIFIED,
+                         MemberLevel.RETIRED, MemberLevel.PENALTY, MemberLevel.BLOCKED]
         self._level = value
 
     @staticmethod

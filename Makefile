@@ -40,11 +40,27 @@ stats:
 	@cloc cfxdb
 	@echo
 
+# list all basic table round-trip tests
+list_tests:
+	find ./cfxdb/tests/test_*.py -exec grep -Hi "def test_.*roundtrip(" {} \;
+
 test:
 	pytest -v -s ./cfxdb/tests/
 
+test_xbr_roundtrip:
+	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_actor_roundtrip
+	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_member_roundtrip
+	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_market_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_token_transfer_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_token_approval_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_payment_channel_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_paying_channel_req_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_payment_channel_bal_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_offer_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_transaction_roundtrip
+
 test_single:
-	pytest -v -s ./cfxdb/tests//test_user.py::test_user_fbs_roundtrip
+	pytest -v -s ./cfxdb/tests/test_user.py::test_user_fbs_roundtrip
 
 
 # auto-format code - WARNING: this my change files, in-place!

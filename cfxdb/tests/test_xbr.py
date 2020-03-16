@@ -17,13 +17,15 @@ import flatbuffers
 import multihash
 
 import zlmdb
+
 import txaio
+txaio.use_twisted()
+
 from txaio import time_ns
 from autobahn import util
 
 from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
 
-txaio.use_twisted()
 zlmdb.TABLES_BY_UUID = {}
 
 

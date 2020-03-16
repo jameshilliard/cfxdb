@@ -137,9 +137,9 @@ class Catalog(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-    # When signed off-chain and submitted via ``XBRCatalog.createCatalogFor``.
+    # Transaction hash of the transaction this change was committed to the blockchain under.
     # Catalog
-    def Signature(self, j):
+    def Tid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             a = self._tab.Vector(o)
@@ -147,25 +147,53 @@ class Catalog(object):
         return 0
 
     # Catalog
-    def SignatureAsNumpy(self):
+    def TidAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Catalog
-    def SignatureLength(self):
+    def TidLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # Catalog
-    def SignatureIsNone(self):
+    def TidIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         return o == 0
 
-def CatalogStart(builder): builder.StartObject(8)
+    # When signed off-chain and submitted via ``XBRCatalog.createCatalogFor``.
+    # Catalog
+    def Signature(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Catalog
+    def SignatureAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Catalog
+    def SignatureLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Catalog
+    def SignatureIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        return o == 0
+
+def CatalogStart(builder): builder.StartObject(9)
 def CatalogAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
 def CatalogStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def CatalogAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
@@ -176,6 +204,8 @@ def CatalogAddOwner(builder, owner): builder.PrependUOffsetTRelativeSlot(4, flat
 def CatalogStartOwnerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def CatalogAddTerms(builder, terms): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(terms), 0)
 def CatalogAddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
-def CatalogAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def CatalogAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def CatalogStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def CatalogAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
 def CatalogStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def CatalogEnd(builder): return builder.EndObject()
