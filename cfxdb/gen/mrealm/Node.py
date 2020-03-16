@@ -3,6 +3,8 @@
 # namespace: mrealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Node(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class Node(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # Node
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -30,7 +32,7 @@ class Node(object):
             return obj
         return None
 
-# /// Label for this object (not interpreted by CFC).
+    # Label for this object (not interpreted by CFC).
     # Node
     def Label(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,7 +40,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Description for this object (not interpreted by CFC).
+    # Description for this object (not interpreted by CFC).
     # Node
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -46,7 +48,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Tags on this object.
+    # Tags on this object.
     # Node
     def Tags(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -62,8 +64,13 @@ class Node(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Name of this object (must be globally unique within CFC at any given point in time).
-# /// Also used for WAMP authid under which the node is authenticated on the management realm.
+    # Node
+    def TagsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Name of this object (must be globally unique within CFC at any given point in time).
+    # Also used for WAMP authid under which the node is authenticated on the management realm.
     # Node
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -71,7 +78,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The WAMP-cryptosign node public key (32 bytes as HEX encoded string).
+    # The WAMP-cryptosign node public key (32 bytes as HEX encoded string).
     # Node
     def Pubkey(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -79,7 +86,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The WAMP ``realm`` the node will be joined on.
+    # The WAMP ``realm`` the node will be joined on.
     # Node
     def Realm(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -87,7 +94,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The WAMP-cryptosign ``authid`` the node will be authenticated as.
+    # The WAMP-cryptosign ``authid`` the node will be authenticated as.
     # Node
     def Authid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -95,7 +102,7 @@ class Node(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Optional WAMP authextra to be sent to the node when authenticating. CBOR serialized binary.
+    # Optional WAMP authextra to be sent to the node when authenticating. CBOR serialized binary.
     # Node
     def Authextra(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -117,6 +124,11 @@ class Node(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # Node
+    def AuthextraIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        return o == 0
 
 def NodeStart(builder): builder.StartObject(9)
 def NodeAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)

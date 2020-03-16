@@ -3,6 +3,8 @@
 # namespace: meta
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class Reaction(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class Reaction(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Table of the object holding the attribute.
+    # Table of the object holding the attribute.
     # Reaction
     def TableOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -41,7 +43,12 @@ class Reaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Object (within the table) holding the attribute
+    # Reaction
+    def TableOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Object (within the table) holding the attribute
     # Reaction
     def ObjectOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -64,7 +71,12 @@ class Reaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Object (within the table) holding the attribute
+    # Reaction
+    def ObjectOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Object (within the table) holding the attribute
     # Reaction
     def VoterOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -87,7 +99,12 @@ class Reaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Reaction name (or URI in general).
+    # Reaction
+    def VoterOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Reaction name (or URI in general).
     # Reaction
     def Reaction(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -95,7 +112,7 @@ class Reaction(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Timestamp when the reaction was recorded or last modifified.
+    # Timestamp when the reaction was recorded or last modifified.
     # Reaction
     def Reacted(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -103,7 +120,7 @@ class Reaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// CBOR-serialized, object-valued extra data stored along with this reaction.
+    # CBOR-serialized, object-valued extra data stored along with this reaction.
     # Reaction
     def Extra(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -125,6 +142,11 @@ class Reaction(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # Reaction
+    def ExtraIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
 
 def ReactionStart(builder): builder.StartObject(6)
 def ReactionAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)

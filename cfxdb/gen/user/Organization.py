@@ -3,8 +3,10 @@
 # namespace: user
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// A CFC organization.
+# A CFC organization.
 class Organization(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Organization(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of object (primary key, never changes).
+    # OID of object (primary key, never changes).
     # Organization
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -31,7 +33,7 @@ class Organization(object):
             return obj
         return None
 
-# /// Label for this object (not interpreted by CFC).
+    # Label for this object (not interpreted by CFC).
     # Organization
     def Label(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -39,7 +41,7 @@ class Organization(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Description for this object (not interpreted by CFC).
+    # Description for this object (not interpreted by CFC).
     # Organization
     def Description(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -47,7 +49,7 @@ class Organization(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Tags on this object.
+    # Tags on this object.
     # Organization
     def Tags(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -63,7 +65,12 @@ class Organization(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Name, must be unique CFC globally (at each point in time).
+    # Organization
+    def TagsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Name, must be unique CFC globally (at each point in time).
     # Organization
     def Name(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -71,7 +78,7 @@ class Organization(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Organization type
+    # Organization type
     # Organization
     def Otype(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -79,7 +86,7 @@ class Organization(object):
             return self._tab.Get(flatbuffers.number_types.Int8Flags, o + self._tab.Pos)
         return 0
 
-# /// When the organization was registered.
+    # When the organization was registered.
     # Organization
     def Registered(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))

@@ -2,14 +2,14 @@
 
 # namespace: xbr
 
-# /// State of a XBR transaction.
+# State of a XBR transaction.
 class TransactionState(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// The transaction is currently in-flight
+    # The transaction is currently in-flight
     INFLIGHT = 1
-# /// The transaction has completed with error (it failed)
+    # The transaction has completed with error (it failed)
     FAILED = 2
-# /// The transaction has completed with success
+    # The transaction has completed with success
     SUCCESS = 3
 

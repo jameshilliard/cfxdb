@@ -3,6 +3,8 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class WampCraPrincipal(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class WampCraPrincipal(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # WampCraPrincipal
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -30,7 +32,7 @@ class WampCraPrincipal(object):
             return obj
         return None
 
-# /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    # WAMP authid of the principal, must be unique within the application realm at any moment in time.
     # WampCraPrincipal
     def Authid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,7 +40,7 @@ class WampCraPrincipal(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// ID of the application realm the authenticated principal will be joined to.
+    # ID of the application realm the authenticated principal will be joined to.
     # WampCraPrincipal
     def ArealmOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -50,7 +52,7 @@ class WampCraPrincipal(object):
             return obj
         return None
 
-# /// ID of the role the authenticated principal will be joined to the application realm.
+    # ID of the role the authenticated principal will be joined to the application realm.
     # WampCraPrincipal
     def RoleOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -62,7 +64,7 @@ class WampCraPrincipal(object):
             return obj
         return None
 
-# /// WAMP-CRA specific stuff:
+    # WAMP-CRA specific stuff:
     # WampCraPrincipal
     def Secret(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))

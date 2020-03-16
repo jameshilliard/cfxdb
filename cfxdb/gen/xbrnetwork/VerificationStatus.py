@@ -3,14 +3,14 @@
 # namespace: xbrnetwork
 
 class VerificationStatus(object):
-# /// Unset
+    # Unset
     NONE = 0
-# ///
+    #
     PENDING = 1
-# ///
+    #
     VERIFIED = 2
-# ///
+    #
     FAILED = 3
-# ///
+    #
     EXPIRED = 4
 

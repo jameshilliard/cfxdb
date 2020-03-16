@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Data encryption key buy-sell transactions.
+# Data encryption key buy-sell transactions.
 class Transaction(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Transaction(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of the transaction.
+    # ID of the transaction.
     # Transaction
     def Tid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Creation time of the transaction (epoch time in ns).
+    # Transaction
+    def TidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Creation time of the transaction (epoch time in ns).
     # Transaction
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +57,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number of the created-state transaction within the payment channel.
+    # Sequence number of the created-state transaction within the payment channel.
     # Transaction
     def CreatedPaymentChannelSeq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number of the created-state transaction within the paying channel.
+    # Sequence number of the created-state transaction within the paying channel.
     # Transaction
     def CreatedPayingChannelSeq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -66,7 +73,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the data encryption key offer this transaction is for.
+    # ID of the data encryption key offer this transaction is for.
     # Transaction
     def Offer(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +96,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Transaction amount in XBR.
+    # Transaction
+    def OfferIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Transaction amount in XBR.
     # Transaction
     def Amount(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -112,7 +124,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Address of the payment channel (of the buyer) this transaction is transacting on.
+    # Transaction
+    def AmountIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # Address of the payment channel (of the buyer) this transaction is transacting on.
     # Transaction
     def PaymentChannel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -135,7 +152,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Address of the paying channel (of the seller) this transaction is transacting on.
+    # Transaction
+    def PaymentChannelIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # Address of the paying channel (of the seller) this transaction is transacting on.
     # Transaction
     def PayingChannel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -158,7 +180,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// State of the transaction: TransactionState.INFLIGHT when created, and then either TransactionState.SUCCESS or TransactionState.FAILED.
+    # Transaction
+    def PayingChannelIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        return o == 0
+
+    # State of the transaction: TransactionState.INFLIGHT when created, and then either TransactionState.SUCCESS or TransactionState.FAILED.
     # Transaction
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -166,7 +193,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Completion time of the transaction (epoch time in ns)
+    # Completion time of the transaction (epoch time in ns)
     # Transaction
     def Completed(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -174,7 +201,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number of the completed-state transaction within the payment channel.
+    # Sequence number of the completed-state transaction within the payment channel.
     # Transaction
     def CompletedPaymentChannelSeq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -182,7 +209,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number of the completed-state transaction within the paying channel.
+    # Sequence number of the completed-state transaction within the paying channel.
     # Transaction
     def CompletedPayingChannelSeq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -190,7 +217,7 @@ class Transaction(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the data encryption key sold under the transaction.
+    # ID of the data encryption key sold under the transaction.
     # Transaction
     def Key(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -213,7 +240,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Buyer public key (Ed25519).
+    # Transaction
+    def KeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        return o == 0
+
+    # Buyer public key (Ed25519).
     # Transaction
     def BuyerPubkey(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -236,7 +268,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Payment channel balance after transaction.
+    # Transaction
+    def BuyerPubkeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        return o == 0
+
+    # Payment channel balance after transaction.
     # Transaction
     def PaymentChannelAfter(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -259,7 +296,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Paying channel balance after transaction.
+    # Transaction
+    def PaymentChannelAfterIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
+        return o == 0
+
+    # Paying channel balance after transaction.
     # Transaction
     def PayingChannelAfter(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -282,7 +324,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Payment channel market maker transaction signature.
+    # Transaction
+    def PayingChannelAfterIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
+        return o == 0
+
+    # Payment channel market maker transaction signature.
     # Transaction
     def PaymentMmSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
@@ -305,7 +352,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Payment channel (buyer) delegate transaction signature.
+    # Transaction
+    def PaymentMmSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
+        return o == 0
+
+    # Payment channel (buyer) delegate transaction signature.
     # Transaction
     def PaymentDelSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
@@ -328,7 +380,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Paying channel market maker transaction signature.
+    # Transaction
+    def PaymentDelSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
+        return o == 0
+
+    # Paying channel market maker transaction signature.
     # Transaction
     def PayingMmSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
@@ -351,7 +408,12 @@ class Transaction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Paying channel (seller) delegate transaction signature.
+    # Transaction
+    def PayingMmSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
+        return o == 0
+
+    # Paying channel (seller) delegate transaction signature.
     # Transaction
     def PayingDelSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
@@ -373,6 +435,11 @@ class Transaction(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # Transaction
+    def PayingDelSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
+        return o == 0
 
 def TransactionStart(builder): builder.StartObject(20)
 def TransactionAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)

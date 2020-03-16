@@ -3,6 +3,8 @@
 # namespace: xbrnetwork
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class UserKey(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class UserKey(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// User key - a Ed25519 public key - for authenticating using WAMP-cryptosign.
+    # User key - a Ed25519 public key - for authenticating using WAMP-cryptosign.
     # UserKey
     def Pubkey(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -41,7 +43,12 @@ class UserKey(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp (epoch time in ns) of initial creation of this record.
+    # UserKey
+    def PubkeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Timestamp (epoch time in ns) of initial creation of this record.
     # UserKey
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -49,7 +56,7 @@ class UserKey(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of user account this user key is owned by.
+    # ID of user account this user key is owned by.
     # UserKey
     def Owner(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -71,6 +78,11 @@ class UserKey(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # UserKey
+    def OwnerIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
 
 def UserKeyStart(builder): builder.StartObject(3)
 def UserKeyAddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)

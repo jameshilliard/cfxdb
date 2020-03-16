@@ -3,8 +3,10 @@
 # namespace: eventstore
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores WAMP publications with configurable amount of details, optionally including application payload.
+# This table stores WAMP publications with configurable amount of details, optionally including application payload.
 class Publication(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Publication(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Timestamp when the publication was accepted by the broker. Epoch time in ns.
+    # Timestamp when the publication was accepted by the broker. Epoch time in ns.
     # Publication
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Publication(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP publication ID that was assigned by the broker.
+    # WAMP publication ID that was assigned by the broker.
     # Publication
     def Publication(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -35,7 +37,7 @@ class Publication(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP session ID of the publisher.
+    # WAMP session ID of the publisher.
     # Publication
     def Publisher(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -43,7 +45,7 @@ class Publication(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// The WAMP or application URI of the PubSub topic the event was published to.
+    # The WAMP or application URI of the PubSub topic the event was published to.
     # Publication
     def Topic(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -51,7 +53,7 @@ class Publication(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Positional values for application-defined event payload.
+    # Positional values for application-defined event payload.
     # Publication
     def Args(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -74,7 +76,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Keyword values for application-defined event payload.
+    # Publication
+    def ArgsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Keyword values for application-defined event payload.
     # Publication
     def Kwargs(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -97,7 +104,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Alternative, transparent payload. If given, ``args`` and ``kwargs`` must be left unset.
+    # Publication
+    def KwargsIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # Alternative, transparent payload. If given, ``args`` and ``kwargs`` must be left unset.
     # Publication
     def Payload(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -120,7 +132,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// If ``True``, the broker was asked to acknowledge the publication with a success or error response.
+    # Publication
+    def PayloadIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # If ``True``, the broker was asked to acknowledge the publication with a success or error response.
     # Publication
     def Acknowledge(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -128,7 +145,7 @@ class Publication(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// If ``True``, the broker was requested to retain this event.
+    # If ``True``, the broker was requested to retain this event.
     # Publication
     def Retain(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -136,7 +153,7 @@ class Publication(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// If ``True``, the broker was asked to exclude the publisher from receiving the event.
+    # If ``True``, the broker was asked to exclude the publisher from receiving the event.
     # Publication
     def ExcludeMe(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -144,7 +161,7 @@ class Publication(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// List of WAMP session IDs to exclude from receiving this event.
+    # List of WAMP session IDs to exclude from receiving this event.
     # Publication
     def Exclude(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -167,7 +184,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// List of WAMP authids to exclude from receiving this event.
+    # Publication
+    def ExcludeIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        return o == 0
+
+    # List of WAMP authids to exclude from receiving this event.
     # Publication
     def ExcludeAuthid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -183,7 +205,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// List of WAMP authroles to exclude from receiving this event.
+    # Publication
+    def ExcludeAuthidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        return o == 0
+
+    # List of WAMP authroles to exclude from receiving this event.
     # Publication
     def ExcludeAuthrole(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -199,7 +226,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// List of WAMP session IDs eligible to receive this event.
+    # Publication
+    def ExcludeAuthroleIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        return o == 0
+
+    # List of WAMP session IDs eligible to receive this event.
     # Publication
     def Eligible(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -222,7 +254,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// List of WAMP authids eligible to receive this event.
+    # Publication
+    def EligibleIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        return o == 0
+
+    # List of WAMP authids eligible to receive this event.
     # Publication
     def EligibleAuthid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -238,7 +275,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// List of WAMP authroles eligible to receive this event.
+    # Publication
+    def EligibleAuthidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
+        return o == 0
+
+    # List of WAMP authroles eligible to receive this event.
     # Publication
     def EligibleAuthrole(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -254,7 +296,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When using payload transparency, the encoding algorithm that was used to encode the payload.
+    # Publication
+    def EligibleAuthroleIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
+        return o == 0
+
+    # When using payload transparency, the encoding algorithm that was used to encode the payload.
     # Publication
     def EncAlgo(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
@@ -262,7 +309,7 @@ class Publication(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// When using payload transparency with an encryption algorithm, the payload encryption key.
+    # When using payload transparency with an encryption algorithm, the payload encryption key.
     # Publication
     def EncKey(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
@@ -285,7 +332,12 @@ class Publication(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When using payload transparency, the payload object serializer that was used encoding the payload.
+    # Publication
+    def EncKeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
+        return o == 0
+
+    # When using payload transparency, the payload object serializer that was used encoding the payload.
     # Publication
     def EncSerializer(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))

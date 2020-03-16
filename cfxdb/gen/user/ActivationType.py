@@ -2,7 +2,7 @@
 
 # namespace: user
 
-# /// User activation types (built into code, unconfigurable)
+# User activation types (built into code, unconfigurable)
 class ActivationType(object):
     NONE = 0
     REGISTRATION = 1

@@ -3,6 +3,8 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class CryptosignPrincipal(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class CryptosignPrincipal(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of this object.
+    # ID of this object.
     # CryptosignPrincipal
     def Oid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -30,7 +32,7 @@ class CryptosignPrincipal(object):
             return obj
         return None
 
-# /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    # WAMP authid of the principal, must be unique within the application realm at any moment in time.
     # CryptosignPrincipal
     def Authid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -38,7 +40,7 @@ class CryptosignPrincipal(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// ID of the application realm the authenticated principal will be joined to.
+    # ID of the application realm the authenticated principal will be joined to.
     # CryptosignPrincipal
     def ArealmOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -50,7 +52,7 @@ class CryptosignPrincipal(object):
             return obj
         return None
 
-# /// ID of the role the authenticated principal will be joined to the application realm.
+    # ID of the role the authenticated principal will be joined to the application realm.
     # CryptosignPrincipal
     def RoleOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -62,8 +64,8 @@ class CryptosignPrincipal(object):
             return obj
         return None
 
-# /// WAMP-cryptosign specific stuff:
-# /// Authorized public keys, eg 64 character hex strings of the 32 bytes Ed25519 public keys.
+    # WAMP-cryptosign specific stuff:
+    # Authorized public keys, eg 64 character hex strings of the 32 bytes Ed25519 public keys.
     # CryptosignPrincipal
     def AuthorizedKeys(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -78,6 +80,11 @@ class CryptosignPrincipal(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # CryptosignPrincipal
+    def AuthorizedKeysIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
 
 def CryptosignPrincipalStart(builder): builder.StartObject(5)
 def CryptosignPrincipalAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)

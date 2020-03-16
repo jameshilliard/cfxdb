@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// XBR payment channel (from XBR consumer to XBR market maker) and XBR paying channels (from XBR market maker to XBR provider).
+# XBR payment channel (from XBR consumer to XBR market maker) and XBR paying channels (from XBR market maker to XBR provider).
 class PaymentChannel(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class PaymentChannel(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Channel type: payment channel (from XBR consumer to XBR market maker) or paying channel (from XBR market maker to XBR provider).
+    # Channel type: payment channel (from XBR consumer to XBR market maker) or paying channel (from XBR market maker to XBR provider).
     # PaymentChannel
     def Type(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class PaymentChannel(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the payment channel.
+    # ID of the payment channel.
     # PaymentChannel
     def Channel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// ID of the market this payment channel is associated with.
+    # PaymentChannel
+    def ChannelIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # ID of the market this payment channel is associated with.
     # PaymentChannel
     def Market(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Ethereum address of the sender (either XBR Consumer or XBR Market).
+    # PaymentChannel
+    def MarketIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Ethereum address of the sender (either XBR Consumer or XBR Market).
     # PaymentChannel
     def Sender(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -96,7 +108,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Ethereum address of the sender delegate (either XBR Consumer delegate or XBR Market delegate == market maker)
+    # PaymentChannel
+    def SenderIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Ethereum address of the sender delegate (either XBR Consumer delegate or XBR Market delegate == market maker)
     # PaymentChannel
     def Delegate(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -119,7 +136,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Ethereum address of the recipient (either XBR Market or XBR Provider)
+    # PaymentChannel
+    def DelegateIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Ethereum address of the recipient (either XBR Market or XBR Provider)
     # PaymentChannel
     def Recipient(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -142,7 +164,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Amount of XBR tokens initially deposited into the payment channel.
+    # PaymentChannel
+    def RecipientIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # Amount of XBR tokens initially deposited into the payment channel.
     # PaymentChannel
     def Amount(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -165,7 +192,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Payment channel (non-cooperative) closed timeout in blocks (on the blockchain).
+    # PaymentChannel
+    def AmountIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # Payment channel (non-cooperative) closed timeout in blocks (on the blockchain).
     # PaymentChannel
     def Timeout(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -173,7 +205,7 @@ class PaymentChannel(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Current state of payment channel.
+    # Current state of payment channel.
     # PaymentChannel
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -181,7 +213,7 @@ class PaymentChannel(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Block number (on the blockchain) when the payment channel was opened.
+    # Block number (on the blockchain) when the payment channel was opened.
     # PaymentChannel
     def OpenAt(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -204,7 +236,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block number (on the blockchain) when the payment channel will close (at the latest).
+    # PaymentChannel
+    def OpenAtIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
+        return o == 0
+
+    # Block number (on the blockchain) when the payment channel will close (at the latest).
     # PaymentChannel
     def ClosingAt(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -227,7 +264,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block number (on the blockchain) when the payment channel was finally closed.
+    # PaymentChannel
+    def ClosingAtIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        return o == 0
+
+    # Block number (on the blockchain) when the payment channel was finally closed.
     # PaymentChannel
     def ClosedAt(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -250,7 +292,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Closing signature by market maker.
+    # PaymentChannel
+    def ClosedAtIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        return o == 0
+
+    # Closing signature by market maker.
     # PaymentChannel
     def CloseMmSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -273,7 +320,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Closing signature by (seller or buyer) delegate.
+    # PaymentChannel
+    def CloseMmSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        return o == 0
+
+    # Closing signature by (seller or buyer) delegate.
     # PaymentChannel
     def CloseDelSig(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -296,7 +348,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Last off-chain, closing transaction: channel transaction sequence number.
+    # PaymentChannel
+    def CloseDelSigIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        return o == 0
+
+    # Last off-chain, closing transaction: channel transaction sequence number.
     # PaymentChannel
     def CloseChannelSeq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -304,7 +361,7 @@ class PaymentChannel(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Remaining (closing) channel balance (XBR).
+    # Remaining (closing) channel balance (XBR).
     # PaymentChannel
     def CloseBalance(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -327,7 +384,12 @@ class PaymentChannel(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Flag indication if close is final (happens immediately without a channel timeout).
+    # PaymentChannel
+    def CloseBalanceIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
+        return o == 0
+
+    # Flag indication if close is final (happens immediately without a channel timeout).
     # PaymentChannel
     def CloseIsFinal(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
@@ -335,7 +397,7 @@ class PaymentChannel(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-# /// When channel was finally closed on-chain, the Ethereum transaction ID.
+    # When channel was finally closed on-chain, the Ethereum transaction ID.
     # PaymentChannel
     def ClosedTx(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
@@ -357,6 +419,11 @@ class PaymentChannel(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # PaymentChannel
+    def ClosedTxIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
+        return o == 0
 
 def PaymentChannelStart(builder): builder.StartObject(18)
 def PaymentChannelAddType(builder, type): builder.PrependUint8Slot(0, type, 0)

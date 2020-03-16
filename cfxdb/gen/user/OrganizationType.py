@@ -2,14 +2,14 @@
 
 # namespace: user
 
-# /// CFC organization type
+# CFC organization type
 class OrganizationType(object):
-# /// No organization.
+    # No organization.
     NONE = 0
-# /// Personal or individual.
+    # Personal or individual.
     PERSONAL = 1
-# /// Company or business.
+    # Company or business.
     BUSINESS = 2
-# /// Public academics & teaching.
+    # Public academics & teaching.
     ACADEMICS = 3
 

@@ -3,8 +3,10 @@
 # namespace: meta
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Generic **meta data attributes** for objects in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
+# Generic **meta data attributes** for objects in other tables. Primary key of this table is ``(table_oid, object_oid, attribute)``.
 class Attribute(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Attribute(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Table of the object holding the attribute.
+    # Table of the object holding the attribute.
     # Attribute
     def TableOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Attribute(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Object (within the table) holding the attribute.
+    # Attribute
+    def TableOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Object (within the table) holding the attribute.
     # Attribute
     def ObjectOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -65,7 +72,12 @@ class Attribute(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Attribute name (part of the key).
+    # Attribute
+    def ObjectOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Attribute name (part of the key).
     # Attribute
     def Attribute(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +85,7 @@ class Attribute(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Timestamp when the attribute was last modified (or first created).
+    # Timestamp when the attribute was last modified (or first created).
     # Attribute
     def Modified(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +93,7 @@ class Attribute(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// CBOR-serialized, object-valued attribute.
+    # CBOR-serialized, object-valued attribute.
     # Attribute
     def Value(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -103,6 +115,11 @@ class Attribute(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # Attribute
+    def ValueIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
 
 def AttributeStart(builder): builder.StartObject(5)
 def AttributeAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)

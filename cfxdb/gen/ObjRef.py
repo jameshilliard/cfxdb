@@ -3,6 +3,8 @@
 # namespace: 
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class ObjRef(object):
     __slots__ = ['_tab']
@@ -11,13 +13,13 @@ class ObjRef(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// OID of the referenced object: 128 bit with UUID.
+    # OID of the referenced object: 128 bit with UUID.
     # ObjRef
     def Oid(self, obj):
         obj.Init(self._tab.Bytes, self._tab.Pos + 0)
         return obj
 
-# /// Version of the referenced object, starting with 1, and incremented
+    # Version of the referenced object, starting with 1, and incremented
     # ObjRef
     def Version(self): return self._tab.Get(flatbuffers.number_types.Uint32Flags, self._tab.Pos + flatbuffers.number_types.UOffsetTFlags.py_type(16))
 

@@ -20,6 +20,7 @@ from .gen.xbr import PaymentChannelType as PaymentChannelTypeGen
 from .gen.xbr import PaymentChannelState as PaymentChannelStateGen
 from .gen.xbr import PayingChannelRequestState as PayingChannelRequestStateGen
 from .gen.xbr import Member as MemberGen
+from .gen.xbr.MemberLevel import MemberLevel
 from .gen.xbr import Actor as ActorGen
 from .gen.xbr import TokenApproval as TokenApprovalGen
 from .gen.xbr import TokenTransfer as TokenTransferGen
@@ -357,6 +358,10 @@ class Member(object):
     @level.setter
     def level(self, value: int):
         assert value is None or type(value) == int
+        assert value in [
+            MemberLevel.NONE, MemberLevel.ACTIVE, MemberLevel.VERIFIED, MemberLevel.RETIRED,
+            MemberLevel.PENALTY, MemberLevel.BLOCKED
+        ]
         self._level = value
 
     @staticmethod
@@ -445,14 +450,6 @@ class _MarketGen(MarketGen.Market):
         return None
 
     def MakerAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
-        if o != 0:
-            _off = self._tab.Vector(o)
-            _len = self._tab.VectorLen(o)
-            return memoryview(self._tab.Bytes)[_off:_off + _len]
-        return None
-
-    def ProviderSecurityAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -460,7 +457,7 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def ConsumerSecurityAsBytes(self):
+    def ProviderSecurityAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -468,7 +465,7 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def MarketFeeAsBytes(self):
+    def ConsumerSecurityAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -476,8 +473,16 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def SignatureAsBytes(self):
+    def MarketFeeAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -835,15 +840,15 @@ class _ActorGen(ActorGen.Actor):
         x.Init(buf, n + offset)
         return x
 
-    def MarketAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+    def ActorAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def ActorAsBytes(self):
+    def MarketAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             _off = self._tab.Vector(o)

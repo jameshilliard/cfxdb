@@ -3,11 +3,11 @@
 # namespace: log
 
 class MasterNodeUsageStatus(object):
-# /// Unset state.
+    # Unset state.
     NONE = 0
-# /// Online and fully operational.
+    # Online and fully operational.
     RECEIVED = 1
-# /// Online, but some error occurred and some features or entities might be unavailable.
+    # Online, but some error occurred and some features or entities might be unavailable.
     SUCCESS = 2
     FAILED = 3
 

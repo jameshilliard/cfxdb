@@ -17,13 +17,15 @@ import flatbuffers
 import multihash
 
 import zlmdb
+
 import txaio
+txaio.use_twisted()  # noqa
+
 from txaio import time_ns
 from autobahn import util
 
 from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
 
-txaio.use_twisted()
 zlmdb.TABLES_BY_UUID = {}
 
 
@@ -224,7 +226,7 @@ def test_market_roundtrip(market, builder):
     obj = market.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 384
+    assert len(data) in [392, 384]
 
     # create python object from bytes (flatbuffes)
     _market = Market.cast(data)

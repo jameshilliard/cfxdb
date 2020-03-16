@@ -6,111 +6,131 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-# XBR Network members.
-class Member(object):
+# XBR data service APIs published to (part of) catalogs.
+class Api(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMember(cls, buf, offset):
+    def GetRootAsApi(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = Member()
+        x = Api()
         x.Init(buf, n + offset)
         return x
 
-    # Member
+    # Api
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # Ethereum address of the member.
-    # Member
-    def Address(self, j):
+    # The unique ID of the API.
+    # Api
+    def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # Member
-    def AddressAsNumpy(self):
+    # Api
+    def OidAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # Member
-    def AddressLength(self):
+    # Api
+    def OidLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # Member
-    def AddressIsNone(self):
+    # Api
+    def OidIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         return o == 0
 
-    # Database transaction time (epoch time in ns) of insert or last update.
-    # Member
-    def Timestamp(self):
+    # The ID of the catalog this API is part of (was published to).
+    # Api
+    def CatalogOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Api
+    def CatalogOidAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Api
+    def CatalogOidLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Api
+    def CatalogOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Database transaction time (epoch time in ns).
+    # Api
+    def Timestamp(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-    # Block number (on the blockchain) when the member (originally) registered.
-    # Member
-    def Registered(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+    # Block number when the catalog was created.
+    # Api
+    def Published(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # Member
-    def RegisteredAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+    # Api
+    def PublishedAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # Member
-    def RegisteredLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+    # Api
+    def PublishedLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # Member
-    def RegisteredIsNone(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+    # Api
+    def PublishedIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
         return o == 0
 
-    # EULA the member agreed to when joining the market (IPFS Multihash string).
-    # Member
-    def Eula(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
-        if o != 0:
-            return self._tab.String(o + self._tab.Pos)
-        return None
-
-    # Optional member profile (IPFS Multihash string).
-    # Member
-    def Profile(self):
+    # Multihash of API Flatbuffers schema (required).
+    # Api
+    def Schema(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
 
-    # Current member level.
-    # Member
-    def Level(self):
+    # Multihash of API meta-data (optional).
+    # Api
+    def Meta(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
-            return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
-        return 0
+            return self._tab.String(o + self._tab.Pos)
+        return None
 
     # Transaction hash of the transaction this change was committed to the blockchain under.
-    # Member
+    # Api
     def Tid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
@@ -118,27 +138,27 @@ class Member(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # Member
+    # Api
     def TidAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # Member
+    # Api
     def TidLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # Member
+    # Api
     def TidIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         return o == 0
 
-    # When signed off-chain and submitted via ``XBRNetwork.registerMemberFor``.
-    # Member
+    # When signed off-chain and submitted via ``XBRCatalog.publishApiFor``.
+    # Api
     def Signature(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
@@ -146,36 +166,37 @@ class Member(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # Member
+    # Api
     def SignatureAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # Member
+    # Api
     def SignatureLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # Member
+    # Api
     def SignatureIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         return o == 0
 
-def MemberStart(builder): builder.StartObject(8)
-def MemberAddAddress(builder, address): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(address), 0)
-def MemberStartAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MemberAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
-def MemberAddRegistered(builder, registered): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(registered), 0)
-def MemberStartRegisteredVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MemberAddEula(builder, eula): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(eula), 0)
-def MemberAddProfile(builder, profile): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(profile), 0)
-def MemberAddLevel(builder, level): builder.PrependUint8Slot(5, level, 0)
-def MemberAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
-def MemberStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MemberAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
-def MemberStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MemberEnd(builder): return builder.EndObject()
+def ApiStart(builder): builder.StartObject(8)
+def ApiAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def ApiStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiAddCatalogOid(builder, catalogOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(catalogOid), 0)
+def ApiStartCatalogOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiAddTimestamp(builder, timestamp): builder.PrependUint64Slot(2, timestamp, 0)
+def ApiAddPublished(builder, published): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(published), 0)
+def ApiStartPublishedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiAddSchema(builder, schema): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(schema), 0)
+def ApiAddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
+def ApiAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def ApiStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def ApiStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiEnd(builder): return builder.EndObject()

@@ -3,8 +3,10 @@
 # namespace: eventstore
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores WAMP sessions and serves as an anchor for all usage related data.
+# This table stores WAMP sessions and serves as an anchor for all usage related data.
 class Session(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Session(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// The WAMP session_id of the session.
+    # The WAMP session_id of the session.
     # Session
     def Session(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Session(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Timestamp when the session was joined by the router. Epoch time in ns.
+    # Timestamp when the session was joined by the router. Epoch time in ns.
     # Session
     def JoinedAt(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -35,7 +37,7 @@ class Session(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Timestamp when the session left the router. Epoch time in ns.
+    # Timestamp when the session left the router. Epoch time in ns.
     # Session
     def LeftAt(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -43,7 +45,7 @@ class Session(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// The WAMP realm the session is/was joined on.
+    # The WAMP realm the session is/was joined on.
     # Session
     def Realm(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -51,7 +53,7 @@ class Session(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The WAMP authid the session was authenticated under.
+    # The WAMP authid the session was authenticated under.
     # Session
     def Authid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -59,7 +61,7 @@ class Session(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// The WAMP authrole the session was authenticated under.
+    # The WAMP authrole the session was authenticated under.
     # Session
     def Authrole(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))

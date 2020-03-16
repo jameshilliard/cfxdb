@@ -3,8 +3,10 @@
 # namespace: arealm
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Association (N:M) between roles and application realms, both defined independently at the management realm level.
+# Association (N:M) between roles and application realms, both defined independently at the management realm level.
 class ApplicationRealmRole(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class ApplicationRealmRole(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// ID of the role being associated with an application realm.
+    # ID of the role being associated with an application realm.
     # ApplicationRealmRole
     def RoleOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -31,7 +33,7 @@ class ApplicationRealmRole(object):
             return obj
         return None
 
-# /// ID of the application realm this role is associated with.
+    # ID of the application realm this role is associated with.
     # ApplicationRealmRole
     def ArealmOid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))

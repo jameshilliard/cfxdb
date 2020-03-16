@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores information about the series of Ethereum blocks that make up the blockchain.
+# This table stores information about the series of Ethereum blocks that make up the blockchain.
 class Block(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Block(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Timestamp when record was inserted (Unix epoch time in ns)
+    # Timestamp when record was inserted (Unix epoch time in ns)
     # Block
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Block(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Primary key: block number.
+    # Primary key: block number.
     # Block
     def BlockNumber(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class Block(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block hash.
+    # Block
+    def BlockNumberIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Block hash.
     # Block
     def BlockHash(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class Block(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Number of XBR blockchain log events found in the block.
+    # Block
+    def BlockHashIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Number of XBR blockchain log events found in the block.
     # Block
     def CntEvents(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))

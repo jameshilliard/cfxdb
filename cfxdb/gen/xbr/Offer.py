@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Data encryption key offerings by XBR providers.
+# Data encryption key offerings by XBR providers.
 class Offer(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Offer(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Offer transaction time (epoch time in ns)
+    # Offer transaction time (epoch time in ns)
     # Offer
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class Offer(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// ID of the data encryption key offer.
+    # ID of the data encryption key offer.
     # Offer
     def Offer(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Address of the XBR provider offering the data encryption key.
+    # Offer
+    def OfferIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Address of the XBR provider offering the data encryption key.
     # Offer
     def Seller(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -73,7 +80,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// WAMP session ID of the caller that originally placed this offer.
+    # Offer
+    def SellerIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # WAMP session ID of the caller that originally placed this offer.
     # Offer
     def SellerSessionId(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +93,7 @@ class Offer(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP session authid of the caller that originally placed this offer.
+    # WAMP session authid of the caller that originally placed this offer.
     # Offer
     def SellerAuthid(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -89,7 +101,7 @@ class Offer(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// ID of the data encryption key offered.
+    # ID of the data encryption key offered.
     # Offer
     def Key(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -112,7 +124,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// ID of the API the encrypted data (this key is for) is provided under.
+    # Offer
+    def KeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # ID of the API the encrypted data (this key is for) is provided under.
     # Offer
     def Api(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -135,7 +152,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// URI under which the data encrypted with the key offered is provided under.
+    # Offer
+    def ApiIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
+
+    # URI under which the data encrypted with the key offered is provided under.
     # Offer
     def Uri(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -143,7 +165,7 @@ class Offer(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Timestamp from which the offer is valid (epoch time in ns).
+    # Timestamp from which the offer is valid (epoch time in ns).
     # Offer
     def ValidFrom(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -151,7 +173,7 @@ class Offer(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Seller delegate signature for the offer. The signature covers all information of the original offer placement request and requestor.
+    # Seller delegate signature for the offer. The signature covers all information of the original offer placement request and requestor.
     # Offer
     def Signature(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -174,7 +196,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Price of data encryption key in XBR tokens.
+    # Offer
+    def SignatureIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
+        return o == 0
+
+    # Price of data encryption key in XBR tokens.
     # Offer
     def Price(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -197,7 +224,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Keys for optional user defined categories the specific data that is provided falls under.
+    # Offer
+    def PriceIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        return o == 0
+
+    # Keys for optional user defined categories the specific data that is provided falls under.
     # Offer
     def CategoriesKey(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -213,7 +245,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Values for optional user defined categories the specific data that is provided falls under.
+    # Offer
+    def CategoriesKeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        return o == 0
+
+    # Values for optional user defined categories the specific data that is provided falls under.
     # Offer
     def CategoriesValue(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -229,7 +266,12 @@ class Offer(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Optional data at which this offer expires (epoch time in ns).
+    # Offer
+    def CategoriesValueIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        return o == 0
+
+    # Optional data at which this offer expires (epoch time in ns).
     # Offer
     def Expires(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -237,7 +279,7 @@ class Offer(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Optional maximum number of times this data encryption key is to be sold or 0 for unlimited.
+    # Optional maximum number of times this data encryption key is to be sold or 0 for unlimited.
     # Offer
     def Copies(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -245,7 +287,7 @@ class Offer(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-# /// Remaining number of copies to be sold (if "copies" is set >0, otherwise 0).
+    # Remaining number of copies to be sold (if "copies" is set >0, otherwise 0).
     # Offer
     def Remaining(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))

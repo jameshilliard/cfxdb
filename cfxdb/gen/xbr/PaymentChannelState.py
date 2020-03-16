@@ -2,16 +2,16 @@
 
 # namespace: xbr
 
-# /// State of a XBR payment channel.
+# State of a XBR payment channel.
 class PaymentChannelState(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// On-chain state: the payment channel is open (and operating off-chain)
+    # On-chain state: the payment channel is open (and operating off-chain)
     OPEN = 1
-# /// The payment channel is closing (one of the channel participants has requested to closed the channel)
+    # The payment channel is closing (one of the channel participants has requested to closed the channel)
     CLOSING = 2
-# /// The payment channel is closed and settled with no errors
+    # The payment channel is closed and settled with no errors
     CLOSED = 3
-# /// The payment channel is closed with an error
+    # The payment channel is closed with an error
     FAILED = 4
 

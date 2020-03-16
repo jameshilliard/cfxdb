@@ -3,8 +3,10 @@
 # namespace: xbr
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// This table stores XBRToken.Approval events.
+# This table stores XBRToken.Approval events.
 class TokenApproval(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class TokenApproval(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: Transaction hash.
+    # Primary key: Transaction hash.
     # TokenApproval
     def TxHash(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class TokenApproval(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Block hash.
+    # TokenApproval
+    def TxHashIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Block hash.
     # TokenApproval
     def BlockHash(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -65,7 +72,12 @@ class TokenApproval(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token sending address.
+    # TokenApproval
+    def BlockHashIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # XBR token sending address.
     # TokenApproval
     def OwnerAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -88,7 +100,12 @@ class TokenApproval(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token receiving address.
+    # TokenApproval
+    def OwnerAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # XBR token receiving address.
     # TokenApproval
     def SpenderAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -111,7 +128,12 @@ class TokenApproval(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// XBR token transferred.
+    # TokenApproval
+    def SpenderAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # XBR token transferred.
     # TokenApproval
     def Value(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -133,6 +155,11 @@ class TokenApproval(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # TokenApproval
+    def ValueIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
 
 def TokenApprovalStart(builder): builder.StartObject(5)
 def TokenApprovalAddTxHash(builder, txHash): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(txHash), 0)

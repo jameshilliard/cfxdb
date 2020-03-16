@@ -3,6 +3,8 @@
 # namespace: xbrnetwork
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class VerifiedAction(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class VerifiedAction(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Globally unique and static ID of action.
+    # Globally unique and static ID of action.
     # VerifiedAction
     def Oid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -41,7 +43,12 @@ class VerifiedAction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp (epoch time in ns) of initial creation of this record.
+    # VerifiedAction
+    def OidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Timestamp (epoch time in ns) of initial creation of this record.
     # VerifiedAction
     def Created(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -49,7 +56,7 @@ class VerifiedAction(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Verification type.
+    # Verification type.
     # VerifiedAction
     def Vtype(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -57,7 +64,7 @@ class VerifiedAction(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Verification type.
+    # Verification type.
     # VerifiedAction
     def Vstatus(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -65,7 +72,7 @@ class VerifiedAction(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Verification code sent.
+    # Verification code sent.
     # VerifiedAction
     def Vcode(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -73,7 +80,7 @@ class VerifiedAction(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// ID of object of verified action.
+    # ID of object of verified action.
     # VerifiedAction
     def VerifiedOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -96,7 +103,12 @@ class VerifiedAction(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Action data, serialized in CBOR.
+    # VerifiedAction
+    def VerifiedOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
+        return o == 0
+
+    # Action data, serialized in CBOR.
     # VerifiedAction
     def VerifiedData(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -118,6 +130,11 @@ class VerifiedAction(object):
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
+
+    # VerifiedAction
+    def VerifiedDataIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
+        return o == 0
 
 def VerifiedActionStart(builder): builder.StartObject(7)
 def VerifiedActionAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)

@@ -3,6 +3,8 @@
 # namespace: log
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class MNodeSession(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class MNodeSession(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// When the his run started (Unix time in ns).
+    # When the his run started (Unix time in ns).
     # MNodeSession
     def Left(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -26,7 +28,7 @@ class MNodeSession(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// WAMP session ID of the CF node uplink management session to this CFC instance.
+    # WAMP session ID of the CF node uplink management session to this CFC instance.
     # MNodeSession
     def Session(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -34,7 +36,7 @@ class MNodeSession(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Management realm CFC backend run ID
+    # Management realm CFC backend run ID
     # MNodeSession
     def RunId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -57,7 +59,12 @@ class MNodeSession(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// The CF node ID (which is dual-used as WAMP session authid).
+    # MNodeSession
+    def RunIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # The CF node ID (which is dual-used as WAMP session authid).
     # MNodeSession
     def NodeId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -80,7 +87,12 @@ class MNodeSession(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When the CF node management session joined this CFC instance.
+    # MNodeSession
+    def NodeIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # When the CF node management session joined this CFC instance.
     # MNodeSession
     def Joined(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -88,7 +100,7 @@ class MNodeSession(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// When the last heartbeat was received on this CF node session.
+    # When the last heartbeat was received on this CF node session.
     # MNodeSession
     def LastHeartbeat(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))

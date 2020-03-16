@@ -3,8 +3,10 @@
 # namespace: log
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Aggregate usage metering records for management realms. Primary key: (timestamp, mrealm_id).
+# Aggregate usage metering records for management realms. Primary key: (timestamp, mrealm_id).
 class MasterNodeUsage(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class MasterNodeUsage(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Primary key: Timestamp (end of aggregate interval) recorded in UTC (Unix time in ns).
+    # Primary key: Timestamp (end of aggregate interval) recorded in UTC (Unix time in ns).
     # MasterNodeUsage
     def Timestamp(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -27,7 +29,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Primary key: Management realm ID.
+    # Primary key: Management realm ID.
     # MasterNodeUsage
     def MrealmId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -50,7 +52,12 @@ class MasterNodeUsage(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp (start of aggregate interval) recorded in UTC (Unix time in ns).
+    # MasterNodeUsage
+    def MrealmIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Timestamp (start of aggregate interval) recorded in UTC (Unix time in ns).
     # MasterNodeUsage
     def TimestampFrom(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -58,7 +65,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Public key of the CrossbarFX master node that submitted the usage record.
+    # Public key of the CrossbarFX master node that submitted the usage record.
     # MasterNodeUsage
     def Pubkey(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
@@ -81,7 +88,12 @@ class MasterNodeUsage(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Client IPv4 address (4 bytes) or IPv6 (16 bytes) address of the CrossbarFX master node that submitted the usage record.
+    # MasterNodeUsage
+    def PubkeyIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        return o == 0
+
+    # Client IPv4 address (4 bytes) or IPv6 (16 bytes) address of the CrossbarFX master node that submitted the usage record.
     # MasterNodeUsage
     def ClientIpAddress(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
@@ -104,7 +116,12 @@ class MasterNodeUsage(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Client IP version of the CrossbarFX master node that submitted the usage record.
+    # MasterNodeUsage
+    def ClientIpAddressIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        return o == 0
+
+    # Client IP version of the CrossbarFX master node that submitted the usage record.
     # MasterNodeUsage
     def ClientIpVersion(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -112,7 +129,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Client IP port of the CrossbarFX master node that submitted the usage record.
+    # Client IP port of the CrossbarFX master node that submitted the usage record.
     # MasterNodeUsage
     def ClientIpPort(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -120,7 +137,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-# /// Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
+    # Sequence number as sent in the log record by the CF node (started at 0 for CF start and incremented by one on each heartbeat).
     # MasterNodeUsage
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
@@ -128,7 +145,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
+    # Unix time in ns. This timestamp is from the original received event payload (from CF node clock).
     # MasterNodeUsage
     def Sent(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
@@ -136,7 +153,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Unix time in ns. Set when this record was processed.
+    # Unix time in ns. Set when this record was processed.
     # MasterNodeUsage
     def Processed(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
@@ -144,7 +161,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Status of usage metering record.
+    # Status of usage metering record.
     # MasterNodeUsage
     def Status(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
@@ -152,7 +169,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-# /// Status message for current status.
+    # Status message for current status.
     # MasterNodeUsage
     def StatusMessage(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
@@ -160,7 +177,7 @@ class MasterNodeUsage(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-# /// Filled after this usage metering record was successfully submitted to the metering service.
+    # Filled after this usage metering record was successfully submitted to the metering service.
     # MasterNodeUsage
     def MeteringId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
@@ -183,7 +200,12 @@ class MasterNodeUsage(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Number of aggregated records from MworkerLogs
+    # MasterNodeUsage
+    def MeteringIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        return o == 0
+
+    # Number of aggregated records from MworkerLogs
     # MasterNodeUsage
     def Count(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
@@ -191,7 +213,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of aggregated and summed MworkerLogs.count records
+    # Number of aggregated and summed MworkerLogs.count records
     # MasterNodeUsage
     def Total(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
@@ -199,7 +221,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Nodes by node type
+    # Nodes by node type
     # MasterNodeUsage
     def Nodes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
@@ -207,7 +229,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of node controllers metered.
+    # Number of node controllers metered.
     # MasterNodeUsage
     def Controllers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
@@ -215,7 +237,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of hostmonitor workers metered.
+    # Number of hostmonitor workers metered.
     # MasterNodeUsage
     def Hostmonitors(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
@@ -223,7 +245,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of router workers metered.
+    # Number of router workers metered.
     # MasterNodeUsage
     def Routers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
@@ -231,7 +253,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of container workers metered.
+    # Number of container workers metered.
     # MasterNodeUsage
     def Containers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
@@ -239,7 +261,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of guest workers metered.
+    # Number of guest workers metered.
     # MasterNodeUsage
     def Guests(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
@@ -247,7 +269,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of proxy workers metered.
+    # Number of proxy workers metered.
     # MasterNodeUsage
     def Proxies(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
@@ -255,7 +277,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of XBR market maker workers metered.
+    # Number of XBR market maker workers metered.
     # MasterNodeUsage
     def Marketmakers(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(48))
@@ -263,7 +285,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP sessions attached to router workers and metered.
+    # Number of WAMP sessions attached to router workers and metered.
     # MasterNodeUsage
     def Sessions(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(50))
@@ -271,7 +293,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP CALL messages processed by a router worker and metered.
+    # Number of WAMP CALL messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsCall(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(52))
@@ -279,7 +301,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP YIELD messages processed by a router worker and metered.
+    # Number of WAMP YIELD messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsYield(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(54))
@@ -287,7 +309,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP INVOCATION messages processed by a router worker and metered.
+    # Number of WAMP INVOCATION messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsInvocation(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(56))
@@ -295,7 +317,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP RESULT messages processed by a router worker and metered.
+    # Number of WAMP RESULT messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsResult(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(58))
@@ -303,7 +325,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP ERROR messages processed by a router worker and metered.
+    # Number of WAMP ERROR messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsError(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(60))
@@ -311,7 +333,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP PUBLISH messages processed by a router worker and metered.
+    # Number of WAMP PUBLISH messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsPublish(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(62))
@@ -319,7 +341,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP PUBLISHED messages processed by a router worker and metered.
+    # Number of WAMP PUBLISHED messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsPublished(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(64))
@@ -327,7 +349,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP EVENT messages processed by a router worker and metered.
+    # Number of WAMP EVENT messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsEvent(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(66))
@@ -335,7 +357,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP REGISTER messages processed by a router worker and metered.
+    # Number of WAMP REGISTER messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsRegister(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(68))
@@ -343,7 +365,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP REGISTERED messages processed by a router worker and metered.
+    # Number of WAMP REGISTERED messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsRegistered(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(70))
@@ -351,7 +373,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP SUBSCRIBE messages processed by a router worker and metered.
+    # Number of WAMP SUBSCRIBE messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsSubscribe(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(72))
@@ -359,7 +381,7 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Number of WAMP SUBSCRIBED messages processed by a router worker and metered.
+    # Number of WAMP SUBSCRIBED messages processed by a router worker and metered.
     # MasterNodeUsage
     def MsgsSubscribed(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(74))

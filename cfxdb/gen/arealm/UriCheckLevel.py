@@ -3,10 +3,10 @@
 # namespace: arealm
 
 class UriCheckLevel(object):
-# /// No check level.
+    # No check level.
     NONE = 0
-# /// Check level "strict".
+    # Check level "strict".
     EXACT = 1
-# /// Check level "loose".
+    # Check level "loose".
     PREFIX = 2
 

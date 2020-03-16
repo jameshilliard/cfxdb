@@ -3,6 +3,8 @@
 # namespace: log
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
 class MRealmRun(object):
     __slots__ = ['_tab']
@@ -18,7 +20,7 @@ class MRealmRun(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// When the this run ended (Unix time in ns).
+    # When the this run ended (Unix time in ns).
     # MRealmRun
     def Ended(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -26,7 +28,7 @@ class MRealmRun(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Management realm CFC backend run ID (this is unique over all start-stop cycles of CFC, and constant per run).
+    # Management realm CFC backend run ID (this is unique over all start-stop cycles of CFC, and constant per run).
     # MRealmRun
     def RunId(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -49,7 +51,12 @@ class MRealmRun(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// When the this run started (Unix time in ns).
+    # MRealmRun
+    def RunIdIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # When the this run started (Unix time in ns).
     # MRealmRun
     def Started(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -57,7 +64,7 @@ class MRealmRun(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-# /// Current CFC management backend state.
+    # Current CFC management backend state.
     # MRealmRun
     def State(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))

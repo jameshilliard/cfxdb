@@ -3,8 +3,10 @@
 # namespace: meta
 
 import flatbuffers
+from flatbuffers.compat import import_numpy
+np = import_numpy()
 
-# /// Generic **tags attached** to objects in other tables. Primary key of this table is ``(table_oid, object_oid, tag_oid)``.
+# Generic **tags attached** to objects in other tables. Primary key of this table is ``(table_oid, object_oid, tag_oid)``.
 class Tag(object):
     __slots__ = ['_tab']
 
@@ -19,7 +21,7 @@ class Tag(object):
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-# /// Table of the object with the tag attached.
+    # Table of the object with the tag attached.
     # Tag
     def TableOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
@@ -42,7 +44,12 @@ class Tag(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Object (within the table) with the tag attached.
+    # Tag
+    def TableOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
+        return o == 0
+
+    # Object (within the table) with the tag attached.
     # Tag
     def ObjectOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
@@ -65,7 +72,12 @@ class Tag(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Tag definition attached to the object.
+    # Tag
+    def ObjectOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
+        return o == 0
+
+    # Tag definition attached to the object.
     # Tag
     def TagOid(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
@@ -88,7 +100,12 @@ class Tag(object):
             return self._tab.VectorLen(o)
         return 0
 
-# /// Timestamp when the tag was attached to the object referenced.
+    # Tag
+    def TagOidIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
+        return o == 0
+
+    # Timestamp when the tag was attached to the object referenced.
     # Tag
     def Attached(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))

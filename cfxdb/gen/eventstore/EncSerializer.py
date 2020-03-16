@@ -2,17 +2,17 @@
 
 # namespace: eventstore
 
-# /// The serializer the app payload was serialized with before encryption.
+# The serializer the app payload was serialized with before encryption.
 class EncSerializer(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// Payload was serialized in JSON
+    # Payload was serialized in JSON
     JSON = 1
-# /// Payload was serialized in MsgPack
+    # Payload was serialized in MsgPack
     MSGPACK = 2
-# /// Payload was serialized in CBOR
+    # Payload was serialized in CBOR
     CBOR = 3
-# /// Payload was serialized in UBJSON
+    # Payload was serialized in UBJSON
     UBJSON = 4
     OPAQUE = 5
     FLATBUFFERS = 6

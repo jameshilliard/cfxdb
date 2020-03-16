@@ -2,16 +2,12 @@
 
 # namespace: xbr
 
-# /// XBR Market Actor type.
+# XBR Market Actor type.
 class ActorType(object):
-# /// Unset
+    # Unset
     NONE = 0
-# /// Actor is the XBR Network itself.
-    NETWORK = 1
-# /// Actor is the XBR Market itself.
-    MARKET = 2
-# /// Actor is a XBR Provider.
-    PROVIDER = 3
-# /// Actor is a XBR Consumer.
-    CONSUMER = 4
+    # Actor is a XBR Provider.
+    PROVIDER = 1
+    # Actor is a XBR Consumer.
+    CONSUMER = 2
 
