@@ -1,9 +1,9 @@
-###############################################################################
+##############################################################################
 #
-# Crossbar.io Fabric Center
-# Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io FX
+#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
 #
-###############################################################################
+##############################################################################
 
 import pytest
 import os

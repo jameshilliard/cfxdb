@@ -102,6 +102,9 @@ table Member
     /// Ethereum address of the member.
     address: [uint8] (address);
 
+    /// Account OID (on ``planet.xbr.network ``) - only filled when this XBR network member has on-boarded via ``planet.xbr.network`` and has an account there.
+    account_oid: [uint8] (uuid);
+
     /// Database transaction time (epoch time in ns) of insert or last update.
     timestamp: uint64 (timestamp);
 

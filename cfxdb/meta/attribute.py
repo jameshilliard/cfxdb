@@ -8,13 +8,11 @@
 import pprint
 from uuid import UUID
 
+import cbor2
 import flatbuffers
 import numpy as np
-import cbor2
-
+from cfxdb.gen.meta import Attribute as AttributeGen
 from zlmdb import table, MapUuidUuidStringFlatBuffers
-
-from .gen.meta import Attribute as AttributeGen
 
 
 class _AttributeGen(AttributeGen.Attribute):
