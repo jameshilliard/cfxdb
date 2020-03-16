@@ -23,7 +23,7 @@ class Market(object):
 
     # The unique ID of the market.
     # Market
-    def Oid(self, j):
+    def Market(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             a = self._tab.Vector(o)
@@ -31,21 +31,21 @@ class Market(object):
         return 0
 
     # Market
-    def OidAsNumpy(self):
+    def MarketAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Market
-    def OidLength(self):
+    def MarketLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # Market
-    def OidIsNone(self):
+    def MarketIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         return o == 0
 
@@ -306,8 +306,8 @@ class Market(object):
         return o == 0
 
 def MarketStart(builder): builder.StartObject(13)
-def MarketAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def MarketStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketAddMarket(builder, market): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(market), 0)
+def MarketStartMarketVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def MarketAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
 def MarketAddSeq(builder, seq): builder.PrependUint32Slot(2, seq, 0)
 def MarketAddOwner(builder, owner): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)

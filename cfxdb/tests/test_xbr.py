@@ -226,7 +226,7 @@ def test_market_roundtrip(market, builder):
     obj = market.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 384
+    assert len(data) in [392, 384]
 
     # create python object from bytes (flatbuffes)
     _market = Market.cast(data)

@@ -175,7 +175,7 @@ table Actor
 table Market
 {
     /// The unique ID of the market.
-    oid: [uint8] (uuid);
+    market: [uint8] (uuid);
 
     /// Database transaction time (epoch time in ns) of insert or last update.
     timestamp: uint64 (timestamp);

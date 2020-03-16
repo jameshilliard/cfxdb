@@ -48,9 +48,9 @@ test:
 	pytest -v -s ./cfxdb/tests/
 
 test_xbr_roundtrip:
-	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_actor_roundtrip
-	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_member_roundtrip
-	#pytest -v -s ./cfxdb/tests/test_xbr.py::test_market_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_actor_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_member_roundtrip
+	pytest -v -s ./cfxdb/tests/test_xbr.py::test_market_roundtrip
 	pytest -v -s ./cfxdb/tests/test_xbr.py::test_token_transfer_roundtrip
 	pytest -v -s ./cfxdb/tests/test_xbr.py::test_token_approval_roundtrip
 	pytest -v -s ./cfxdb/tests/test_xbr.py::test_payment_channel_roundtrip
