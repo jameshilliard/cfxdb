@@ -64,6 +64,7 @@ test_single:
 
 
 # auto-format code - WARNING: this my change files, in-place!
+# use "pip install yapf==0.29.0"
 autoformat:
 	yapf -ri --style=yapf.ini \
 		--exclude="cfxdb/gen/*" \

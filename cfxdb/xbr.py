@@ -358,8 +358,10 @@ class Member(object):
     @level.setter
     def level(self, value: int):
         assert value is None or type(value) == int
-        assert value in [MemberLevel.NONE, MemberLevel.ACTIVE, MemberLevel.VERIFIED,
-                         MemberLevel.RETIRED, MemberLevel.PENALTY, MemberLevel.BLOCKED]
+        assert value in [
+            MemberLevel.NONE, MemberLevel.ACTIVE, MemberLevel.VERIFIED, MemberLevel.RETIRED,
+            MemberLevel.PENALTY, MemberLevel.BLOCKED
+        ]
         self._level = value
 
     @staticmethod
