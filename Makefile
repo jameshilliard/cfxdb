@@ -32,7 +32,6 @@ publish: clean
 
 
 stats:
-	@clear
 	@find ./cfxdb -name "*.fbs" -exec grep -Hi "^table" {} \; | cut -d" " -f1,2 | sort
 	@echo
 	@wc -l cfxdb/*.fbs

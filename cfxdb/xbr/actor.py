@@ -60,6 +60,22 @@ class _ActorGen(ActorGen.Actor):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def TidAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
 
 class Actor(object):
     """
@@ -68,17 +84,17 @@ class Actor(object):
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
 
-        # uint64 (timestamp)
-        self._timestamp = None
-
-        # [uint8] (uuid)
-        self._market = None
-
         # [uint8] (address)
         self._actor = None
 
         # uint8 (ActorType)
         self._actor_type = None
+
+        # [uint8] (uuid)
+        self._market = None
+
+        # uint64 (timestamp)
+        self._timestamp = None
 
         # [uint8] (uint256)
         self._joined = None
@@ -89,6 +105,12 @@ class Actor(object):
         # string (multihash)
         self._meta = None
 
+        # [uint8] (ethhash)
+        self._tid = None
+
+        # [uint8] (ethsig)
+        self._signature = None
+
     def marshal(self) -> dict:
         obj = {
             'timestamp': self.timestamp,
@@ -98,6 +120,8 @@ class Actor(object):
             'joined': self.joined,
             'security': self.security,
             'meta': self.meta,
+            'tid': bytes(self.tid) if self.tid else None,
+            'signature': bytes(self.signature) if self.signature else None,
         }
         return obj
 
@@ -215,6 +239,36 @@ class Actor(object):
         assert value is None or type(value) == str
         self._meta = value
 
+    @property
+    def tid(self) -> bytes:
+        """
+        Transaction hash of the transaction this change was committed to the blockchain under.
+        """
+        if self._tid is None and self._from_fbs:
+            if self._from_fbs.TidLength():
+                self._tid = self._from_fbs.TidAsBytes()
+        return self._tid
+
+    @tid.setter
+    def tid(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 32)
+        self._tid = value
+
+    @property
+    def signature(self) -> bytes:
+        """
+        When signed off-chain and submitted via ``XBRMarket.joinMarketFor``.
+        """
+        if self._signature is None and self._from_fbs:
+            if self._from_fbs.SignatureLength():
+                self._signature = self._from_fbs.SignatureAsBytes()
+        return self._signature
+
+    @signature.setter
+    def signature(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._signature = value
+
     @staticmethod
     def cast(buf):
         return Actor(_ActorGen.GetRootAsActor(buf, 0))
@@ -241,6 +295,14 @@ class Actor(object):
         if meta:
             meta = builder.CreateString(meta)
 
+        tid = self.tid
+        if tid:
+            tid = builder.CreateString(tid)
+
+        signature = self.signature
+        if signature:
+            signature = builder.CreateString(signature)
+
         ActorGen.ActorStart(builder)
 
         if self.timestamp:
@@ -263,6 +325,12 @@ class Actor(object):
 
         if meta:
             ActorGen.ActorAddMeta(builder, meta)
+
+        if tid:
+            ActorGen.ActorAddTid(builder, tid)
+
+        if signature:
+            ActorGen.ActorAddSignature(builder, signature)
 
         final = ActorGen.ActorEnd(builder)
 

@@ -43,6 +43,14 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def CoinAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
     def MakerAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
@@ -69,6 +77,14 @@ class _MarketGen(MarketGen.Market):
 
     def MarketFeeAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def TidAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -103,6 +119,9 @@ class Market(object):
         # [uint8] (address)
         self._owner = None
 
+        # [uint8] (address)
+        self._coin = None
+
         # string (multihash)
         self._terms = None
 
@@ -121,6 +140,9 @@ class Market(object):
         # [uint8] (uint256)
         self._market_fee = None
 
+        # [uint8] (ethhash)
+        self._tid = None
+
         # [uint8] (ethsig)
         self._signature = None
 
@@ -130,12 +152,14 @@ class Market(object):
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'seq': self.seq,
             'owner': bytes(self.owner) if self.owner else None,
+            'coin': bytes(self.coin) if self.coin else None,
             'terms': self.terms,
             'meta': self.meta,
             'maker': bytes(self.maker) if self.maker else None,
             'provider_security': pack_uint256(self.provider_security) if self.provider_security else None,
             'consumer_security': pack_uint256(self.consumer_security) if self.consumer_security else None,
             'market_fee': pack_uint256(self.market_fee) if self.market_fee else None,
+            'tid': bytes(self.tid) if self.tid else None,
             'signature': bytes(self.signature) if self.signature else None,
         }
         return obj
@@ -201,6 +225,21 @@ class Market(object):
     def owner(self, value: bytes):
         assert value is None or (type(value) == bytes and len(value) == 20)
         self._owner = value
+
+    @property
+    def coin(self) -> bytes:
+        """
+        Market coin.
+        """
+        if self._coin is None and self._from_fbs:
+            if self._from_fbs.CoinLength():
+                self._coin = self._from_fbs.CoinAsBytes()
+        return self._coin
+
+    @coin.setter
+    def coin(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 20)
+        self._coin = value
 
     @property
     def terms(self) -> str:
@@ -304,6 +343,21 @@ class Market(object):
         self._market_fee = value
 
     @property
+    def tid(self) -> bytes:
+        """
+        Transaction hash of the transaction this change was committed to the blockchain under.
+        """
+        if self._tid is None and self._from_fbs:
+            if self._from_fbs.TidLength():
+                self._tid = self._from_fbs.TidAsBytes()
+        return self._tid
+
+    @tid.setter
+    def tid(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 32)
+        self._tid = value
+
+    @property
     def signature(self) -> bytes:
         """
         When signed off-chain and submitted via ``XBRMarket.createMarketFor``.
@@ -332,6 +386,10 @@ class Market(object):
         if owner:
             owner = builder.CreateString(owner)
 
+        coin = self.coin
+        if coin:
+            coin = builder.CreateString(coin)
+
         terms = self.terms
         if terms:
             terms = builder.CreateString(terms)
@@ -356,6 +414,10 @@ class Market(object):
         if market_fee:
             market_fee = builder.CreateString(pack_uint256(market_fee))
 
+        tid = self.tid
+        if tid:
+            tid = builder.CreateString(tid)
+
         signature = self.signature
         if signature:
             signature = builder.CreateString(signature)
@@ -374,6 +436,9 @@ class Market(object):
         if owner:
             MarketGen.MarketAddOwner(builder, owner)
 
+        if coin:
+            MarketGen.MarketAddCoin(builder, coin)
+
         if terms:
             MarketGen.MarketAddTerms(builder, terms)
 
@@ -391,6 +456,9 @@ class Market(object):
 
         if market_fee:
             MarketGen.MarketAddMarketFee(builder, market_fee)
+
+        if tid:
+            MarketGen.MarketAddTid(builder, tid)
 
         if signature:
             MarketGen.MarketAddSignature(builder, signature)

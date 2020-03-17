@@ -53,6 +53,22 @@ class _MemberGen(MemberGen.Member):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def TidAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
 
 class Member(object):
     """
@@ -82,6 +98,12 @@ class Member(object):
         # enum MemberLevel: uint8
         self._level = None
 
+        # [uint8] (ethhash)
+        self._tid = None
+
+        # [uint8] (ethsig)
+        self._signature = None
+
     def marshal(self) -> dict:
         obj = {
             'address': self.address,
@@ -91,6 +113,8 @@ class Member(object):
             'eula': self.eula,
             'profile': self.profile,
             'level': self.level,
+            'tid': bytes(self.tid) if self.tid else None,
+            'signature': bytes(self.signature) if self.signature else None,
         }
         return obj
 
@@ -212,6 +236,36 @@ class Member(object):
         ]
         self._level = value
 
+    @property
+    def tid(self) -> bytes:
+        """
+        Transaction hash of the transaction this change was committed to the blockchain under.
+        """
+        if self._tid is None and self._from_fbs:
+            if self._from_fbs.TidLength():
+                self._tid = self._from_fbs.TidAsBytes()
+        return self._tid
+
+    @tid.setter
+    def tid(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 32)
+        self._tid = value
+
+    @property
+    def signature(self) -> bytes:
+        """
+        When signed off-chain and submitted via ``XBRNetwork.registerMemberFor``.
+        """
+        if self._signature is None and self._from_fbs:
+            if self._from_fbs.SignatureLength():
+                self._signature = self._from_fbs.SignatureAsBytes()
+        return self._signature
+
+    @signature.setter
+    def signature(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._signature = value
+
     @staticmethod
     def cast(buf):
         return Member(_MemberGen.GetRootAsMember(buf, 0))
@@ -238,6 +292,14 @@ class Member(object):
         if profile:
             profile = builder.CreateString(profile)
 
+        tid = self.tid
+        if tid:
+            tid = builder.CreateString(tid)
+
+        signature = self.signature
+        if signature:
+            signature = builder.CreateString(signature)
+
         MemberGen.MemberStart(builder)
 
         if address:
@@ -260,6 +322,12 @@ class Member(object):
 
         if self.level:
             MemberGen.MemberAddLevel(builder, self.level)
+
+        if tid:
+            MemberGen.MemberAddTid(builder, tid)
+
+        if signature:
+            MemberGen.MemberAddSignature(builder, signature)
 
         final = MemberGen.MemberEnd(builder)
 

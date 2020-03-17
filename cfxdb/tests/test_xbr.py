@@ -10,11 +10,9 @@ import uuid
 import random
 import timeit
 import pytest
-import hashlib
 
 import numpy as np
 import flatbuffers
-import multihash
 
 import zlmdb
 
@@ -27,6 +25,8 @@ from autobahn import util
 from cfxdb.xbr import TokenApproval, TokenTransfer, Market, Member, Actor, \
     PaymentChannel, PayingChannelRequest, PaymentChannelBalance, Offer, Transaction
 
+from cfxdb.tests._util import _gen_ipfs_hash
+
 zlmdb.TABLES_BY_UUID = {}
 
 
@@ -36,27 +36,21 @@ def builder():
     return _builder
 
 
-def _gen_ipfs_hash():
-    # IPFS uses sha2-256 and B58 string encoding, eg "QmevbQAb6L7MsZUxqsspYREqMhMqaaV6arvF4UytgdsSfX"
-    data = os.urandom(100)
-    digest = hashlib.sha256(data).digest()
-    hash = multihash.encode(digest, 'sha2-256')
-    return multihash.to_b58_string(hash)
-
-
 #
 # Actor
 #
 
 
 def fill_actor(actor):
-    actor.timestamp = np.datetime64(time_ns(), 'ns')
-    actor.market = uuid.uuid4()
     actor.actor = os.urandom(20)
     actor.actor_type = random.randint(1, 2)
+    actor.market = uuid.uuid4()
+    actor.timestamp = np.datetime64(time_ns(), 'ns')
     actor.joined = random.randint(0, 2**256 - 1)
     actor.security = random.randint(0, 2**256 - 1)
     actor.meta = _gen_ipfs_hash()
+    actor.tid = os.urandom(32)
+    actor.signature = os.urandom(65)
 
 
 @pytest.fixture(scope='function')
@@ -71,18 +65,20 @@ def test_actor_roundtrip(actor, builder):
     obj = actor.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 248
+    assert len(data) == 368
 
     # create python object from bytes (flatbuffes)
     _actor = Actor.cast(data)
 
-    assert _actor.timestamp == actor.timestamp
-    assert _actor.market == actor.market
     assert _actor.actor == actor.actor
     assert _actor.actor_type == actor.actor_type
+    assert _actor.market == actor.market
+    assert _actor.timestamp == actor.timestamp
     assert _actor.joined == actor.joined
     assert _actor.security == actor.security
     assert _actor.meta == actor.meta
+    assert _actor.tid == actor.tid
+    assert _actor.signature == actor.signature
 
 
 def test_actor_roundtrip_perf(actor, builder):
@@ -94,13 +90,15 @@ def test_actor_roundtrip_perf(actor, builder):
     def loop():
         _actor = Actor.cast(data)
         if True:
-            assert _actor.timestamp == actor.timestamp
-            assert _actor.market == actor.market
             assert _actor.actor == actor.actor
             assert _actor.actor_type == actor.actor_type
+            assert _actor.market == actor.market
+            assert _actor.timestamp == actor.timestamp
             assert _actor.joined == actor.joined
             assert _actor.security == actor.security
             assert _actor.meta == actor.meta
+            assert _actor.tid == actor.tid
+            assert _actor.signature == actor.signature
 
             scratch['value'] += _actor.actor_type
 
@@ -135,6 +133,8 @@ def fill_member(member):
     member.eula = _gen_ipfs_hash()
     member.profile = _gen_ipfs_hash()
     member.level = random.randint(1, 5)
+    member.tid = os.urandom(32)
+    member.signature = os.urandom(65)
 
 
 @pytest.fixture(scope='function')
@@ -149,7 +149,7 @@ def test_member_roundtrip(member, builder):
     obj = member.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 264
+    assert len(data) == 384
 
     # create python object from bytes (flatbuffes)
     _member = Member.cast(data)
@@ -161,6 +161,8 @@ def test_member_roundtrip(member, builder):
     assert _member.eula == member.eula
     assert _member.profile == member.profile
     assert _member.level == member.level
+    assert _member.tid == member.tid
+    assert _member.signature == member.signature
 
 
 def test_member_roundtrip_perf(member, builder):
@@ -179,6 +181,8 @@ def test_member_roundtrip_perf(member, builder):
             assert _member.eula == member.eula
             assert _member.profile == member.profile
             assert _member.level == member.level
+            assert _member.tid == member.tid
+            assert _member.signature == member.signature
 
             scratch['value'] += _member.level
 
@@ -210,12 +214,15 @@ def fill_market(market):
     market.timestamp = np.datetime64(time_ns(), 'ns')
     market.seq = random.randint(1, 2**32 - 1)
     market.owner = os.urandom(20)
+    market.coin = os.urandom(20)
     market.terms = _gen_ipfs_hash()
     market.meta = _gen_ipfs_hash()
     market.maker = os.urandom(20)
     market.provider_security = random.randint(0, 2**256 - 1)
     market.consumer_security = random.randint(0, 2**256 - 1)
     market.market_fee = random.randint(0, 2**256 - 1)
+    market.tid = os.urandom(32)
+    market.signature = os.urandom(65)
 
 
 @pytest.fixture(scope='function')
@@ -230,7 +237,7 @@ def test_market_roundtrip(market, builder):
     obj = market.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) in [392, 384]
+    assert len(data) == 544
 
     # create python object from bytes (flatbuffes)
     _market = Market.cast(data)
@@ -239,12 +246,15 @@ def test_market_roundtrip(market, builder):
     assert _market.timestamp == market.timestamp
     assert _market.seq == market.seq
     assert _market.owner == market.owner
+    assert _market.coin == market.coin
     assert _market.terms == market.terms
     assert _market.meta == market.meta
     assert _market.maker == market.maker
     assert _market.provider_security == market.provider_security
     assert _market.consumer_security == market.consumer_security
     assert _market.market_fee == market.market_fee
+    assert _market.tid == market.tid
+    assert _market.signature == market.signature
 
 
 def test_market_roundtrip_perf(market, builder):
@@ -260,12 +270,15 @@ def test_market_roundtrip_perf(market, builder):
             assert _market.timestamp == market.timestamp
             assert _market.seq == market.seq
             assert _market.owner == market.owner
+            assert _market.coin == market.coin
             assert _market.terms == market.terms
             assert _market.meta == market.meta
             assert _market.maker == market.maker
             assert _market.provider_security == market.provider_security
             assert _market.consumer_security == market.consumer_security
             assert _market.market_fee == market.market_fee
+            assert _market.tid == market.tid
+            assert _market.signature == market.signature
 
             scratch['value'] += _market.seq
 
@@ -724,7 +737,7 @@ def fill_offer(offer):
     offer.uri = 'com.example.something.add2'
     offer.valid_from = np.datetime64(now, 'ns')
     offer.signature = os.urandom(64)
-    offer.price = 23
+    offer.price = random.randint(0, 2**256 - 1)
     offer.categories = {
         'xtile': '{:05}'.format(random.randint(0, 99999)),
         'ytile': '{:05}'.format(random.randint(0, 99999)),
@@ -875,13 +888,22 @@ def fill_transaction(transaction):
     transaction.created_payment_channel_seq = random.randint(0, 1000)
     transaction.created_paying_channel_seq = random.randint(0, 1000)
     transaction.offer = uuid.uuid4()
-    transaction.amount = random.randint(100, 1000)
+    transaction.amount = random.randint(0, 2**256 - 1)
     transaction.payment_channel = os.urandom(20)
     transaction.paying_channel = os.urandom(20)
     transaction.state = random.randint(1, 3)
     transaction.completed = np.datetime64(now, 'ns')
     transaction.completed_payment_channel_seq = random.randint(0, 1000)
     transaction.completed_paying_channel_seq = random.randint(0, 1000)
+
+    # transaction.key = uuid.uuid4()
+    # transaction.buyer_pubkey = os.urandom(32)
+    # transaction.payment_channel_after = random.randint(0, 2**256 - 1)
+    # transaction.paying_channel_after = random.randint(0, 2**256 - 1)
+    # transaction.payment_mm_sig = os.urandom(65)
+    # transaction.payment_del_sig = os.urandom(65)
+    # transaction.paying_mm_sig = os.urandom(65)
+    # transaction.paying_del_sig = os.urandom(65)
 
 
 def fill_transaction_empty(transaction):
@@ -897,6 +919,15 @@ def fill_transaction_empty(transaction):
     transaction.completed = None
     transaction.completed_payment_channel_seq = None
     transaction.completed_paying_channel_seq = None
+
+    # transaction.key = None
+    # transaction.buyer_pubkey = None
+    # transaction.payment_channel_after = None
+    # transaction.paying_channel_after = None
+    # transaction.payment_mm_sig = None
+    # transaction.payment_del_sig = None
+    # transaction.paying_mm_sig = None
+    # transaction.paying_del_sig = None
 
 
 @pytest.fixture(scope='function')
@@ -929,6 +960,15 @@ def test_transaction_roundtrip(transaction, builder):
     assert _transaction.completed_payment_channel_seq == transaction.completed_payment_channel_seq
     assert _transaction.completed_paying_channel_seq == transaction.completed_paying_channel_seq
 
+    # assert _transaction.key == transaction.key
+    # assert _transaction.buyer_pubkey == transaction.buyer_pubkey
+    # assert _transaction.payment_channel_after == transaction.payment_channel_after
+    # assert _transaction.paying_channel_after == transaction.paying_channel_after
+    # assert _transaction.payment_mm_sig == transaction.payment_mm_sig
+    # assert _transaction.payment_del_sig == transaction.payment_del_sig
+    # assert _transaction.paying_mm_sig == transaction.paying_mm_sig
+    # assert _transaction.paying_del_sig == transaction.paying_del_sig
+
 
 def test_transaction_empty(builder):
     transaction1 = Transaction()
@@ -958,6 +998,15 @@ def test_transaction_empty(builder):
     assert transaction2.completed_payment_channel_seq == 0
     assert transaction2.completed_paying_channel_seq == 0
 
+    # assert transaction2.key is None
+    # assert transaction2.buyer_pubkey is None
+    # assert transaction2.payment_channel_after == 0
+    # assert transaction2.paying_channel_after == 0
+    # assert transaction2.payment_mm_sig is None
+    # assert transaction2.payment_del_sig is None
+    # assert transaction2.paying_mm_sig is None
+    # assert transaction2.paying_del_sig is None
+
 
 def test_transaction_roundtrip_perf(transaction, builder):
     obj = transaction.build(builder)
@@ -980,6 +1029,15 @@ def test_transaction_roundtrip_perf(transaction, builder):
             assert _transaction.completed == transaction.completed
             assert _transaction.completed_payment_channel_seq == transaction.completed_payment_channel_seq
             assert _transaction.completed_paying_channel_seq == transaction.completed_paying_channel_seq
+
+            # assert _transaction.key == transaction.key
+            # assert _transaction.buyer_pubkey == transaction.buyer_pubkey
+            # assert _transaction.payment_channel_after == transaction.payment_channel_after
+            # assert _transaction.paying_channel_after == transaction.paying_channel_after
+            # assert _transaction.payment_mm_sig == transaction.payment_mm_sig
+            # assert _transaction.payment_del_sig == transaction.payment_del_sig
+            # assert _transaction.paying_mm_sig == transaction.paying_mm_sig
+            # assert _transaction.paying_del_sig == transaction.paying_del_sig
 
             scratch['value'] += _transaction.amount
 
