@@ -7,7 +7,7 @@
 
 from zlmdb import table, MapOidFlatBuffers, MapOidTimestampFlatBuffers
 
-from . import eventstore
+import cfxdb.eventstore.session
 
 __all__ = (
     'Sessions',
@@ -17,7 +17,9 @@ __all__ = (
 )
 
 
-@table('a674f707-69b8-4c41-b2a1-df17cec9b095', build=eventstore.Session.build, cast=eventstore.Session.cast)
+@table('a674f707-69b8-4c41-b2a1-df17cec9b095',
+       build=cfxdb.eventstore.session.Session.build,
+       cast=cfxdb.eventstore.session.Session.cast)
 class Sessions(MapOidFlatBuffers):
     """
     Persisted sessions archive.
@@ -27,8 +29,8 @@ class Sessions(MapOidFlatBuffers):
 
 
 @table('dd04931a-753b-4fde-8140-d66b93519c73',
-       build=eventstore.Publication.build,
-       cast=eventstore.Publication.cast)
+       build=cfxdb.eventstore.publication.Publication.build,
+       cast=cfxdb.eventstore.publication.Publication.cast)
 class Publications(MapOidFlatBuffers):
     """
     Persisted publications archive.
@@ -37,7 +39,9 @@ class Publications(MapOidFlatBuffers):
     """
 
 
-@table('40a9df31-6065-496f-809f-027a1879654c', build=eventstore.Event.build, cast=eventstore.Event.cast)
+@table('40a9df31-6065-496f-809f-027a1879654c',
+       build=cfxdb.eventstore.event.Event.build,
+       cast=cfxdb.eventstore.event.Event.cast)
 class Events(MapOidTimestampFlatBuffers):
     """
     Persisted events archive.
