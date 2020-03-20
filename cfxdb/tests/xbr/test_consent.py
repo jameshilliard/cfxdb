@@ -34,7 +34,7 @@ def fill_consent(consent):
     consent.delegate_type = random.randint(1, 3)
     consent.catalog_oid = uuid.uuid4()
     consent.timestamp = np.datetime64(time_ns(), 'ns')
-    consent.updated = random.randint(1, 2 ** 256 - 1)
+    consent.updated = random.randint(1, 2**256 - 1)
     consent.consent = True
     consent.prefix = _gen_ipfs_hash()
     consent.tid = os.urandom(32)
