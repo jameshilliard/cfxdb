@@ -11,7 +11,7 @@ import flatbuffers
 import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbr import Consent as ConsentGen
-from zlmdb import table, MapBytes20TimestampUuid, MapUuidBytes20Bytes20Uint8UuidFlatBuffers, MapBy
+from zlmdb import table, MapBytes20TimestampUuid, MapUuidBytes20Bytes20Uint8UuidFlatBuffers
 
 
 class _ConsentGen(ConsentGen.Consent):
@@ -44,9 +44,6 @@ class _ConsentGen(ConsentGen.Consent):
 
     def UpdatedAsBytes(self):
         return self._as_bytes(16)
-
-    def ConsentAsBytes(self):
-        return self._as_bytes(18)
 
     def TidAsBytes(self):
         return self._as_bytes(22)
@@ -228,11 +225,7 @@ class Consent(object):
         Whether we have the consent
         """
         if self._consent is None and self._from_fbs:
-            if self._from_fbs.ConsentLength():
-                _consent = self._from_fbs.ConsentAsBytes()
-                self._consent = unpack_uint256(bytes(_consent))
-            else:
-                self._consent = False
+            self._consent = self._from_fbs.Consent()
         return self._consent
 
     @consent.setter
@@ -302,8 +295,6 @@ class Consent(object):
             delegate = builder.CreateString(delegate)
 
         delegate_type = self.delegate_type
-        if delegate_type:
-            delegate_type = builder.CreateString(delegate_type)
 
         catalog_oid = self.catalog_oid.bytes if self.catalog_oid else None
         if catalog_oid:
