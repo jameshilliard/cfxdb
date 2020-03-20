@@ -47,7 +47,7 @@ class _ApiGen(ApiGen.Api):
         return None
 
     def TidAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -55,7 +55,7 @@ class _ApiGen(ApiGen.Api):
         return None
 
     def SignatureAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -137,6 +137,11 @@ class Api(object):
                 self._oid = uuid.UUID(bytes=bytes(_oid))
         return self._oid
 
+    @catalog_oid.setter
+    def catalog_oid(self, value: uuid.UUID):
+        assert value is None or isinstance(value, uuid.UUID)
+        self._catalog_oid = value
+
     @property
     def timestamp(self) -> np.datetime64:
         """
@@ -157,10 +162,11 @@ class Api(object):
         Global market sequence number.
         """
         if self._published is None and self._from_fbs:
-            _published = self._from_fbs.PublishedAsBytes()
-            self._published = unpack_uint256(bytes(_published))
-        else:
-            self._published = 0
+            if self._from_fbs.PublishedLength():
+                _published = self._from_fbs.PublishedAsBytes()
+                self._published = unpack_uint256(bytes(_published))
+            else:
+                self._published = 0
         return self._published
 
     @published.setter

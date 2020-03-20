@@ -6,18 +6,20 @@
 ##############################################################################
 
 from .actor import Actor, Actors
+from .api import Api, Apis
 from .block import Block, Blocks
-from .channel import PaymentChannel, PaymentChannels, IndexPaymentChannelByDelegate, PaymentChannelBalance, PaymentChannelBalances, \
-    PayingChannelRequest, PayingChannelRequests, PayingChannels, IndexPayingChannelByDelegate, IndexPayingChannelByRecipient, \
-    PayingChannelBalances, IndexPayingChannelRequestByRecipient
+from .catalog import Catalog, Catalogs
+from .channel import PaymentChannel, PaymentChannels, IndexPaymentChannelByDelegate, PaymentChannelBalance,\
+    PaymentChannelBalances, PayingChannelRequest, PayingChannelRequests, PayingChannels, IndexPayingChannelByDelegate, \
+    IndexPayingChannelByRecipient, PayingChannelBalances, IndexPayingChannelRequestByRecipient
 from .market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor
 from .member import Member, Members
 from .offer import Offer, Offers, IndexOfferByKey
 from .token import TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
 from .transaction import Transaction, Transactions
 
-from cfxdb.gen.xbr.MemberLevel import MemberLevel
 from cfxdb.gen.xbr.ActorType import ActorType
+from cfxdb.gen.xbr.MemberLevel import MemberLevel
 from cfxdb.gen.xbr.PayingChannelRequestState import PayingChannelRequestState
 from cfxdb.gen.xbr.PaymentChannelType import PaymentChannelType
 from cfxdb.gen.xbr.PaymentChannelState import PaymentChannelState
@@ -38,8 +40,12 @@ __all__ = (
     # table/index types
     'Actor',
     'Actors',
+    'Api',
+    'Apis',
     'Block',
     'Blocks',
+    'Catalog',
+    'Catalogs',
     'PaymentChannel',
     'PaymentChannels',
     'IndexPaymentChannelByDelegate',
@@ -77,9 +83,19 @@ class Schema(object):
     def __init__(self, db):
         self.db = db
 
+    apis: Apis
+    """
+    XBR network apis.
+    """
+
     blocks: Blocks
     """
     Ethereum blocks basic information.
+    """
+
+    catalogs: Catalogs
+    """
+    XBR network catalogs.
     """
 
     token_approvals: TokenApprovals
@@ -185,7 +201,11 @@ class Schema(object):
         """
         schema = Schema(db)
 
+        schema.apis = db.attach_table(Apis)
+
         schema.blocks = db.attach_table(Blocks)
+
+        schema.catalogs = db.attach_table(Catalogs)
 
         schema.token_approvals = db.attach_table(TokenApprovals)
 
