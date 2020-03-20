@@ -59,7 +59,7 @@ def test_consent_roundtrip(consent, builder):
     obj = consent.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    # assert len(data) == 368
+    assert len(data) == 392
 
     # create python object from bytes (flatbuffes)
     _consent = Consent.cast(data)
