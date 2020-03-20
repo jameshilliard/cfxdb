@@ -138,7 +138,10 @@ enum ActorType: uint8
     PROVIDER = 1,
 
     /// Actor is a XBR Consumer.
-    CONSUMER = 2
+    CONSUMER = 2,
+
+    /// Actor is both a XBR Provider and XBR Consumer.
+    PROVIDER_CONSUMER = 3
 }
 
 
@@ -278,6 +281,41 @@ table Api
     signature: [uint8] (ethsig);
 }
 
+/// XBR data consent set by market actors.
+table Consent {
+    /// The ID of the catalog consent was set within [primary key].
+    market_oid: [uint8] (uuid);
+
+    /// Member (must be actor in market) that has set consent [primary key].
+    member: [uint8] (address);
+
+    /// Delegate for which consent is set [primary key].
+    delegate: [uint8] (address);
+
+    /// Type of delegate for which consent was granted [primary key].
+    delegate_type: ActorType;
+
+    /// The ID of the catalog this consent was set for [primary key].
+    catalog_oid: [uint8] (uuid);
+
+    /// Database transaction time (epoch time in ns).
+    timestamp: uint64 (timestamp);
+
+    /// Block number when the consent was updated.
+    updated: [uint8] (uint256);
+
+    /// Consent granted or revoked.
+    consent: bool;
+
+    /// The WAMP URI prefix to be used by the delegate in the data plane realm.
+    prefix: string;
+
+    /// Transaction hash of the transaction this change was committed to the blockchain under.
+    tid: [uint8] (ethhash);
+
+    /// This is the signature the user (actor) supplied when setting the consent status.
+    signature: [uint8] (ethsig);
+}
 
 /// State of a XBR paying channel request.
 enum PayingChannelRequestState: uint8
