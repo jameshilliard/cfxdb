@@ -32,7 +32,12 @@ publish: clean
 
 
 stats:
+	@echo
 	@find ./cfxdb -name "*.fbs" -exec grep -Hi "^table" {} \; | cut -d" " -f1,2 | sort
+	@echo
+	@find ./cfxdb -name "*.fbs" -exec grep -Hi "^enum" {} \; | cut -d" " -f1,2 | sort
+	@echo
+	@find ./cfxdb -name "*.fbs" -exec grep -Hi "^struct" {} \; | cut -d" " -f1,2 | sort
 	@echo
 	@wc -l cfxdb/*.fbs
 	@echo
