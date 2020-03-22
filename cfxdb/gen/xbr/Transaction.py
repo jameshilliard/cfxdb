@@ -6,7 +6,7 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-# Data encryption key buy-sell transactions.
+# Data encryption key (off-chain) market transactions.
 class Transaction(object):
     __slots__ = ['_tab']
 
@@ -101,7 +101,7 @@ class Transaction(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         return o == 0
 
-    # Transaction amount in XBR.
+    # Transaction amount in ERC20 tokens of the market coin type.
     # Transaction
     def Amount(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
@@ -129,7 +129,7 @@ class Transaction(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         return o == 0
 
-    # Address of the payment channel (of the buyer) this transaction is transacting on.
+    # OID of the channel (of the buyer) this transaction is transacting on.
     # Transaction
     def PaymentChannel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
@@ -157,7 +157,7 @@ class Transaction(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         return o == 0
 
-    # Address of the paying channel (of the seller) this transaction is transacting on.
+    # OID of the channel (of the seller) this transaction is transacting on.
     # Transaction
     def PayingChannel(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))

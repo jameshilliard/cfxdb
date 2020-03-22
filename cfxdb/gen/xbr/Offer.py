@@ -6,7 +6,7 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-# Data encryption key offerings by XBR providers.
+# Data encryption key off-chain offerings, submitted by seller/provider delegates in the market.
 class Offer(object):
     __slots__ = ['_tab']
 
@@ -201,7 +201,7 @@ class Offer(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         return o == 0
 
-    # Price of data encryption key in XBR tokens.
+    # Price of data encryption key in ERC20 tokens of the market coin type.
     # Offer
     def Price(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))

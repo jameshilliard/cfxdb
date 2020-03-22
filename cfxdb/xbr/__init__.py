@@ -9,9 +9,19 @@ from .actor import Actor, Actors
 from .api import Api, Apis
 from .block import Block, Blocks
 from .catalog import Catalog, Catalogs
-from .channel import PaymentChannel, PaymentChannels, IndexPaymentChannelByDelegate, PaymentChannelBalance,\
-    PaymentChannelBalances, PayingChannelRequest, PayingChannelRequests, PayingChannels, IndexPayingChannelByDelegate, \
-    IndexPayingChannelByRecipient, PayingChannelBalances, IndexPayingChannelRequestByRecipient
+
+from .channel import Channel
+from .channel import Channel as PaymentChannel
+from .channel import Channel as PayingChannel
+
+from .channel import ChannelBalance
+from .channel import ChannelBalance as PaymentChannelBalance
+from .channel import ChannelBalance as PayingChannelBalance
+
+from .channel import PaymentChannels, IndexPaymentChannelByDelegate, \
+    PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
+    IndexPayingChannelByRecipient, PayingChannelBalances
+
 from .market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor
 from .member import Member, Members
 from .offer import Offer, Offers, IndexOfferByKey
@@ -20,10 +30,9 @@ from .transaction import Transaction, Transactions
 
 from cfxdb.gen.xbr.ActorType import ActorType
 from cfxdb.gen.xbr.MemberLevel import MemberLevel
-from cfxdb.gen.xbr.PayingChannelRequestState import PayingChannelRequestState
-from cfxdb.gen.xbr.PaymentChannelType import PaymentChannelType
-from cfxdb.gen.xbr.PaymentChannelState import PaymentChannelState
 from cfxdb.gen.xbr.TransactionState import TransactionState
+from cfxdb.gen.xbr.ChannelType import ChannelType
+from cfxdb.gen.xbr.ChannelState import ChannelState
 
 __all__ = (
     # database schema
@@ -32,9 +41,8 @@ __all__ = (
     # enum types
     'MemberLevel',
     'ActorType',
-    'PayingChannelRequestState',
-    'PaymentChannelType',
-    'PaymentChannelState',
+    'ChannelType',
+    'ChannelState',
     'TransactionState',
 
     # table/index types
@@ -46,18 +54,19 @@ __all__ = (
     'Blocks',
     'Catalog',
     'Catalogs',
+    'Channel',
     'PaymentChannel',
     'PaymentChannels',
     'IndexPaymentChannelByDelegate',
+    'ChannelBalance',
     'PaymentChannelBalance',
     'PaymentChannelBalances',
-    'PayingChannelRequest',
-    'PayingChannelRequests',
+    'PayingChannel',
     'PayingChannels',
     'IndexPayingChannelByDelegate',
     'IndexPayingChannelByRecipient',
+    'PayingChannelBalance',
     'PayingChannelBalances',
-    'IndexPayingChannelRequestByRecipient',
     'Market',
     'Markets',
     'IndexMarketsByOwner',
@@ -149,11 +158,6 @@ class Schema(object):
     Current off-chain balances within payment channels.
     """
 
-    paying_channel_requests: PayingChannelRequests
-    """
-    Requests for openng paying channels.
-    """
-
     paying_channels: PayingChannels
     """
     Paying channels for XBR provider delegates.
@@ -163,10 +167,6 @@ class Schema(object):
     """
     Maps from XBR provider delegate address to the currently active paying
     channel address for the given provider delegate.
-    """
-
-    idx_paying_channel_requests_by_recipient: IndexPayingChannelByRecipient
-    """
     """
 
     paying_balances: PayingChannelBalances
@@ -234,14 +234,6 @@ class Schema(object):
         #                                      lambda payment_channel: (bytes(payment_channel.delegate), np.datetime64(time_ns(), 'ns')))
 
         schema.payment_balances = db.attach_table(PaymentChannelBalances)
-
-        schema.paying_channel_requests = db.attach_table(PayingChannelRequests)
-
-        schema.idx_paying_channel_requests_by_recipient = db.attach_table(
-            IndexPayingChannelRequestByRecipient)
-        schema.paying_channel_requests.attach_index(
-            'idx1', schema.idx_paying_channel_requests_by_recipient,
-            lambda paying_channel_request: bytes(paying_channel_request.recipient))
 
         schema.paying_channels = db.attach_table(PayingChannels)
 

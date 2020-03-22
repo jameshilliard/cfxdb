@@ -6,23 +6,23 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-# XBR payment channel current (off-chain) balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``PaymentChannel.amount``.
-class PaymentChannelBalance(object):
+# Current channel off-chain balance. The sum of ``Balance.remaining`` and ``Balance.inflight`` equals ``Channel.amount``.
+class ChannelBalance(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsPaymentChannelBalance(cls, buf, offset):
+    def GetRootAsChannelBalance(cls, buf, offset):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = PaymentChannelBalance()
+        x = ChannelBalance()
         x.Init(buf, n + offset)
         return x
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
 
-    # Amount of XBR tokens currently remaining in the payment channel.
-    # PaymentChannelBalance
+    # Amount of ERC20 tokens (of the market coin type) currently remaining in the channel.
+    # ChannelBalance
     def Remaining(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
@@ -30,27 +30,27 @@ class PaymentChannelBalance(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def RemainingAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def RemainingLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def RemainingIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(4))
         return o == 0
 
-    # Amount of XBR tokens reserved to in-flight purchase transactions.
-    # PaymentChannelBalance
+    # Amount of ERC20 tokens (of the market coin type) reserved to in-flight transactions.
+    # ChannelBalance
     def Inflight(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
@@ -58,37 +58,37 @@ class PaymentChannelBalance(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def InflightAsNumpy(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def InflightLength(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
-    # PaymentChannelBalance
+    # ChannelBalance
     def InflightIsNone(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
-    # Sequence number of transactions on this balance starting from 0 when the payment channel is created.
-    # PaymentChannelBalance
+    # Sequence number of transactions on this balance starting from 0 when the channel is created.
+    # ChannelBalance
     def Seq(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-def PaymentChannelBalanceStart(builder): builder.StartObject(3)
-def PaymentChannelBalanceAddRemaining(builder, remaining): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(remaining), 0)
-def PaymentChannelBalanceStartRemainingVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PaymentChannelBalanceAddInflight(builder, inflight): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(inflight), 0)
-def PaymentChannelBalanceStartInflightVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PaymentChannelBalanceAddSeq(builder, seq): builder.PrependUint32Slot(2, seq, 0)
-def PaymentChannelBalanceEnd(builder): return builder.EndObject()
+def ChannelBalanceStart(builder): builder.StartObject(3)
+def ChannelBalanceAddRemaining(builder, remaining): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(remaining), 0)
+def ChannelBalanceStartRemainingVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelBalanceAddInflight(builder, inflight): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(inflight), 0)
+def ChannelBalanceStartInflightVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelBalanceAddSeq(builder, seq): builder.PrependUint32Slot(2, seq, 0)
+def ChannelBalanceEnd(builder): return builder.EndObject()

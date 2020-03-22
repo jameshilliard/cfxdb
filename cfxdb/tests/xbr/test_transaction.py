@@ -25,25 +25,24 @@ def fill_transaction(transaction):
     now = time_ns()
     transaction.tid = uuid.uuid4()
     transaction.created = np.datetime64(now, 'ns')
-    transaction.created_payment_channel_seq = random.randint(0, 1000)
-    transaction.created_paying_channel_seq = random.randint(0, 1000)
+    transaction.created_payment_channel_seq = random.randint(1, 1000)
+    transaction.created_paying_channel_seq = random.randint(1, 1000)
     transaction.offer = uuid.uuid4()
-    transaction.amount = random.randint(0, 2**256 - 1)
+    transaction.amount = random.randint(1, 2**256 - 1)
     transaction.payment_channel = os.urandom(20)
     transaction.paying_channel = os.urandom(20)
     transaction.state = random.randint(1, 3)
     transaction.completed = np.datetime64(now, 'ns')
-    transaction.completed_payment_channel_seq = random.randint(0, 1000)
-    transaction.completed_paying_channel_seq = random.randint(0, 1000)
-
-    # transaction.key = uuid.uuid4()
-    # transaction.buyer_pubkey = os.urandom(32)
-    # transaction.payment_channel_after = random.randint(0, 2**256 - 1)
-    # transaction.paying_channel_after = random.randint(0, 2**256 - 1)
-    # transaction.payment_mm_sig = os.urandom(65)
-    # transaction.payment_del_sig = os.urandom(65)
-    # transaction.paying_mm_sig = os.urandom(65)
-    # transaction.paying_del_sig = os.urandom(65)
+    transaction.completed_payment_channel_seq = random.randint(1, 1000)
+    transaction.completed_paying_channel_seq = random.randint(1, 1000)
+    transaction.key = uuid.uuid4()
+    transaction.buyer_pubkey = os.urandom(32)
+    transaction.payment_channel_after = random.randint(1, 2**256 - 1)
+    transaction.paying_channel_after = random.randint(1, 2**256 - 1)
+    transaction.payment_mm_sig = os.urandom(65)
+    transaction.payment_del_sig = os.urandom(65)
+    transaction.paying_mm_sig = os.urandom(65)
+    transaction.paying_del_sig = os.urandom(65)
 
 
 def fill_transaction_empty(transaction):
@@ -59,15 +58,14 @@ def fill_transaction_empty(transaction):
     transaction.completed = None
     transaction.completed_payment_channel_seq = None
     transaction.completed_paying_channel_seq = None
-
-    # transaction.key = None
-    # transaction.buyer_pubkey = None
-    # transaction.payment_channel_after = None
-    # transaction.paying_channel_after = None
-    # transaction.payment_mm_sig = None
-    # transaction.payment_del_sig = None
-    # transaction.paying_mm_sig = None
-    # transaction.paying_del_sig = None
+    transaction.key = None
+    transaction.buyer_pubkey = None
+    transaction.payment_channel_after = None
+    transaction.paying_channel_after = None
+    transaction.payment_mm_sig = None
+    transaction.payment_del_sig = None
+    transaction.paying_mm_sig = None
+    transaction.paying_del_sig = None
 
 
 @pytest.fixture(scope='function')
@@ -88,7 +86,7 @@ def test_transaction_roundtrip(transaction, builder):
     obj = transaction.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) in [240, 248]
+    assert len(data) == 728
 
     # create python object from bytes (flatbuffes)
     _transaction = Transaction.cast(data)
@@ -105,15 +103,14 @@ def test_transaction_roundtrip(transaction, builder):
     assert _transaction.completed == transaction.completed
     assert _transaction.completed_payment_channel_seq == transaction.completed_payment_channel_seq
     assert _transaction.completed_paying_channel_seq == transaction.completed_paying_channel_seq
-
-    # assert _transaction.key == transaction.key
-    # assert _transaction.buyer_pubkey == transaction.buyer_pubkey
-    # assert _transaction.payment_channel_after == transaction.payment_channel_after
-    # assert _transaction.paying_channel_after == transaction.paying_channel_after
-    # assert _transaction.payment_mm_sig == transaction.payment_mm_sig
-    # assert _transaction.payment_del_sig == transaction.payment_del_sig
-    # assert _transaction.paying_mm_sig == transaction.paying_mm_sig
-    # assert _transaction.paying_del_sig == transaction.paying_del_sig
+    assert _transaction.key == transaction.key
+    assert _transaction.buyer_pubkey == transaction.buyer_pubkey
+    assert _transaction.payment_channel_after == transaction.payment_channel_after
+    assert _transaction.paying_channel_after == transaction.paying_channel_after
+    assert _transaction.payment_mm_sig == transaction.payment_mm_sig
+    assert _transaction.payment_del_sig == transaction.payment_del_sig
+    assert _transaction.paying_mm_sig == transaction.paying_mm_sig
+    assert _transaction.paying_del_sig == transaction.paying_del_sig
 
 
 def test_transaction_empty(builder):
@@ -143,15 +140,14 @@ def test_transaction_empty(builder):
     assert transaction2.completed == unix_zero
     assert transaction2.completed_payment_channel_seq == 0
     assert transaction2.completed_paying_channel_seq == 0
-
-    # assert transaction2.key is None
-    # assert transaction2.buyer_pubkey is None
-    # assert transaction2.payment_channel_after == 0
-    # assert transaction2.paying_channel_after == 0
-    # assert transaction2.payment_mm_sig is None
-    # assert transaction2.payment_del_sig is None
-    # assert transaction2.paying_mm_sig is None
-    # assert transaction2.paying_del_sig is None
+    assert transaction2.key is None
+    assert transaction2.buyer_pubkey is None
+    assert transaction2.payment_channel_after == 0
+    assert transaction2.paying_channel_after == 0
+    assert transaction2.payment_mm_sig is None
+    assert transaction2.payment_del_sig is None
+    assert transaction2.paying_mm_sig is None
+    assert transaction2.paying_del_sig is None
 
 
 def test_transaction_roundtrip_perf(transaction, builder):
@@ -175,15 +171,14 @@ def test_transaction_roundtrip_perf(transaction, builder):
             assert _transaction.completed == transaction.completed
             assert _transaction.completed_payment_channel_seq == transaction.completed_payment_channel_seq
             assert _transaction.completed_paying_channel_seq == transaction.completed_paying_channel_seq
-
-            # assert _transaction.key == transaction.key
-            # assert _transaction.buyer_pubkey == transaction.buyer_pubkey
-            # assert _transaction.payment_channel_after == transaction.payment_channel_after
-            # assert _transaction.paying_channel_after == transaction.paying_channel_after
-            # assert _transaction.payment_mm_sig == transaction.payment_mm_sig
-            # assert _transaction.payment_del_sig == transaction.payment_del_sig
-            # assert _transaction.paying_mm_sig == transaction.paying_mm_sig
-            # assert _transaction.paying_del_sig == transaction.paying_del_sig
+            assert _transaction.key == transaction.key
+            assert _transaction.buyer_pubkey == transaction.buyer_pubkey
+            assert _transaction.payment_channel_after == transaction.payment_channel_after
+            assert _transaction.paying_channel_after == transaction.paying_channel_after
+            assert _transaction.payment_mm_sig == transaction.payment_mm_sig
+            assert _transaction.payment_del_sig == transaction.payment_del_sig
+            assert _transaction.paying_mm_sig == transaction.paying_mm_sig
+            assert _transaction.paying_del_sig == transaction.paying_del_sig
 
             scratch['value'] += _transaction.amount
 

@@ -84,7 +84,7 @@ class Consent(object):
         self._consent = None
 
         # string
-        self._prefix = None
+        self._service_prefix = None
 
         # [uint8] (ethhash)
         self._tid = None
@@ -102,7 +102,7 @@ class Consent(object):
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'updated': pack_uint256(self.updated) if self.updated else None,
             'consent': self.consent,
-            'prefix': self.prefix if self.prefix else None,
+            'service_prefix': self.service_prefix if self.service_prefix else None,
             'tid': bytes(self.tid) if self.tid else None,
             'signature': bytes(self.signature) if self.signature else None,
         }
@@ -234,17 +234,17 @@ class Consent(object):
         self._consent = value
 
     @property
-    def prefix(self) -> str:
-        if self._prefix is None and self._from_fbs:
-            meta = self._from_fbs.Prefix()
-            if meta:
-                self._prefix = meta.decode('utf8')
-        return self._prefix
+    def service_prefix(self) -> str:
+        if self._service_prefix is None and self._from_fbs:
+            service_prefix = self._from_fbs.ServicePrefix()
+            if service_prefix:
+                self.service_prefix = service_prefix.decode('utf8')
+        return self._service_prefix
 
-    @prefix.setter
-    def prefix(self, value):
+    @service_prefix.setter
+    def service_prefix(self, value):
         assert value is None or type(value) == str
-        self._prefix = value
+        self._service_prefix = value
 
     @property
     def tid(self) -> bytes:
@@ -304,9 +304,9 @@ class Consent(object):
         if updated:
             updated = builder.CreateString(pack_uint256(updated))
 
-        prefix = self.prefix
-        if prefix:
-            prefix = builder.CreateString(prefix)
+        service_prefix = self.service_prefix
+        if service_prefix:
+            service_prefix = builder.CreateString(service_prefix)
 
         tid = self.tid
         if tid:
@@ -341,8 +341,8 @@ class Consent(object):
 
         ConsentGen.ConsentAddConsent(builder, self.consent)
 
-        if prefix:
-            ConsentGen.ConsentAddPrefix(builder, prefix)
+        if service_prefix:
+            ConsentGen.ConsentAddServicePrefix(builder, service_prefix)
 
         if tid:
             ConsentGen.ConsentAddTid(builder, tid)

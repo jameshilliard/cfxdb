@@ -185,9 +185,9 @@ class Consent(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-    # The WAMP URI prefix to be used by the delegate in the data plane realm.
+    # The WAMP URI prefix to be used by the delegate when providing data service under an API of the catalog and in the data plane realm.
     # Consent
-    def Prefix(self):
+    def ServicePrefix(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
@@ -263,7 +263,7 @@ def ConsentAddTimestamp(builder, timestamp): builder.PrependUint64Slot(5, timest
 def ConsentAddUpdated(builder, updated): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(updated), 0)
 def ConsentStartUpdatedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def ConsentAddConsent(builder, consent): builder.PrependBoolSlot(7, consent, 0)
-def ConsentAddPrefix(builder, prefix): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(prefix), 0)
+def ConsentAddServicePrefix(builder, servicePrefix): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(servicePrefix), 0)
 def ConsentAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
 def ConsentStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def ConsentAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)

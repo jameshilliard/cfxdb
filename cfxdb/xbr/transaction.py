@@ -68,6 +68,70 @@ class _TransactionGen(TransactionGen.Transaction):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def KeyAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def BuyerPubkeyAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PaymentChannelAfterAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PayingChannelAfterAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PaymentMmSigAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PaymentDelSigAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(38))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PayingMmSigAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(40))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def PayingDelSigAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
 
 class Transaction(object):
     """
@@ -132,6 +196,30 @@ class Transaction(object):
         # uint32
         self._completed_paying_channel_seq = None
 
+        # [uint8] (uuid)
+        self._key = None
+
+        # [uint8] (uint256)
+        self._buyer_pubkey = None
+
+        # [uint8] (uint256)
+        self._payment_channel_after = None
+
+        # [uint8] (uint256)
+        self._paying_channel_after = None
+
+        # [uint8] (ethsig)
+        self._payment_mm_sig = None
+
+        # [uint8] (ethsig)
+        self._payment_del_sig = None
+
+        # [uint8] (ethsig)
+        self._paying_mm_sig = None
+
+        # [uint8] (ethsig)
+        self._paying_del_sig = None
+
     def marshal(self):
         obj = {
             'tid': str(self.tid) if self.tid else None,
@@ -146,6 +234,14 @@ class Transaction(object):
             'completed': self.completed,
             'completed_payment_channel_seq': self._completed_payment_channel_seq,
             'completed_paying_channel_seq': self._completed_paying_channel_seq,
+            'key': self.key,
+            'buyer_pubkey': self.buyer_pubkey,
+            'payment_channel_after': self.payment_channel_after,
+            'paying_channel_after': self.paying_channel_after,
+            'payment_mm_sig': self.payment_mm_sig,
+            'payment_del_sig': self.payment_del_sig,
+            'paying_mm_sig': self.paying_mm_sig,
+            'paying_del_sig': self.paying_del_sig,
         }
         return obj
 
@@ -330,6 +426,133 @@ class Transaction(object):
         assert value is None or type(value) == int
         self._completed_paying_channel_seq = value
 
+    @property
+    def key(self) -> uuid.UUID:
+        """
+        ID of the data encryption key sold under the transaction.
+        """
+        if self._key is None and self._from_fbs:
+            if self._from_fbs.KeyLength():
+                _key = self._from_fbs.KeyAsBytes()
+                self._key = uuid.UUID(bytes=bytes(_key))
+        return self._key
+
+    @key.setter
+    def key(self, value):
+        assert value is None or isinstance(value, uuid.UUID)
+        self._key = value
+
+    @property
+    def buyer_pubkey(self) -> bytes:
+        """
+        Buyer public key (Ed25519).
+        """
+        if self._buyer_pubkey is None and self._from_fbs:
+            if self._from_fbs.BuyerPubkeyLength():
+                self._buyer_pubkey = self._from_fbs.BuyerPubkeyAsBytes()
+        return self._buyer_pubkey
+
+    @buyer_pubkey.setter
+    def buyer_pubkey(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 32)
+        self._buyer_pubkey = value
+
+    @property
+    def payment_channel_after(self) -> int:
+        """
+        Payment channel balance after transaction.
+        """
+        if self._payment_channel_after is None and self._from_fbs:
+            if self._from_fbs.PaymentChannelAfterLength():
+                _payment_channel_after = self._from_fbs.PaymentChannelAfterAsBytes()
+                self._payment_channel_after = unpack_uint256(bytes(_payment_channel_after))
+            else:
+                self._payment_channel_after = 0
+        return self._payment_channel_after
+
+    @payment_channel_after.setter
+    def payment_channel_after(self, value: int):
+        assert value is None or type(value) == int
+        self._payment_channel_after = value
+
+    @property
+    def paying_channel_after(self) -> int:
+        """
+        Payment channel balance after transaction.
+        """
+        if self._paying_channel_after is None and self._from_fbs:
+            if self._from_fbs.PayingChannelAfterLength():
+                _paying_channel_after = self._from_fbs.PayingChannelAfterAsBytes()
+                self._paying_channel_after = unpack_uint256(bytes(_paying_channel_after))
+            else:
+                self._paying_channel_after = 0
+        return self._paying_channel_after
+
+    @paying_channel_after.setter
+    def paying_channel_after(self, value: int):
+        assert value is None or type(value) == int
+        self._paying_channel_after = value
+
+    @property
+    def payment_mm_sig(self) -> bytes:
+        """
+        Payment channel market maker transaction signature.
+        """
+        if self._payment_mm_sig is None and self._from_fbs:
+            if self._from_fbs.PaymentMmSigLength():
+                self._payment_mm_sig = self._from_fbs.PaymentMmSigAsBytes()
+        return self._payment_mm_sig
+
+    @payment_mm_sig.setter
+    def payment_mm_sig(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._payment_mm_sig = value
+
+    @property
+    def payment_del_sig(self) -> bytes:
+        """
+        Payment channel (buyer) delegate transaction signature.
+        """
+        if self._payment_del_sig is None and self._from_fbs:
+            if self._from_fbs.PaymentDelSigLength():
+                self._payment_del_sig = self._from_fbs.PaymentDelSigAsBytes()
+        return self._payment_del_sig
+
+    @payment_del_sig.setter
+    def payment_del_sig(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._payment_del_sig = value
+
+    @property
+    def paying_mm_sig(self) -> bytes:
+        """
+        Paying channel market maker transaction signature.
+        """
+        if self._paying_mm_sig is None and self._from_fbs:
+            if self._from_fbs.PayingMmSigLength():
+                self._paying_mm_sig = self._from_fbs.PayingMmSigAsBytes()
+        return self._paying_mm_sig
+
+    @paying_mm_sig.setter
+    def paying_mm_sig(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._paying_mm_sig = value
+
+    @property
+    def paying_del_sig(self) -> bytes:
+        """
+        Paying channel (seller) delegate transaction signature.
+        """
+        if self._paying_del_sig is None and self._from_fbs:
+            if self._from_fbs.PayingDelSigLength():
+                self._paying_del_sig = self._from_fbs.PayingDelSigAsBytes()
+        return self._paying_del_sig
+
+    @paying_del_sig.setter
+    def paying_del_sig(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._paying_del_sig = value
+
     @staticmethod
     def cast(buf):
         return Transaction(_TransactionGen.GetRootAsTransaction(buf, 0))
@@ -355,6 +578,38 @@ class Transaction(object):
         paying_channel = self.paying_channel
         if paying_channel:
             paying_channel = builder.CreateString(paying_channel)
+
+        key = self.key
+        if key:
+            key = builder.CreateString(key.bytes)
+
+        buyer_pubkey = self.buyer_pubkey
+        if buyer_pubkey:
+            buyer_pubkey = builder.CreateString(buyer_pubkey)
+
+        payment_channel_after = self.payment_channel_after
+        if payment_channel_after:
+            payment_channel_after = builder.CreateString(pack_uint256(payment_channel_after))
+
+        paying_channel_after = self.paying_channel_after
+        if paying_channel_after:
+            paying_channel_after = builder.CreateString(pack_uint256(paying_channel_after))
+
+        payment_mm_sig = self.payment_mm_sig
+        if payment_mm_sig:
+            payment_mm_sig = builder.CreateString(payment_mm_sig)
+
+        payment_del_sig = self.payment_del_sig
+        if payment_del_sig:
+            payment_del_sig = builder.CreateString(payment_del_sig)
+
+        paying_mm_sig = self.paying_mm_sig
+        if paying_mm_sig:
+            paying_mm_sig = builder.CreateString(paying_mm_sig)
+
+        paying_del_sig = self.paying_del_sig
+        if paying_del_sig:
+            paying_del_sig = builder.CreateString(paying_del_sig)
 
         TransactionGen.TransactionStart(builder)
 
@@ -395,6 +650,30 @@ class Transaction(object):
         if self.completed_paying_channel_seq:
             TransactionGen.TransactionAddCompletedPayingChannelSeq(builder, self.completed_paying_channel_seq)
 
+        if key:
+            TransactionGen.TransactionAddKey(builder, key)
+
+        if buyer_pubkey:
+            TransactionGen.TransactionAddBuyerPubkey(builder, buyer_pubkey)
+
+        if payment_channel_after:
+            TransactionGen.TransactionAddPaymentChannelAfter(builder, payment_channel_after)
+
+        if paying_channel_after:
+            TransactionGen.TransactionAddPayingChannelAfter(builder, paying_channel_after)
+
+        if payment_mm_sig:
+            TransactionGen.TransactionAddPaymentMmSig(builder, payment_mm_sig)
+
+        if payment_del_sig:
+            TransactionGen.TransactionAddPaymentDelSig(builder, payment_del_sig)
+
+        if paying_mm_sig:
+            TransactionGen.TransactionAddPayingMmSig(builder, paying_mm_sig)
+
+        if paying_del_sig:
+            TransactionGen.TransactionAddPayingDelSig(builder, paying_del_sig)
+
         final = TransactionGen.TransactionEnd(builder)
 
         return final
@@ -403,5 +682,5 @@ class Transaction(object):
 @table('87cf8eac-10d8-470d-a645-23e11343e065', build=Transaction.build, cast=Transaction.cast)
 class Transactions(MapUuidFlatBuffers):
     """
-
+    Data encryption key (off-chain) market transactions.
     """

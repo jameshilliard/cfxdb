@@ -35,15 +35,15 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def OwnerAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+    def CreatedAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def CoinAsBytes(self):
+    def OwnerAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -51,15 +51,15 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def MakerAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+    def CoinAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def ProviderSecurityAsBytes(self):
+    def MakerAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -67,7 +67,7 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def ConsumerSecurityAsBytes(self):
+    def ProviderSecurityAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -75,7 +75,7 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def MarketFeeAsBytes(self):
+    def ConsumerSecurityAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -83,7 +83,7 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def TidAsBytes(self):
+    def MarketFeeAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             _off = self._tab.Vector(o)
@@ -91,8 +91,16 @@ class _MarketGen(MarketGen.Market):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
-    def SignatureAsBytes(self):
+    def TidAsBytes(self):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -112,6 +120,9 @@ class Market(object):
 
         # uint64 (timestamp)
         self._timestamp = None
+
+        # uint256
+        self._created = None
 
         # uint32
         self._seq = None
@@ -150,6 +161,7 @@ class Market(object):
         obj = {
             'market': self.market.bytes if self.market else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
+            'created': pack_uint256(self.created) if self.created else None,
             'seq': self.seq,
             'owner': bytes(self.owner) if self.owner else None,
             'coin': bytes(self.coin) if self.coin else None,
@@ -196,6 +208,24 @@ class Market(object):
     def timestamp(self, value: np.datetime64):
         assert value is None or isinstance(value, np.datetime64)
         self._timestamp = value
+
+    @property
+    def created(self) -> int:
+        """
+        Block number (on the blockchain) when the actor (originally) joined the market.
+        """
+        if self._created is None and self._from_fbs:
+            if self._from_fbs.CreatedLength():
+                _created = self._from_fbs.CreatedAsBytes()
+                self._created = unpack_uint256(bytes(_created))
+            else:
+                self._created = 0
+        return self._created
+
+    @created.setter
+    def created(self, value: int):
+        assert value is None or type(value) == int
+        self._created = value
 
     @property
     def seq(self) -> int:
@@ -382,6 +412,10 @@ class Market(object):
         if market:
             market = builder.CreateString(market)
 
+        created = self.created
+        if created:
+            created = builder.CreateString(pack_uint256(created))
+
         owner = self.owner
         if owner:
             owner = builder.CreateString(owner)
@@ -429,6 +463,9 @@ class Market(object):
 
         if self.timestamp:
             MarketGen.MarketAddTimestamp(builder, int(self.timestamp))
+
+        if created:
+            MarketGen.MarketAddProviderSecurity(builder, created)
 
         if self.seq:
             MarketGen.MarketAddSeq(builder, self.seq)
