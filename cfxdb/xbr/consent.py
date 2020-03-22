@@ -363,7 +363,7 @@ class Consents(MapUuidBytes20Bytes20Uint8UuidFlatBuffers):
 
 
 @table('7cdac5f2-bddf-4fda-8e3c-21938a0c3667')
-class IndexConsentsByMemberAddress(MapBytes20TimestampUuid):
+class IndexConsentByMemberAddress(MapBytes20TimestampUuid):
     """
-    Consents-by-members-address index with ``(member_adr|bytes[20], joined|int) -> member_adr|UUID`` mapping.
+    Consent-by-member-address index with ``(member_adr|bytes[20], timestamp|int) -> consent_oid|UUID`` mapping.
     """
