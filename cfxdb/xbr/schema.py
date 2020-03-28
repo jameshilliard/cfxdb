@@ -8,7 +8,7 @@
 from .actor import Actors
 from .api import Apis
 from .block import Blocks
-from .catalog import Catalogs
+from .catalog import Catalogs, IndexCatalogsByOwner
 
 from .consent import Consents, IndexConsentByMemberAddress
 
@@ -78,6 +78,16 @@ class Schema(object):
     actors: Actors
     """
     XBR market actors.
+    """
+
+    catalogs: Catalogs
+    """
+    XBR market catalogs
+    """
+
+    idx_catalogs_by_owner: IndexCatalogsByOwner
+    """
+    Index ``(member_oid, created) -> catalog_oid``.
     """
 
     consents: Consents
@@ -154,6 +164,8 @@ class Schema(object):
         schema.blocks = db.attach_table(Blocks)
 
         schema.catalogs = db.attach_table(Catalogs)
+
+        schema.idx_catalogs_by_owner = db.attach_table(IndexCatalogsByOwner)
 
         schema.token_approvals = db.attach_table(TokenApprovals)
 

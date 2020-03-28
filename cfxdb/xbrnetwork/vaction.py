@@ -109,7 +109,12 @@ class VerifiedAction(object):
     Verification action type for joining an existing market via email verification.
     """
 
-    VERIFICATION_TYPE = list(range(5))
+    VERIFICATION_TYPE_CREATE_CATALOG = 5
+    """
+    Verification action type for creation of a catalog via email verification.
+    """
+
+    VERIFICATION_TYPE = list(range(6))
     """
     All valid verification action types.
     """

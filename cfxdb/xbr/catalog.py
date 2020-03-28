@@ -95,7 +95,7 @@ class Catalog(object):
 
     def marshal(self) -> dict:
         obj = {
-            'oid': self.oid if self.oid else None,
+            'oid': self.oid.bytes if self.oid else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'seq': self.seq,
             'owner': bytes(self.owner) if self.owner else None,
