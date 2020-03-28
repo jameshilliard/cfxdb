@@ -55,6 +55,11 @@ class Schema(object):
     XBR network catalogs.
     """
 
+    idx_catalogs_by_owner: IndexCatalogsByOwner
+    """
+    Index ``(member_oid, created) -> catalog_oid``.
+    """
+
     apis: Apis
     """
     XBR network apis.
@@ -78,16 +83,6 @@ class Schema(object):
     actors: Actors
     """
     XBR market actors.
-    """
-
-    catalogs: Catalogs
-    """
-    XBR market catalogs
-    """
-
-    idx_catalogs_by_owner: IndexCatalogsByOwner
-    """
-    Index ``(member_oid, created) -> catalog_oid``.
     """
 
     consents: Consents
