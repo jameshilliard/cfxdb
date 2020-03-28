@@ -114,7 +114,12 @@ class VerifiedAction(object):
     Verification action type for creation of a catalog via email verification.
     """
 
-    VERIFICATION_TYPE = list(range(6))
+    VERIFICATION_TYPE_PUBLISH_API = 5
+    """
+    Verification action type for publishing on API via email verification.
+    """
+
+    VERIFICATION_TYPE = list(range(7))
     """
     All valid verification action types.
     """

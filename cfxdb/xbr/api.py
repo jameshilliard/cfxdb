@@ -10,7 +10,7 @@ import uuid
 import flatbuffers
 import numpy as np
 from cfxdb.gen.xbr import Api as ApiGen
-from zlmdb import table, MapUuidFlatBuffers
+from zlmdb import table, MapUuidFlatBuffers, MapBytes16TimestampUuid
 from cfxdb import pack_uint256, unpack_uint256
 
 
@@ -96,8 +96,8 @@ class Api(object):
 
     def marshal(self) -> dict:
         obj = {
-            'oid': self.oid if self.oid else None,
-            'catalog_oid': self.catalog_oid if self.catalog_oid else None,
+            'oid': self.oid.bytes if self.oid else None,
+            'catalog_oid': self.catalog_oid.bytes if self.catalog_oid else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'published': pack_uint256(self.published) if self.published else None,
             'schema': self.schema,
@@ -305,4 +305,11 @@ class Api(object):
 class Apis(MapUuidFlatBuffers):
     """
     Apis table, mapping from ``oid|UUID`` to :class:`cfxdb.xbr.Api`
+    """
+
+
+@table('57ae5d83-57b0-4214-8481-a1853f7faf87')
+class IndexApiByCatalog(MapBytes16TimestampUuid):
+    """
+    Api-by-Catalog, index with ``(catalog_oid|bytes[16], created|int) -> api_oid|UUID`` mapping.
     """

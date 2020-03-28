@@ -6,7 +6,7 @@
 ##############################################################################
 
 from .actor import Actors
-from .api import Apis
+from .api import Apis, IndexApiByCatalog
 from .block import Blocks
 from .catalog import Catalogs, IndexCatalogsByOwner
 
@@ -63,6 +63,11 @@ class Schema(object):
     apis: Apis
     """
     XBR network apis.
+    """
+
+    idx_apis_by_catalog: IndexApiByCatalog
+    """
+    Index ``catalog_oid -> api_oid``.
     """
 
     markets: Markets
@@ -155,6 +160,8 @@ class Schema(object):
         schema = Schema(db)
 
         schema.apis = db.attach_table(Apis)
+
+        schema.idx_apis_by_catalog = db.attach_table(IndexApiByCatalog)
 
         schema.blocks = db.attach_table(Blocks)
 
