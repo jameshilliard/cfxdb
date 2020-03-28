@@ -95,8 +95,8 @@ class Consent(object):
     def marshal(self) -> dict:
         obj = {
             'market_oid': self.market_oid.bytes if self.market_oid else None,
-            'member': self.member if self.member else None,
-            'delegate': self.delegate if self.delegate else None,
+            'member': bytes(self.member) if self.member else None,
+            'delegate': bytes(self.delegate) if self.delegate else None,
             'delegate_type': int(self.delegate_type) if self.delegate_type else None,
             'catalog_oid': self.catalog_oid.bytes if self.catalog_oid else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
