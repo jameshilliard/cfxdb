@@ -94,11 +94,11 @@ class Consent(object):
 
     def marshal(self) -> dict:
         obj = {
-            'market_oid': self.market_oid if self.market_oid else None,
+            'market_oid': self.market_oid.bytes if self.market_oid else None,
             'member': self.member if self.member else None,
             'delegate': self.delegate if self.delegate else None,
             'delegate_type': int(self.delegate_type) if self.delegate_type else None,
-            'catalog_oid': self.catalog_oid if self.catalog_oid else None,
+            'catalog_oid': self.catalog_oid.bytes if self.catalog_oid else None,
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'updated': pack_uint256(self.updated) if self.updated else None,
             'consent': self.consent,
@@ -230,7 +230,7 @@ class Consent(object):
 
     @consent.setter
     def consent(self, value: bool):
-        assert value is None or type(value) == bool
+        assert type(value) == bool
         self._consent = value
 
     @property

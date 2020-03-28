@@ -169,6 +169,10 @@ class Schema(object):
 
         schema.idx_catalogs_by_owner = db.attach_table(IndexCatalogsByOwner)
 
+        schema.consents = db.attach_table(Consents)
+
+        schema.idx_consent_by_member_adr = db.attach_table(IndexConsentByMemberAddress)
+
         schema.token_approvals = db.attach_table(TokenApprovals)
 
         schema.token_transfers = db.attach_table(TokenTransfers)
