@@ -52,7 +52,7 @@ class Session(object):
 
     @session.setter
     def session(self, value):
-        assert type(value) == int
+        assert value is None or type(value) == int
         self._session = value
 
     @property
@@ -69,7 +69,7 @@ class Session(object):
 
     @joined_at.setter
     def joined_at(self, value):
-        assert type(value) == int
+        assert value is None or type(value) == int
         self._joined_at = value
 
     @property
@@ -86,7 +86,7 @@ class Session(object):
 
     @left_at.setter
     def left_at(self, value):
-        assert type(value) == int
+        assert value is None or type(value) == int
         self._left_at = value
 
     @property
@@ -103,7 +103,7 @@ class Session(object):
 
     @realm.setter
     def realm(self, value):
-        assert type(value) == str
+        assert value is None or type(value) == str
         self._realm = value
 
     @property
@@ -120,7 +120,7 @@ class Session(object):
 
     @authid.setter
     def authid(self, value):
-        assert type(value) == str
+        assert value is None or type(value) == str
         self._authid = value
 
     @property
@@ -137,7 +137,7 @@ class Session(object):
 
     @authrole.setter
     def authrole(self, value):
-        assert type(value) == str
+        assert value is None or type(value) == str
         self._authrole = value
 
     @staticmethod
