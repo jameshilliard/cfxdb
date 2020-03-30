@@ -1,39 +1,32 @@
 #!/bin/bash
 
-# build the docs, source package and binary (executable). this will produce:
-#
-#  - $HOME/crossbarfx-docs
-#  - $HOME/crossbarfx-source.zip
-#  - $HOME/crossbarfx
-#
-# upload to "crossbario.com" and "download.crossbario.com" company S3 buckets
+set +o verbose -o errexit
 
-# AWS_ACCESS_KEY_ID         : must be set in Travis CI build context
-# AWS_SECRET_ACCESS_KEY     : must be set in Travis CI build context
-
-export AWS_S3_BUCKET_NAME=download.crossbario.com
+# CFXDB_VERSION             : must be set in travis.yml!
 export AWS_DEFAULT_REGION=eu-central-1
-
-set -ev
+export AWS_S3_BUCKET_NAME=crossbarbuilder
+# AWS_ACCESS_KEY_ID         : must be set in Travis CI build context!
+# AWS_SECRET_ACCESS_KEY     : must be set in Travis CI build context!
+# WAMP_PRIVATE_KEY          : must be set in Travis CI build context!
 
 # TRAVIS_BRANCH, TRAVIS_PULL_REQUEST, TRAVIS_TAG
 
-# PR
+# PR => don't deploy and exit
 if [ "$TRAVIS_PULL_REQUEST" = "true" ]; then
     echo '[1] deploy script called for PR - exiting ..';
     exit 0;
 
-# direct push to master
+# direct push to master => deploy
 elif [ "$TRAVIS_BRANCH" = "master" -a "$TRAVIS_PULL_REQUEST" = "false" ]; then
     echo '[2] deploy script called for direct push to master: continuing to deploy!';
 
-# tagged release
+# tagged release => deploy
 elif [ -n "$TRAVIS_TAG" ]; then
     echo '[3] deploy script called for tagged release: continuing to deploy!';
 
+# outside travis? => deploy
 else
-    echo '[?] deploy script called for unhandled case (FIXME) - exiting ..';
-    exit 0;
+    echo '[?] deploy script called outside Travis? continuing to deploy!';
 
 fi
 
@@ -48,21 +41,35 @@ echo 'installing aws tools ..'
 pip install awscli
 which aws
 aws --version
-aws s3 ls ${AWS_S3_BUCKET_NAME}
 
 # build python source dist and wheels
-echo '>>>>> building/uploading wheels ..'
-
-# build cfxdb wheel
+echo 'building package ..'
 python setup.py sdist bdist_wheel --universal
+ls -la ./dist
 
-# upload the wheels
 # upload to S3: https://s3.eu-central-1.amazonaws.com/crossbarbuilder/wheels/
-aws s3 cp --recursive ./dist s3://crossbarbuilder/wheels
+echo 'uploading package ..'
+# aws s3 cp --recursive ./dist s3://${AWS_S3_BUCKET_NAME}/wheels
+aws s3 rm s3://${AWS_S3_BUCKET_NAME}/wheels/cfxdb-${CFXDB_VERSION}-py2.py3-none-any.whl
+aws s3 rm s3://${AWS_S3_BUCKET_NAME}/wheels/cfxdb-latest-py2.py3-none-any.whl
+
+aws s3 cp --acl public-read ./dist/cfxdb-${CFXDB_VERSION}-py2.py3-none-any.whl s3://${AWS_S3_BUCKET_NAME}/wheels/cfxdb-${CFXDB_VERSION}-py2.py3-none-any.whl
+aws s3 cp --acl public-read ./dist/cfxdb-${CFXDB_VERSION}-py2.py3-none-any.whl s3://${AWS_S3_BUCKET_NAME}/wheels/cfxdb-latest-py2.py3-none-any.whl
+
+#aws s3api copy-object --acl public-read \
+#    --copy-source wheels/cfxdb-${CFXDB_VERSION}-py2.py3-none-any.whl --bucket ${AWS_S3_BUCKET_NAME} \
+#    --key wheels/cfxdb-latest-py2.py3-none-any.whl
+
+aws s3 ls ${AWS_S3_BUCKET_NAME}/wheels/cfxdb-
 
 # tell crossbar-builder about this new wheel push
 # get 'wamp' command, always with latest autobahn master
-pip install -I https://github.com/crossbario/autobahn-python/archive/master.zip#egg=autobahn[twisted,serialization,encryption]
+pip install -q -I https://github.com/crossbario/autobahn-python/archive/master.zip#egg=autobahn[twisted,serialization,encryption]
 
 # use 'wamp' to notify crossbar-builder
-wamp --max-failures 3 --authid wheel_pusher --url ws://office2dmz.crossbario.com:8008/ --realm webhook call builder.wheel_pushed --keyword name cfxdb --keyword publish true
+wamp --max-failures 3 \
+     --authid wheel_pusher \
+     --url ws://office2dmz.crossbario.com:8008/ \
+     --realm webhook call builder.wheel_pushed \
+     --keyword name cfxdb \
+     --keyword publish true
