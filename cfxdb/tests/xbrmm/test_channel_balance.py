@@ -14,7 +14,7 @@ txaio.use_twisted()  # noqa
 import flatbuffers
 import pytest
 
-from cfxdb.xbr import ChannelBalance
+from cfxdb.xbrmm import ChannelBalance
 
 
 def fill_channel_balance(channel_balance):

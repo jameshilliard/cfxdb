@@ -12,7 +12,7 @@ import numpy as np
 
 import flatbuffers
 from cfxdb import unpack_uint256, pack_uint256
-from cfxdb.gen.xbr import ChannelType as ChannelTypeGen, ChannelState as ChannelStateGen, \
+from cfxdb.gen.xbrmm import ChannelType as ChannelTypeGen, ChannelState as ChannelStateGen, \
     Channel as ChannelGen, ChannelBalance as ChannelBalanceGen
 from zlmdb import table, MapBytes20FlatBuffers, MapBytes20TimestampBytes20
 

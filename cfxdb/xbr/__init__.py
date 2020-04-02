@@ -5,37 +5,20 @@
 #
 ##############################################################################
 
-from .schema import Schema
+from cfxdb.xbr.schema import Schema
 
-from .actor import Actor, Actors
-from .api import Api, Apis
-from .block import Block, Blocks
-from .catalog import Catalog, Catalogs
-from .consent import Consent, Consents, IndexConsentByMemberAddress
+from cfxdb.xbr.actor import Actor, Actors
+from cfxdb.xbr.api import Api, Apis
+from cfxdb.xbr.block import Block, Blocks
+from cfxdb.xbr.catalog import Catalog, Catalogs
+from cfxdb.xbr.consent import Consent, Consents, IndexConsentByMemberAddress
 
-from .channel import Channel
-from .channel import Channel as PaymentChannel
-from .channel import Channel as PayingChannel
-
-from .channel import ChannelBalance
-from .channel import ChannelBalance as PaymentChannelBalance
-from .channel import ChannelBalance as PayingChannelBalance
-
-from .channel import PaymentChannels, IndexPaymentChannelByDelegate, \
-    PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
-    IndexPayingChannelByRecipient, PayingChannelBalances
-
-from .market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor
-from .member import Member, Members
-from .offer import Offer, Offers, IndexOfferByKey
-from .token import TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
-from .transaction import Transaction, Transactions
+from cfxdb.xbr.market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor
+from cfxdb.xbr.member import Member, Members
+from cfxdb.xbr.token import TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
 
 from cfxdb.gen.xbr.ActorType import ActorType
 from cfxdb.gen.xbr.MemberLevel import MemberLevel
-from cfxdb.gen.xbr.TransactionState import TransactionState
-from cfxdb.gen.xbr.ChannelType import ChannelType
-from cfxdb.gen.xbr.ChannelState import ChannelState
 
 __all__ = (
     # database schema
@@ -44,9 +27,6 @@ __all__ = (
     # enum types
     'MemberLevel',
     'ActorType',
-    'ChannelType',
-    'ChannelState',
-    'TransactionState',
 
     # table/index types
     'Actor',
@@ -60,32 +40,13 @@ __all__ = (
     'Consent',
     'Consents',
     'IndexConsentByMemberAddress',
-    'Channel',
-    'PaymentChannel',
-    'PaymentChannels',
-    'IndexPaymentChannelByDelegate',
-    'ChannelBalance',
-    'PaymentChannelBalance',
-    'PaymentChannelBalances',
-    'PayingChannel',
-    'PayingChannels',
-    'IndexPayingChannelByDelegate',
-    'IndexPayingChannelByRecipient',
-    'PayingChannelBalance',
-    'PayingChannelBalances',
     'Market',
     'Markets',
     'IndexMarketsByOwner',
     'IndexMarketsByActor',
     'Member',
     'Members',
-    'Offer',
-    'Offers',
-    'IndexOfferByKey',
     'TokenApproval',
     'TokenApprovals',
     'TokenTransfer',
-    'TokenTransfers',
-    'Transaction',
-    'Transactions',
-)
+    'TokenTransfers')

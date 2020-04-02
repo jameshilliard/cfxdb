@@ -19,7 +19,7 @@ import pytest
 import numpy as np
 from txaio import time_ns
 
-from cfxdb.xbr import Offer
+from cfxdb.xbrmm import Offer
 
 
 def fill_offer(offer):

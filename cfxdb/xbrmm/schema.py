@@ -5,21 +5,13 @@
 #
 ##############################################################################
 
-from .actor import Actors
-from .api import Apis, IndexApiByCatalog
-from .block import Blocks
-from .catalog import Catalogs, IndexCatalogsByOwner
-
 from cfxdb.xbr.consent import Consents, IndexConsentByMemberAddress
 
 from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, \
     PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
     PayingChannelBalances
 
-from .market import Markets, IndexMarketsByOwner, IndexMarketsByActor
-from .member import Members
 from cfxdb.xbrmm.offer import Offers, IndexOfferByKey
-from .token import TokenApprovals, TokenTransfers
 from cfxdb.xbrmm.transaction import Transactions
 
 
@@ -29,66 +21,6 @@ class Schema(object):
     """
     def __init__(self, db):
         self.db = db
-
-    blocks: Blocks
-    """
-    Ethereum blocks basic information.
-    """
-
-    token_approvals: TokenApprovals
-    """
-    Token approvals archive.
-    """
-
-    token_transfers: TokenTransfers
-    """
-    Token transfers archive.
-    """
-
-    members: Members
-    """
-    XBR network members.
-    """
-
-    catalogs: Catalogs
-    """
-    XBR network catalogs.
-    """
-
-    idx_catalogs_by_owner: IndexCatalogsByOwner
-    """
-    Index ``(member_oid, created) -> catalog_oid``.
-    """
-
-    apis: Apis
-    """
-    XBR network apis.
-    """
-
-    idx_apis_by_catalog: IndexApiByCatalog
-    """
-    Index ``catalog_oid -> api_oid``.
-    """
-
-    markets: Markets
-    """
-    XBR markets.
-    """
-
-    idx_markets_by_owner: IndexMarketsByOwner
-    """
-    Index ``(owner_adr, created) -> market_oid``.
-    """
-
-    idx_markets_by_actor: IndexMarketsByActor
-    """
-    Index ``(actor_adr, joined) -> market_oid``.
-    """
-
-    actors: Actors
-    """
-    XBR market actors.
-    """
 
     consents: Consents
     """
@@ -143,7 +75,7 @@ class Schema(object):
     is indexed by).
     """
 
-    transaction: Transactions
+    transactions: Transactions
     """
     """
 
@@ -159,38 +91,9 @@ class Schema(object):
         """
         schema = Schema(db)
 
-        schema.apis = db.attach_table(Apis)
-
-        schema.idx_apis_by_catalog = db.attach_table(IndexApiByCatalog)
-
-        schema.blocks = db.attach_table(Blocks)
-
-        schema.catalogs = db.attach_table(Catalogs)
-
-        schema.idx_catalogs_by_owner = db.attach_table(IndexCatalogsByOwner)
-
         schema.consents = db.attach_table(Consents)
 
         schema.idx_consent_by_member_adr = db.attach_table(IndexConsentByMemberAddress)
-
-        schema.token_approvals = db.attach_table(TokenApprovals)
-
-        schema.token_transfers = db.attach_table(TokenTransfers)
-
-        schema.members = db.attach_table(Members)
-
-        schema.markets = db.attach_table(Markets)
-
-        schema.idx_markets_by_owner = db.attach_table(IndexMarketsByOwner)
-
-        schema.markets.attach_index('idx1', schema.idx_markets_by_owner, lambda market:
-                                    (market.owner, market.timestamp))
-
-        schema.actors = db.attach_table(Actors)
-        schema.idx_markets_by_actor = db.attach_table(IndexMarketsByActor)
-
-        # schema.actors.attach_index('idx1', schema.idx_markets_by_actor, lambda actor:
-        #                            (actor.actor, actor.timestamp))
 
         schema.payment_channels = db.attach_table(PaymentChannels)
 

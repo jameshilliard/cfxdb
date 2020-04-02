@@ -11,7 +11,7 @@ import uuid
 import flatbuffers
 import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
-from cfxdb.gen.xbr import Transaction as TransactionGen
+from cfxdb.gen.xbrmm import Transaction as TransactionGen
 from zlmdb import table, MapUuidFlatBuffers
 
 

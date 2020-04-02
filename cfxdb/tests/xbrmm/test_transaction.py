@@ -18,7 +18,7 @@ import pytest
 import numpy as np
 from txaio import time_ns
 
-from cfxdb.xbr import Transaction
+from cfxdb.xbrmm import Transaction
 
 
 def fill_transaction(transaction):

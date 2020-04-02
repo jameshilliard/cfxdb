@@ -19,7 +19,7 @@ from txaio import time_ns
 import flatbuffers
 import pytest
 
-from cfxdb.xbr import Channel
+from cfxdb.xbrmm import Channel
 
 
 def fill_channel(channel):
