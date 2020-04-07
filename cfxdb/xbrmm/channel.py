@@ -14,7 +14,7 @@ import flatbuffers
 from cfxdb import unpack_uint256, pack_uint256
 from cfxdb.gen.xbrmm import ChannelType as ChannelTypeGen, ChannelState as ChannelStateGen, \
     Channel as ChannelGen, ChannelBalance as ChannelBalanceGen
-from zlmdb import table, MapBytes20FlatBuffers, MapBytes20TimestampBytes20
+from zlmdb import table, MapUuidFlatBuffers, MapBytes20TimestampUuid
 
 ChannelType = ChannelTypeGen.ChannelType
 ChannelState = ChannelStateGen.ChannelState
@@ -697,41 +697,48 @@ class Channel(object):
 
 
 @table('b3d01946-85ae-49f3-ad96-b78194eb82fe', build=Channel.build, cast=Channel.cast)
-class PaymentChannels(MapBytes20FlatBuffers):
+class PaymentChannels(MapUuidFlatBuffers):
     """
-    XBR payment channels by ``payment_channel_adr``.
+    XBR payment channels by ``channel_oid``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`cfxdb.xbr.Channel`
+    Map :class:`zlmdb.MapUuidFlatBuffers` from ``channel_oid`` to :class:`cfxdb.xbr.Channel`
     """
 
 
 @table('cffd5253-72f8-41a9-8b76-5e6ff3654e67')
-class IndexPaymentChannelByDelegate(MapBytes20TimestampBytes20):
+class IndexPaymentChannelByDelegate(MapBytes20TimestampUuid):
     """
-    Index: ``(delegate_adr, created_timestamp) -> payment_channel_adr``
+    Index: ``(delegate_adr, created_timestamp) -> channel_oid``
+    """
+
+
+@table('c78e0113-3b40-42b1-a15f-0b478ccf0de4')
+class IndexPaymentChannelByActor(MapBytes20TimestampUuid):
+    """
+    Index: ``(actor_adr, created_timestamp) -> channel_oid``
     """
 
 
 @table('4e7e7c8d-db0d-4dea-8409-ac8f21ce1e10', build=Channel.build, cast=Channel.cast)
-class PayingChannels(MapBytes20FlatBuffers):
+class PayingChannels(MapUuidFlatBuffers):
     """
-    XBR paying channels by ``paying_channel_adr``.
+    XBR paying channels by ``channel_oid``.
 
-    Map :class:`zlmdb.MapBytes32FlatBuffers` from ``paying_channel_adr`` to :class:`cfxdb.xbr.Channel`
+    Map :class:`zlmdb.MapUuidFlatBuffers` from ``channel_oid`` to :class:`cfxdb.xbr.Channel`
     """
 
 
 @table('cee954be-fdb2-43cc-8891-529d6c7a0c3b')
-class IndexPayingChannelByDelegate(MapBytes20TimestampBytes20):
+class IndexPayingChannelByDelegate(MapBytes20TimestampUuid):
     """
-    Index: ``(delegate_adr, created_timestamp) -> paying_channel_adr``
+    Index: ``(delegate_adr, created_timestamp) -> channel_oid``
     """
 
 
 @table('655a9d5f-0bdf-4c2a-8102-208f6da4a566')
-class IndexPayingChannelByRecipient(MapBytes20TimestampBytes20):
+class IndexPayingChannelByRecipient(MapBytes20TimestampUuid):
     """
-    Index: ``(recipient_adr, created_timestamp) -> paying_channel_adr``
+    Index: ``(recipient_adr, created_timestamp) -> channel_oid``
     """
 
 
@@ -891,18 +898,18 @@ class ChannelBalance(object):
 
 
 @table('878ac002-a830-488b-bfe9-f06371b8eecb', build=ChannelBalance.build, cast=ChannelBalance.cast)
-class PaymentChannelBalances(MapBytes20FlatBuffers):
+class PaymentChannelBalances(MapUuidFlatBuffers):
     """
-    XBR payment channels current balances by ``payment_channel_adr``.
+    XBR payment channels current balances by ``channel_oid``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``payment_channel_adr`` to :class:`cfxdb.xbr.Balance`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``channel_oid`` to :class:`cfxdb.xbr.Balance`
     """
 
 
 @table('c0931d5d-6d5d-4f9c-b2a3-29664a0f4c07', build=ChannelBalance.build, cast=ChannelBalance.cast)
-class PayingChannelBalances(MapBytes20FlatBuffers):
+class PayingChannelBalances(MapUuidFlatBuffers):
     """
-    XBR paying channels current balances by ``paying_channel_adr``.
+    XBR paying channels current balances by ``channel_oid``.
 
-    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``paying_channel_adr`` to :class:`cfxdb.xbr.Balance`
+    Map :class:`zlmdb.MapBytes20FlatBuffers` from ``channel_oid`` to :class:`cfxdb.xbr.Balance`
     """

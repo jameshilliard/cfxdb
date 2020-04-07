@@ -8,12 +8,13 @@
 from ._version import __version__
 from .common import address, uint256, unpack_uint256, pack_uint256,\
     uint128, unpack_uint128, pack_uint128
-from . import schema, meta, xbr, xbrnetwork
+from . import schema, meta, xbr, xbrmm, xbrnetwork
 
 __all__ = (
     '__version__',
     'meta',
     'xbr',
+    'xbrmm',
     'xbrnetwork',
     'schema',
     'address',
