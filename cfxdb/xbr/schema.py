@@ -13,8 +13,8 @@ from .catalog import Catalogs, IndexCatalogsByOwner
 from cfxdb.xbr.consent import Consents, IndexConsentByMemberAddress
 
 from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, \
-    PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
-    PayingChannelBalances
+    IndexPaymentChannelByActor, PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
+    IndexPayingChannelByRecipient, PayingChannelBalances
 
 from .market import Markets, IndexMarketsByOwner, IndexMarketsByActor
 from .member import Members
@@ -111,6 +111,12 @@ class Schema(object):
     channel address for the given consumer delegate.
     """
 
+    idx_payment_channel_by_actor: IndexPaymentChannelByActor
+    """
+    Maps from XBR (buyer) actor address to the currently active payment
+    channel address for the given actor.
+    """
+
     payment_balances: PaymentChannelBalances
     """
     Current off-chain balances within payment channels.
@@ -125,6 +131,12 @@ class Schema(object):
     """
     Maps from XBR provider delegate address to the currently active paying
     channel address for the given provider delegate.
+    """
+
+    idx_paying_channel_by_recipient: IndexPayingChannelByRecipient
+    """
+    Maps from XBR seller actor address to the currently active paying
+    channel address for the given actor.
     """
 
     paying_balances: PayingChannelBalances
@@ -195,23 +207,28 @@ class Schema(object):
         schema.payment_channels = db.attach_table(PaymentChannels)
 
         schema.idx_payment_channel_by_delegate = db.attach_table(IndexPaymentChannelByDelegate)
-        # schema.payment_channels.attach_index('idx1',
-        #                                      schema.idx_payment_channel_by_delegate,
-        #                                      lambda payment_channel: (bytes(payment_channel.delegate), np.datetime64(time_ns(), 'ns')))
+        schema.payment_channels.attach_index(
+            'idx1', schema.idx_payment_channel_by_delegate, lambda payment_channel:
+            (bytes(payment_channel.delegate), payment_channel.timestamp))
+
+        schema.idx_payment_channel_by_actor = db.attach_table(IndexPaymentChannelByActor)
+        schema.payment_channels.attach_index(
+            'idx2', schema.idx_payment_channel_by_actor, lambda payment_channel:
+            (bytes(payment_channel.actor), payment_channel.timestamp))
 
         schema.payment_balances = db.attach_table(PaymentChannelBalances)
 
         schema.paying_channels = db.attach_table(PayingChannels)
 
         schema.idx_paying_channel_by_delegate = db.attach_table(IndexPayingChannelByDelegate)
-        # schema.paying_channels.attach_index('idx1',
-        #                                      schema.idx_paying_channel_by_delegate,
-        #                                      lambda paying_channel: (bytes(paying_channel.delegate), np.datetime64(time_ns(), 'ns')))
+        schema.paying_channels.attach_index(
+            'idx1', schema.idx_paying_channel_by_delegate, lambda paying_channel:
+            (bytes(paying_channel.delegate), paying_channel.timestamp))
 
-        # schema.idx_paying_channel_by_recipient = db.attach_table(IndexPayingChannelByRecipient)
-        # schema.paying_channels.attach_index('idx2',
-        #                                      schema.idx_paying_channel_by_recipient,
-        #                                      lambda paying_channel: (bytes(paying_channel.recipient), np.datetime64(time_ns(), 'ns')))
+        schema.idx_paying_channel_by_recipient = db.attach_table(IndexPayingChannelByRecipient)
+        schema.paying_channels.attach_index(
+            'idx2', schema.idx_paying_channel_by_recipient, lambda paying_channel:
+            (bytes(paying_channel.recipient), paying_channel.timestamp))
 
         schema.paying_balances = db.attach_table(PayingChannelBalances)
 
