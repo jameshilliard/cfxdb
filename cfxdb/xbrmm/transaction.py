@@ -178,10 +178,10 @@ class Transaction(object):
         # uint8[] (uint256)
         self._amount = None
 
-        # uint8[] (bytes20)
+        # uint8[] (uuid)
         self._payment_channel = None
 
-        # uint8[] (bytes20)
+        # uint8[] (uuid)
         self._paying_channel = None
 
         # uint8
@@ -228,16 +228,18 @@ class Transaction(object):
             'created_paying_channel_seq': self._created_paying_channel_seq,
             'offer': str(self.offer) if self.offer else None,
             'amount': pack_uint256(self.amount) if self.amount else 0,
-            'payment_channel': self.payment_channel,
-            'paying_channel': self.paying_channel,
+            'payment_channel': self.payment_channel.bytes if self.payment_channel else None,
+            'paying_channel': self.paying_channel.bytes if self.paying_channel else None,
             'state': self.state,
             'completed': self.completed,
             'completed_payment_channel_seq': self._completed_payment_channel_seq,
             'completed_paying_channel_seq': self._completed_paying_channel_seq,
-            'key': self.key,
+            'key': self.key.bytes if self.key else None,
             'buyer_pubkey': self.buyer_pubkey,
-            'payment_channel_after': self.payment_channel_after,
-            'paying_channel_after': self.paying_channel_after,
+            'payment_channel_after':
+            pack_uint256(self.payment_channel_after) if self.payment_channel_after else None,
+            'paying_channel_after':
+            pack_uint256(self.paying_channel_after) if self.paying_channel_after else None,
             'payment_mm_sig': self.payment_mm_sig,
             'payment_del_sig': self.payment_del_sig,
             'paying_mm_sig': self.paying_mm_sig,
@@ -341,33 +343,33 @@ class Transaction(object):
         self._amount = value
 
     @property
-    def payment_channel(self) -> bytes:
+    def payment_channel(self) -> uuid.UUID:
         """
         Address of the payment channel (of the buyer) this transaction is transacting on.
         """
         if self._payment_channel is None and self._from_fbs:
             if self._from_fbs.PaymentChannelLength():
-                self._payment_channel = self._from_fbs.PaymentChannelAsBytes()
+                self._payment_channel = uuid.UUID(bytes=bytes(self._from_fbs.PaymentChannelAsBytes()))
         return self._payment_channel
 
     @payment_channel.setter
-    def payment_channel(self, value: bytes):
-        assert value is None or (type(value) == bytes and len(value) == 20)
+    def payment_channel(self, value: uuid.UUID):
+        assert value is None or isinstance(value, uuid.UUID)
         self._payment_channel = value
 
     @property
-    def paying_channel(self) -> bytes:
+    def paying_channel(self) -> uuid.UUID:
         """
         Address of the paying channel (of the seller) this transaction is transacting on.
         """
         if self._payment_channel is None and self._from_fbs:
             if self._from_fbs.PayingChannelLength():
-                self._payment_channel = self._from_fbs.PayingChannelAsBytes()
+                self._payment_channel = uuid.UUID(bytes=bytes(self._from_fbs.PayingChannelAsBytes()))
         return self._payment_channel
 
     @paying_channel.setter
-    def paying_channel(self, value: bytes):
-        assert value is None or (type(value) == bytes and len(value) == 20)
+    def paying_channel(self, value: uuid.UUID):
+        assert value is None or isinstance(value, uuid.UUID)
         self._payment_channel = value
 
     @property
@@ -571,11 +573,11 @@ class Transaction(object):
         if amount:
             amount = builder.CreateString(pack_uint256(amount))
 
-        payment_channel = self.payment_channel
+        payment_channel = self.payment_channel.bytes if self.payment_channel else None
         if payment_channel:
             payment_channel = builder.CreateString(payment_channel)
 
-        paying_channel = self.paying_channel
+        paying_channel = self.paying_channel.bytes if self.paying_channel else None
         if paying_channel:
             paying_channel = builder.CreateString(paying_channel)
 

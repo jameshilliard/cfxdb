@@ -29,8 +29,8 @@ def fill_transaction(transaction):
     transaction.created_paying_channel_seq = random.randint(1, 1000)
     transaction.offer = uuid.uuid4()
     transaction.amount = random.randint(1, 2**256 - 1)
-    transaction.payment_channel = os.urandom(20)
-    transaction.paying_channel = os.urandom(20)
+    transaction.payment_channel = uuid.uuid4()
+    transaction.paying_channel = uuid.uuid4()
     transaction.state = random.randint(1, 3)
     transaction.completed = np.datetime64(now, 'ns')
     transaction.completed_payment_channel_seq = random.randint(1, 1000)
@@ -86,7 +86,7 @@ def test_transaction_roundtrip(transaction, builder):
     obj = transaction.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 728
+    assert len(data) == 720
 
     # create python object from bytes (flatbuffes)
     _transaction = Transaction.cast(data)
