@@ -1,9 +1,9 @@
-autobahn[twisted,xbr]>=20.2.1
+autobahn[twisted,xbr]>=20.4.2
 cbor>=1.0.0
 flatbuffers>=1.11
 numpy==1.15.4
 py-multihash>=0.2.3
-txaio>=20.1.1
+txaio>=20.4.1
 git+https://github.com/ethereum/web3.py@v5.4.0#egg=web3
 zlmdb>=20.4.1
 # git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
