@@ -113,12 +113,12 @@ class Actor(object):
 
     def marshal(self) -> dict:
         obj = {
-            'timestamp': self.timestamp,
-            'market': self.market,
-            'actor': self.actor,
+            'timestamp': int(self.timestamp) if self.timestamp else None,
+            'market': self.market.bytes if self.market else None,
+            'actor': bytes(self.actor) if self.actor else None,
             'actor_type': self.actor_type,
-            'joined': self.joined,
-            'security': self.security,
+            'joined': pack_uint256(self.joined) if self.joined else None,
+            'security': pack_uint256(self.security) if self.security else None,
             'meta': self.meta,
             'tid': bytes(self.tid) if self.tid else None,
             'signature': bytes(self.signature) if self.signature else None,
