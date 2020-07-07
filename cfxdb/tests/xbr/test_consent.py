@@ -36,6 +36,7 @@ def fill_consent(consent):
     consent.timestamp = np.datetime64(time_ns(), 'ns')
     consent.updated = random.randint(1, 2**256 - 1)
     consent.consent = True
+    consent.synced = True
     consent.service_prefix = _gen_ipfs_hash()
     consent.tid = os.urandom(32)
     consent.signature = os.urandom(65)
@@ -75,6 +76,7 @@ def test_consent_roundtrip(consent, builder):
     assert _consent.service_prefix == consent.service_prefix
     assert _consent.tid == consent.tid
     assert _consent.signature == consent.signature
+    assert _consent.synced == consent.synced
 
 
 def test_consent_roundtrip_perf(consent, builder):
@@ -97,6 +99,7 @@ def test_consent_roundtrip_perf(consent, builder):
             assert _consent.service_prefix == consent.service_prefix
             assert _consent.tid == consent.tid
             assert _consent.signature == consent.signature
+            assert _consent.synced == consent.synced
 
             scratch['value'] += _consent.updated
 
