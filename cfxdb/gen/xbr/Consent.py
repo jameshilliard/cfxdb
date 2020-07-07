@@ -249,7 +249,15 @@ class Consent(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         return o == 0
 
-def ConsentStart(builder): builder.StartObject(11)
+    # Whether the consent was set in blockchain
+    # Consent
+    def Synced(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        if o != 0:
+            return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
+        return False
+
+def ConsentStart(builder): builder.StartObject(12)
 def ConsentAddMarketOid(builder, marketOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(marketOid), 0)
 def ConsentStartMarketOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def ConsentAddMember(builder, member): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(member), 0)
@@ -268,4 +276,5 @@ def ConsentAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(9, flatbuff
 def ConsentStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
 def ConsentAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
 def ConsentStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentAddSynced(builder, synced): builder.PrependBoolSlot(11, synced, 0)
 def ConsentEnd(builder): return builder.EndObject()

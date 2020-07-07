@@ -319,4 +319,7 @@ table Consent {
 
     /// This is the signature the user (actor) supplied when setting the consent status.
     signature: [uint8] (ethsig);
+
+    /// Whether the consent was set in blockchain
+    synced: bool;
 }
