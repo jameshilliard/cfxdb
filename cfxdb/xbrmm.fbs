@@ -259,3 +259,14 @@ table Transaction
     /// Paying channel (seller) delegate transaction signature.
     paying_del_sig: [uint8] (ethsig);
 }
+
+table UserKey {
+    /// User key - a Ed25519 public key - for authenticating using WAMP-cryptosign.
+    pubkey: [uint8] (uint256);
+
+    /// Timestamp (epoch time in ns) of initial creation of this record.
+    created: uint64 (timestamp);
+
+    /// ID of XBR network member this user key is owned by (foreign key to xbr.Member)
+    owner: [uint8] (uuid);
+}

@@ -14,6 +14,8 @@ from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, 
 from cfxdb.xbrmm.offer import Offers, IndexOfferByKey
 from cfxdb.xbrmm.transaction import Transactions
 
+from cfxdb.xbrmm.userkey import UserKeys, IndexUserKeyByMember
+
 
 class Schema(object):
     """
@@ -91,6 +93,16 @@ class Schema(object):
     """
     """
 
+    user_keys: UserKeys
+    """
+    User client keys database table :class:`xbrmm.UserKeys`.
+    """
+
+    idx_user_key_by_member: IndexUserKeyByMember
+    """
+    Index "by pubkey" of user keys :class:`xbrmm.IndexUserKeyByMember`.
+    """
+
     @staticmethod
     def attach(db):
         """
@@ -134,6 +146,12 @@ class Schema(object):
         schema.offers = db.attach_table(Offers)
         schema.idx_offer_by_key = db.attach_table(IndexOfferByKey)
         schema.offers.attach_index('idx1', schema.idx_offer_by_key, lambda offer: offer.key)
+
+        schema.user_keys = db.attach_table(UserKeys)
+
+        schema.idx_user_key_by_member = db.attach_table(IndexUserKeyByMember)
+        schema.user_keys.attach_index('idx1', schema.idx_user_key_by_member, lambda user_key:
+                                      (user_key.owner, user_key.created))
 
         schema.transactions = db.attach_table(Transactions)
 
