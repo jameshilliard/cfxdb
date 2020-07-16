@@ -184,7 +184,7 @@ class ConfigurationElement(object):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '\n{}\n'.format(pprint.pformat(self.marshal()))
+        return pprint.pformat(self.marshal())
 
     def copy(self, other, overwrite=False):
         if (not self.oid and other.oid) or overwrite:
@@ -199,23 +199,17 @@ class ConfigurationElement(object):
         # _unknown is not copied
 
     def marshal(self):
-        assert isinstance(self.oid, uuid.UUID)
+        assert self.oid is None or isinstance(self.oid, uuid.UUID)
         assert self.label is None or type(self.label) == six.text_type
         assert self.description is None or type(self.description) == six.text_type
         assert self.tags is None or (type(self.tags) == list and type(tag) == six.text_type
                                      for tag in self.tags)
 
-        obj = {'oid': str(self.oid)}
-        if self.label:
-            obj['label'] = self.label
-        if self.description:
-            obj['description'] = self.description
-        if self.tags:
-            obj['tags'] = self.tags
-
-        if self._unknown:
-            # pass through all attributes unknown
-            obj.update(self._unknown)
+        obj = dict()
+        obj['oid'] = str(self.oid) if self.oid else None
+        obj['label'] = self.label
+        obj['description'] = self.description
+        obj['tags'] = self.tags
 
         return obj
 
@@ -224,35 +218,37 @@ class ConfigurationElement(object):
         assert type(data) == dict
 
         # future attributes (yet unknown) are not only ignored, but passed through!
-        _unknown = {}
+        _unknown = dict()
         for k in data:
             if k not in ['oid', 'label', 'description', 'tags']:
                 _unknown[k] = data[k]
 
         oid = None
-        if 'oid' in data:
+        if 'oid' in data and data['oid'] is not None:
             assert type(data['oid']) == six.text_type
             oid = uuid.UUID(data['oid'])
 
         label = None
-        if 'label' in data:
+        if 'label' in data and data['label'] is not None:
             assert type(data['label']) == six.text_type
             label = data['label']
 
         description = None
-        if 'description' in data:
+        if 'description' in data and data['description'] is not None:
             assert type(data['description']) == six.text_type
             description = data['description']
 
         tags = None
-        if 'tags' in data:
+        if 'tags' in data and data['tags'] is not None:
             assert type(data['tags']) == list
             for tag in data['tags']:
                 assert type(tag) == six.text_type
             tags = data['tags']
 
-        return ConfigurationElement(oid=oid,
-                                    label=label,
-                                    description=description,
-                                    tags=tags,
-                                    _unknown=_unknown)
+        obj = ConfigurationElement(oid=oid,
+                                   label=label,
+                                   description=description,
+                                   tags=tags,
+                                   _unknown=_unknown)
+
+        return obj

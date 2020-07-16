@@ -71,7 +71,12 @@ class Cluster(ConfigurationElement):
         :param _unknown: Any unparsed/unprocessed data attributes
         :type _unknown: None or dict
         """
-        ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
+        ConfigurationElement.__init__(self,
+                                      oid=oid,
+                                      label=label,
+                                      description=description,
+                                      tags=tags,
+                                      _unknown=_unknown)
         self.name = name
         self.status = status
         self.changed = changed
@@ -93,7 +98,7 @@ class Cluster(ConfigurationElement):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '\n{}\n'.format(pprint.pformat(self.marshal()))
+        return pprint.pformat(self.marshal())
 
     def marshal(self):
         """
@@ -108,9 +113,9 @@ class Cluster(ConfigurationElement):
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
-            u'name': self.name,
-            u'status': STATUS_BY_CODE[self.status],
-            u'changed': self.changed,
+            'name': self.name,
+            'status': STATUS_BY_CODE[self.status] if self.status else None,
+            'changed': self.changed,
         })
 
         return obj
@@ -131,7 +136,7 @@ class Cluster(ConfigurationElement):
         data = obj._unknown or {}
 
         # future attributes (yet unknown) are not only ignored, but passed through!
-        _unknown = {}
+        _unknown = dict()
         for k in data:
             if k not in ['name', 'status', 'changed']:
                 _unknown[k] = data[k]

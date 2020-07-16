@@ -111,7 +111,8 @@ class WebCluster(Cluster):
                          tags=tags,
                          name=name,
                          status=status,
-                         changed=changed)
+                         changed=changed,
+                         _unknown=_unknown)
         self.tcp_version = tcp_version
         self.tcp_port = tcp_port
         self.tcp_shared = tcp_shared
@@ -172,7 +173,7 @@ class WebCluster(Cluster):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '\n{}\n'.format(pprint.pformat(self.marshal()))
+        return pprint.pformat(self.marshal())
 
     def marshal(self):
         """
@@ -200,22 +201,22 @@ class WebCluster(Cluster):
         obj = Cluster.marshal(self)
 
         obj.update({
-            u'tcp_version': self.tcp_version,
-            u'tcp_port': self.tcp_port,
-            u'tcp_shared': self.tcp_shared,
-            u'tcp_interface': self.tcp_interface,
-            u'tcp_backlog': self.tcp_backlog,
-            u'tls_key': self.tls_key,
-            u'tls_certificate': self.tls_certificate,
-            u'tls_chain_certificates': self.tls_chain_certificates,
-            u'tls_ca_certificates': self.tls_ca_certificates,
-            u'tls_dhparam': self.tls_dhparam,
-            u'tls_ciphers': self.tls_ciphers,
-            u'http_client_timeout': self.http_client_timeout,
-            u'http_hsts': self.http_hsts,
-            u'http_hsts_max_age': self.http_hsts_max_age,
-            u'http_access_log': self.http_access_log,
-            u'http_display_tracebacks': self.http_display_tracebacks,
+            'tcp_version': self.tcp_version,
+            'tcp_port': self.tcp_port,
+            'tcp_shared': self.tcp_shared,
+            'tcp_interface': self.tcp_interface,
+            'tcp_backlog': self.tcp_backlog,
+            'tls_key': self.tls_key,
+            'tls_certificate': self.tls_certificate,
+            'tls_chain_certificates': self.tls_chain_certificates,
+            'tls_ca_certificates': self.tls_ca_certificates,
+            'tls_dhparam': self.tls_dhparam,
+            'tls_ciphers': self.tls_ciphers,
+            'http_client_timeout': self.http_client_timeout,
+            'http_hsts': self.http_hsts,
+            'http_hsts_max_age': self.http_hsts_max_age,
+            'http_access_log': self.http_access_log,
+            'http_display_tracebacks': self.http_display_tracebacks,
         })
 
         return obj

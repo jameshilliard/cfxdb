@@ -127,6 +127,21 @@ class MrealmSchema(object):
     def __init__(self, db):
         self.db = db
 
+    # routerclusters: RouterClusters
+    routerclusters = None
+    """
+    """
+
+    # idx_routerclusters_by_name: IndexRouterClusterByName
+    idx_routerclusters_by_name = None
+    """
+    """
+
+    # routerclusters_node_memberships: ClusterNodeMemberships
+    routerclusters_node_memberships = None
+    """
+    """
+
     # webclusters: WebClusters
     webclusters = None
     """
