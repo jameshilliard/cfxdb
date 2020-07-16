@@ -233,7 +233,7 @@ class WebCluster(Cluster):
         assert type(data) == dict
 
         obj = Cluster.parse(data)
-        data = obj._unknown
+        data = obj._unknown or {}
 
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
