@@ -11,7 +11,7 @@ import uuid
 import six
 
 
-class WebClusterNodeMembership(object):
+class ClusterNodeMembership(object):
     def __init__(self, webcluster_oid=None, node_oid=None, parallel=None, standby=None, _unknown=None):
         self.webcluster_oid = webcluster_oid
         self.node_oid = node_oid
@@ -93,10 +93,10 @@ class WebClusterNodeMembership(object):
         assert webcluster_oid
         assert node_oid
 
-        obj = WebClusterNodeMembership(webcluster_oid=webcluster_oid,
-                                       node_oid=node_oid,
-                                       parallel=parallel,
-                                       standby=standby,
-                                       _unknown=_unknown)
+        obj = ClusterNodeMembership(webcluster_oid=webcluster_oid,
+                                    node_oid=node_oid,
+                                    parallel=parallel,
+                                    standby=standby,
+                                    _unknown=_unknown)
 
         return obj

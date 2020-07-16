@@ -73,8 +73,8 @@ table Node
 }
 
 
-/// Web cluster status.
-enum WebClusterStatus: uint8
+/// Cluster status for WebClusters or RouterClusters.
+enum ClusterStatus: uint8
 {
     /// Unset status.
     NONE = 0,
@@ -82,17 +82,39 @@ enum WebClusterStatus: uint8
     /// Initial status of a newly created web cluster.
     STOPPED = 1,
 
-    /// The Web cluster is currently starting.
+    /// The cluster is currently starting.
     STARTING = 2,
 
-    /// The Web cluster is currently running.
+    /// The cluster is currently running.
     RUNNING = 3,
 
-    /// The Web cluster is currently paused (it is serving, but the watch/change engine doesn't operate).
+    /// The cluster is currently paused (it is serving, but the watch/change engine doesn't operate).
     PAUSED = 4,
 
-    /// The Web cluster is currently stopping.
+    /// The cluster is currently stopping.
     STOPPING = 5,
+
+    /// The cluster is stopped in an error state.
+    ERROR = 6,
+
+    /// The cluster is currently running, but degraded (not all components and services desired are actually running at this moment, but some have failed, but may be retried automatically).
+    DEGRADED = 7,
+}
+
+
+table ClusterNodeMembership
+{
+    /// OID of web cluster to which to the node is added. A cluster can have zero or more nodes added.
+    cluster_oid: oid_t (required);
+
+    /// OID of the node to add to the cluster. A node can be added to more than one cluster.
+    node_oid: oid_t (required);
+
+    /// The desired (maximum) parallelism (in terms of CPU usage, given as number of workers) that the node should receive if it is active (not a standby node) in this cluster.
+    parallel: uint16;
+
+    /// Wheather this node acts as a standby node that only takes over work when an active node fails.
+    standby: bool;
 }
 
 
@@ -114,7 +136,7 @@ table WebCluster
     name: string;
 
     /// Current status of web cluster.
-    status: WebClusterStatus;
+    status: ClusterStatus;
 
     /// IP version, either 4 for 6
     tcp_version: byte;
@@ -166,17 +188,23 @@ table WebCluster
 }
 
 
-table WebClusterNodeMembership
+table RouterCluster
 {
-    /// OID of the web cluster to which to the node is added. A cluster can have zero or more nodes added.
-    webcluster_oid: oid_t (required);
+    /// ID of this object.
+    oid: oid_t (required);
 
-    /// OID of the node to add to the cluster. A node can be added to more than one cluster.
-    node_oid: oid_t (required);
+    /// Label for this object (not interpreted by CFC).
+    label: string;
 
-    /// The desired parallelism (in CPU) that the node should receive (if it is active in the web cluster).
-    parallel: uint16;
+    /// Description for this object (not interpreted by CFC).
+    description: string;
 
-    /// Wheather this node acts as a standby node that only takes over work when an active node fails.
-    standby: bool;
+    /// Tags on this object.
+    tags: [string];
+
+    /// Unique user assigned name.
+    name: string;
+
+    /// Current status of web cluster.
+    status: ClusterStatus;
 }

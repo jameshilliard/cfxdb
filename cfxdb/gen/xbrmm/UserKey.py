@@ -56,7 +56,7 @@ class UserKey(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-    # ID of user account this user key is owned by.
+    # ID of XBR network member this user key is owned by (foreign key to xbr.Member)
     # UserKey
     def Owner(self, j):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(8))

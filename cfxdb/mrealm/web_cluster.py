@@ -7,38 +7,13 @@
 
 import pprint
 
-from cfxdb.common import ConfigurationElement
+from cfxdb.mrealm.cluster import Cluster
 
 
-class WebCluster(ConfigurationElement):
+class WebCluster(Cluster):
     """
     CFC Web Cluster database configuration object.
     """
-
-    STATUS_BY_CODE = {
-        0: 'NONE',
-        1: 'STOPPED',
-        2: 'STARTING',
-        3: 'RUNNING',
-        4: 'PAUSED',
-        5: 'STOPPING',
-    }
-
-    STATUS_BY_NAME = {
-        'NONE': 0,
-        'STOPPED': 1,
-        'STARTING': 2,
-        'RUNNING': 3,
-        'PAUSED': 4,
-        'STOPPING': 5,
-    }
-
-    STATUS_STOPPED = 1
-    STATUS_STARTING = 2
-    STATUS_RUNNING = 3
-    STATUS_PAUSED = 4
-    STATUS_STOPPING = 5
-
     def __init__(self,
                  oid=None,
                  label=None,
@@ -129,10 +104,14 @@ class WebCluster(ConfigurationElement):
         :param _unknown: Any unparsed/unprocessed data attributes
         :type _unknown: None or dict
         """
-        ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
-        self.name = name
-        self.status = status
-        self.changed = changed
+        Cluster.__init__(self,
+                         oid=oid,
+                         label=label,
+                         description=description,
+                         tags=tags,
+                         name=name,
+                         status=status,
+                         changed=changed)
         self.tcp_version = tcp_version
         self.tcp_port = tcp_port
         self.tcp_shared = tcp_shared
@@ -153,13 +132,7 @@ class WebCluster(ConfigurationElement):
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        if not ConfigurationElement.__eq__(self, other):
-            return False
-        if other.name != self.name:
-            return False
-        if other.status != self.status:
-            return False
-        if other.changed != self.changed:
+        if not Cluster.__eq__(self, other):
             return False
         if other.tcp_version != self.tcp_version:
             return False
@@ -207,9 +180,6 @@ class WebCluster(ConfigurationElement):
 
         :return: dict
         """
-        assert self.name is None or type(self.name) == str
-        assert self.status is None or type(self.status) == int
-        assert self.changed is None or type(self.changed) == int
         assert self.tcp_version is None or type(self.tcp_version) == int
         assert self.tcp_port is None or type(self.tcp_port) == int
         assert self.tcp_shared is None or type(self.tcp_shared) == bool
@@ -227,12 +197,9 @@ class WebCluster(ConfigurationElement):
         assert self.http_access_log is None or type(self.http_access_log) == bool
         assert self.http_display_tracebacks is None or type(self.http_display_tracebacks) == bool
 
-        obj = ConfigurationElement.marshal(self)
+        obj = Cluster.marshal(self)
 
         obj.update({
-            u'name': self.name,
-            u'status': WebCluster.STATUS_BY_CODE[self.status],
-            u'changed': self.changed,
             u'tcp_version': self.tcp_version,
             u'tcp_port': self.tcp_port,
             u'tcp_shared': self.tcp_shared,
@@ -265,29 +232,19 @@ class WebCluster(ConfigurationElement):
         """
         assert type(data) == dict
 
-        obj = ConfigurationElement.parse(data)
+        obj = Cluster.parse(data)
         data = obj._unknown
 
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
             if k not in [
-                    'name', 'status', 'changed', 'tcp_version', 'tcp_port', 'tcp_shared', 'tcp_interface',
-                    'tcp_backlog', 'tls_key', 'tls_certificate', 'tls_chain_certificates',
-                    'tls_ca_certificates', 'tls_dhparam', 'tls_ciphers', 'http_client_timeout', 'http_hsts',
-                    'http_hsts_max_age', 'http_access_log', 'http_display_tracebacks'
+                    'tcp_version', 'tcp_port', 'tcp_shared', 'tcp_interface', 'tcp_backlog', 'tls_key',
+                    'tls_certificate', 'tls_chain_certificates', 'tls_ca_certificates', 'tls_dhparam',
+                    'tls_ciphers', 'http_client_timeout', 'http_hsts', 'http_hsts_max_age', 'http_access_log',
+                    'http_display_tracebacks'
             ]:
                 _unknown[k] = data[k]
-
-        name = data.get('name', None)
-        assert name is None or (type(name) == str)
-
-        status = data.get('status', None)
-        assert status is None or (type(status) == str)
-        status = WebCluster.STATUS_BY_NAME.get(status, None)
-
-        changed = data.get('changed', None)
-        assert changed is None or (type(changed) == int)
 
         tcp_version = data.get('tcp_version', None)
         assert tcp_version is None or (type(tcp_version) == int)
@@ -341,9 +298,9 @@ class WebCluster(ConfigurationElement):
                          label=obj.label,
                          description=obj.description,
                          tags=obj.tags,
-                         name=name,
-                         status=status,
-                         changed=changed,
+                         name=obj.name,
+                         status=obj.status,
+                         changed=obj.changed,
                          tcp_version=tcp_version,
                          tcp_port=tcp_port,
                          tcp_shared=tcp_shared,

@@ -8,10 +8,39 @@
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidCbor
 
-from cfxdb.mrealm import WebCluster, WebService, WebClusterNodeMembership, parse_webservice
+from cfxdb.mrealm import RouterCluster, WebCluster, WebService, ClusterNodeMembership, parse_webservice
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
+
+
+#
+# Router clusters
+#
+@table('b054a230-c370-4c29-b5de-7e0148321b0a', marshal=RouterCluster.marshal, parse=RouterCluster.parse)
+class RouterClusters(MapUuidCbor):
+    """
+    Table: routercluster_oid -> routercluster
+    """
+
+
+@table('0c80c7a8-7536-4a74-8916-4922c0b72cb7')
+class IndexRouterClusterByName(MapStringUuid):
+    """
+    Index: routercluster_name -> routercluster_oid
+    """
+
+
+#
+# Web cluster node memberships
+#
+@table('a091bad6-f14c-437c-8e30-e9be84380658',
+       marshal=ClusterNodeMembership.marshal,
+       parse=ClusterNodeMembership.parse)
+class RouterClusterNodeMemberships(MapUuidUuidCbor):
+    """
+    Table: (cluster_oid, node_oid) -> cluster_node_membership
+    """
 
 
 #
@@ -35,8 +64,8 @@ class IndexWebClusterByName(MapStringUuid):
 # Web cluster node memberships
 #
 @table('e9801077-a629-470b-a4c9-4292a1f00d43',
-       marshal=WebClusterNodeMembership.marshal,
-       parse=WebClusterNodeMembership.parse)
+       marshal=ClusterNodeMembership.marshal,
+       parse=ClusterNodeMembership.parse)
 class WebClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (webcluster_oid, node_oid) -> webcluster_node_membership
@@ -108,7 +137,7 @@ class MrealmSchema(object):
     """
     """
 
-    # webcluster_node_memberships: WebClusterNodeMemberships
+    # webcluster_node_memberships: ClusterNodeMemberships
     webcluster_node_memberships = None
     """
     """
@@ -171,6 +200,15 @@ class MrealmSchema(object):
         :return: object of Schema
         """
         schema = MrealmSchema(db)
+
+        # router clusters
+        schema.routerclusters = db.attach_table(RouterClusters)
+
+        schema.idx_routerclusters_by_name = db.attach_table(IndexRouterClusterByName)
+        schema.routerclusters.attach_index('idx1', schema.idx_routerclusters_by_name,
+                                           lambda routercluster: routercluster.name)
+
+        schema.routercluster_node_memberships = db.attach_table(RouterClusterNodeMemberships)
 
         # web clusters
         schema.webclusters = db.attach_table(WebClusters)

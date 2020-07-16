@@ -6,15 +6,15 @@ FBS_OUTPUT=./cfxdb/gen
 FLATC=/usr/local/bin/flatc
 
 build_flatc:
-	cd /tmp
-	wget https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz
-	tar xvf v1.12.0.tar.gz
-	cd v1.12.0
-	cmake .
-	make
-	sudo cp ./flatc $(FLATC)
-	cd ..
-	rm -rf v1.12.0 && rm v1.12.0.tar.gz
+	cd /tmp && \
+	wget https://github.com/google/flatbuffers/archive/v1.12.0.tar.gz && \
+	tar xvf v1.12.0.tar.gz && \
+	cd flatbuffers-1.12.0 && \
+	cmake . && \
+	make && \
+	sudo cp ./flatc $(FLATC) && \
+	cd .. && \
+	rm -rf flatbuffers-1.12.0 && rm v1.12.0.tar.gz
 
 clean:
 	-find . -type d -name "__pycache__" -exec rm -rf {} \;
