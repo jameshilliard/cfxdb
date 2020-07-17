@@ -8,7 +8,7 @@
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidCbor
 
-from cfxdb.mrealm import RouterCluster, WebCluster, WebService, ClusterNodeMembership, parse_webservice
+from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
@@ -35,8 +35,8 @@ class IndexRouterClusterByName(MapStringUuid):
 # Web cluster node memberships
 #
 @table('a091bad6-f14c-437c-8e30-e9be84380658',
-       marshal=ClusterNodeMembership.marshal,
-       parse=ClusterNodeMembership.parse)
+       marshal=RouterClusterNodeMembership.marshal,
+       parse=RouterClusterNodeMembership.parse)
 class RouterClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (cluster_oid, node_oid) -> cluster_node_membership
@@ -64,8 +64,8 @@ class IndexWebClusterByName(MapStringUuid):
 # Web cluster node memberships
 #
 @table('e9801077-a629-470b-a4c9-4292a1f00d43',
-       marshal=ClusterNodeMembership.marshal,
-       parse=ClusterNodeMembership.parse)
+       marshal=WebClusterNodeMembership.marshal,
+       parse=WebClusterNodeMembership.parse)
 class WebClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (webcluster_oid, node_oid) -> webcluster_node_membership
@@ -137,8 +137,8 @@ class MrealmSchema(object):
     """
     """
 
-    # routerclusters_node_memberships: ClusterNodeMemberships
-    routerclusters_node_memberships = None
+    # routercluster_node_memberships: RouterClusterNodeMemberships
+    routercluster_node_memberships = None
     """
     """
 
@@ -152,7 +152,7 @@ class MrealmSchema(object):
     """
     """
 
-    # webcluster_node_memberships: ClusterNodeMemberships
+    # webcluster_node_memberships: WebClusterNodeMemberships
     webcluster_node_memberships = None
     """
     """

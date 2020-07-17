@@ -12,7 +12,8 @@ from cfxdb.mrealm.cluster import Cluster
 
 class RouterCluster(Cluster):
     """
-    CFC Web Cluster database configuration object.
+    A router cluster is able to run "data planes", which are groups of router workers kept in sync,
+    and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
     """
     def __init__(self,
                  oid=None,
@@ -69,9 +70,7 @@ class RouterCluster(Cluster):
         :return: dict
         """
         obj = Cluster.marshal(self)
-
         obj.update({})
-
         return obj
 
     @staticmethod

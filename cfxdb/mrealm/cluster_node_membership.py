@@ -12,23 +12,17 @@ import six
 
 
 class ClusterNodeMembership(object):
-    def __init__(self, webcluster_oid=None, node_oid=None, parallel=None, standby=None, _unknown=None):
-        self.webcluster_oid = webcluster_oid
+    def __init__(self, cluster_oid=None, node_oid=None, _unknown=None):
+        self.cluster_oid = cluster_oid
         self.node_oid = node_oid
-        self.parallel = parallel
-        self.standby = standby
         self._unknown = _unknown
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
             return False
-        if other.webcluster_oid != self.webcluster_oid:
+        if other.cluster_oid != self.cluster_oid:
             return False
         if other.node_oid != self.node_oid:
-            return False
-        if other.parallel != self.parallel:
-            return False
-        if other.standby != self.standby:
             return False
         return True
 
@@ -36,7 +30,7 @@ class ClusterNodeMembership(object):
         return not self.__eq__(other)
 
     def __str__(self):
-        return '\n{}\n'.format(pprint.pformat(self.marshal()))
+        return pprint.pformat(self.marshal())
 
     def marshal(self):
         """
@@ -45,10 +39,8 @@ class ClusterNodeMembership(object):
         :return: dict
         """
         obj = {
-            'webcluster_oid': str(self.webcluster_oid),
+            'cluster_oid': str(self.cluster_oid),
             'node_oid': str(self.node_oid),
-            'parallel': self.parallel,
-            'standby': self.standby,
         }
         return obj
 
@@ -67,36 +59,19 @@ class ClusterNodeMembership(object):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['webcluster_oid', 'node_oid', 'parallel', 'standby']:
+            if k not in ['cluster_oid', 'node_oid']:
                 _unknown[k] = data[k]
 
-        webcluster_oid = None
-        if 'webcluster_oid' in data:
-            assert type(data['webcluster_oid']) == six.text_type
-            webcluster_oid = uuid.UUID(data['webcluster_oid'])
+        cluster_oid = None
+        if 'cluster_oid' in data:
+            assert type(data['cluster_oid']) == six.text_type
+            cluster_oid = uuid.UUID(data['cluster_oid'])
 
         node_oid = None
         if 'node_oid' in data:
             assert type(data['node_oid']) == six.text_type
             node_oid = uuid.UUID(data['node_oid'])
 
-        parallel = None
-        if 'parallel' in data and data['parallel']:
-            assert type(data['parallel']) == int
-            parallel = data['parallel']
-
-        standby = None
-        if 'standby' in data and data['standby']:
-            assert data['standby'] is None or type(data['standby']) == bool
-            standby = data['standby']
-
-        assert webcluster_oid
-        assert node_oid
-
-        obj = ClusterNodeMembership(webcluster_oid=webcluster_oid,
-                                    node_oid=node_oid,
-                                    parallel=parallel,
-                                    standby=standby,
-                                    _unknown=_unknown)
+        obj = ClusterNodeMembership(cluster_oid=cluster_oid, node_oid=node_oid, _unknown=_unknown)
 
         return obj
