@@ -208,3 +208,73 @@ table RouterCluster
     /// Current status of web cluster.
     status: ClusterStatus;
 }
+
+
+/// Status of RouterWorkerGroups.
+enum WorkerGroupStatus: uint8
+{
+    /// Unset status.
+    NONE = 0,
+
+    /// Initial status of a newly created worker group.
+    STOPPED = 1,
+
+    /// The worker group is currently starting.
+    STARTING = 2,
+
+    /// The worker group is currently running.
+    RUNNING = 3,
+
+    /// The worker group is currently paused (it is serving, but the watch/change engine doesn't operate).
+    PAUSED = 4,
+
+    /// The worker group is currently stopping.
+    STOPPING = 5,
+
+    /// The worker group is stopped in an error state.
+    ERROR = 6,
+
+    /// The worker group is currently running, but degraded (not all components and services desired are actually running at this moment, but some have failed, but may be retried automatically).
+    DEGRADED = 7,
+}
+
+
+table RouterWorkerGroup
+{
+    /// ID of this object.
+    oid: oid_t (required);
+
+    /// Label for this object (not interpreted by CFC).
+    label: string;
+
+    /// Description for this object (not interpreted by CFC).
+    description: string;
+
+    /// Tags on this object.
+    tags: [string];
+
+    /// Unique user assigned name.
+    name: string;
+
+    /// Current status of worker group.
+    status: WorkerGroupStatus;
+}
+
+
+table RouterWorkerGroupClusterPlacement
+{
+    /// OID of this worker-to-cluster placement.
+    oid: oid_t (required);
+
+    /// OID of (router) worker group this placement applies to.
+    worker_group_oid: oid_t (required);
+
+    /// OID of cluster onto which the worker is placed.
+    cluster_oid: oid_t (required);
+
+    /// OID of the node onto which the worker is placed.
+    node_oid: oid_t (required);
+
+    /// Local worker name on the node onto which the worker is placed.
+    worker_name: string;
+}

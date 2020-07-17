@@ -6,9 +6,10 @@
 ##############################################################################
 
 from zlmdb import table
-from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidCbor
+from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
+from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
 
-from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice
+from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
@@ -32,7 +33,7 @@ class IndexRouterClusterByName(MapStringUuid):
 
 
 #
-# Web cluster node memberships
+# Router cluster node memberships
 #
 @table('a091bad6-f14c-437c-8e30-e9be84380658',
        marshal=RouterClusterNodeMembership.marshal,
@@ -40,6 +41,37 @@ class IndexRouterClusterByName(MapStringUuid):
 class RouterClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (cluster_oid, node_oid) -> cluster_node_membership
+    """
+
+
+#
+# Router worker groups
+#
+@table('c019457b-d499-454f-9bf2-4f7e85079d8f',
+       marshal=RouterWorkerGroup.marshal,
+       parse=RouterWorkerGroup.parse)
+class RouterWorkerGroups(MapUuidCbor):
+    """
+    Table: workergroup_oid -> workergroup
+    """
+
+
+#
+# Router worker groups to cluster node placements
+#
+@table('e3d326d2-6140-47a9-adf9-8e93b832717b',
+       marshal=RouterWorkerGroupClusterPlacement.marshal,
+       parse=RouterWorkerGroupClusterPlacement.parse)
+class RouterWorkerGroupClusterPlacements(MapUuidCbor):
+    """
+    Table: placement_oid -> placement
+    """
+
+
+@table('1a18739f-7224-4459-a446-6f1fedd760a7')
+class IndexClusterPlacementByWorkerName(MapUuidUuidUuidStringUuid):
+    """
+    Index: (workergroup_oid, cluster_oid, node_oid, worker_name) -> placement_oid
     """
 
 
@@ -142,6 +174,21 @@ class MrealmSchema(object):
     """
     """
 
+    # router_workgroups: RouterWorkerGroups
+    router_workgroups = None
+    """
+    """
+
+    # router_workergroup_placements: RouterWorkerGroupClusterPlacements
+    router_workergroup_placements = None
+    """
+    """
+
+    # idx_clusterplacement_by_workername: IndexClusterPlacementByWorkerName
+    idx_clusterplacement_by_workername = None
+    """
+    """
+
     # webclusters: WebClusters
     webclusters = None
     """
@@ -224,6 +271,16 @@ class MrealmSchema(object):
                                            lambda routercluster: routercluster.name)
 
         schema.routercluster_node_memberships = db.attach_table(RouterClusterNodeMemberships)
+
+        # route groups
+        schema.router_workgroups = db.attach_table(RouterWorkerGroups)
+
+        schema.idx_clusterplacement_by_workername = db.attach_table(IndexClusterPlacementByWorkerName)
+        schema.router_workgroups.attach_index(
+            'idx1', schema.idx_clusterplacement_by_workername, lambda wg:
+            (wg.workergroup_oid, wg.cluster_oid, wg.node_oid, wg.worker_name))
+
+        schema.router_workergroup_placements = db.attach_table(RouterWorkerGroupClusterPlacements)
 
         # web clusters
         schema.webclusters = db.attach_table(WebClusters)

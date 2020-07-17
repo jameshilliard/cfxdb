@@ -9,4 +9,4 @@ txaio>=20.4.1
 web3>=5.11.0
 
 # git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
-zlmdb>=20.4.1
+zlmdb>=20.7.1
