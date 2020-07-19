@@ -24,6 +24,7 @@ from cfxdb.mrealm.node import Node
 from cfxdb.mrealm.role import Role
 from cfxdb.mrealm.application_realm import ApplicationRealm
 from cfxdb.mrealm.arealm_role_association import ApplicationRealmRoleAssociation
+from cfxdb.mrealm.permission import Permission
 
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
 from cfxdb.gen.mrealm.WorkerGroupStatus import WorkerGroupStatus
@@ -56,6 +57,7 @@ __all__ = (
     'ScramKdfType',
     'UriCheckLevel',
     'Role',
+    'Permission',
     'ApplicationRealm',
     'ApplicationRealmRoleAssociation',
 )

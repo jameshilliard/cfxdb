@@ -12,7 +12,7 @@ from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
-from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation
+from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation, Permission
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
@@ -49,6 +49,23 @@ class Roles(MapUuidCbor):
 class IndexRoleByName(MapStringUuid):
     """
     Index: role_name -> role_oid
+    """
+
+
+#
+# Permissions
+#
+@table('f98ed35b-f8fb-47ba-81e1-3c014101464d', marshal=Permission.marshal, parse=Permission.parse)
+class Permissions(MapUuidCbor):
+    """
+    Table: permission_oid -> permission
+    """
+
+
+@table('6cdc21bf-353d-4477-8631-8eb039142ae9')
+class IndexPermissionByUri(MapUuidStringUuid):
+    """
+    Index: (role_oid, uri) -> permission_oid
     """
 
 
@@ -215,11 +232,6 @@ class MrealmSchema(object):
     def __init__(self, db):
         self.db = db
 
-    # arealms: ApplicationRealm
-    arealms = None
-    """
-    """
-
     # roles: Role
     roles = None
     """
@@ -227,6 +239,17 @@ class MrealmSchema(object):
 
     # idx_roles_by_name: IndexRolesByName
     idx_roles_by_name = None
+
+    # permissions: Permissions
+    permissions = None
+
+    # idx_permissions_by_uri: IndexPermissionByUri
+    idx_permissions_by_uri = None
+
+    # arealms: ApplicationRealm
+    arealms = None
+    """
+    """
 
     # idx_arealms_by_name: IndexApplicationRealmByName
     idx_arealms_by_name = None
@@ -349,14 +372,24 @@ class MrealmSchema(object):
 
         # application realms
         schema.arealms = db.attach_table(ApplicationRealms)
+
         schema.idx_arealms_by_name = db.attach_table(IndexApplicationRealmByName)
         schema.arealms.attach_index('idx1', schema.idx_arealms_by_name, lambda arealm: arealm.name)
 
+        # roles
         schema.roles = db.attach_table(Roles)
+
         schema.idx_roles_by_name = db.attach_table(IndexRoleByName)
         schema.roles.attach_index('idx1', schema.idx_roles_by_name, lambda role: role.name)
 
         schema.arealm_role_associations = db.attach_table(ApplicationRealmRoleAssociations)
+
+        # permissions
+        schema.permissions = db.attach_table(Permissions)
+
+        schema.idx_permissions_by_uri = db.attach_table(IndexPermissionByUri)
+        schema.permissions.attach_index('idx1', schema.idx_permissions_by_uri, lambda permission:
+                                        (permission.role_oid, permission.uri))
 
         # router clusters
         schema.routerclusters = db.attach_table(RouterClusters)
