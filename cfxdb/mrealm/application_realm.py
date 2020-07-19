@@ -7,9 +7,6 @@
 
 import pprint
 import uuid
-from datetime import datetime
-
-import six
 
 from cfxdb.common import ConfigurationElement
 
@@ -105,18 +102,18 @@ class ApplicationRealm(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, uuid.UUID)
-        assert type(self.name) == six.text_type
-        assert isinstance(self.created, datetime)
-        assert isinstance(self.owner, uuid.UUID)
+        assert self.oid is None or isinstance(self.oid, uuid.UUID)
+        assert self.name is None or type(self.name) == str
+        assert self.created is None or type(self.created) == int
+        assert self.owner is None or isinstance(self.owner, uuid.UUID)
 
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
-            'oid': str(self.oid),
+            'oid': str(self.oid) if self.oid else None,
             'name': self.name,
             'created': int(self.created.timestamp() * 1000000) if self.created else None,
-            'owner': str(self.owner),
+            'owner': str(self.owner) if self.owner else None,
         })
 
         if self._unknown:
@@ -143,24 +140,20 @@ class ApplicationRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in [
-                    'oid', 'name', 'rtype', 'owner', 'created', 'cf_node', 'cf_router_worker',
-                    'cf_container_worker'
-            ]:
+            if k not in ['oid', 'name', 'owner', 'created']:
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
-        assert name is None or type(name) == six.text_type
+        assert name is None or type(name) == str, 'name must be a string, not {}'.format(type(name))
 
         owner = data.get('owner', None)
-        assert owner is None or type(owner) == six.text_type
-        if owner:
+        assert owner is None or type(owner) == str
+        if owner is not None:
+            print('8' * 100, type(owner), owner, '-{}-'.format(owner))
             owner = uuid.UUID(owner)
 
         created = data.get('created', None)
-        assert created is None or type(created) == float or type(created) in six.integer_types
-        if created:
-            created = datetime.utcfromtimestamp(float(created) / 1000000.)
+        assert created is None or type(created) == int
 
         obj = ApplicationRealm(oid=obj.oid,
                                label=obj.label,

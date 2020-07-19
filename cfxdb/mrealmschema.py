@@ -350,9 +350,11 @@ class MrealmSchema(object):
         # application realms
         schema.arealms = db.attach_table(ApplicationRealms)
         schema.idx_arealms_by_name = db.attach_table(IndexApplicationRealmByName)
+        schema.arealms.attach_index('idx1', schema.idx_arealms_by_name, lambda arealm: arealm.name)
 
         schema.roles = db.attach_table(Roles)
         schema.idx_roles_by_name = db.attach_table(IndexRoleByName)
+        schema.roles.attach_index('idx1', schema.idx_roles_by_name, lambda role: role.name)
 
         schema.arealm_role_associations = db.attach_table(ApplicationRealmRoleAssociations)
 

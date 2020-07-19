@@ -7,9 +7,6 @@
 
 import pprint
 import uuid
-from datetime import datetime
-
-import six
 
 from cfxdb.common import ConfigurationElement
 
@@ -106,17 +103,17 @@ class Role(ConfigurationElement):
         :return: dict
         """
         assert isinstance(self.oid, uuid.UUID)
-        assert type(self.name) == six.text_type
-        assert isinstance(self.created, datetime)
-        assert isinstance(self.owner, uuid.UUID)
+        assert type(self.name) == str
+        assert self.created is None or type(self.created) == int
+        assert self.owner is None or isinstance(self.owner, uuid.UUID)
 
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
-            'oid': str(self.oid),
+            'oid': str(self.oid) if self.oid else None,
             'name': self.name,
-            'created': int(self.created.timestamp() * 1000000) if self.created else None,
-            'owner': str(self.owner),
+            'created': self.created,
+            'owner': str(self.owner) if self.owner else None,
         })
 
         if self._unknown:
@@ -147,17 +144,15 @@ class Role(ConfigurationElement):
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
-        assert name is None or type(name) == six.text_type
+        assert name is None or type(name) == str
 
         owner = data.get('owner', None)
-        assert owner is None or type(owner) == six.text_type
+        assert owner is None or type(owner) == str
         if owner:
             owner = uuid.UUID(owner)
 
         created = data.get('created', None)
-        assert created is None or type(created) == float or type(created) in six.integer_types
-        if created:
-            created = datetime.utcfromtimestamp(float(created) / 1000000.)
+        assert created is None or type(created) == int
 
         obj = Role(oid=obj.oid,
                    label=obj.label,
