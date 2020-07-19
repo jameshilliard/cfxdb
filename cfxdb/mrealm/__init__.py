@@ -21,10 +21,41 @@ from cfxdb.mrealm.web_service_node_info import WebServiceNodeInfo
 from cfxdb.mrealm.web_service_static import WebServiceStatic
 from cfxdb.mrealm.node import Node
 
+from cfxdb.mrealm.role import Role
+from cfxdb.mrealm.application_realm import ApplicationRealm
+from cfxdb.mrealm.arealm_role_association import ApplicationRealmRoleAssociation
+
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
 from cfxdb.gen.mrealm.WorkerGroupStatus import WorkerGroupStatus
 
-__all__ = ('parse_webservice', 'ManagementRealm', 'Node', 'Cluster', 'RouterCluster', 'WebCluster',
-           'ClusterNodeMembership', 'WebClusterNodeMembership', 'RouterClusterNodeMembership', 'WebService',
-           'WebServiceJson', 'WebServiceNodeInfo', 'WebServiceStatic', 'ClusterStatus', 'WorkerGroupStatus',
-           'RouterWorkerGroup', 'RouterWorkerGroupClusterPlacement')
+from cfxdb.gen.arealm.AuthenticatorType import AuthenticatorType
+from cfxdb.gen.arealm.MatchType import MatchType
+from cfxdb.gen.arealm.ScramKdfType import ScramKdfType
+from cfxdb.gen.arealm.UriCheckLevel import UriCheckLevel
+
+__all__ = (
+    'parse_webservice',
+    'ManagementRealm',
+    'Node',
+    'Cluster',
+    'RouterCluster',
+    'WebCluster',
+    'ClusterNodeMembership',
+    'WebClusterNodeMembership',
+    'RouterClusterNodeMembership',
+    'WebService',
+    'WebServiceJson',
+    'WebServiceNodeInfo',
+    'WebServiceStatic',
+    'ClusterStatus',
+    'WorkerGroupStatus',
+    'RouterWorkerGroup',
+    'RouterWorkerGroupClusterPlacement',
+    'AuthenticatorType',
+    'MatchType',
+    'ScramKdfType',
+    'UriCheckLevel',
+    'Role',
+    'ApplicationRealm',
+    'ApplicationRealmRoleAssociation',
+)

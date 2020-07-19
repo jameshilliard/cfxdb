@@ -5,14 +5,63 @@
 #
 ##############################################################################
 
+import uuid
+
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
+from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
+
+
+#
+# Application Realms
+#
+@table('7099565b-7b44-4891-a0c8-83c7dbb60883', marshal=ApplicationRealm.marshal, parse=ApplicationRealm.parse)
+class ApplicationRealms(MapUuidCbor):
+    """
+    Table: arealm_oid -> arealm
+    """
+
+
+@table('89f3073a-32d5-497e-887d-7e930e9c26e6')
+class IndexApplicationRealmByName(MapStringUuid):
+    """
+    Index: arealm_name -> arealm_oid
+    """
+
+
+#
+# Roles
+#
+@table('341083bb-edeb-461c-a6d4-38dddcda6ec9', marshal=Role.marshal, parse=Role.parse)
+class Roles(MapUuidCbor):
+    """
+    Table: role_oid -> role
+    """
+
+
+@table('71b990d1-4525-44cd-9ef8-3569de8b4c80')
+class IndexRoleByName(MapStringUuid):
+    """
+    Index: role_name -> role_oid
+    """
+
+
+#
+# Application Realm Role Associations
+#
+@table('5eabdb63-9c31-4c97-b514-7e8fbac7e143',
+       marshal=ApplicationRealmRoleAssociation.marshal,
+       parse=ApplicationRealmRoleAssociation.parse)
+class ApplicationRealmRoleAssociations(MapUuidUuidCbor):
+    """
+    Table: (arealm_oid, role_oid) -> arealm_role_association
+    """
 
 
 #
@@ -53,6 +102,13 @@ class RouterClusterNodeMemberships(MapUuidUuidCbor):
 class RouterWorkerGroups(MapUuidCbor):
     """
     Table: workergroup_oid -> workergroup
+    """
+
+
+@table('4bb8ec14-4820-4061-8b2c-d1841e2686e1')
+class IndexWorkerGroupByCluster(MapUuidStringUuid):
+    """
+    Index: cluster_oid, workergroup_name -> workergroup_oid
     """
 
 
@@ -159,6 +215,29 @@ class MrealmSchema(object):
     def __init__(self, db):
         self.db = db
 
+    # arealms: ApplicationRealm
+    arealms = None
+    """
+    """
+
+    # roles: Role
+    roles = None
+    """
+    """
+
+    # idx_roles_by_name: IndexRolesByName
+    idx_roles_by_name = None
+
+    # idx_arealms_by_name: IndexApplicationRealmByName
+    idx_arealms_by_name = None
+    """
+    """
+
+    # arealm_role_associations: ApplicationRealmRoleAssociation
+    arealm_role_associations = None
+    """
+    """
+
     # routerclusters: RouterClusters
     routerclusters = None
     """
@@ -174,8 +253,13 @@ class MrealmSchema(object):
     """
     """
 
-    # router_workgroups: RouterWorkerGroups
-    router_workgroups = None
+    # router_workergroups: RouterWorkerGroups
+    router_workergroups = None
+    """
+    """
+
+    # idx_workergroup_by_cluster: IndexWorkerGroupByCluster
+    idx_workergroup_by_cluster = None
     """
     """
 
@@ -263,6 +347,15 @@ class MrealmSchema(object):
         """
         schema = MrealmSchema(db)
 
+        # application realms
+        schema.arealms = db.attach_table(ApplicationRealms)
+        schema.idx_arealms_by_name = db.attach_table(IndexApplicationRealmByName)
+
+        schema.roles = db.attach_table(Roles)
+        schema.idx_roles_by_name = db.attach_table(IndexRoleByName)
+
+        schema.arealm_role_associations = db.attach_table(ApplicationRealmRoleAssociations)
+
         # router clusters
         schema.routerclusters = db.attach_table(RouterClusters)
 
@@ -272,13 +365,17 @@ class MrealmSchema(object):
 
         schema.routercluster_node_memberships = db.attach_table(RouterClusterNodeMemberships)
 
-        # route groups
-        schema.router_workgroups = db.attach_table(RouterWorkerGroups)
+        # router worker groups
+        schema.router_workergroups = db.attach_table(RouterWorkerGroups)
+
+        schema.idx_workergroup_by_cluster = db.attach_table(IndexWorkerGroupByCluster)
+        schema.router_workergroups.attach_index('idx1', schema.idx_workergroup_by_cluster, lambda wg:
+                                                (wg.cluster_oid, wg.name))
 
         schema.idx_clusterplacement_by_workername = db.attach_table(IndexClusterPlacementByWorkerName)
-        schema.router_workgroups.attach_index(
-            'idx1', schema.idx_clusterplacement_by_workername, lambda wg:
-            (wg.workergroup_oid, wg.cluster_oid, wg.node_oid, wg.worker_name))
+        schema.router_workergroups.attach_index(
+            'idx2', schema.idx_clusterplacement_by_workername, lambda wg:
+            (wg.oid, wg.cluster_oid, uuid.UUID(bytes=b'\x00' * 16), ''))
 
         schema.router_workergroup_placements = db.attach_table(RouterWorkerGroupClusterPlacements)
 
