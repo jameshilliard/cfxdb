@@ -43,6 +43,22 @@ class _UserKeyGen(UserKeyGen.UserKey):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def WalletAddressAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(10))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def SignatureAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
 
 class UserKey:
     """
@@ -63,11 +79,21 @@ class UserKey:
         # [uint8] (uuid)
         self._owner = None
 
+        # Wallet address of user account this key is owned by.
+        # [uint8] (address)
+        self._wallet_address = None
+
+        # Signature which resulted in this key being saved.
+        # [uint8] (ethsig)
+        self._signature = None
+
     def marshal(self):
         obj = {
             'pubkey': bytes(self.pubkey),
             'created': int(self.created),
             'owner': self.owner.bytes,
+            'wallet_address': self.wallet_address if self.wallet_address else None,
+            'signature': bytes(self.signature) if self.signature else None
         }
         return obj
 
@@ -121,6 +147,36 @@ class UserKey:
         assert value is None or isinstance(value, uuid.UUID)
         self._owner = value
 
+    @property
+    def wallet_address(self) -> bytes:
+        """
+        Wallet address of the member this key belong to.
+        """
+        if self._wallet_address is None and self._from_fbs:
+            if self._from_fbs.WalletAddressLength():
+                self._wallet_address = self._from_fbs.WalletAddressAsBytes()
+        return self._wallet_address
+
+    @wallet_address.setter
+    def wallet_address(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 20)
+        self._wallet_address = value
+
+    @property
+    def signature(self) -> bytes:
+        """
+        market maker transaction signature.
+        """
+        if self._signature is None and self._from_fbs:
+            if self._from_fbs.SignatureLength():
+                self._signature = self._from_fbs.SignatureAsBytes()
+        return self._signature
+
+    @signature.setter
+    def signature(self, value: bytes):
+        assert value is None or (type(value) == bytes and len(value) == 65)
+        self._signature = value
+
     @staticmethod
     def cast(buf):
         return UserKey(_UserKeyGen.GetRootAsUserKey(buf, 0))
@@ -135,6 +191,14 @@ class UserKey:
         if pubkey:
             pubkey = builder.CreateString(pubkey)
 
+        wallet_address = self.wallet_address
+        if wallet_address:
+            wallet_address = builder.CreateString(wallet_address)
+
+        signature = self.signature
+        if signature:
+            signature = builder.CreateString(signature)
+
         UserKeyGen.UserKeyStart(builder)
 
         if pubkey:
@@ -145,6 +209,12 @@ class UserKey:
 
         if owner:
             UserKeyGen.UserKeyAddOwner(builder, owner)
+
+        if wallet_address:
+            UserKeyGen.UserKeyAddWalletAddress(builder, wallet_address)
+
+        if signature:
+            UserKeyGen.UserKeyAddSignature(builder, signature)
 
         final = UserKeyGen.UserKeyEnd(builder)
 

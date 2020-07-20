@@ -269,4 +269,10 @@ table UserKey {
 
     /// ID of XBR network member this user key is owned by (foreign key to xbr.Member)
     owner: [uint8] (uuid);
+
+    /// Wallet address of XBR network member this user key is owned by (foreign key to xbr.Member)
+    wallet_address: [uint8] (address);
+
+    /// User key delegate signature
+    signature: [uint8] (ethsig);
 }
