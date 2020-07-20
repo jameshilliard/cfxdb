@@ -5,8 +5,6 @@
 #
 ##############################################################################
 
-import uuid
-
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
@@ -407,12 +405,13 @@ class MrealmSchema(object):
         schema.router_workergroups.attach_index('idx1', schema.idx_workergroup_by_cluster, lambda wg:
                                                 (wg.cluster_oid, wg.name))
 
-        schema.idx_clusterplacement_by_workername = db.attach_table(IndexClusterPlacementByWorkerName)
-        schema.router_workergroups.attach_index(
-            'idx2', schema.idx_clusterplacement_by_workername, lambda wg:
-            (wg.oid, wg.cluster_oid, uuid.UUID(bytes=b'\x00' * 16), ''))
-
+        # router worker group placements
         schema.router_workergroup_placements = db.attach_table(RouterWorkerGroupClusterPlacements)
+
+        schema.idx_clusterplacement_by_workername = db.attach_table(IndexClusterPlacementByWorkerName)
+        schema.router_workergroup_placements.attach_index(
+            'idx1', schema.idx_clusterplacement_by_workername, lambda p:
+            (p.worker_group_oid, p.cluster_oid, p.node_oid, p.worker_name))
 
         # web clusters
         schema.webclusters = db.attach_table(WebClusters)

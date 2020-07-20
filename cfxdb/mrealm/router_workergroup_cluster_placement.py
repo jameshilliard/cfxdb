@@ -11,9 +11,6 @@ import pprint
 
 class RouterWorkerGroupClusterPlacement(object):
     """
-    Information about membership of a managed node in a management realm to a "router cluster".
-    A router cluster is able to run "data planes", which are groups of router workers kept in sync,
-    and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
     """
     def __init__(self,
                  oid=None,

@@ -14,7 +14,7 @@ from cfxdb.gen.arealm.ApplicationRealmStatus import ApplicationRealmStatus
 
 class ApplicationRealm(ConfigurationElement):
     """
-    CFC management realm database configuration object.
+    Application realm database configuration object.
     """
 
     STATUS_BY_CODE = {
@@ -54,7 +54,8 @@ class ApplicationRealm(ConfigurationElement):
                  tags=None,
                  name=None,
                  status=None,
-                 created=None,
+                 workergroup_oid=None,
+                 changed=None,
                  owner=None,
                  _unknown=None):
         """
@@ -74,8 +75,14 @@ class ApplicationRealm(ConfigurationElement):
         :param name: Name of management realm
         :type name: str
 
-        :param created: Timestamp when the management realm was created
-        :type created: datetime.datetime
+        :param status: Status of application realm.
+        :type status: int
+
+        :param workergroup_oid: When running, workergroup this application realm is running on.
+        :type workergroup_oid: uuid.UUID
+
+        :param changed: Timestamp when the application realm was last changed
+        :type changed: int
 
         :param owner: Owning user (object ID)
         :type owner: uuid.UUID
@@ -86,7 +93,8 @@ class ApplicationRealm(ConfigurationElement):
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.name = name
         self.status = status
-        self.created = created
+        self.workergroup_oid = workergroup_oid
+        self.changed = changed
         self.owner = owner
 
         # private member with unknown/untouched data passing through
@@ -101,7 +109,9 @@ class ApplicationRealm(ConfigurationElement):
             return False
         if other.status != self.status:
             return False
-        if other.created != self.created:
+        if other.workergroup_oid != self.workergroup_oid:
+            return False
+        if other.changed != self.changed:
             return False
         if other.owner != self.owner:
             return False
@@ -127,8 +137,10 @@ class ApplicationRealm(ConfigurationElement):
             self.name = other.name
         if (not self.status and other.status) or overwrite:
             self.status = other.status
-        if (not self.created and other.created) or overwrite:
-            self.created = other.created
+        if (not self.workergroup_oid and other.workergroup_oid) or overwrite:
+            self.workergroup_oid = other.workergroup_oid
+        if (not self.changed and other.changed) or overwrite:
+            self.changed = other.changed
         if (not self.owner and other.owner) or overwrite:
             self.owner = other.owner
 
@@ -143,7 +155,8 @@ class ApplicationRealm(ConfigurationElement):
         assert self.oid is None or isinstance(self.oid, uuid.UUID)
         assert self.name is None or type(self.name) == str
         assert self.status is None or type(self.status) == int
-        assert self.created is None or type(self.created) == int
+        assert self.workergroup_oid is None or isinstance(self.workergroup_oid, uuid.UUID)
+        assert self.changed is None or type(self.changed) == int
         assert self.owner is None or isinstance(self.owner, uuid.UUID)
 
         obj = ConfigurationElement.marshal(self)
@@ -152,7 +165,8 @@ class ApplicationRealm(ConfigurationElement):
             'oid': str(self.oid) if self.oid else None,
             'name': self.name,
             'status': self.STATUS_BY_CODE.get(self.status, None),
-            'created': self.created,
+            'workergroup_oid': str(self.workergroup_oid) if self.workergroup_oid else None,
+            'changed': self.changed,
             'owner': str(self.owner) if self.owner else None,
         })
 
@@ -170,7 +184,7 @@ class ApplicationRealm(ConfigurationElement):
         :param data: Generic host language object
         :type data: dict
 
-        :return: instance of :class:`ManagementRealm`
+        :return: instance of :class:`ApplicationRealm`
         """
         assert type(data) == dict
 
@@ -180,33 +194,41 @@ class ApplicationRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'name', 'status', 'owner', 'created']:
+            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'owner', 'created']:
                 _unknown[k] = data[k]
 
-        name = data.get('name', None)
-        assert name is None or type(name) == str, 'name must be a string, not {}'.format(type(name))
+        name = data.get('name', 'arealm-{}'.format(str(obj.oid)[:8]))
+        assert type(name) == str
 
         status = data.get('status', None)
         assert status is None or (type(status) == str)
         status = ApplicationRealm.STATUS_BY_NAME.get(status, None)
 
-        owner = data.get('owner', None)
-        assert owner is None or type(owner) == str
-        if owner is not None:
-            print('8' * 100, type(owner), owner, '-{}-'.format(owner))
-            owner = uuid.UUID(owner)
+        workergroup_oid = None
+        if 'workergroup_oid' in data and data['workergroup_oid'] is not None:
+            assert type(
+                data['workergroup_oid']) == str, 'workergroup_oid must be a string, but was {}'.format(
+                    type(data['workergroup_oid']))
+            workergroup_oid = uuid.UUID(data['workergroup_oid'])
 
-        created = data.get('created', None)
-        assert created is None or type(created) == int
+        owner = None
+        if 'owner' in data and data['owner'] is not None:
+            assert type(data['owner']) == str, 'owner must be a string, but was {}'.format(type(
+                data['owner']))
+            owner = uuid.UUID(data['owner'])
+
+        changed = data.get('changed', None)
+        assert changed is None or type(changed) == int
 
         obj = ApplicationRealm(oid=obj.oid,
                                label=obj.label,
                                description=obj.description,
                                tags=obj.tags,
                                name=name,
+                               workergroup_oid=workergroup_oid,
                                status=status,
                                owner=owner,
-                               created=created,
+                               changed=changed,
                                _unknown=_unknown)
 
         return obj
