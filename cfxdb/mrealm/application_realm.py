@@ -55,31 +55,35 @@ class ApplicationRealm(ConfigurationElement):
                  name=None,
                  status=None,
                  workergroup_oid=None,
+                 webcluster_oid=None,
                  changed=None,
                  owner=None,
                  _unknown=None):
         """
 
-        :param oid: Object ID of management realm
+        :param oid: Object ID of application realm
         :type oid: uuid.UUID
 
-        :param label: Optional user label of management realm
+        :param label: Optional user label of application realm
         :type label: str
 
-        :param description: Optional user description of management realm
+        :param description: Optional user description of application realm
         :type description: str
 
-        :param tags: Optional list of user tags on management realm
+        :param tags: Optional list of user tags on application realm
         :type tags: list[str]
 
-        :param name: Name of management realm
+        :param name: Name of application realm
         :type name: str
 
         :param status: Status of application realm.
         :type status: int
 
-        :param workergroup_oid: When running, workergroup this application realm is running on.
+        :param workergroup_oid: When running, router cluster worker group this application realm is running on.
         :type workergroup_oid: uuid.UUID
+
+        :param webcluster_oid: When running, the web cluster to serve as a frontend layer for the application realm.
+        :type webcluster_oid: uuid.UUID
 
         :param changed: Timestamp when the application realm was last changed
         :type changed: int
@@ -94,6 +98,7 @@ class ApplicationRealm(ConfigurationElement):
         self.name = name
         self.status = status
         self.workergroup_oid = workergroup_oid
+        self.webcluster_oid = webcluster_oid
         self.changed = changed
         self.owner = owner
 
@@ -111,6 +116,8 @@ class ApplicationRealm(ConfigurationElement):
             return False
         if other.workergroup_oid != self.workergroup_oid:
             return False
+        if other.webcluster_oid != self.webcluster_oid:
+            return False
         if other.changed != self.changed:
             return False
         if other.owner != self.owner:
@@ -127,7 +134,7 @@ class ApplicationRealm(ConfigurationElement):
         """
         Copy over other object.
 
-        :param other: Other management realm to copy data from.
+        :param other: Other application realm to copy data from.
         :type other: instance of :class:`ManagementRealm`
         :return:
         """
@@ -139,6 +146,8 @@ class ApplicationRealm(ConfigurationElement):
             self.status = other.status
         if (not self.workergroup_oid and other.workergroup_oid) or overwrite:
             self.workergroup_oid = other.workergroup_oid
+        if (not self.webcluster_oid and other.webcluster_oid) or overwrite:
+            self.webcluster_oid = other.webcluster_oid
         if (not self.changed and other.changed) or overwrite:
             self.changed = other.changed
         if (not self.owner and other.owner) or overwrite:
@@ -156,6 +165,7 @@ class ApplicationRealm(ConfigurationElement):
         assert self.name is None or type(self.name) == str
         assert self.status is None or type(self.status) == int
         assert self.workergroup_oid is None or isinstance(self.workergroup_oid, uuid.UUID)
+        assert self.webcluster_oid is None or isinstance(self.webcluster_oid, uuid.UUID)
         assert self.changed is None or type(self.changed) == int
         assert self.owner is None or isinstance(self.owner, uuid.UUID)
 
@@ -166,6 +176,7 @@ class ApplicationRealm(ConfigurationElement):
             'name': self.name,
             'status': self.STATUS_BY_CODE.get(self.status, None),
             'workergroup_oid': str(self.workergroup_oid) if self.workergroup_oid else None,
+            'webcluster_oid': str(self.webcluster_oid) if self.webcluster_oid else None,
             'changed': self.changed,
             'owner': str(self.owner) if self.owner else None,
         })
@@ -194,7 +205,7 @@ class ApplicationRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'owner', 'created']:
+            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'webcluster_oid', 'owner', 'created']:
                 _unknown[k] = data[k]
 
         name = data.get('name', 'arealm-{}'.format(str(obj.oid)[:8]))
@@ -211,6 +222,12 @@ class ApplicationRealm(ConfigurationElement):
                     type(data['workergroup_oid']))
             workergroup_oid = uuid.UUID(data['workergroup_oid'])
 
+        webcluster_oid = None
+        if 'webcluster_oid' in data and data['webcluster_oid'] is not None:
+            assert type(data['webcluster_oid']) == str, 'webcluster_oid must be a string, but was {}'.format(
+                type(data['webcluster_oid']))
+            webcluster_oid = uuid.UUID(data['webcluster_oid'])
+
         owner = None
         if 'owner' in data and data['owner'] is not None:
             assert type(data['owner']) == str, 'owner must be a string, but was {}'.format(type(
@@ -226,6 +243,7 @@ class ApplicationRealm(ConfigurationElement):
                                tags=obj.tags,
                                name=name,
                                workergroup_oid=workergroup_oid,
+                               webcluster_oid=webcluster_oid,
                                status=status,
                                owner=owner,
                                changed=changed,
