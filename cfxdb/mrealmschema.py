@@ -33,6 +33,13 @@ class IndexApplicationRealmByName(MapStringUuid):
     """
 
 
+@table('0275b858-890c-4879-945c-720235b093d7')
+class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
+    """
+    Index: (webcluster_oid, arealm_name) -> arealm_oid
+    """
+
+
 #
 # Roles
 #
@@ -254,6 +261,11 @@ class MrealmSchema(object):
     """
     """
 
+    # idx_arealm_by_webcluster: IndexApplicationRealmByWebCluster
+    idx_arealm_by_webcluster = None
+    """
+    """
+
     # arealm_role_associations: ApplicationRealmRoleAssociation
     arealm_role_associations = None
     """
@@ -373,6 +385,12 @@ class MrealmSchema(object):
 
         schema.idx_arealms_by_name = db.attach_table(IndexApplicationRealmByName)
         schema.arealms.attach_index('idx1', schema.idx_arealms_by_name, lambda arealm: arealm.name)
+
+        schema.idx_arealm_by_webcluster = db.attach_table(IndexApplicationRealmByWebCluster)
+        schema.arealms.attach_index('idx2',
+                                    schema.idx_arealm_by_webcluster,
+                                    lambda arealm: (arealm.webcluster_oid, arealm.name),
+                                    nullable=True)
 
         # roles
         schema.roles = db.attach_table(Roles)
