@@ -8,6 +8,8 @@
 import uuid
 import pprint
 
+from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
+
 
 class RouterWorkerGroupClusterPlacement(object):
     """
@@ -18,12 +20,18 @@ class RouterWorkerGroupClusterPlacement(object):
                  cluster_oid=None,
                  node_oid=None,
                  worker_name=None,
+                 status=None,
+                 changed=None,
+                 tcp_listening_port=None,
                  _unknown=None):
         self.oid = oid
         self.worker_group_oid = worker_group_oid
         self.cluster_oid = cluster_oid
         self.node_oid = node_oid
         self.worker_name = worker_name
+        self.status = status
+        self.changed = changed
+        self.tcp_listening_port = tcp_listening_port
         self._unknown = _unknown
 
     def __eq__(self, other):
@@ -38,6 +46,12 @@ class RouterWorkerGroupClusterPlacement(object):
         if other.node_oid != self.node_oid:
             return False
         if other.worker_name != self.worker_name:
+            return False
+        if other.status != self.status:
+            return False
+        if other.changed != self.changed:
+            return False
+        if other.tcp_listening_port != self.tcp_listening_port:
             return False
         return True
 
@@ -54,11 +68,14 @@ class RouterWorkerGroupClusterPlacement(object):
         :return: dict
         """
         obj = {
-            'oid': str(self.oid),
+            'oid': str(self.oid) if self.oid else None,
             'worker_group_oid': str(self.worker_group_oid),
             'cluster_oid': str(self.cluster_oid),
             'node_oid': str(self.node_oid),
             'worker_name': self.worker_name,
+            'status': STATUS_BY_CODE[self.status] if self.status else None,
+            'changed': self.changed,
+            'tcp_listening_port': self.tcp_listening_port,
         }
         return obj
 
@@ -77,7 +94,10 @@ class RouterWorkerGroupClusterPlacement(object):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'worker_group_oid', 'cluster_oid', 'node_oid', 'worker_name']:
+            if k not in [
+                    'oid', 'worker_group_oid', 'cluster_oid', 'node_oid', 'worker_name', 'status', 'changed',
+                    'tcp_listening_port'
+            ]:
                 _unknown[k] = data[k]
 
         oid = None
@@ -105,11 +125,25 @@ class RouterWorkerGroupClusterPlacement(object):
             assert type(data['worker_name']) == str
             worker_name = data['worker_name']
 
+        status = data.get('status', None)
+        assert status is None or (type(status) == str)
+        status = STATUS_BY_NAME.get(status, None)
+
+        changed = data.get('changed', None)
+        assert changed is None or (type(changed) == int)
+
+        tcp_listening_port = data.get('tcp_listening_port', None)
+        assert tcp_listening_port is None or (type(tcp_listening_port) == int and tcp_listening_port > 0
+                                              and tcp_listening_port < 65536)
+
         obj = RouterWorkerGroupClusterPlacement(oid=oid,
                                                 worker_group_oid=worker_group_oid,
                                                 cluster_oid=cluster_oid,
                                                 worker_name=worker_name,
                                                 node_oid=node_oid,
+                                                status=status,
+                                                changed=changed,
+                                                tcp_listening_port=tcp_listening_port,
                                                 _unknown=_unknown)
 
         return obj
