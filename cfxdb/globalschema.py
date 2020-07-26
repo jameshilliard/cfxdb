@@ -5,6 +5,7 @@
 #
 ##############################################################################
 
+import zlmdb
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapUuidUuidCbor, MapUuidStringUuid,\
     MapTimestampUuidFlatBuffers
@@ -19,44 +20,60 @@ __all__ = ('GlobalSchema', )
 @table('1219e71c-a62c-415a-bd15-ddf45e3a658b', marshal=ManagementRealm.marshal, parse=ManagementRealm.parse)
 class ManagementRealms(MapUuidCbor):
     """
-    Table: oid -> mrealm
+    Table: oid -> mrealm.
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Record type :class:`cfxdb.mrealm.ManagementRealm`
     """
 
 
 @table('1d2e8045-ea2b-4456-be4a-7a234d3622d6')
 class IndexManagementRealmByName(MapStringUuid):
     """
-    Index: pubkey -> oid
+    Index: pubkey -> oid.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Nodes`
     """
 
 
 @table('ae89d956-273a-4ce3-b63d-52b07ae35742', marshal=Node.marshal, parse=Node.parse)
 class Nodes(MapUuidCbor):
     """
-    Table: oid -> node
+    Table: oid -> node.
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Record type :class:`cfxdb.mrealm.Node`
     """
 
 
 @table('1336c623-5f38-4397-ad5b-2e6b716b57b0')
 class IndexNodesByPubkey(MapStringUuid):
     """
-    Index: pubkey -> node_oid
+    Index: pubkey -> node_oid.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Nodes`
     """
 
 
 @table('6d071a33-0577-4f72-a2e1-11182f60ab9c')
 class IndexNodesByAuthid(MapUuidStringUuid):
     """
-    Index: (mrealm_oid, authid) -> node_oid
+    Index: (mrealm_oid, authid) -> node_oid.
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Nodes`
     """
 
 
 @table('fa1ed0fc-304e-4f66-8092-d901df1735e4', marshal=User.marshal, parse=User.parse)
 class Users(MapUuidCbor):
     """
-    CFC global users table.
+    Users registered in this domain (master node).
 
-    The table holds all CFC users registered in this CFC domain.
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Record type :class:`cfxdb.user.User`
     """
 
 
@@ -64,6 +81,9 @@ class Users(MapUuidCbor):
 class IndexUsersByName(MapStringUuid):
     """
     Index (by name) on users table.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Users`
     """
 
 
@@ -71,6 +91,9 @@ class IndexUsersByName(MapStringUuid):
 class IndexUsersByPubkey(MapStringUuid):
     """
     Index on Users: by pubkey.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Users`
     """
 
 
@@ -78,34 +101,49 @@ class IndexUsersByPubkey(MapStringUuid):
 class IndexUsersByEmail(MapStringUuid):
     """
     Index on Users: by email.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Users`
     """
 
 
 @table('eccdfc57-5632-4ad4-9c2b-2ac11e9d389f', marshal=UserMrealmRole.marshal, parse=UserMrealmRole.parse)
 class UserMrealmRoles(MapUuidUuidCbor):
     """
+    User roles on management realms.
+
+    * Table type :class:`zlmdb.MapUuidUuidCbor`
+    * Record type :class:`cfxdb.user.UserMrealmRole`
     """
 
 
 @table('c968886e-a2e2-490c-bc2a-6b684c3130f6', marshal=ActivationToken.marshal, parse=ActivationToken.parse)
 class ActivationTokens(MapUuidCbor):
     """
-    CFC user activations.
+    User activations.
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Record type :class:`cfxdb.user.ActivationToken`.
     """
 
 
 @table('0f6a9014-2e39-4cfd-9f2b-f6ffd3d3deca')
 class IndexActivationTokensByAuthidPubkey(MapStringUuid):
     """
+    Index on ActivationTokens: by (authid, pubkey).
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.ActivationTokens`.
     """
 
 
 @table('ae2fe53f-f8ec-4484-8a8f-cabdf1b38358', marshal=Organization.marshal, parse=Organization.parse)
 class Organizations(MapUuidCbor):
     """
-    CFC global organizations table.
+    Organizations defined in this domain (master node).
 
-    The table holds all CFC organizations defined in this CFC domain.
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Record type :class:`cfxdb.user.Organization`.
     """
 
 
@@ -113,6 +151,9 @@ class Organizations(MapUuidCbor):
 class IndexOrganizationsByName(MapStringUuid):
     """
     Index (by name) on organizations table.
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Indexed table :class:`cfxdb.globalschema.Organizations`.
     """
 
 
@@ -120,108 +161,127 @@ class IndexOrganizationsByName(MapStringUuid):
 class UsageRecords(MapTimestampUuidFlatBuffers):
     """
     Usage metering records.
+
+    * Table type :class:`zlmdb.MapTimestampUuidFlatBuffers`
+    * Record type :class:`cfxdb.usage.MasterNodeUsage`.
     """
 
 
 class GlobalSchema(object):
     """
-    CFC database schema.
+    Global (master node wide) database schema.
     """
     def __init__(self, db):
         self.db = db
 
-    # nodes: Nodes
-    nodes = None
+    nodes: Nodes
     """
     Nodes.
+
+    * Database table :class:`cfxdb.globalschema.Nodes`
     """
 
-    # idx_nodes_by_pubkey: IndexNodesByPubkey
-    idx_nodes_by_pubkey = None
+    idx_nodes_by_pubkey: IndexNodesByPubkey
     """
-    Index on nodes: by pubkey
+    Index on nodes (by pubkey).
+
+    * Database table :class:`cfxdb.globalschema.IndexNodesByPubkey`
     """
 
-    # idx_nodes_by_authid: IndexNodesByAuthid
-    idx_nodes_by_authid = None
+    idx_nodes_by_authid: IndexNodesByAuthid
     """
-    Index on nodes: by authid
+    Index on nodes (by authid).
+
+    * Database table :class:`cfxdb.globalschema.IndexNodesByAuthid`
     """
 
-    # organizations = Organizations
-    organizations = None
+    organizations: Organizations
     """
     Organizations.
+
+    * Database table :class:`cfxdb.globalschema.Organizations`
     """
 
-    # idx_organizations_by_name = IndexOrganizationsByName
-    idx_organizations_by_name = None
+    idx_organizations_by_name: IndexOrganizationsByName
     """
-    Index on organizations: by name
+    Index on organizations (by name).
+
+    * Database table :class:`cfxdb.globalschema.IndexOrganizationsByName`
     """
 
-    # users: Users
-    users = None
+    users: Users
     """
     Users.
+
+    * Database table :class:`cfxdb.globalschema.Users`
     """
 
-    # idx_users_by_pubkey: IndexUsersByPubkey
-    idx_users_by_pubkey = None
+    idx_users_by_pubkey: IndexUsersByPubkey
     """
-    Index on users: by pubkey
+    Index on users (by pubkey).
+
+    * Database table :class:`cfxdb.globalschema.IndexUsersByPubkey`
     """
 
-    # idx_users_by_email: IndexUsersByEmail
-    idx_users_by_email = None
+    idx_users_by_email: IndexUsersByEmail
     """
-    Index on users: by email
+    Index on users (by email).
+
+    * Database table :class:`cfxdb.globalschema.IndexUsersByEmail`
     """
 
-    # activation_tokens: ActivationTokens
-    activation_tokens = None
+    activation_tokens: ActivationTokens
     """
     User activation tokens.
+
+    * Database table :class:`cfxdb.globalschema.ActivationTokens`
     """
 
-    # idx_act_tokens_by_authid_pubkey: IndexActivationTokensByAuthidPubkey
-    idx_act_tokens_by_authid_pubkey = None
+    idx_act_tokens_by_authid_pubkey: IndexActivationTokensByAuthidPubkey
     """
-    Index on user activation tokens: by authid+pubkey
+    Index on user activation tokens (by authid, pubkey).
+
+    * Database table :class:`cfxdb.globalschema.IndexActivationTokensByAuthidPubkey`
     """
 
-    # mrealms: ManagementRealms
-    mrealms = None
+    mrealms: ManagementRealms
     """
     Management realms.
+
+    * Database table :class:`cfxdb.globalschema.ManagementRealms`
     """
 
-    # idx_mrealms_by_name: IndexManagementRealmByName
-    idx_mrealms_by_name = None
+    idx_mrealms_by_name: IndexManagementRealmByName
     """
-    Index on management realms: by name.
+    Index on management realms (by name).
+
+    * Database table :class:`cfxdb.globalschema.IndexManagementRealmByName`
     """
 
-    # users_mrealm_roles: UserMrealmRoles
-    users_mrealm_roles = None
+    users_mrealm_roles: UserMrealmRoles
     """
-    User roles map: mrealm_oid, user_oid => UserRoles
+    User roles map (by mrealm_oid, user_oid to UserRoles).
+
+    * Database table :class:`cfxdb.globalschema.UserMrealmRoles`
     """
 
-    usage = None
+    usage: UsageRecords
     """
-    Usage metering records: by timestamp
+    Usage metering records (by timestamp).
+
+    * Database table :class:`cfxdb.globalschema.UsageRecords`
     """
 
     @staticmethod
-    def attach(db):
+    def attach(db: zlmdb.Database) -> object:
         """
         Factory to create a schema from attaching to a database. The schema tables
         will be automatically mapped as persistant maps and attached to the
         database slots.
 
-        :param db: zlmdb.Database
-        :return: object of Schema
+        :param db: Database to which to attach this schema.
+
+        :returns: Open database handle with attached schema, an instance of :class:`GlobalSchema`.
         """
         schema = GlobalSchema(db)
 

@@ -15,5 +15,7 @@ class MNodeLogs(MapTimestampUuidFlatBuffers):
     """
     Persisted managed node heartbeat log records.
 
-    Map :class:`zlmdb.MapTimestampUuidFlatBuffers` from ``(timestamp, node_id)`` to :class:`cfxdb.logs.MNodeLog`
+    * Table type :class:`zlmdb.MapTimestampUuidFlatBuffers`
+    * Key ``(timestamp, node_id)`` type :class:`typing.Tuple[int, uuid.UUID]`
+    * Record type :class:`cfxdb.log.mnode_log.MNodeLog`
     """

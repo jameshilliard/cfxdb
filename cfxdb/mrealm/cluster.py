@@ -5,7 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
+from uuid import UUID
 
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
@@ -46,30 +48,23 @@ class Cluster(ConfigurationElement):
     CFC Cluster database configuration object.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 status=None,
-                 changed=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 status: Optional[int] = None,
+                 changed: Optional[int] = None,
                  _unknown=None):
         """
 
-        :param oid: Object ID of node
-        :type oid: uuid.UUID
+        :param oid: Object ID of this cluster
 
-        :param label: Optional user label of node
-        :type label: str
+        :param label: Optional user label of this cluster
 
-        :param description: Optional user description of node
-        :type description: str
+        :param description: Optional user description of this cluster
 
-        :param tags: Optional list of user tags on node
-        :type tags: list[str]
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
+        :param tags: Optional list of user tags on this cluster
         """
         ConfigurationElement.__init__(self,
                                       oid=oid,

@@ -5,8 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
-import uuid
+from uuid import UUID
 from datetime import datetime
 
 import six
@@ -19,51 +20,38 @@ class ManagementRealm(ConfigurationElement):
     CFC management realm database configuration object.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 created=None,
-                 owner=None,
-                 cf_node=None,
-                 cf_router_worker=None,
-                 cf_container_worker=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 created: Optional[datetime] = None,
+                 owner: Optional[UUID] = None,
+                 cf_node: Optional[str] = None,
+                 cf_router_worker: Optional[str] = None,
+                 cf_container_worker: Optional[str] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of management realm
-        :type oid: uuid.UUID
 
         :param label: Optional user label of management realm
-        :type label: str
 
         :param description: Optional user description of management realm
-        :type description: str
 
         :param tags: Optional list of user tags on management realm
-        :type tags: list[str]
 
         :param name: Name of management realm
-        :type name: str
 
         :param created: Timestamp when the management realm was created
-        :type created: datetime.datetime
 
         :param owner: Owning user (object ID)
-        :type owner: uuid.UUID
 
         :param cf_node: *INTERNAL USE* CFC hosting node for this management realm
-        :type cf_node: str
 
         :param cf_router_worker: *INTERNAL USE* CFC hosting router worker for this management realm
-        :type cf_router_worker: str
 
         :param cf_container_worker: *INTERNAL USE* CFC hosting container worker for this management realm
-        :type cf_container_worker: str
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.name = name
@@ -132,13 +120,13 @@ class ManagementRealm(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, uuid.UUID)
+        assert isinstance(self.oid, UUID)
         assert type(self.name) == six.text_type
         assert isinstance(self.created, datetime)
-        assert isinstance(self.owner, uuid.UUID)
-        assert self.cf_node is None or isinstance(self.cf_node, uuid.UUID)
-        assert self.cf_router_worker is None or isinstance(self.cf_router_worker, uuid.UUID)
-        assert self.cf_container_worker is None or isinstance(self.cf_container_worker, uuid.UUID)
+        assert isinstance(self.owner, UUID)
+        assert self.cf_node is None or isinstance(self.cf_node, UUID)
+        assert self.cf_router_worker is None or isinstance(self.cf_router_worker, UUID)
+        assert self.cf_container_worker is None or isinstance(self.cf_container_worker, UUID)
 
         obj = ConfigurationElement.marshal(self)
 
@@ -188,7 +176,7 @@ class ManagementRealm(ConfigurationElement):
         owner = data.get('owner', None)
         assert owner is None or type(owner) == six.text_type
         if owner:
-            owner = uuid.UUID(owner)
+            owner = UUID(owner)
 
         created = data.get('created', None)
         assert created is None or type(created) == float or type(created) in six.integer_types
@@ -198,17 +186,17 @@ class ManagementRealm(ConfigurationElement):
         cf_node = data.get('cf_node', None)
         assert cf_node is None or type(cf_node) == six.text_type
         if cf_node:
-            cf_node = uuid.UUID(cf_node)
+            cf_node = UUID(cf_node)
 
         cf_router_worker = data.get('cf_router_worker', None)
         assert cf_router_worker is None or type(cf_router_worker) == six.text_type
         if cf_router_worker:
-            cf_router_worker = uuid.UUID(cf_router_worker)
+            cf_router_worker = UUID(cf_router_worker)
 
         cf_container_worker = data.get('cf_container_worker', None)
         assert cf_container_worker is None or type(cf_container_worker) == six.text_type
         if cf_container_worker:
-            cf_container_worker = uuid.UUID(cf_container_worker)
+            cf_container_worker = UUID(cf_container_worker)
 
         obj = ManagementRealm(oid=obj.oid,
                               label=obj.label,

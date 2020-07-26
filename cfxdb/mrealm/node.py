@@ -6,7 +6,8 @@
 ##############################################################################
 
 import pprint
-import uuid
+from uuid import UUID
+from typing import Optional, List
 
 import six
 
@@ -15,50 +16,40 @@ from cfxdb.common import ConfigurationElement
 
 class Node(ConfigurationElement):
     """
-    CFC Node database configuration object.
+    Nodes paired with management realms on this master node.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 owner_oid=None,
-                 pubkey=None,
-                 mrealm_oid=None,
-                 authid=None,
-                 authextra=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 owner_oid: Optional[UUID] = None,
+                 pubkey: Optional[str] = None,
+                 mrealm_oid: Optional[UUID] = None,
+                 authid: Optional[str] = None,
+                 authextra: Optional[dict] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of node
-        :type oid: uuid.UUID
 
         :param label: Optional user label of node
-        :type label: str
 
         :param description: Optional user description of node
-        :type description: str
 
         :param tags: Optional list of user tags on node
-        :type tags: list[str]
 
         :param owner_oid: Object owner.
-        :type owner_oid: uuid.UUID
 
         :param pubkey: The WAMP-cryptosign node public key (32 bytes as HEX encoded string).
-        :type pubkey: str
 
         :param mrealm_oid: The management realm the node will be joined on.
-        :type mrealm_oid: uuid.UUID
 
         :param authid: The WAMP ``authid`` the node will be authenticated as.
-        :type authid: str
 
         :param authextra: Optional ``authextra`` the node will be sent to when authenticating.
-        :type authextra: None or dict
 
         :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.owner_oid = owner_oid
@@ -121,9 +112,9 @@ class Node(ConfigurationElement):
         """
         obj = ConfigurationElement.marshal(self)
 
-        assert self.owner_oid is None or isinstance(self.owner_oid, uuid.UUID)
+        assert self.owner_oid is None or isinstance(self.owner_oid, UUID)
         assert type(self.pubkey) == six.text_type and len(self.pubkey) == 64
-        assert self.mrealm_oid is None or isinstance(self.mrealm_oid, uuid.UUID)
+        assert self.mrealm_oid is None or isinstance(self.mrealm_oid, UUID)
         assert self.authid is None or type(self.authid) == six.text_type
         assert self.authextra is None or type(self.authextra) == dict
 
@@ -161,7 +152,7 @@ class Node(ConfigurationElement):
         owner_oid = data.get('owner_oid', None)
         assert owner_oid is None or type(owner_oid) == six.text_type
         if owner_oid:
-            owner_oid = uuid.UUID(owner_oid)
+            owner_oid = UUID(owner_oid)
 
         pubkey = data.get('pubkey', None)
         assert pubkey is None or (type(pubkey) == six.text_type and len(pubkey) == 64)
@@ -169,7 +160,7 @@ class Node(ConfigurationElement):
         mrealm_oid = data.get('mrealm_oid', None)
         assert mrealm_oid is None or type(mrealm_oid) == six.text_type
         if mrealm_oid:
-            mrealm_oid = uuid.UUID(mrealm_oid)
+            mrealm_oid = UUID(mrealm_oid)
 
         authid = data.get('authid', None)
         assert authid is None or type(authid) == six.text_type

@@ -9,7 +9,7 @@ from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
 
-from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, parse_webservice, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
+from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
 from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation, Permission
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
@@ -23,6 +23,10 @@ __all__ = ('MrealmSchema', )
 class ApplicationRealms(MapUuidCbor):
     """
     Table: arealm_oid -> arealm
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.ApplicationRealm`
     """
 
 
@@ -30,6 +34,10 @@ class ApplicationRealms(MapUuidCbor):
 class IndexApplicationRealmByName(MapStringUuid):
     """
     Index: arealm_name -> arealm_oid
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.ApplicationRealms`
     """
 
 
@@ -37,6 +45,10 @@ class IndexApplicationRealmByName(MapStringUuid):
 class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
     """
     Index: (webcluster_oid, arealm_name) -> arealm_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.ApplicationRealms`
     """
 
 
@@ -47,6 +59,10 @@ class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
 class Roles(MapUuidCbor):
     """
     Table: role_oid -> role
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.Role`.
     """
 
 
@@ -54,6 +70,10 @@ class Roles(MapUuidCbor):
 class IndexRoleByName(MapStringUuid):
     """
     Index: role_name -> role_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.Roles`
     """
 
 
@@ -64,6 +84,10 @@ class IndexRoleByName(MapStringUuid):
 class Permissions(MapUuidCbor):
     """
     Table: permission_oid -> permission
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.Permission`.
     """
 
 
@@ -71,6 +95,10 @@ class Permissions(MapUuidCbor):
 class IndexPermissionByUri(MapUuidStringUuid):
     """
     Index: (role_oid, uri) -> permission_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.Permissions`
     """
 
 
@@ -83,6 +111,10 @@ class IndexPermissionByUri(MapUuidStringUuid):
 class ApplicationRealmRoleAssociations(MapUuidUuidCbor):
     """
     Table: (arealm_oid, role_oid) -> arealm_role_association
+
+    * Table type :class:`zlmdb.MapUuidUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.ApplicationRealmRoleAssociation`.
     """
 
 
@@ -93,6 +125,10 @@ class ApplicationRealmRoleAssociations(MapUuidUuidCbor):
 class RouterClusters(MapUuidCbor):
     """
     Table: routercluster_oid -> routercluster
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.RouterCluster`.
     """
 
 
@@ -100,6 +136,10 @@ class RouterClusters(MapUuidCbor):
 class IndexRouterClusterByName(MapStringUuid):
     """
     Index: routercluster_name -> routercluster_oid
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.RouterClusters`
     """
 
 
@@ -112,6 +152,10 @@ class IndexRouterClusterByName(MapStringUuid):
 class RouterClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (cluster_oid, node_oid) -> cluster_node_membership
+
+    * Table type :class:`zlmdb.MapUuidUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.RouterClusterNodeMemberships`.
     """
 
 
@@ -124,6 +168,10 @@ class RouterClusterNodeMemberships(MapUuidUuidCbor):
 class RouterWorkerGroups(MapUuidCbor):
     """
     Table: workergroup_oid -> workergroup
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.RouterWorkerGroup`.
     """
 
 
@@ -131,6 +179,10 @@ class RouterWorkerGroups(MapUuidCbor):
 class IndexWorkerGroupByCluster(MapUuidStringUuid):
     """
     Index: cluster_oid, workergroup_name -> workergroup_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroups`
     """
 
 
@@ -143,6 +195,10 @@ class IndexWorkerGroupByCluster(MapUuidStringUuid):
 class RouterWorkerGroupClusterPlacements(MapUuidCbor):
     """
     Table: placement_oid -> placement
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.RouterWorkerGroupClusterPlacement`.
     """
 
 
@@ -150,6 +206,10 @@ class RouterWorkerGroupClusterPlacements(MapUuidCbor):
 class IndexClusterPlacementByWorkerName(MapUuidUuidUuidStringUuid):
     """
     Index: (workergroup_oid, cluster_oid, node_oid, worker_name) -> placement_oid
+
+    * Table type :class:`zlmdb.MapUuidUuidUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacements`
     """
 
 
@@ -160,6 +220,10 @@ class IndexClusterPlacementByWorkerName(MapUuidUuidUuidStringUuid):
 class WebClusters(MapUuidCbor):
     """
     Table: webcluster_oid -> webcluster
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.WebCluster`.
     """
 
 
@@ -167,6 +231,10 @@ class WebClusters(MapUuidCbor):
 class IndexWebClusterByName(MapStringUuid):
     """
     Index: webcluster_name -> webcluster_oid
+
+    * Table type :class:`zlmdb.MapStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.WebClusters`
     """
 
 
@@ -179,16 +247,24 @@ class IndexWebClusterByName(MapStringUuid):
 class WebClusterNodeMemberships(MapUuidUuidCbor):
     """
     Table: (webcluster_oid, node_oid) -> webcluster_node_membership
+
+    * Table type :class:`zlmdb.MapUuidUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.WebClusterNodeMembership`.
     """
 
 
 #
 # Web cluster services
 #
-@table('a8803ca3-09a0-4d72-8728-2469de8d50ac', marshal=WebService.marshal, parse=parse_webservice)
+@table('a8803ca3-09a0-4d72-8728-2469de8d50ac', marshal=WebService.marshal, parse=WebService.parse)
 class WebServices(MapUuidCbor):
     """
     Table: webservice_oid -> webservice
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.WebService`.
     """
 
 
@@ -196,6 +272,10 @@ class WebServices(MapUuidCbor):
 class IndexWebClusterWebServices(MapUuidUuidUuid):
     """
     Index: (webcluster_oid, webservice_oid) -> webservice_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.WebServices`
     """
 
 
@@ -203,6 +283,10 @@ class IndexWebClusterWebServices(MapUuidUuidUuid):
 class IndexWebServiceByPath(MapUuidStringUuid):
     """
     Index: (webcluster_oid, webservice_name) -> webservice_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.WebServices`
     """
 
 
@@ -210,6 +294,10 @@ class IndexWebServiceByPath(MapUuidStringUuid):
 class IndexWebClusterPathToWebService(MapUuidStringUuid):
     """
     Index: (webcluster_oid, path) -> webservice_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.WebClusters`
     """
 
 
@@ -220,6 +308,10 @@ class IndexWebClusterPathToWebService(MapUuidStringUuid):
 class Docs(MapUuidCbor):
     """
     Table: doc_oid -> doc
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.Doc`
     """
 
 
@@ -227,6 +319,10 @@ class Docs(MapUuidCbor):
 class IndexObjectToDoc(MapSlotUuidUuid):
     """
     Index: (object_slot, object_oid) -> doc_oid
+
+    * Table type :class:`zlmdb.MapSlotUuidUuid`
+    * Key type :class:`typing.Tuple[int, uuid.UUID]`
+    * Indexed table :class:`cfxdb.mrealmschema.Docs`
     """
 
 
@@ -237,135 +333,179 @@ class MrealmSchema(object):
     def __init__(self, db):
         self.db = db
 
-    # roles: Role
-    roles = None
+    roles: Roles
     """
+    Roles for used in authorization with application routing.
+
+    * Database table :class:`cfxdb.mrealmschema.Roles`
     """
 
-    # idx_roles_by_name: IndexRolesByName
-    idx_roles_by_name = None
-
-    # permissions: Permissions
-    permissions = None
-
-    # idx_permissions_by_uri: IndexPermissionByUri
-    idx_permissions_by_uri = None
-
-    # arealms: ApplicationRealm
-    arealms = None
+    idx_roles_by_name: IndexRoleByName
     """
+    Index on roles (by name).
+
+    * Database table :class:`cfxdb.mrealmschema.IndexRoleByName`
     """
 
-    # idx_arealms_by_name: IndexApplicationRealmByName
-    idx_arealms_by_name = None
+    permissions: Permissions
     """
+    Permissions defined on roles.
+
+    * Database table :class:`cfxdb.mrealmschema.Permissions`
     """
 
-    # idx_arealm_by_webcluster: IndexApplicationRealmByWebCluster
-    idx_arealm_by_webcluster = None
+    idx_permissions_by_uri: IndexPermissionByUri
     """
+    Index on permissions: by URI.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexPermissionByUri`
     """
 
-    # arealm_role_associations: ApplicationRealmRoleAssociation
-    arealm_role_associations = None
+    arealms: ApplicationRealms
     """
+    Application realms defined in this management realm.
+
+    * Database table :class:`cfxdb.mrealmschema.ApplicationRealms`
     """
 
-    # routerclusters: RouterClusters
-    routerclusters = None
+    idx_arealms_by_name: IndexApplicationRealmByName
     """
+    Index on application realms: by name.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexApplicationRealmByName`
     """
 
-    # idx_routerclusters_by_name: IndexRouterClusterByName
-    idx_routerclusters_by_name = None
+    idx_arealm_by_webcluster: IndexApplicationRealmByWebCluster
     """
+    Index on application realms: by web cluster.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexApplicationRealmByWebCluster`
     """
 
-    # routercluster_node_memberships: RouterClusterNodeMemberships
-    routercluster_node_memberships = None
+    arealm_role_associations: ApplicationRealmRoleAssociation
     """
+    Association of roles to application realms.
+
+    * Database table :class:`cfxdb.mrealmschema.ApplicationRealmRoleAssociation`
     """
 
-    # router_workergroups: RouterWorkerGroups
-    router_workergroups = None
+    routerclusters: RouterClusters
     """
+    Router clusters defined in this management realm.
+
+    * Database table :class:`cfxdb.mrealmschema.RouterClusters`
     """
 
-    # idx_workergroup_by_cluster: IndexWorkerGroupByCluster
-    idx_workergroup_by_cluster = None
+    idx_routerclusters_by_name: IndexRouterClusterByName
     """
+    Index on router clusters: by name.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexRouterClusterByName`
     """
 
-    # router_workergroup_placements: RouterWorkerGroupClusterPlacements
-    router_workergroup_placements = None
+    routercluster_node_memberships: RouterClusterNodeMemberships
     """
+    Node membership in router clusters.
+
+    * Database table :class:`cfxdb.mrealmschema.RouterClusterNodeMemberships`
     """
 
-    # idx_clusterplacement_by_workername: IndexClusterPlacementByWorkerName
-    idx_clusterplacement_by_workername = None
+    router_workergroups: RouterWorkerGroups
     """
+    Router worker groups.
+
+    * Database table :class:`cfxdb.mrealmschema.RouterWorkerGroups`
     """
 
-    # webclusters: WebClusters
-    webclusters = None
+    idx_workergroup_by_cluster: IndexWorkerGroupByCluster
     """
+    Index on worker groups: by cluster.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexWorkerGroupByCluster`
     """
 
-    # idx_webclusters_by_name: IndexWebClusterByName
-    idx_webclusters_by_name = None
+    router_workergroup_placements: RouterWorkerGroupClusterPlacements
     """
+    Router worker cluster placements.
+
+    * Database table :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacements`
     """
 
-    # webcluster_node_memberships: WebClusterNodeMemberships
-    webcluster_node_memberships = None
+    idx_clusterplacement_by_workername: IndexClusterPlacementByWorkerName
     """
+    Index on router worker placements: by worker name.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexClusterPlacementByWorkerName`
     """
 
-    # webservices: WebServices
-    webservices = None
+    webclusters: WebClusters
     """
+    Web clusters.
+
+    * Database table :class:`cfxdb.mrealmschema.WebClusters`
     """
 
-    # idx_webservices_by_path: IndexWebServiceByPath
-    idx_webservices_by_path = None
+    idx_webclusters_by_name: IndexWebClusterByName
     """
+    Index of web clusters: by name.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexWebClusterByName`
     """
 
-    # idx_webcluster_path_to_service: IndexWebClusterPathToWebService
-    idx_webcluster_path_to_service = None
+    webcluster_node_memberships: WebClusterNodeMemberships
     """
+    Node membership in web clusters.
+
+    * Database table :class:`cfxdb.mrealmschema.WebClusterNodeMemberships`
     """
 
-    # idx_node_to_webclusters: IndexNodeToWebClusters
-    idx_node_to_webclusters = None
+    webservices: WebServices
     """
+    Web service added to web clusters.
+
+    * Database table :class:`cfxdb.mrealmschema.WebServices`
     """
 
-    # idx_webcluster_to_nodes: IndexWebClusterToNodes
-    idx_webcluster_to_nodes = None
+    idx_webservices_by_path: IndexWebServiceByPath
     """
+    Index on web services: by HTTP path.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexWebServiceByPath`
     """
 
-    # docs: Docs
-    docs = None
+    idx_webcluster_path_to_service: IndexWebClusterPathToWebService
     """
+    Index on web service: by ...
+
+    * Database table :class:`cfxdb.mrealmschema.IndexWebClusterPathToWebService`
     """
 
-    # idx_object_to_doc: IndexObjectToDoc
-    idx_object_to_doc = None
+    docs: Docs
     """
+    Documentation attached to a database object.
+
+    * Database table :class:`cfxdb.mrealmschema.Docs`
     """
 
-    # mnode_logs: MNodeLogs
-    mnode_logs = None
+    idx_object_to_doc: IndexObjectToDoc
+    """
+    Index on documentation: by documented object ID
+
+    * Database table :class:`cfxdb.mrealmschema.IndexObjectToDoc`
+    """
+
+    mnode_logs: MNodeLogs
     """
     Managed node log records.
+
+    * Database table :class:`cfxdb.mrealmschema.MNodeLogs`
     """
 
-    # mworker_logs: MWorkerLogs
-    mworker_logs = None
+    mworker_logs: MWorkerLogs
     """
     Managed node worker log records.
+
+    * Database table :class:`cfxdb.mrealmschema.MWorkerLogs`
     """
 
     @staticmethod

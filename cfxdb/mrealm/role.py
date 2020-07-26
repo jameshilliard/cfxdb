@@ -5,50 +5,42 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
-import uuid
+from uuid import UUID
 
 from cfxdb.common import ConfigurationElement
 
 
 class Role(ConfigurationElement):
     """
-    CFC management realm database configuration object.
+    Roles created for use with application-level authorization and permissions
+    in application realms.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 created=None,
-                 owner=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 created: Optional[int] = None,
+                 owner: Optional[UUID] = None,
                  _unknown=None):
         """
 
-        :param oid: Object ID of management realm
-        :type oid: uuid.UUID
+        :param oid: Object ID of role
 
-        :param label: Optional user label of management realm
-        :type label: str
+        :param label: Optional user label of role
 
-        :param description: Optional user description of management realm
-        :type description: str
+        :param description: Optional user description of role
 
-        :param tags: Optional list of user tags on management realm
-        :type tags: list[str]
+        :param tags: Optional list of user tags on role
 
-        :param name: Name of management realm
-        :type name: str
+        :param name: Name of role
 
-        :param created: Timestamp when the management realm was created
-        :type created: datetime.datetime
+        :param created: Timestamp when the role was created
 
         :param owner: Owning user (object ID)
-        :type owner: uuid.UUID
-
-       :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.name = name
@@ -81,7 +73,7 @@ class Role(ConfigurationElement):
         """
         Copy over other object.
 
-        :param other: Other management realm to copy data from.
+        :param other: Other role to copy data from.
         :type other: instance of :class:`ManagementRealm`
         :return:
         """
@@ -102,10 +94,10 @@ class Role(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, uuid.UUID)
+        assert isinstance(self.oid, UUID)
         assert type(self.name) == str
         assert self.created is None or type(self.created) == int
-        assert self.owner is None or isinstance(self.owner, uuid.UUID)
+        assert self.owner is None or isinstance(self.owner, UUID)
 
         obj = ConfigurationElement.marshal(self)
 
@@ -149,7 +141,7 @@ class Role(ConfigurationElement):
         owner = data.get('owner', None)
         assert owner is None or type(owner) == str
         if owner:
-            owner = uuid.UUID(owner)
+            owner = UUID(owner)
 
         created = data.get('created', None)
         assert created is None or type(created) == int

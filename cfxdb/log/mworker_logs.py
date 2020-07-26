@@ -15,5 +15,7 @@ class MWorkerLogs(MapTimestampUuidStringFlatBuffers):
     """
     Persisted managed node worker heartbeat log records.
 
-    Map :class:`zlmdb.MapTimestampUuidStringFlatBuffers` from ``(timestamp, node_id, worker_id)`` to :class:`cfxdb.logs.MWorkerLog`
+    * Table type :class:`zlmdb.MapTimestampUuidStringFlatBuffers`
+    * Key ``(timestamp, node_id, worker_id)`` type :class:`typing.Tuple[int, uuid.UUID, uuid.UUID]`
+    * Record type :class:`cfxdb.log.mworker_log.MWorkerLog`
     """

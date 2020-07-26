@@ -5,8 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
-import uuid
+from uuid import UUID
 
 from cfxdb.common import ConfigurationElement
 
@@ -18,30 +19,25 @@ class WebService(ConfigurationElement):
     * check_web_path_service
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 service_type=None,
-                 webcluster_oid=None,
-                 path=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 service_type: Optional[str] = None,
+                 webcluster_oid: Optional[UUID] = None,
+                 path: Optional[str] = None,
                  _unknown=None):
         """
 
-        :param oid: Object ID of node
-        :type oid: uuid.UUID
+        :param oid: Object ID of this web service.
 
-        :param label: Optional user label of node
-        :type label: str
+        :param label: Optional user label of this web service.
 
-        :param description: Optional user description of node
-        :type description: str
+        :param description: Optional user description of this web service.
 
-        :param tags: Optional list of user tags on node
-        :type tags: list[str]
+        :param tags: Optional list of user tags on this web service.
 
         :param path: HTTP URL path of the Web service, eg ``/myapp`` or ``/myapp/dashboard/72``.
-        :type path: str
         """
         ConfigurationElement.__init__(self,
                                       oid=oid,
@@ -120,7 +116,7 @@ class WebService(ConfigurationElement):
         webcluster_oid = data.get('webcluster_oid', None)
         assert webcluster_oid is None or (type(webcluster_oid) == str)
         if webcluster_oid:
-            webcluster_oid = uuid.UUID(webcluster_oid)
+            webcluster_oid = UUID(webcluster_oid)
 
         path = data.get('path', None)
         assert path is None or (type(path) == str)

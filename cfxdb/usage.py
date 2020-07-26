@@ -111,6 +111,10 @@ class MasterNodeUsage(object):
         self._msgs_subscribed = None
 
     def marshal(self):
+        """
+
+        :return:
+        """
         obj = {
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'mrealm_id': str(self.mrealm_id) if self.mrealm_id else None,
@@ -153,6 +157,11 @@ class MasterNodeUsage(object):
 
     @staticmethod
     def parse(data):
+        """
+
+        :param data:
+        :return:
+        """
         assert type(data) == dict, 'data parsed must have type dict, but was "{}"'.format(type(data))
         obj = MasterNodeUsage()
 
@@ -338,6 +347,10 @@ class MasterNodeUsage(object):
 
     @property
     def timestamp(self):
+        """
+
+        :return: Timestamp when usage was recorded (at the node of recording).
+        """
         if self._timestamp is None and self._from_fbs:
             self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
         return self._timestamp
@@ -349,6 +362,10 @@ class MasterNodeUsage(object):
 
     @property
     def timestamp_from(self):
+        """
+
+        :return:
+        """
         if self._timestamp_from is None and self._from_fbs:
             self._timestamp_from = np.datetime64(self._from_fbs.TimestampFrom(), 'ns')
         return self._timestamp_from
@@ -360,6 +377,10 @@ class MasterNodeUsage(object):
 
     @property
     def mrealm_id(self):
+        """
+
+        :return:
+        """
         if self._mrealm_id is None and self._from_fbs:
             if self._from_fbs.MrealmIdLength():
                 _mrealm_id = self._from_fbs.MrealmIdAsBytes()
@@ -374,6 +395,10 @@ class MasterNodeUsage(object):
 
     @property
     def metering_id(self):
+        """
+
+        :return:
+        """
         if self._metering_id is None and self._from_fbs:
             if self._from_fbs.MeteringIdLength():
                 _metering_id = self._from_fbs.MeteringIdAsBytes()
@@ -388,6 +413,10 @@ class MasterNodeUsage(object):
 
     @property
     def pubkey(self):
+        """
+
+        :return:
+        """
         if self._pubkey is None and self._from_fbs:
             if self._from_fbs.PubkeyLength():
                 self._pubkey = self._from_fbs.PubkeyAsBytes()
@@ -400,6 +429,10 @@ class MasterNodeUsage(object):
 
     @property
     def client_ip_address(self):
+        """
+
+        :return:
+        """
         if self._client_ip_address is None and self._from_fbs:
             if self._from_fbs.ClientIpAddressLength():
                 self._client_ip_address = self._from_fbs.ClientIpAddressAsBytes()
@@ -412,6 +445,10 @@ class MasterNodeUsage(object):
 
     @property
     def client_ip_version(self):
+        """
+
+        :return:
+        """
         if self._client_ip_version is None and self._from_fbs:
             self._client_ip_version = self._from_fbs.ClientIpVersion()
         return self._client_ip_version
@@ -423,6 +460,10 @@ class MasterNodeUsage(object):
 
     @property
     def client_ip_port(self):
+        """
+
+        :return:
+        """
         if self._client_ip_port is None and self._from_fbs:
             self._client_ip_port = self._from_fbs.ClientIpPort()
         return self._client_ip_port
@@ -434,6 +475,10 @@ class MasterNodeUsage(object):
 
     @property
     def seq(self):
+        """
+
+        :return:
+        """
         if self._seq is None and self._from_fbs:
             self._seq = self._from_fbs.Seq()
         return self._seq
@@ -445,6 +490,10 @@ class MasterNodeUsage(object):
 
     @property
     def sent(self):
+        """
+
+        :return:
+        """
         if self._sent is None and self._from_fbs:
             self._sent = np.datetime64(self._from_fbs.Sent(), 'ns')
         return self._sent
@@ -456,6 +505,10 @@ class MasterNodeUsage(object):
 
     @property
     def processed(self):
+        """
+
+        :return:
+        """
         if self._processed is None and self._from_fbs:
             self._processed = np.datetime64(self._from_fbs.Processed(), 'ns')
         return self._processed
@@ -467,6 +520,10 @@ class MasterNodeUsage(object):
 
     @property
     def status(self):
+        """
+
+        :return:
+        """
         if self._status is None and self._from_fbs:
             self._status = self._from_fbs.Status()
         return self._status
@@ -478,6 +535,10 @@ class MasterNodeUsage(object):
 
     @property
     def status_message(self):
+        """
+
+        :return:
+        """
         if self._status_message is None and self._from_fbs:
             status_message = self._from_fbs.StatusMessage()
             if status_message:
@@ -491,6 +552,10 @@ class MasterNodeUsage(object):
 
     @property
     def count(self):
+        """
+
+        :return:
+        """
         if self._count is None and self._from_fbs:
             self._count = self._from_fbs.Count()
         return self._count
@@ -502,6 +567,10 @@ class MasterNodeUsage(object):
 
     @property
     def total(self):
+        """
+
+        :return:
+        """
         if self._total is None and self._from_fbs:
             self._total = self._from_fbs.Total()
         return self._total
@@ -513,6 +582,10 @@ class MasterNodeUsage(object):
 
     @property
     def nodes(self):
+        """
+
+        :return:
+        """
         if self._nodes is None and self._from_fbs:
             self._nodes = self._from_fbs.Nodes()
         return self._nodes
@@ -524,6 +597,10 @@ class MasterNodeUsage(object):
 
     @property
     def controllers(self):
+        """
+
+        :return:
+        """
         if self._controllers is None and self._from_fbs:
             self._controllers = self._from_fbs.Controllers()
         return self._controllers
@@ -535,6 +612,10 @@ class MasterNodeUsage(object):
 
     @property
     def hostmonitors(self):
+        """
+
+        :return:
+        """
         if self._hostmonitors is None and self._from_fbs:
             self._hostmonitors = self._from_fbs.Hostmonitors()
         return self._hostmonitors
@@ -546,6 +627,10 @@ class MasterNodeUsage(object):
 
     @property
     def routers(self):
+        """
+
+        :return:
+        """
         if self._routers is None and self._from_fbs:
             self._routers = self._from_fbs.Routers()
         return self._routers
@@ -557,6 +642,10 @@ class MasterNodeUsage(object):
 
     @property
     def containers(self):
+        """
+
+        :return:
+        """
         if self._containers is None and self._from_fbs:
             self._containers = self._from_fbs.Containers()
         return self._containers
@@ -568,6 +657,10 @@ class MasterNodeUsage(object):
 
     @property
     def guests(self):
+        """
+
+        :return:
+        """
         if self._guests is None and self._from_fbs:
             self._guests = self._from_fbs.Guests()
         return self._guests
@@ -579,6 +672,10 @@ class MasterNodeUsage(object):
 
     @property
     def proxies(self):
+        """
+
+        :return:
+        """
         if self._proxies is None and self._from_fbs:
             self._proxies = self._from_fbs.Proxies()
         return self._proxies
@@ -590,6 +687,10 @@ class MasterNodeUsage(object):
 
     @property
     def marketmakers(self):
+        """
+
+        :return:
+        """
         if self._marketmakers is None and self._from_fbs:
             self._marketmakers = self._from_fbs.Marketmakers()
         return self._marketmakers
@@ -601,6 +702,10 @@ class MasterNodeUsage(object):
 
     @property
     def sessions(self):
+        """
+
+        :return:
+        """
         if self._sessions is None and self._from_fbs:
             self._sessions = self._from_fbs.Sessions()
         return self._sessions
@@ -612,6 +717,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_call(self):
+        """
+
+        :return:
+        """
         if self._msgs_call is None and self._from_fbs:
             self._msgs_call = self._from_fbs.MsgsCall()
         return self._msgs_call
@@ -623,6 +732,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_yield(self):
+        """
+
+        :return:
+        """
         if self._msgs_yield is None and self._from_fbs:
             self._msgs_yield = self._from_fbs.MsgsYield()
         return self._msgs_yield
@@ -634,6 +747,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_invocation(self):
+        """
+
+        :return:
+        """
         if self._msgs_invocation is None and self._from_fbs:
             self._msgs_invocation = self._from_fbs.MsgsInvocation()
         return self._msgs_invocation
@@ -645,6 +762,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_result(self):
+        """
+
+        :return:
+        """
         if self._msgs_result is None and self._from_fbs:
             self._msgs_result = self._from_fbs.MsgsResult()
         return self._msgs_result
@@ -656,6 +777,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_error(self):
+        """
+
+        :return:
+        """
         if self._msgs_error is None and self._from_fbs:
             self._msgs_error = self._from_fbs.MsgsError()
         return self._msgs_error
@@ -667,6 +792,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_publish(self):
+        """
+
+        :return:
+        """
         if self._msgs_publish is None and self._from_fbs:
             self._msgs_publish = self._from_fbs.MsgsPublish()
         return self._msgs_publish
@@ -678,6 +807,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_published(self):
+        """
+
+        :return:
+        """
         if self._msgs_published is None and self._from_fbs:
             self._msgs_published = self._from_fbs.MsgsPublished()
         return self._msgs_published
@@ -689,6 +822,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_event(self):
+        """
+
+        :return:
+        """
         if self._msgs_event is None and self._from_fbs:
             self._msgs_event = self._from_fbs.MsgsEvent()
         return self._msgs_event
@@ -700,6 +837,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_register(self):
+        """
+
+        :return:
+        """
         if self._msgs_register is None and self._from_fbs:
             self._msgs_register = self._from_fbs.MsgsRegister()
         return self._msgs_register
@@ -711,6 +852,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_registered(self):
+        """
+
+        :return:
+        """
         if self._msgs_registered is None and self._from_fbs:
             self._msgs_registered = self._from_fbs.MsgsRegistered()
         return self._msgs_registered
@@ -722,6 +867,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_subscribe(self):
+        """
+
+        :return:
+        """
         if self._msgs_subscribe is None and self._from_fbs:
             self._msgs_subscribe = self._from_fbs.MsgsSubscribe()
         return self._msgs_subscribe
@@ -733,6 +882,10 @@ class MasterNodeUsage(object):
 
     @property
     def msgs_subscribed(self):
+        """
+
+        :return:
+        """
         if self._msgs_subscribed is None and self._from_fbs:
             self._msgs_subscribed = self._from_fbs.MsgsSubscribed()
         return self._msgs_subscribed
@@ -744,9 +897,19 @@ class MasterNodeUsage(object):
 
     @staticmethod
     def cast(buf):
+        """
+
+        :param buf:
+        :return:
+        """
         return MasterNodeUsage(_MasterNodeUsage.GetRootAsMasterNodeUsage(buf, 0))
 
     def build(self, builder):
+        """
+
+        :param builder:
+        :return:
+        """
 
         mrealm_id = self.mrealm_id.bytes if self.mrealm_id else None
         if mrealm_id:

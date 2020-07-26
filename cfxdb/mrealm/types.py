@@ -1,3 +1,10 @@
+##############################################################################
+#
+#                        Crossbar.io FX
+#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#
+##############################################################################
+
 from cfxdb.gen.mrealm.WorkerGroupStatus import WorkerGroupStatus
 
 STATUS_BY_CODE = {

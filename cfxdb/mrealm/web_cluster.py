@@ -5,7 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
+from uuid import UUID
 
 from cfxdb.mrealm.cluster import Cluster
 
@@ -15,94 +17,71 @@ class WebCluster(Cluster):
     CFC Web Cluster database configuration object.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 status=None,
-                 changed=None,
-                 tcp_version=None,
-                 tcp_port=None,
-                 tcp_shared=None,
-                 tcp_interface=None,
-                 tcp_backlog=None,
-                 tls_key=None,
-                 tls_certificate=None,
-                 tls_chain_certificates=None,
-                 tls_ca_certificates=None,
-                 tls_dhparam=None,
-                 tls_ciphers=None,
-                 http_client_timeout=None,
-                 http_hsts=None,
-                 http_hsts_max_age=None,
-                 http_access_log=None,
-                 http_display_tracebacks=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 status: Optional[int] = None,
+                 changed: Optional[int] = None,
+                 tcp_version: Optional[int] = None,
+                 tcp_port: Optional[int] = None,
+                 tcp_shared: Optional[bool] = None,
+                 tcp_interface: Optional[str] = None,
+                 tcp_backlog: Optional[int] = None,
+                 tls_key: Optional[str] = None,
+                 tls_certificate: Optional[str] = None,
+                 tls_chain_certificates: Optional[List[str]] = None,
+                 tls_ca_certificates: Optional[List[str]] = None,
+                 tls_dhparam: Optional[str] = None,
+                 tls_ciphers: Optional[str] = None,
+                 http_client_timeout: Optional[int] = None,
+                 http_hsts: Optional[bool] = None,
+                 http_hsts_max_age: Optional[int] = None,
+                 http_access_log: Optional[bool] = None,
+                 http_display_tracebacks: Optional[bool] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of node
-        :type oid: uuid.UUID
 
         :param label: Optional user label of node
-        :type label: str
 
         :param description: Optional user description of node
-        :type description: str
 
         :param tags: Optional list of user tags on node
-        :type tags: list[str]
 
         :param tcp_version: IP version, either 4 for 6
-        :type tcp_version: int
 
         :param tcp_port: IP listening port
-        :type tcp_port: int
 
         :param tcp_shared: enable TCP port sharing
-        :type tcp_shared: bool
 
         :param tcp_interface: listen on this interface
-        :type tcp_interface: str
 
         :param tcp_backlog: TCP accept backlog queue size
-        :type tcp_backlog: int
 
         :param tls_key: TLS server private key to use
-        :type tls_key: str
 
         :param tls_certificate: TLS server certificate to use
-        :type tls_certificate: str
 
         :param tls_chain_certificates: TLS certificate chain
-        :type tls_chain_certificates: list[str]
 
         :param tls_ca_certificates: CA certificates to use
-        :type tls_ca_certificates: list[str]
 
         :param tls_dhparam: DH parameter file
-        :type tls_dhparam: str
 
         :param tls_ciphers: Ciphers list
-        :type tls_ciphers: str
 
         :param http_client_timeout: HTTP client inactivity timeout
-        :type http_client_timeout: int
 
         :param http_hsts: enable HTTP strict transport security (HSTS)
-        :type http_hsts: bool
 
         :param http_hsts_max_age: HSTS maximum age to announce
-        :type http_hsts_max_age: int
 
         :param http_access_log: enable Web request access logging
-        :type http_access_log: bool
 
         :param http_display_tracebacks: enable tracebacks when running into Web errors
-        :type http_display_tracebacks: bool
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         Cluster.__init__(self,
                          oid=oid,

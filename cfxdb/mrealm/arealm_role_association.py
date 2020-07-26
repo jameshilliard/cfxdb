@@ -5,17 +5,25 @@
 #
 ##############################################################################
 
+from typing import Optional
 import pprint
-import uuid
-
-import six
+from uuid import UUID
 
 
 class ApplicationRealmRoleAssociation(object):
-    def __init__(self, arealm_oid=None, role_oid=None, _unknown=None):
+    """
+    Association of a role with an application realm.
+    """
+    def __init__(self, arealm_oid: Optional[UUID] = None, role_oid: Optional[UUID] = None, _unknown=None):
         self.arealm_oid = arealm_oid
         self.role_oid = role_oid
         self._unknown = _unknown
+        """
+
+        :param arealm_oid: Object ID of the application realm this association applies to.
+
+        :param role_oid: Object ID of the role this association applies to.
+        """
 
     def __eq__(self, other):
         if not isinstance(other, self.__class__):
@@ -64,13 +72,13 @@ class ApplicationRealmRoleAssociation(object):
 
         arealm_oid = None
         if 'arealm_oid' in data:
-            assert type(data['arealm_oid']) == six.text_type
-            arealm_oid = uuid.UUID(data['arealm_oid'])
+            assert type(data['arealm_oid']) == str
+            arealm_oid = UUID(data['arealm_oid'])
 
         role_oid = None
         if 'role_oid' in data:
-            assert type(data['role_oid']) == six.text_type
-            role_oid = uuid.UUID(data['role_oid'])
+            assert type(data['role_oid']) == str
+            role_oid = UUID(data['role_oid'])
 
         obj = ApplicationRealmRoleAssociation(arealm_oid=arealm_oid, role_oid=role_oid, _unknown=_unknown)
 

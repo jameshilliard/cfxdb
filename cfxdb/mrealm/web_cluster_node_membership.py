@@ -5,13 +5,33 @@
 #
 ##############################################################################
 
+from typing import Optional
 import pprint
+from uuid import UUID
 
 from cfxdb.mrealm.cluster_node_membership import ClusterNodeMembership
 
 
 class WebClusterNodeMembership(ClusterNodeMembership):
-    def __init__(self, cluster_oid=None, node_oid=None, parallel=None, standby=None, _unknown=None):
+    """
+    Information about memberships of nodes in web clusters.
+    """
+    def __init__(self,
+                 cluster_oid: Optional[UUID] = None,
+                 node_oid: Optional[UUID] = None,
+                 parallel: Optional[int] = None,
+                 standby: Optional[bool] = None,
+                 _unknown=None):
+        """
+
+        :param cluster_oid: Object ID of the cluster the node is member in.
+
+        :param node_oid: Object ID of the node that is member in the cluster.
+
+        :param parallel: Default parallel degree per node in this cluster.
+
+        :param standby: Flag indicating whether this is a (currently inactive) standby node.
+        """
         ClusterNodeMembership.__init__(self, cluster_oid=cluster_oid, node_oid=node_oid, _unknown=_unknown)
         self.parallel = parallel
         self.standby = standby

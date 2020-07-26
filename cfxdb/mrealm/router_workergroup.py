@@ -5,8 +5,9 @@
 #
 ##############################################################################
 
-import uuid
+from typing import Optional, List
 import pprint
+from uuid import UUID
 
 from cfxdb.common import ConfigurationElement
 from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
@@ -17,32 +18,25 @@ class RouterWorkerGroup(ConfigurationElement):
     Router worker group database configuration object.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 cluster_oid=None,
-                 name=None,
-                 scale=None,
-                 status=None,
-                 changed=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 cluster_oid: Optional[UUID] = None,
+                 name: Optional[str] = None,
+                 scale: Optional[int] = None,
+                 status: Optional[int] = None,
+                 changed: Optional[int] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of router worker group.
-        :type oid: uuid.UUID
 
         :param label: Optional user label of router worker group.
-        :type label: str
 
         :param description: Optional user description of router worker group.
-        :type description: str
 
         :param tags: Optional list of user tags on router worker group.
-        :type tags: list[str]
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self,
                                       oid=oid,
@@ -126,7 +120,7 @@ class RouterWorkerGroup(ConfigurationElement):
 
         cluster_oid = data.get('cluster_oid', None)
         assert cluster_oid is None or (type(cluster_oid) == str)
-        cluster_oid = uuid.UUID(cluster_oid)
+        cluster_oid = UUID(cluster_oid)
 
         name = data.get('name', None)
         assert name is None or (type(name) == str)

@@ -5,8 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
-import uuid
+from uuid import UUID
 
 from cfxdb.common import ConfigurationElement
 
@@ -16,43 +17,32 @@ class Permission(ConfigurationElement):
     Role permission database object.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 role_oid=None,
-                 uri=None,
-                 created=None,
-                 owner=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 role_oid: Optional[UUID] = None,
+                 uri: Optional[str] = None,
+                 created: Optional[int] = None,
+                 owner: Optional[UUID] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of this permission object
-        :type oid: uuid.UUID
 
         :param label: Optional user label of permission
-        :type label: str
 
         :param description: Optional user description of permission
-        :type description: str
 
         :param tags: Optional list of user tags on permission
-        :type tags: list[str]
 
         :param role_oid: Object ID of role this permission applies to.
-        :type role_oid: uuid.UUID
 
         :param uri: URI matched for permission.
-        :type uri: str
 
         :param created: Timestamp when the permission was created
-        :type created: datetime.datetime
 
         :param owner: Owning user (object ID)
-        :type owner: uuid.UUID
-
-       :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.role_oid = role_oid
@@ -111,11 +101,11 @@ class Permission(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, uuid.UUID)
-        assert isinstance(self.role_oid, uuid.UUID)
+        assert isinstance(self.oid, UUID)
+        assert isinstance(self.role_oid, UUID)
         assert type(self.uri) == str
         assert self.created is None or type(self.created) == int
-        assert self.owner is None or isinstance(self.owner, uuid.UUID)
+        assert self.owner is None or isinstance(self.owner, UUID)
 
         obj = ConfigurationElement.marshal(self)
 
@@ -157,7 +147,7 @@ class Permission(ConfigurationElement):
         role_oid = data.get('role_oid', None)
         assert role_oid is None or type(role_oid) == str
         if role_oid:
-            role_oid = uuid.UUID(role_oid)
+            role_oid = UUID(role_oid)
 
         uri = data.get('uri', None)
         assert uri is None or type(uri) == str
@@ -165,7 +155,7 @@ class Permission(ConfigurationElement):
         owner = data.get('owner', None)
         assert owner is None or type(owner) == str
         if owner:
-            owner = uuid.UUID(owner)
+            owner = UUID(owner)
 
         created = data.get('created', None)
         assert created is None or type(created) == int

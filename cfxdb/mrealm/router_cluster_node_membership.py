@@ -5,7 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional
 import pprint
+from uuid import UUID
 
 from cfxdb.mrealm.cluster_node_membership import ClusterNodeMembership
 
@@ -16,17 +18,24 @@ class RouterClusterNodeMembership(ClusterNodeMembership):
     A router cluster is able to run "data planes", which are groups of router workers kept in sync,
     and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
     """
-    def __init__(self, cluster_oid=None, node_oid=None, softlimit=None, hardlimit=None, _unknown=None):
+    def __init__(self,
+                 cluster_oid: Optional[UUID] = None,
+                 node_oid: Optional[UUID] = None,
+                 softlimit: Optional[int] = None,
+                 hardlimit: Optional[int] = None,
+                 _unknown=None):
         """
 
         :param cluster_oid: Object ID of router cluster the node is becoming member of.
+
         :param node_oid: Object ID of the node becoming member of the router cluster.
+
         :param softlimit: Limits the number of router workers started on this node. When this number of workers
             is reached, efforts are taken to actively reduce the resource load on this node (eg stopping
             other running router workers "currently being idle"). New router workers will still be started.
+
         :param hardlimit: Maximum number of router workers started on this node. This hard limits the
             number of router workers started on this node.
-        :param _unknown:
         """
         ClusterNodeMembership.__init__(self, cluster_oid=cluster_oid, node_oid=node_oid, _unknown=_unknown)
         self.softlimit = softlimit

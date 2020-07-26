@@ -5,8 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
+from uuid import UUID
 import pprint
-import uuid
 
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.arealm.ApplicationRealmStatus import ApplicationRealmStatus
@@ -48,51 +49,37 @@ class ApplicationRealm(ConfigurationElement):
     STATUS_DEGRADED = ApplicationRealmStatus.DEGRADED
 
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 status=None,
-                 workergroup_oid=None,
-                 webcluster_oid=None,
-                 changed=None,
-                 owner=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 status: Optional[int] = None,
+                 workergroup_oid: Optional[UUID] = None,
+                 webcluster_oid: Optional[UUID] = None,
+                 changed: Optional[int] = None,
+                 owner: Optional[UUID] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of application realm
-        :type oid: uuid.UUID
 
         :param label: Optional user label of application realm
-        :type label: str
 
         :param description: Optional user description of application realm
-        :type description: str
 
         :param tags: Optional list of user tags on application realm
-        :type tags: list[str]
 
         :param name: Name of application realm
-        :type name: str
 
         :param status: Status of application realm.
-        :type status: int
 
         :param workergroup_oid: When running, router cluster worker group this application realm is running on.
-        :type workergroup_oid: uuid.UUID
 
         :param webcluster_oid: When running, the web cluster to serve as a frontend layer for the application realm.
-        :type webcluster_oid: uuid.UUID
 
         :param changed: Timestamp when the application realm was last changed
-        :type changed: int
-
         :param owner: Owning user (object ID)
-        :type owner: uuid.UUID
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.name = name
@@ -161,13 +148,13 @@ class ApplicationRealm(ConfigurationElement):
 
         :return: dict
         """
-        assert self.oid is None or isinstance(self.oid, uuid.UUID)
+        assert self.oid is None or isinstance(self.oid, UUID)
         assert self.name is None or type(self.name) == str
         assert self.status is None or type(self.status) == int
-        assert self.workergroup_oid is None or isinstance(self.workergroup_oid, uuid.UUID)
-        assert self.webcluster_oid is None or isinstance(self.webcluster_oid, uuid.UUID)
+        assert self.workergroup_oid is None or isinstance(self.workergroup_oid, UUID)
+        assert self.webcluster_oid is None or isinstance(self.webcluster_oid, UUID)
         assert self.changed is None or type(self.changed) == int
-        assert self.owner is None or isinstance(self.owner, uuid.UUID)
+        assert self.owner is None or isinstance(self.owner, UUID)
 
         obj = ConfigurationElement.marshal(self)
 
@@ -220,19 +207,19 @@ class ApplicationRealm(ConfigurationElement):
             assert type(
                 data['workergroup_oid']) == str, 'workergroup_oid must be a string, but was {}'.format(
                     type(data['workergroup_oid']))
-            workergroup_oid = uuid.UUID(data['workergroup_oid'])
+            workergroup_oid = UUID(data['workergroup_oid'])
 
         webcluster_oid = None
         if 'webcluster_oid' in data and data['webcluster_oid'] is not None:
             assert type(data['webcluster_oid']) == str, 'webcluster_oid must be a string, but was {}'.format(
                 type(data['webcluster_oid']))
-            webcluster_oid = uuid.UUID(data['webcluster_oid'])
+            webcluster_oid = UUID(data['webcluster_oid'])
 
         owner = None
         if 'owner' in data and data['owner'] is not None:
             assert type(data['owner']) == str, 'owner must be a string, but was {}'.format(type(
                 data['owner']))
-            owner = uuid.UUID(data['owner'])
+            owner = UUID(data['owner'])
 
         changed = data.get('changed', None)
         assert changed is None or type(changed) == int

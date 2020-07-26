@@ -5,8 +5,10 @@
 #
 ##############################################################################
 
+from uuid import UUID
 from datetime import datetime
 from pprint import pformat
+from typing import Optional, List
 
 import six
 
@@ -15,53 +17,37 @@ from cfxdb.common import ConfigurationElement
 
 class User(ConfigurationElement):
     """
-    CFC user database class using CBOR.
+    Users registered with this master instance.
+
+    .. note::
+        The user database exists "globally" (master-wide) and
+        independent of management realms. A given user can be owner or authorized to
+        access different management realms or resources therein.
     """
-
-    # oid: uuid.UUID
-
-    # label: Optional[str]
-    # description: Optional[str]
-    # tags: Optional[List[str]]
-
-    # email: str
-    # registered: datetime
-    # pubkey: six.text_type
-
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 email=None,
-                 registered=None,
-                 pubkey=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 email: Optional[str] = None,
+                 registered: Optional[datetime] = None,
+                 pubkey: Optional[str] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of the user
-        :type oid: uuid.UUID
 
         :param label: Optional user label of the user
-        :type label: str
 
         :param description: Optional user description of the user
-        :type description: str
 
         :param tags: Optional list of user tags on the user
-        :type tags: list[str]
 
         :param email: User email
-        :type email: str
 
         :param registered: Timestamp when the user registered
-        :type registered: datetime.datetime
 
         :param pubkey: Public key of user (HEX encoded Ed25519 32 byte public key).
-        :type pubkey: str
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
 
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)

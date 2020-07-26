@@ -5,14 +5,22 @@
 #
 ##############################################################################
 
+from typing import Optional
 import pprint
-import uuid
-
-import six
+from uuid import UUID
 
 
 class ClusterNodeMembership(object):
-    def __init__(self, cluster_oid=None, node_oid=None, _unknown=None):
+    """
+    Membership of a node in a cluster.
+    """
+    def __init__(self, cluster_oid: Optional[UUID] = None, node_oid: Optional[UUID] = None, _unknown=None):
+        """
+
+        :param cluster_oid: Object ID of the cluster the node is member in.
+
+        :param node_oid: Object ID of the node that is member in the cluster.
+        """
         self.cluster_oid = cluster_oid
         self.node_oid = node_oid
         self._unknown = _unknown
@@ -64,13 +72,13 @@ class ClusterNodeMembership(object):
 
         cluster_oid = None
         if 'cluster_oid' in data:
-            assert type(data['cluster_oid']) == six.text_type
-            cluster_oid = uuid.UUID(data['cluster_oid'])
+            assert type(data['cluster_oid']) == str
+            cluster_oid = UUID(data['cluster_oid'])
 
         node_oid = None
         if 'node_oid' in data:
-            assert type(data['node_oid']) == six.text_type
-            node_oid = uuid.UUID(data['node_oid'])
+            assert type(data['node_oid']) == str
+            node_oid = UUID(data['node_oid'])
 
         obj = ClusterNodeMembership(cluster_oid=cluster_oid, node_oid=node_oid, _unknown=_unknown)
 

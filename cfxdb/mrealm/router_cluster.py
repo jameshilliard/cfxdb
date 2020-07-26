@@ -5,7 +5,9 @@
 #
 ##############################################################################
 
+from typing import Optional, List
 import pprint
+from uuid import UUID
 
 from cfxdb.mrealm.cluster import Cluster
 
@@ -16,30 +18,23 @@ class RouterCluster(Cluster):
     and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
     """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 status=None,
-                 changed=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 status: Optional[int] = None,
+                 changed: Optional[int] = None,
                  _unknown=None):
         """
 
-        :param oid: Object ID of node
-        :type oid: uuid.UUID
+        :param oid: Object ID of this router cluster.
 
-        :param label: Optional user label of node
-        :type label: str
+        :param label: Optional user label of this router cluster.
 
-        :param description: Optional user description of node
-        :type description: str
+        :param description: Optional user description of this router cluster.
 
-        :param tags: Optional list of user tags on node
-        :type tags: list[str]
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
+        :param tags: Optional list of user tags on this router cluster.
         """
         Cluster.__init__(self,
                          oid=oid,

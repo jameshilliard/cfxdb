@@ -5,8 +5,10 @@
 #
 ##############################################################################
 
+from uuid import UUID
 from datetime import datetime
 from pprint import pformat
+from typing import Optional, List
 
 import six
 
@@ -16,56 +18,40 @@ from cfxdb.gen.user.OrganizationType import OrganizationType
 
 class Organization(ConfigurationElement):
     """
-    CFC organization database class.
+    Organizations created in this master instance.
     """
-
-    # oid: uuid.UUID
-    # label: Optional[str]
-    # description: Optional[str]
-    # tags: Optional[List[str]]
-    # name: str
-    # otype: int
-    # registered: Optional[datetime]
 
     OTYPES = [
         OrganizationType.NONE, OrganizationType.BUSINESS, OrganizationType.ACADEMICS,
         OrganizationType.PERSONAL
     ]
-
+    """
+    Organization type.
+    """
     def __init__(self,
-                 oid=None,
-                 label=None,
-                 description=None,
-                 tags=None,
-                 name=None,
-                 otype=None,
-                 registered=None,
+                 oid: Optional[UUID] = None,
+                 label: Optional[str] = None,
+                 description: Optional[str] = None,
+                 tags: Optional[List[str]] = None,
+                 name: Optional[str] = None,
+                 otype: Optional[int] = None,
+                 registered: Optional[datetime] = None,
                  _unknown=None):
         """
 
         :param oid: Object ID of the organization
-        :type oid: uuid.UUID
 
         :param label: Optional user label of the organization
-        :type label: str
 
         :param description: Optional user description of the organization
-        :type description: str
 
         :param tags: Optional list of user tags on the organization
-        :type tags: list[str]
 
         :param name: Name of the organization
-        :type name: str
 
         :param otype: Type of the organization.
-        :type otype: int
 
         :param registered: Timestamp when the organization was created
-        :type registered: datetime.datetime
-
-        :param _unknown: Any unparsed/unprocessed data attributes
-        :type _unknown: None or dict
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
 

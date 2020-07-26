@@ -5,7 +5,6 @@
 #
 ##############################################################################
 
-from cfxdb.mrealm.helpers import parse_webservice
 from cfxdb.mrealm.management_realm import ManagementRealm
 from cfxdb.mrealm.router_workergroup import RouterWorkerGroup
 from cfxdb.mrealm.router_workergroup_cluster_placement import RouterWorkerGroupClusterPlacement
@@ -16,9 +15,6 @@ from cfxdb.mrealm.cluster_node_membership import ClusterNodeMembership
 from cfxdb.mrealm.web_cluster_node_membership import WebClusterNodeMembership
 from cfxdb.mrealm.router_cluster_node_membership import RouterClusterNodeMembership
 from cfxdb.mrealm.web_service import WebService
-from cfxdb.mrealm.web_service_json import WebServiceJson
-from cfxdb.mrealm.web_service_node_info import WebServiceNodeInfo
-from cfxdb.mrealm.web_service_static import WebServiceStatic
 from cfxdb.mrealm.node import Node
 
 from cfxdb.mrealm.role import Role
@@ -35,7 +31,6 @@ from cfxdb.gen.arealm.ScramKdfType import ScramKdfType
 from cfxdb.gen.arealm.UriCheckLevel import UriCheckLevel
 
 __all__ = (
-    'parse_webservice',
     'ManagementRealm',
     'Node',
     'Cluster',
@@ -45,9 +40,6 @@ __all__ = (
     'WebClusterNodeMembership',
     'RouterClusterNodeMembership',
     'WebService',
-    'WebServiceJson',
-    'WebServiceNodeInfo',
-    'WebServiceStatic',
     'ClusterStatus',
     'WorkerGroupStatus',
     'RouterWorkerGroup',

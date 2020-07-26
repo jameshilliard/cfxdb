@@ -7,23 +7,48 @@
 
 import uuid
 import pprint
+from typing import Optional
 
 from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
 
 
 class RouterWorkerGroupClusterPlacement(object):
     """
+    Placement of router worker groups onto router clusters, specifically router
+    workers running as part of router worker groups.
     """
     def __init__(self,
-                 oid=None,
-                 worker_group_oid=None,
-                 cluster_oid=None,
-                 node_oid=None,
-                 worker_name=None,
-                 status=None,
-                 changed=None,
-                 tcp_listening_port=None,
-                 _unknown=None):
+                 oid: Optional[uuid.UUID] = None,
+                 worker_group_oid: Optional[uuid.UUID] = None,
+                 cluster_oid: Optional[uuid.UUID] = None,
+                 node_oid: Optional[uuid.UUID] = None,
+                 worker_name: Optional[str] = None,
+                 status: Optional[int] = None,
+                 changed: Optional[int] = None,
+                 tcp_listening_port: Optional[int] = None,
+                 _unknown: Optional[dict] = None):
+        """
+
+        :param oid: Object ID of this placement itself.
+
+        :param worker_group_oid: Object ID of the router worker group this placement applies to.
+            Refers to :class:`cfxdb.mrealm.RouterWorkerGroup`
+
+        :param cluster_oid: Object ID of the router cluster this placement applies to.
+            Refers to :class:`cfxdb.mrealm.RouterCluster`
+
+        :param node_oid: Object ID of the node (within the router cluster) this placement is assigned to.
+            Refers to :class:`cfxdb.mrealm.Node`
+
+        :param worker_name: Run-time ID (in the node) of the router worker this placement is assigned to.
+
+        :param status: Status of this placement, which essentially reflects the router worker status of this placement.
+
+        :param changed: Timestamp when the status of this placement last changed.
+
+        :param tcp_listening_port: TCP listening port the router worker this placement is assigned to is listening on
+            for incoming proxy front-end and router-to-router connections.
+        """
         self.oid = oid
         self.worker_group_oid = worker_group_oid
         self.cluster_oid = cluster_oid
