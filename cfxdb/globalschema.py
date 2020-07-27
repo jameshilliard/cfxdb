@@ -14,7 +14,24 @@ from cfxdb.mrealm import ManagementRealm, Node
 from cfxdb.user import User, ActivationToken, UserMrealmRole, Organization
 from cfxdb.usage import MasterNodeUsage
 
-__all__ = ('GlobalSchema', )
+__all__ = (
+    'ManagementRealms',
+    'IndexManagementRealmByName',
+    'Nodes',
+    'IndexNodesByPubkey',
+    'IndexNodesByAuthid',
+    'Users',
+    'IndexUsersByName',
+    'IndexUsersByPubkey',
+    'IndexUsersByEmail',
+    'UserMrealmRoles',
+    'ActivationTokens',
+    'IndexActivationTokensByAuthidPubkey',
+    'Organizations',
+    'IndexOrganizationsByName',
+    'UsageRecords',
+    'GlobalSchema',
+)
 
 
 @table('1219e71c-a62c-415a-bd15-ddf45e3a658b', marshal=ManagementRealm.marshal, parse=ManagementRealm.parse)
