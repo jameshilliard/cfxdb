@@ -17,6 +17,8 @@ from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, 
     PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
     IndexPayingChannelByRecipient, PayingChannelBalances
 
+from cfxdb.xbrmm.ipfs_file import IPFSFile, IPFSFiles
+
 from cfxdb.xbrmm.offer import Offer, Offers, IndexOfferByKey
 
 from cfxdb.xbrmm.transaction import Transaction, Transactions
@@ -50,6 +52,8 @@ __all__ = (
     'IndexPayingChannelByRecipient',
     'PayingChannelBalance',
     'PayingChannelBalances',
+    'IPFSFile',
+    'IPFSFiles',
     'Offer',
     'Offers',
     'IndexOfferByKey',

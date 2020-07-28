@@ -13,7 +13,7 @@ from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, 
 
 from cfxdb.xbrmm.offer import Offers, IndexOfferByKey
 from cfxdb.xbrmm.transaction import Transactions
-
+from cfxdb.xbrmm.ipfs_file import IPFSFiles
 from cfxdb.xbrmm.userkey import UserKeys, IndexUserKeyByMember
 
 
@@ -103,6 +103,11 @@ class Schema(object):
     Index "by pubkey" of user keys :class:`xbrmm.IndexUserKeyByMember`.
     """
 
+    ipfs_files: IPFSFiles
+    """
+    IPFS files download log table :class:`xbrmm.IPFSFiles`.
+    """
+
     @staticmethod
     def attach(db):
         """
@@ -154,5 +159,7 @@ class Schema(object):
                                       (user_key.owner, user_key.created))
 
         schema.transactions = db.attach_table(Transactions)
+
+        schema.ipfs_files = db.attach_table(IPFSFiles)
 
         return schema

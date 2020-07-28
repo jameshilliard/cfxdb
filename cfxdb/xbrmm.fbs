@@ -276,3 +276,17 @@ table UserKey {
     /// User key delegate signature
     signature: [uint8] (ethsig);
 }
+
+table IPFSFile {
+    /// metadata (IPFS Multihash).
+    file_hash: string (multihash);
+
+    /// Whether the relevant file was downloaded from Infura
+    downloaded: bool;
+
+    /// Number of download attempts in case of failure
+    retries: uint32;
+
+    /// Timestamp of last error to download
+    errored_at: uint64 (timestamp);
+}
