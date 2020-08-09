@@ -27,7 +27,6 @@ class ManagementRealm(ConfigurationElement):
                  name: Optional[str] = None,
                  created: Optional[datetime] = None,
                  owner: Optional[UUID] = None,
-                 cf_node: Optional[str] = None,
                  cf_router_worker: Optional[str] = None,
                  cf_container_worker: Optional[str] = None,
                  _unknown=None):
@@ -47,8 +46,6 @@ class ManagementRealm(ConfigurationElement):
 
         :param owner: Owning user (object ID)
 
-        :param cf_node: *INTERNAL USE* CFC hosting node for this management realm
-
         :param cf_router_worker: *INTERNAL USE* CFC hosting router worker for this management realm
 
         :param cf_container_worker: *INTERNAL USE* CFC hosting container worker for this management realm
@@ -57,7 +54,6 @@ class ManagementRealm(ConfigurationElement):
         self.name = name
         self.created = created
         self.owner = owner
-        self.cf_node = cf_node
         self.cf_router_worker = cf_router_worker
         self.cf_container_worker = cf_container_worker
 
@@ -74,8 +70,6 @@ class ManagementRealm(ConfigurationElement):
         if other.created != self.created:
             return False
         if other.owner != self.owner:
-            return False
-        if other.cf_node != self.cf_node:
             return False
         if other.cf_router_worker != self.cf_router_worker:
             return False
@@ -105,8 +99,6 @@ class ManagementRealm(ConfigurationElement):
             self.created = other.created
         if (not self.owner and other.owner) or overwrite:
             self.owner = other.owner
-        if (not self.cf_node and other.cf_node) or overwrite:
-            self.cf_node = other.cf_node
         if (not self.cf_router_worker and other.cf_router_worker) or overwrite:
             self.cf_router_worker = other.cf_router_worker
         if (not self.cf_container_worker and other.cf_container_worker) or overwrite:
@@ -124,9 +116,12 @@ class ManagementRealm(ConfigurationElement):
         assert type(self.name) == six.text_type
         assert isinstance(self.created, datetime)
         assert isinstance(self.owner, UUID)
-        assert self.cf_node is None or isinstance(self.cf_node, UUID)
-        assert self.cf_router_worker is None or isinstance(self.cf_router_worker, UUID)
-        assert self.cf_container_worker is None or isinstance(self.cf_container_worker, UUID)
+        assert self.cf_router_worker is None or type(
+            self.cf_router_worker) == six.text_type, 'invalid type {} for cf_router_worker'.format(
+                type(self.cf_router_worker))
+        assert self.cf_container_worker is None or type(
+            self.cf_container_worker) == six.text_type, 'invalid type {} for cf_container_worker'.format(
+                type(self.cf_container_worker))
 
         obj = ConfigurationElement.marshal(self)
 
@@ -135,9 +130,8 @@ class ManagementRealm(ConfigurationElement):
             'name': self.name,
             'created': int(self.created.timestamp() * 1000000) if self.created else None,
             'owner': str(self.owner),
-            'cf_node': str(self.cf_node) if self.cf_node else None,
-            'cf_router_worker': str(self.cf_router_worker) if self.cf_router_worker else None,
-            'cf_container_worker': str(self.cf_container_worker) if self.cf_container_worker else None,
+            'cf_router_worker': self.cf_router_worker,
+            'cf_container_worker': self.cf_container_worker,
         })
 
         if self._unknown:
@@ -165,8 +159,7 @@ class ManagementRealm(ConfigurationElement):
         _unknown = {}
         for k in data:
             if k not in [
-                    'oid', 'name', 'rtype', 'owner', 'created', 'cf_node', 'cf_router_worker',
-                    'cf_container_worker'
+                    'oid', 'name', 'rtype', 'owner', 'created', 'cf_router_worker', 'cf_container_worker'
             ]:
                 _unknown[k] = data[k]
 
@@ -183,20 +176,11 @@ class ManagementRealm(ConfigurationElement):
         if created:
             created = datetime.utcfromtimestamp(float(created) / 1000000.)
 
-        cf_node = data.get('cf_node', None)
-        assert cf_node is None or type(cf_node) == six.text_type
-        if cf_node:
-            cf_node = UUID(cf_node)
-
         cf_router_worker = data.get('cf_router_worker', None)
         assert cf_router_worker is None or type(cf_router_worker) == six.text_type
-        if cf_router_worker:
-            cf_router_worker = UUID(cf_router_worker)
 
         cf_container_worker = data.get('cf_container_worker', None)
         assert cf_container_worker is None or type(cf_container_worker) == six.text_type
-        if cf_container_worker:
-            cf_container_worker = UUID(cf_container_worker)
 
         obj = ManagementRealm(oid=obj.oid,
                               label=obj.label,
@@ -205,7 +189,6 @@ class ManagementRealm(ConfigurationElement):
                               name=name,
                               owner=owner,
                               created=created,
-                              cf_node=cf_node,
                               cf_router_worker=cf_router_worker,
                               cf_container_worker=cf_container_worker,
                               _unknown=_unknown)
