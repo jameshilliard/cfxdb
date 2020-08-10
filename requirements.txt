@@ -1,4 +1,4 @@
-autobahn[twisted,xbr]>=20.6.1
+autobahn[twisted,xbr]>=20.7.1
 cbor>=1.0.0
 flatbuffers>=1.11
 numpy==1.15.4
@@ -9,4 +9,4 @@ txaio>=20.4.1
 web3>=5.11.0
 
 # git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
-zlmdb>=20.7.1
+zlmdb>=20.8.1
