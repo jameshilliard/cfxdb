@@ -2,11 +2,12 @@
 
 # namespace: arealm
 
+# WAMP URI check level applied in an application realm.
 class UriCheckLevel(object):
     # No check level.
     NONE = 0
     # Check level "strict".
-    EXACT = 1
+    STRICT = 1
     # Check level "loose".
-    PREFIX = 2
+    LOOSE = 2
 

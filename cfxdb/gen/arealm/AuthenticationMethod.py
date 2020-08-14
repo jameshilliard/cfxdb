@@ -2,8 +2,9 @@
 
 # namespace: arealm
 
-class AuthenticatorType(object):
-    # No authentiator type.
+# WAMP authentication methods.
+class AuthenticationMethod(object):
+    # No authentiation method defined (undefined).
     NONE = 0
     # WAMP-anonymous authentication.
     ANONYMOUS = 1

@@ -6,6 +6,7 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
+# WAMP application realms defined.
 class ApplicationRealm(object):
     __slots__ = ['_tab']
 

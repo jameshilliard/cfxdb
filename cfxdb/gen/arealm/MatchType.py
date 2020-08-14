@@ -2,6 +2,7 @@
 
 # namespace: arealm
 
+# WAMP URI match type applied (for pattern subscription/registrations and permissions).
 class MatchType(object):
     # No match type.
     NONE = 0

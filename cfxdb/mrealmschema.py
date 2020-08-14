@@ -7,10 +7,10 @@
 
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
-from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid
+from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid, MapStringStringStringUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
-from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation, Permission
+from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation, Permission, Credential, Principal
 from cfxdb.log import MNodeLogs, MWorkerLogs
 
 __all__ = ('MrealmSchema', )
@@ -49,6 +49,45 @@ class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.ApplicationRealms`
+    """
+
+
+#
+# Principals
+#
+@table('9808cb0b-1b55-4b3f-858e-39004cb11135', marshal=Principal.marshal, parse=Principal.parse)
+class Principals(MapUuidCbor):
+    """
+    Table: principal_oid -> principal
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.Principal`.
+    """
+
+
+#
+# Credentials
+#
+@table('251c8620-425a-4eeb-ade9-4284e8670080', marshal=Credential.marshal, parse=Credential.parse)
+class Credentials(MapUuidCbor):
+    """
+    Table: credential_oid -> credential
+
+    * Table type :class:`zlmdb.MapUuidCbor`
+    * Key type :class:`uuid.UUID`
+    * Record type :class:`cfxdb.mrealm.Credential`.
+    """
+
+
+@table('251c8620-425a-4eeb-ade9-4284e8670080', marshal=Credential.marshal, parse=Credential.parse)
+class IndexCredentialsByAuthHello(MapStringStringStringUuid):
+    """
+    Index: (authmethod, realm_name, authid) -> credential_oid
+
+    * Table type :class:`zlmdb.MapStringStringStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.Credentials`
     """
 
 
@@ -333,6 +372,20 @@ class MrealmSchema(object):
     def __init__(self, db):
         self.db = db
 
+    principals: Principals
+    """
+    Application realm client principals.
+
+    * Database table :class:`cfxdb.mrealmschema.Principals`
+    """
+
+    credentials: Credentials
+    """
+    WAMP client authentication credentials, used for mapping ``(authmethod, realm, authid) -> principal``.
+
+    * Database table :class:`cfxdb.mrealmschema.Credentials`
+    """
+
     roles: Roles
     """
     Roles for used in authorization with application routing.
@@ -531,6 +584,10 @@ class MrealmSchema(object):
                                     schema.idx_arealm_by_webcluster,
                                     lambda arealm: (arealm.webcluster_oid, arealm.name),
                                     nullable=True)
+
+        # principals and credentials
+        schema.principals = db.attach_table(Principals)
+        schema.credentials = db.attach_table(Credentials)
 
         # roles
         schema.roles = db.attach_table(Roles)

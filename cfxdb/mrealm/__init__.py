@@ -21,14 +21,16 @@ from cfxdb.mrealm.role import Role
 from cfxdb.mrealm.application_realm import ApplicationRealm
 from cfxdb.mrealm.arealm_role_association import ApplicationRealmRoleAssociation
 from cfxdb.mrealm.permission import Permission
+from cfxdb.mrealm.credential import Credential
+from cfxdb.mrealm.principal import Principal
 
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
 from cfxdb.gen.mrealm.WorkerGroupStatus import WorkerGroupStatus
 
-from cfxdb.gen.arealm.AuthenticatorType import AuthenticatorType
+from cfxdb.gen.arealm.AuthenticationMethod import AuthenticationMethod
 from cfxdb.gen.arealm.MatchType import MatchType
-from cfxdb.gen.arealm.ScramKdfType import ScramKdfType
 from cfxdb.gen.arealm.UriCheckLevel import UriCheckLevel
+from cfxdb.gen.arealm.ApplicationRealmStatus import ApplicationRealmStatus
 
 __all__ = (
     'ManagementRealm',
@@ -44,12 +46,14 @@ __all__ = (
     'WorkerGroupStatus',
     'RouterWorkerGroup',
     'RouterWorkerGroupClusterPlacement',
-    'AuthenticatorType',
     'MatchType',
-    'ScramKdfType',
     'UriCheckLevel',
     'Role',
     'Permission',
     'ApplicationRealm',
     'ApplicationRealmRoleAssociation',
+    'ApplicationRealmStatus',
+    'AuthenticationMethod',
+    'Credential',
+    'Principal',
 )

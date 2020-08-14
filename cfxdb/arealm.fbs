@@ -5,6 +5,7 @@ include "common.fbs";
 namespace arealm;
 
 
+/// WAMP URI match type applied (for pattern subscription/registrations and permissions).
 enum MatchType : byte
 {
     /// No match type.
@@ -21,16 +22,17 @@ enum MatchType : byte
 }
 
 
+/// WAMP URI check level applied in an application realm.
 enum UriCheckLevel : byte
 {
     /// No check level.
     NONE = 0,
 
     /// Check level "strict".
-    EXACT = 1,
+    STRICT = 1,
 
     /// Check level "loose".
-    PREFIX = 2,
+    LOOSE = 2,
 }
 
 
@@ -63,6 +65,7 @@ enum ApplicationRealmStatus: uint8
 }
 
 
+/// WAMP permission (authorization of performing a WAMP action on a WAMP URI pattern).
 struct Permission
 {
     /// URI matching mode.
@@ -91,6 +94,7 @@ struct Permission
 }
 
 
+/// WAMP authentication roles defined, including permissions.
 table Role
 {
     /// ID of this object.
@@ -127,6 +131,7 @@ table ApplicationRealmRole
 }
 
 
+/// WAMP application realms defined.
 table ApplicationRealm
 {
     /// ID of this object.
@@ -155,151 +160,10 @@ table ApplicationRealm
 }
 
 
-table AnonymousPrincipal
+/// WAMP authentication methods.
+enum AuthenticationMethod : byte
 {
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// WAMP-anonymous specific stuff:
-
-    /// nothing!
-}
-
-
-table TicketPrincipal
-{
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// WAMP-ticket specific stuff:
-
-    ticket: string;
-}
-
-
-table WampCraPrincipal
-{
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// WAMP-CRA specific stuff:
-
-    secret: string;
-    salt: string;
-    iterations: uint32;
-    keylen: uint16;
-}
-
-
-enum ScramKdfType : byte
-{
-    /// No SCRAM KDF type.
-    NONE = 0,
-
-    /// Use argon2id-13 KDF.
-    ARGON2ID13 = 1,
-
-    /// Use pbkdf2 KDF.
-    PBKDF2 = 2
-}
-
-
-table ScramPrincipal
-{
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// WAMP-SCRAM specific stuff:
-
-    kdf: ScramKdfType;
-    iterations: uint32;
-    memory: uint64;
-    salt: string;
-    stored_key: string;
-    server_key: string;
-}
-
-
-table TlsPrincipal
-{
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// TLS authentication specific stuff:
-
-    /// FIXME
-}
-
-
-table CryptosignPrincipal
-{
-    /// ID of this object.
-    oid: oid_t (required);
-
-    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
-    authid: string;
-
-    /// ID of the application realm the authenticated principal will be joined to.
-    arealm_oid: oid_t (required);
-
-    /// ID of the role the authenticated principal will be joined to the application realm.
-    role_oid: oid_t (required);
-
-    /// WAMP-cryptosign specific stuff:
-
-    /// Authorized public keys, eg 64 character hex strings of the 32 bytes Ed25519 public keys.
-    authorized_keys: [string];
-}
-
-
-enum AuthenticatorType : byte
-{
-    /// No authentiator type.
+    /// No authentiation method defined (undefined).
     NONE = 0,
 
     /// WAMP-anonymous authentication.
@@ -325,31 +189,47 @@ enum AuthenticatorType : byte
 }
 
 
-table Authenticator
+/// Application realm client principals.
+table Principal
 {
-    /// ID of this object.
+    /// ID of this principal.
     oid: oid_t (required);
 
-    /// Time when the object was created.
-    created: uint64 (timestamp);
+    /// Timestamp when the principal was last modified
+    modified: int;
 
-    /// Owner organization of this object.
-    owner: oid_t;
+    /// ID of the application realm the authenticated principal will be joined to.
+    arealm_oid: oid_t (required);
 
-    /// The type of authenticator.
-    authenticator_type: AuthenticatorType;
+    /// WAMP authid of the principal, must be unique within the application realm at any moment in time.
+    authid: string;
 
-    /// When a dynamic authenticator shall be used, the WAMP procedure URI of a dynamic authenticator to call.
-    authenticator: string;
+    /// ID of the role the authenticated principal will be joined to the application realm.
+    role_oid: oid_t (required);
+
+    /// Optional authextra information returned to the authenticating principal (CBOR serialized).
+    authextra: [uint8] (cbor);
 }
 
 
-/// Association (N:M) between principals and authenticators, both defined independently at the management realm level.
-table AuthenticatorPrincipal
+/// WAMP client authentication credentials, used for mapping ``(authmethod, realm, authid) -> principal``.
+table Credential
 {
-    /// ID of the principal (which must match in type with the authenticator).
-    principal_oid: oid_t (required);
+    /// ID of this credential.
+    oid: oid_t (required);
 
-    /// ID of the authenticator the principal is associated with.
-    authenticator_oid: oid_t (required);
+    /// WAMP authentication method offered by the authenticating client.
+    authmethod: AuthenticationMethod;
+
+    /// WAMP realm requested by the authenticating client.
+    realm: string;
+
+    /// WAMP authid announced by the authenticating client.
+    authid: string;
+
+    /// Authentication method specific configuration (CBOR serialized).
+    authconfig: [uint8] (cbor);
+
+    /// ID of the principal this credential resolves to upon successful authentication.
+    principal_oid: oid_t (required);
 }

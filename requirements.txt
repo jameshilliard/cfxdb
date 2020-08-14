@@ -8,5 +8,5 @@ txaio>=20.4.1
 # git+https://github.com/ethereum/web3.py@v5.4.0#egg=web3
 web3>=5.11.0
 
-# git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
-zlmdb>=20.8.1
+git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
+# zlmdb>=20.8.1

@@ -6,6 +6,7 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
+# WAMP permission (authorization of performing a WAMP action on a WAMP URI pattern).
 class Permission(object):
     __slots__ = ['_tab']
 
