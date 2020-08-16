@@ -66,6 +66,17 @@ class Principals(MapUuidCbor):
     """
 
 
+@table('212f3455-6d4c-43ec-843d-53cd17e31974')
+class IndexPrincipalByName(MapUuidStringUuid):
+    """
+    Index: (arealm_oid, principal_name) -> principal_oid
+
+    * Table type :class:`zlmdb.MapUuidStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.Principals`
+    """
+
+
 #
 # Credentials
 #
@@ -81,7 +92,7 @@ class Credentials(MapUuidCbor):
 
 
 @table('251c8620-425a-4eeb-ade9-4284e8670080', marshal=Credential.marshal, parse=Credential.parse)
-class IndexCredentialsByAuthHello(MapStringStringStringUuid):
+class IndexCredentialsByAuth(MapStringStringStringUuid):
     """
     Index: (authmethod, realm_name, authid) -> credential_oid
 
@@ -379,11 +390,25 @@ class MrealmSchema(object):
     * Database table :class:`cfxdb.mrealmschema.Principals`
     """
 
+    idx_principals_by_name: IndexPrincipalByName
+    """
+    Index on principals (by name).
+
+    * Database table :class:`cfxdb.mrealmschema.IndexPrincipalByName`
+    """
+
     credentials: Credentials
     """
     WAMP client authentication credentials, used for mapping ``(authmethod, realm, authid) -> principal``.
 
     * Database table :class:`cfxdb.mrealmschema.Credentials`
+    """
+
+    idx_credentials_by_auth: IndexCredentialsByAuth
+    """
+    Index on credentials (by WAMP auth information).
+
+    * Database table :class:`cfxdb.mrealmschema.IndexCredentialsByAuth`
     """
 
     roles: Roles
@@ -585,9 +610,20 @@ class MrealmSchema(object):
                                     lambda arealm: (arealm.webcluster_oid, arealm.name),
                                     nullable=True)
 
-        # principals and credentials
+        # principals
         schema.principals = db.attach_table(Principals)
+
+        schema.idx_principals_by_name = db.attach_table(IndexPrincipalByName)
+        schema.principals.attach_index('idx1', schema.idx_principals_by_name, lambda principal:
+                                       (principal.arealm_oid, principal.authid))
+
+        # credentials
         schema.credentials = db.attach_table(Credentials)
+
+        schema.idx_credentials_by_auth = db.attach_table(IndexCredentialsByAuth)
+        schema.credentials.attach_index(
+            'idx1', schema.idx_credentials_by_auth, lambda credential:
+            (credential.authmethod, credential.realm, credential.authid))
 
         # roles
         schema.roles = db.attach_table(Roles)

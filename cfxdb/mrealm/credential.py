@@ -19,6 +19,7 @@ class Credential(object):
     def __init__(self,
                  oid: Optional[UUID] = None,
                  authmethod: Optional[str] = None,
+                 authid: Optional[str] = None,
                  realm: Optional[str] = None,
                  authconfig: Optional[dict] = None,
                  principal_oid: Optional[UUID] = None,
@@ -40,6 +41,7 @@ class Credential(object):
         self.oid = oid
         self.authmethod = authmethod
         self.realm = realm
+        self.authid = authid
         self.authconfig = authconfig
         self.principal_oid = principal_oid
 
@@ -54,6 +56,8 @@ class Credential(object):
         if other.authmethod != self.authmethod:
             return False
         if other.realm != self.realm:
+            return False
+        if other.authid != self.authid:
             return False
         if other.authconfig != self.authconfig:
             return False
@@ -77,14 +81,18 @@ class Credential(object):
         """
         ConfigurationElement.copy(self, other, overwrite=overwrite)
 
-        if (not self.role_oid and other.role_oid) or overwrite:
-            self.role_oid = other.role_oid
-        if (not self.uri and other.uri) or overwrite:
-            self.uri = other.uri
-        if (not self.created and other.created) or overwrite:
-            self.created = other.created
-        if (not self.owner and other.owner) or overwrite:
-            self.owner = other.owner
+        if (not self.oid and other.oid) or overwrite:
+            self.oid = other.oid
+        if (not self.authmethod and other.authmethod) or overwrite:
+            self.authmethod = other.authmethod
+        if (not self.realm and other.realm) or overwrite:
+            self.realm = other.realm
+        if (not self.authid and other.authid) or overwrite:
+            self.authid = other.authid
+        if (not self.authconfig and other.authconfig) or overwrite:
+            self.authconfig = other.authconfig
+        if (not self.principal_oid and other.principal_oid) or overwrite:
+            self.principal_oid = other.principal_oid
 
         # _unknown is not copied!
 
@@ -94,20 +102,15 @@ class Credential(object):
 
         :return: dict
         """
-        assert isinstance(self.oid, UUID)
-        assert isinstance(self.role_oid, UUID)
-        assert type(self.uri) == str
-        assert self.created is None or type(self.created) == int
-        assert self.owner is None or isinstance(self.owner, UUID)
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
             'oid': str(self.oid) if self.oid else None,
-            'role_oid': str(self.role_oid) if self.role_oid else None,
-            'uri': self.uri,
-            'created': self.created,
-            'owner': str(self.owner) if self.owner else None,
+            'authmethod': self.authmethod,
+            'realm': self.realm,
+            'authid': self.authid,
+            'authconfig': self.authconfig,
+            'principal_oid': str(self.principal_oid) if self.principal_oid else None,
         })
 
         if self._unknown:
@@ -128,39 +131,40 @@ class Credential(object):
         """
         assert type(data) == dict
 
-        obj = ConfigurationElement.parse(data)
-        data = obj._unknown
-
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'role_oid', 'uri', 'owner', 'created']:
+            if k not in ['oid', 'authmethod', 'realm', 'authid', 'authconfig', 'principal_oid']:
                 _unknown[k] = data[k]
 
-        role_oid = data.get('role_oid', None)
-        assert role_oid is None or type(role_oid) == str
-        if role_oid:
-            role_oid = UUID(role_oid)
+        oid = data.get('oid', None)
+        assert oid is None or type(oid) == str
+        if oid:
+            oid = UUID(oid)
 
-        uri = data.get('uri', None)
-        assert uri is None or type(uri) == str
+        authmethod = data.get('authmethod', None)
+        assert authmethod is None or type(authmethod) == str
 
-        owner = data.get('owner', None)
-        assert owner is None or type(owner) == str
-        if owner:
-            owner = UUID(owner)
+        realm = data.get('realm', None)
+        assert realm is None or type(realm) == str
 
-        created = data.get('created', None)
-        assert created is None or type(created) == int
+        authid = data.get('authid', None)
+        assert authid is None or type(authid) == str
 
-        obj = Credential(oid=obj.oid,
-                         label=obj.label,
-                         description=obj.description,
-                         tags=obj.tags,
-                         role_oid=role_oid,
-                         uri=uri,
-                         owner=owner,
-                         created=created,
+        authconfig = data.get('authconfig', None)
+        assert authconfig is None or type(authconfig) == dict
+
+        principal_oid = data.get('principal_oid', None)
+        assert principal_oid is None or type(principal_oid) == str
+        if principal_oid:
+            principal_oid = UUID(principal_oid)
+
+        obj = Credential(oid=oid,
+                         authmethod=authmethod,
+                         realm=realm,
+                         authid=authid,
+                         authconfig=authconfig,
+                         principal_oid=principal_oid,
                          _unknown=_unknown)
 
         return obj
