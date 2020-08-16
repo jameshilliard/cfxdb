@@ -9,8 +9,6 @@ from typing import Optional
 import pprint
 from uuid import UUID
 
-from cfxdb.common import ConfigurationElement
-
 
 class Credential(object):
     """
@@ -79,8 +77,6 @@ class Credential(object):
         :type other: instance of :class:`ManagementRealm`
         :return:
         """
-        ConfigurationElement.copy(self, other, overwrite=overwrite)
-
         if (not self.oid and other.oid) or overwrite:
             self.oid = other.oid
         if (not self.authmethod and other.authmethod) or overwrite:
@@ -102,16 +98,14 @@ class Credential(object):
 
         :return: dict
         """
-        obj = ConfigurationElement.marshal(self)
-
-        obj.update({
+        obj = {
             'oid': str(self.oid) if self.oid else None,
             'authmethod': self.authmethod,
             'realm': self.realm,
             'authid': self.authid,
             'authconfig': self.authconfig,
             'principal_oid': str(self.principal_oid) if self.principal_oid else None,
-        })
+        }
 
         if self._unknown:
             # pass through all attributes unknown

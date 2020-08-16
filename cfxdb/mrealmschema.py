@@ -91,7 +91,7 @@ class Credentials(MapUuidCbor):
     """
 
 
-@table('251c8620-425a-4eeb-ade9-4284e8670080', marshal=Credential.marshal, parse=Credential.parse)
+@table('45490b42-b167-4df6-ab1c-41d434390397')
 class IndexCredentialsByAuth(MapStringStringStringUuid):
     """
     Index: (authmethod, realm_name, authid) -> credential_oid
