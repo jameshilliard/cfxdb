@@ -7,7 +7,7 @@
 
 from zlmdb import table
 from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
-from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid, MapStringStringStringUuid
+from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid, MapStringStringStringUuid, MapUuidTimestampUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
 from cfxdb.mrealm import ApplicationRealm, Role, ApplicationRealmRoleAssociation, Permission, Credential, Principal
@@ -97,6 +97,17 @@ class IndexCredentialsByAuth(MapStringStringStringUuid):
     Index: (authmethod, realm_name, authid) -> credential_oid
 
     * Table type :class:`zlmdb.MapStringStringStringUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.Credentials`
+    """
+
+
+@table('ed0da771-e331-4d93-b50c-d371391cd7b9')
+class IndexCredentialsByPrincipal(MapUuidTimestampUuid):
+    """
+    Index: (principal_oid, modified) -> credential_oid
+
+    * Table type :class:`zlmdb.MapUuidIntUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Credentials`
     """
@@ -411,6 +422,13 @@ class MrealmSchema(object):
     * Database table :class:`cfxdb.mrealmschema.IndexCredentialsByAuth`
     """
 
+    idx_credentials_by_principal: IndexCredentialsByPrincipal
+    """
+    Index on credentials (by principal_oid, modified).
+
+    * Database table :class:`cfxdb.mrealmschema.IndexCredentialsByPrincipal`
+    """
+
     roles: Roles
     """
     Roles for used in authorization with application routing.
@@ -624,6 +642,10 @@ class MrealmSchema(object):
         schema.credentials.attach_index(
             'idx1', schema.idx_credentials_by_auth, lambda credential:
             (credential.authmethod, credential.realm, credential.authid))
+
+        schema.idx_credentials_by_principal = db.attach_table(IndexCredentialsByPrincipal)
+        schema.credentials.attach_index('idx2', schema.idx_credentials_by_principal, lambda credential:
+                                        (credential.principal_oid, credential.created))
 
         # roles
         schema.roles = db.attach_table(Roles)

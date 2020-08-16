@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.common import ConfigurationElement
 
 
@@ -23,7 +25,7 @@ class Role(ConfigurationElement):
                  description: Optional[str] = None,
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
-                 created: Optional[int] = None,
+                 created: Optional[np.datetime64] = None,
                  owner: Optional[UUID] = None,
                  _unknown=None):
         """
@@ -94,17 +96,12 @@ class Role(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, UUID)
-        assert type(self.name) == str
-        assert self.created is None or type(self.created) == int
-        assert self.owner is None or isinstance(self.owner, UUID)
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
             'oid': str(self.oid) if self.oid else None,
             'name': self.name,
-            'created': self.created,
+            'created': int(self.created) if self.created else None,
             'owner': str(self.owner) if self.owner else None,
         })
 
@@ -145,6 +142,8 @@ class Role(ConfigurationElement):
 
         created = data.get('created', None)
         assert created is None or type(created) == int
+        if created:
+            created = np.datetime64(created, 'ns')
 
         obj = Role(oid=obj.oid,
                    label=obj.label,

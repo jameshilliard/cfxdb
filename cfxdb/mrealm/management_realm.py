@@ -112,17 +112,6 @@ class ManagementRealm(ConfigurationElement):
 
         :return: dict
         """
-        assert isinstance(self.oid, UUID)
-        assert type(self.name) == six.text_type
-        assert isinstance(self.created, datetime)
-        assert isinstance(self.owner, UUID)
-        assert self.cf_router_worker is None or type(
-            self.cf_router_worker) == six.text_type, 'invalid type {} for cf_router_worker'.format(
-                type(self.cf_router_worker))
-        assert self.cf_container_worker is None or type(
-            self.cf_container_worker) == six.text_type, 'invalid type {} for cf_container_worker'.format(
-                type(self.cf_container_worker))
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({

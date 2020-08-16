@@ -9,6 +9,8 @@ from typing import Optional
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 
 class Credential(object):
     """
@@ -16,6 +18,7 @@ class Credential(object):
     """
     def __init__(self,
                  oid: Optional[UUID] = None,
+                 created: Optional[np.datetime64] = None,
                  authmethod: Optional[str] = None,
                  authid: Optional[str] = None,
                  realm: Optional[str] = None,
@@ -25,6 +28,8 @@ class Credential(object):
         """
 
         :param oid: Object ID of this credential object
+
+        :param created: Timestamp when credential was created.
 
         :param authmethod: WAMP authentication method offered by the authenticating client.
 
@@ -37,6 +42,7 @@ class Credential(object):
         :param principal_oid: ID of the principal this credential resolves to upon successful authentication.
         """
         self.oid = oid
+        self.created = created
         self.authmethod = authmethod
         self.realm = realm
         self.authid = authid
@@ -50,6 +56,8 @@ class Credential(object):
         if not isinstance(other, self.__class__):
             return False
         if other.oid != self.oid:
+            return False
+        if other.created != self.created:
             return False
         if other.authmethod != self.authmethod:
             return False
@@ -79,6 +87,8 @@ class Credential(object):
         """
         if (not self.oid and other.oid) or overwrite:
             self.oid = other.oid
+        if (not self.created and other.created) or overwrite:
+            self.created = other.created
         if (not self.authmethod and other.authmethod) or overwrite:
             self.authmethod = other.authmethod
         if (not self.realm and other.realm) or overwrite:
@@ -100,6 +110,7 @@ class Credential(object):
         """
         obj = {
             'oid': str(self.oid) if self.oid else None,
+            'created': int(self.created) if self.created else None,
             'authmethod': self.authmethod,
             'realm': self.realm,
             'authid': self.authid,
@@ -128,13 +139,18 @@ class Credential(object):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'authmethod', 'realm', 'authid', 'authconfig', 'principal_oid']:
+            if k not in ['oid', 'created', 'authmethod', 'realm', 'authid', 'authconfig', 'principal_oid']:
                 _unknown[k] = data[k]
 
         oid = data.get('oid', None)
         assert oid is None or type(oid) == str
         if oid:
             oid = UUID(oid)
+
+        created = data.get('created', None)
+        assert created is None or type(created) == int
+        if created:
+            created = np.datetime64(created, 'ns')
 
         authmethod = data.get('authmethod', None)
         assert authmethod is None or type(authmethod) == str
@@ -154,6 +170,7 @@ class Credential(object):
             principal_oid = UUID(principal_oid)
 
         obj = Credential(oid=oid,
+                         created=created,
                          authmethod=authmethod,
                          realm=realm,
                          authid=authid,

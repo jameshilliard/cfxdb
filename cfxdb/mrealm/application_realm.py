@@ -9,6 +9,8 @@ from typing import Optional, List
 from uuid import UUID
 import pprint
 
+import numpy as np
+
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.arealm.ApplicationRealmStatus import ApplicationRealmStatus
 
@@ -57,7 +59,7 @@ class ApplicationRealm(ConfigurationElement):
                  status: Optional[int] = None,
                  workergroup_oid: Optional[UUID] = None,
                  webcluster_oid: Optional[UUID] = None,
-                 changed: Optional[int] = None,
+                 changed: Optional[np.datetime64] = None,
                  owner: Optional[UUID] = None,
                  _unknown=None):
         """
@@ -148,14 +150,6 @@ class ApplicationRealm(ConfigurationElement):
 
         :return: dict
         """
-        assert self.oid is None or isinstance(self.oid, UUID)
-        assert self.name is None or type(self.name) == str
-        assert self.status is None or type(self.status) == int
-        assert self.workergroup_oid is None or isinstance(self.workergroup_oid, UUID)
-        assert self.webcluster_oid is None or isinstance(self.webcluster_oid, UUID)
-        assert self.changed is None or type(self.changed) == int
-        assert self.owner is None or isinstance(self.owner, UUID)
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
@@ -164,7 +158,7 @@ class ApplicationRealm(ConfigurationElement):
             'status': self.STATUS_BY_CODE.get(self.status, None),
             'workergroup_oid': str(self.workergroup_oid) if self.workergroup_oid else None,
             'webcluster_oid': str(self.webcluster_oid) if self.webcluster_oid else None,
-            'changed': self.changed,
+            'changed': int(self.changed) if self.changed else None,
             'owner': str(self.owner) if self.owner else None,
         })
 
@@ -223,6 +217,8 @@ class ApplicationRealm(ConfigurationElement):
 
         changed = data.get('changed', None)
         assert changed is None or type(changed) == int
+        if changed:
+            changed = np.datetime64(changed, 'ns')
 
         obj = ApplicationRealm(oid=obj.oid,
                                label=obj.label,

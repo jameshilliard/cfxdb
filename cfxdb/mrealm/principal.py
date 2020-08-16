@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.common import ConfigurationElement
 
 
@@ -113,7 +115,7 @@ class Principal(ConfigurationElement):
 
         obj.update({
             'oid': str(self.oid) if self.oid else None,
-            'modified': self.modified,
+            'modified': int(self.modified) if self.modified else None,
             'arealm_oid': str(self.arealm_oid) if self.arealm_oid else None,
             'authid': self.authid,
             'role_oid': str(self.role_oid) if self.role_oid else None,
@@ -149,6 +151,8 @@ class Principal(ConfigurationElement):
 
         modified = data.get('modified', None)
         assert modified is None or type(modified) == int
+        if modified:
+            modified = np.datetime64(modified, 'ns')
 
         arealm_oid = data.get('arealm_oid', None)
         assert arealm_oid is None or type(arealm_oid) == str

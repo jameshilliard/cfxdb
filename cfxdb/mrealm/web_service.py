@@ -77,8 +77,6 @@ class WebService(ConfigurationElement):
 
         :return: dict
         """
-        assert self.path is None or type(self.path) == str
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({

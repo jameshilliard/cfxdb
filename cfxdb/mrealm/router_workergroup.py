@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.common import ConfigurationElement
 from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
 
@@ -26,7 +28,7 @@ class RouterWorkerGroup(ConfigurationElement):
                  name: Optional[str] = None,
                  scale: Optional[int] = None,
                  status: Optional[int] = None,
-                 changed: Optional[int] = None,
+                 changed: Optional[np.datetime64] = None,
                  _unknown=None):
         """
 
@@ -79,12 +81,6 @@ class RouterWorkerGroup(ConfigurationElement):
 
         :return: dict
         """
-        assert self.cluster_oid is None or type(self.name) == str
-        assert self.name is None or type(self.name) == str
-        assert self.scale is None or type(self.scale) == int
-        assert self.status is None or type(self.status) == int
-        assert self.changed is None or type(self.changed) == int
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
@@ -92,7 +88,7 @@ class RouterWorkerGroup(ConfigurationElement):
             'name': self.name,
             'scale': self.scale,
             'status': STATUS_BY_CODE[self.status] if self.status else None,
-            'changed': self.changed,
+            'changed': int(self.changed) if self.changed else None,
         })
 
         return obj
@@ -135,6 +131,8 @@ class RouterWorkerGroup(ConfigurationElement):
 
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
+        if changed:
+            changed = np.datetime64(changed, 'ns')
 
         obj = RouterWorkerGroup(oid=obj.oid,
                                 label=obj.label,

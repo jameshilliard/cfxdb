@@ -112,12 +112,6 @@ class Node(ConfigurationElement):
         """
         obj = ConfigurationElement.marshal(self)
 
-        assert self.owner_oid is None or isinstance(self.owner_oid, UUID)
-        assert type(self.pubkey) == six.text_type and len(self.pubkey) == 64
-        assert self.mrealm_oid is None or isinstance(self.mrealm_oid, UUID)
-        assert self.authid is None or type(self.authid) == six.text_type
-        assert self.authextra is None or type(self.authextra) == dict
-
         obj.update({
             'owner_oid': str(self.owner_oid) if self.owner_oid else None,
             'pubkey': self.pubkey,

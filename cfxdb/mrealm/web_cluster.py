@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.mrealm.cluster import Cluster
 
 
@@ -23,7 +25,7 @@ class WebCluster(Cluster):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
-                 changed: Optional[int] = None,
+                 changed: Optional[np.datetime64] = None,
                  tcp_version: Optional[int] = None,
                  tcp_port: Optional[int] = None,
                  tcp_shared: Optional[bool] = None,
@@ -160,23 +162,6 @@ class WebCluster(Cluster):
 
         :return: dict
         """
-        assert self.tcp_version is None or type(self.tcp_version) == int
-        assert self.tcp_port is None or type(self.tcp_port) == int
-        assert self.tcp_shared is None or type(self.tcp_shared) == bool
-        assert self.tcp_interface is None or type(self.tcp_interface) == str
-        assert self.tcp_backlog is None or type(self.tcp_backlog) == int
-        assert self.tls_key is None or type(self.tls_key) == str
-        assert self.tls_certificate is None or type(self.tls_certificate) == str
-        assert self.tls_chain_certificates is None or type(self.tls_chain_certificates) == list
-        assert self.tls_ca_certificates is None or type(self.tls_ca_certificates) == list
-        assert self.tls_dhparam is None or type(self.tls_dhparam) == str
-        assert self.tls_ciphers is None or type(self.tls_ciphers) == str
-        assert self.http_client_timeout is None or type(self.http_client_timeout) == int
-        assert self.http_hsts is None or type(self.http_hsts) == bool
-        assert self.http_hsts_max_age is None or type(self.http_hsts_max_age) == int
-        assert self.http_access_log is None or type(self.http_access_log) == bool
-        assert self.http_display_tracebacks is None or type(self.http_display_tracebacks) == bool
-
         obj = Cluster.marshal(self)
 
         obj.update({

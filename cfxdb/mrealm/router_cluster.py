@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.mrealm.cluster import Cluster
 
 
@@ -24,7 +26,7 @@ class RouterCluster(Cluster):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
-                 changed: Optional[int] = None,
+                 changed: Optional[np.datetime64] = None,
                  _unknown=None):
         """
 

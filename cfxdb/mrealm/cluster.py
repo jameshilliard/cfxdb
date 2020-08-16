@@ -9,6 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
+import numpy as np
+
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
 
@@ -54,7 +56,7 @@ class Cluster(ConfigurationElement):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
-                 changed: Optional[int] = None,
+                 changed: Optional[np.datetime64] = None,
                  _unknown=None):
         """
 
@@ -101,16 +103,12 @@ class Cluster(ConfigurationElement):
 
         :return: dict
         """
-        assert self.name is None or type(self.name) == str
-        assert self.status is None or type(self.status) == int
-        assert self.changed is None or type(self.changed) == int
-
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
             'name': self.name,
             'status': STATUS_BY_CODE[self.status] if self.status else None,
-            'changed': self.changed,
+            'changed': int(self.changed) if self.changed else None,
         })
 
         return obj
@@ -145,6 +143,8 @@ class Cluster(ConfigurationElement):
 
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
+        if changed:
+            changed = np.datetime64(changed, 'ns')
 
         obj = Cluster(oid=obj.oid,
                       label=obj.label,
