@@ -11,7 +11,7 @@ import flatbuffers
 import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbr import Market as MarketGen
-from zlmdb import table, MapUuidFlatBuffers, MapBytes20TimestampUuid
+from zlmdb import table, MapUuidFlatBuffers, MapBytes20TimestampUuid, MapBytes20Uuid
 
 
 class _MarketGen(MarketGen.Market):
@@ -523,4 +523,11 @@ class IndexMarketsByOwner(MapBytes20TimestampUuid):
 class IndexMarketsByActor(MapBytes20TimestampUuid):
     """
     Markets-by-actor index with ``(actor_adr|bytes[20], joined|int) -> market_id|UUID`` mapping.
+    """
+
+
+@table('d511774c-0c7b-4d3f-a2de-6748c072a56f')
+class IndexMarketsByMaker(MapBytes20Uuid):
+    """
+    Markets-by-maker index with ``maker_adr|bytes[20] -> market_id|UUID`` mapping.
     """

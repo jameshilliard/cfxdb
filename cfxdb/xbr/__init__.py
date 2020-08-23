@@ -13,7 +13,7 @@ from cfxdb.xbr.block import Block, Blocks
 from cfxdb.xbr.catalog import Catalog, Catalogs
 from cfxdb.xbr.consent import Consent, Consents, IndexConsentByMemberAddress
 
-from cfxdb.xbr.market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor
+from cfxdb.xbr.market import Market, Markets, IndexMarketsByOwner, IndexMarketsByActor, IndexMarketsByMaker
 from cfxdb.xbr.member import Member, Members
 from cfxdb.xbr.token import TokenApproval, TokenApprovals, TokenTransfer, TokenTransfers
 
@@ -44,6 +44,7 @@ __all__ = (
     'Markets',
     'IndexMarketsByOwner',
     'IndexMarketsByActor',
+    'IndexMarketsByMaker',
     'Member',
     'Members',
     'TokenApproval',

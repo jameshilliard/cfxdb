@@ -16,7 +16,7 @@ from cfxdb.xbrmm.channel import PaymentChannels, IndexPaymentChannelByDelegate, 
     IndexPaymentChannelByActor, PaymentChannelBalances, PayingChannels, IndexPayingChannelByDelegate, \
     IndexPayingChannelByRecipient, PayingChannelBalances
 
-from .market import Markets, IndexMarketsByOwner, IndexMarketsByActor
+from .market import Markets, IndexMarketsByOwner, IndexMarketsByActor, IndexMarketsByMaker
 from .member import Members
 from cfxdb.xbrmm.offer import Offers, IndexOfferByKey
 from .token import TokenApprovals, TokenTransfers
@@ -83,6 +83,11 @@ class Schema(object):
     idx_markets_by_actor: IndexMarketsByActor
     """
     Index ``(actor_adr, joined) -> market_oid``.
+    """
+
+    idx_markets_by_maker: IndexMarketsByMaker
+    """
+    Index ``maker_adr -> market_oid``.
     """
 
     actors: Actors
@@ -206,6 +211,9 @@ class Schema(object):
 
         # schema.actors.attach_index('idx1', schema.idx_markets_by_actor, lambda actor:
         #                            (actor.actor, actor.timestamp))
+
+        schema.idx_markets_by_maker = db.attach_table(IndexMarketsByMaker)
+        schema.markets.attach_index('idx3', schema.idx_markets_by_maker, lambda market: market.maker)
 
         schema.payment_channels = db.attach_table(PaymentChannels)
 
