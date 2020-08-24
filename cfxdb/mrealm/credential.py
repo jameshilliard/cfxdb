@@ -7,9 +7,12 @@
 
 from typing import Optional
 import pprint
+import binascii
 from uuid import UUID
 
 import numpy as np
+
+from cfxdb._exception import InvalidConfigException
 
 
 class Credential(object):
@@ -161,13 +164,102 @@ class Credential(object):
         authid = data.get('authid', None)
         assert authid is None or type(authid) == str
 
-        authconfig = data.get('authconfig', None)
-        assert authconfig is None or type(authconfig) == dict
-
         principal_oid = data.get('principal_oid', None)
         assert principal_oid is None or type(principal_oid) == str
         if principal_oid:
             principal_oid = UUID(principal_oid)
+
+        authconfig = data.get('authconfig', None)
+        assert authconfig is None or type(authconfig) == dict
+
+        if authconfig:
+            if authmethod == 'cryptosign':
+                # check allowed keys
+                for key in authconfig:
+                    if key not in ['authorized_keys']:
+                        raise InvalidConfigException(
+                            'invalid attribute "{}" in cryptosign config'.format(key))
+
+                # check required keys
+                if 'authorized_keys' not in authconfig or type(authconfig['authorized_keys']) != list:
+                    raise InvalidConfigException(
+                        'invalid type "{}" for authorized_keys in cryptosign config'.format(
+                            type(authconfig['authorized_keys'])))
+                if len(authconfig['authorized_keys']) == 0:
+                    raise InvalidConfigException(
+                        'need at least one key in authorized_keys in cryptosign config')
+                authorized_keys = authconfig['authorized_keys']
+                for k in authorized_keys:
+                    if type(k) != str or len(k) != 64:
+                        raise InvalidConfigException(
+                            'key in autheorized_keys must have type str[64] (was {}) in authorized_keys in cryptosign config'
+                            .format(type(k)))
+                    try:
+                        binascii.a2b_hex(k)
+                    except Exception as e:
+                        raise InvalidConfigException(
+                            'invalid key in autheorized_keys in authorized_keys in cryptosign config: {}'.
+                            format(e))
+
+            elif authmethod == 'ticket':
+                # check allowed keys
+                for key in authconfig:
+                    if key not in ['secret']:
+                        raise InvalidConfigException('invalid attribute "{}" in ticket config'.format(key))
+
+                # check required keys
+                if 'secret' not in authconfig or type(authconfig['secret']) != str:
+                    raise InvalidConfigException(
+                        'invalid type "{}" for authorized_keys in ticket config'.format(
+                            type(authconfig['authorized_keys'])))
+
+            elif authmethod == 'wampcra':
+                # check allowed keys
+                for key in authconfig:
+                    if key not in ['secret', 'salt', 'iterations', 'keylen']:
+                        raise InvalidConfigException('invalid attribute "{}" in wampcra config'.format(key))
+
+                # check required keys
+                if 'secret' not in authconfig or type(authconfig['secret']) != str:
+                    raise InvalidConfigException('invalid type "{}" for secret in wampcra config'.format(
+                        type(authconfig['secret'])))
+                if 'salt' in authconfig and type(authconfig['salt']) != str:
+                    raise InvalidConfigException('invalid type "{}" for salt in wampcra config'.format(
+                        type(authconfig['salt'])))
+                if 'iterations' in authconfig and type(authconfig['iterations']) != int:
+                    raise InvalidConfigException('invalid type "{}" for iterations in wampcra config'.format(
+                        type(authconfig['iterations'])))
+                if 'keylen' in authconfig and type(authconfig['keylen']) != int:
+                    raise InvalidConfigException('invalid type "{}" for keylen in wampcra config'.format(
+                        type(authconfig['keylen'])))
+
+            elif authmethod == 'tls':
+                raise NotImplementedError('FIXME: check tls authmethod configuration')
+
+            elif authmethod == 'scram':
+                # check allowed keys
+                for key in authconfig:
+                    if key not in ['kdf', 'iterations', 'memory', 'salt', 'stored-key', 'server-key']:
+                        raise InvalidConfigException('invalid attribute "{}" in scram config'.format(key))
+
+                # check required keys
+                for key, Type in [('kdf', str), ('iterations', int), ('memory', int), ('salt', str),
+                                  ('stored-key', str), ('server-key', str)]:
+                    if key not in authconfig or type(authconfig[key]) != Type:
+                        raise InvalidConfigException('invalid type "{}" for secret in scram config'.format(
+                            type(authconfig[key])))
+
+            elif authmethod == 'cookie':
+                raise NotImplementedError('FIXME: check cookie authmethod configuration')
+
+            elif authmethod == 'anonymous':
+                # there is nothing to configure for authmethod==anonymous (authid/authrole actually assigned
+                # is defined already "outside" this config dict)
+                for key in authconfig:
+                    if key not in []:
+                        raise InvalidConfigException('invalid attribute "{}" in anonymous config'.format(key))
+            else:
+                raise InvalidConfigException('invalid authmethod "{}"'.format(authmethod))
 
         obj = Credential(oid=oid,
                          created=created,

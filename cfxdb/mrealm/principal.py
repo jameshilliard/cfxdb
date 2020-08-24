@@ -16,7 +16,21 @@ from cfxdb.common import ConfigurationElement
 
 class Principal(ConfigurationElement):
     """
-    Principals created for use with WAMP authentication.
+    Principals created for use with WAMP authentication. A principal represents the identity
+    an application client is authenticated to the application realm joined.
+
+    A principal must have at least one :class:`cfxdb.mrealmschema.Credential` added.
+    When an application client connects, it will offer an ``authmethod`` and request a ``realm``
+    and (usually) ``authid``. When a matching :class:`cfxdb.mrealmschema.Credential` is found,
+    and authentication succeeds using that, the client will be authenticated under the
+    :class:`cfxdb.mrealmschema.Principal` associated with the credential.
+
+    .. note::
+
+        It is important to note that while the ``realm`` and ``authid`` requested by the client
+        (and defined in the respective :class:`cfxdb.mrealmschema.Credential`) will *usually* be identical
+        to the ``realm`` and ``authid`` actually assigned (as defined in the :class:`cfxdb.mrealmschema.Principal`
+        associated with the credential), this is allowed to differ in *general*.
     """
     def __init__(self,
                  oid: Optional[UUID] = None,

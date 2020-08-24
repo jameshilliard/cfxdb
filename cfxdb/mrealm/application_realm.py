@@ -186,7 +186,7 @@ class ApplicationRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'webcluster_oid', 'owner', 'created']:
+            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'webcluster_oid', 'owner', 'changed']:
                 _unknown[k] = data[k]
 
         name = data.get('name', 'arealm-{}'.format(str(obj.oid)[:8]))

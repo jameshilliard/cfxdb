@@ -22,19 +22,17 @@ __all__ = ('MrealmSchema', )
 @table('7099565b-7b44-4891-a0c8-83c7dbb60883', marshal=ApplicationRealm.marshal, parse=ApplicationRealm.parse)
 class ApplicationRealms(MapUuidCbor):
     """
-    Table: arealm_oid -> arealm
-
+    * Database table: ``arealm_oid -> arealm``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.ApplicationRealm`
+    * Record type :class:`cfxdb.mrealmschema.ApplicationRealm`
     """
 
 
 @table('89f3073a-32d5-497e-887d-7e930e9c26e6')
 class IndexApplicationRealmByName(MapStringUuid):
     """
-    Index: arealm_name -> arealm_oid
-
+    * Database index table ``arealm_name -> arealm_oid``
     * Table type :class:`zlmdb.MapStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.ApplicationRealms`
@@ -44,8 +42,7 @@ class IndexApplicationRealmByName(MapStringUuid):
 @table('0275b858-890c-4879-945c-720235b093d7')
 class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
     """
-    Index: (webcluster_oid, arealm_name) -> arealm_oid
-
+    * Database index table ``(webcluster_oid, arealm_name) -> arealm_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.ApplicationRealms`
@@ -58,19 +55,17 @@ class IndexApplicationRealmByWebCluster(MapUuidStringUuid):
 @table('9808cb0b-1b55-4b3f-858e-39004cb11135', marshal=Principal.marshal, parse=Principal.parse)
 class Principals(MapUuidCbor):
     """
-    Table: principal_oid -> principal
-
+    * Database table: ``principal_oid -> principal``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.Principal`.
+    * Record type :class:`cfxdb.mrealmschema.Principal`.
     """
 
 
 @table('212f3455-6d4c-43ec-843d-53cd17e31974')
 class IndexPrincipalByName(MapUuidStringUuid):
     """
-    Index: (arealm_oid, principal_name) -> principal_oid
-
+    * Database index table ``(arealm_oid, principal_name) -> principal_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Principals`
@@ -83,19 +78,17 @@ class IndexPrincipalByName(MapUuidStringUuid):
 @table('251c8620-425a-4eeb-ade9-4284e8670080', marshal=Credential.marshal, parse=Credential.parse)
 class Credentials(MapUuidCbor):
     """
-    Table: credential_oid -> credential
-
+    * Database table: ``credential_oid -> credential``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.Credential`.
+    * Record type :class:`cfxdb.mrealmschema.Credential`.
     """
 
 
 @table('45490b42-b167-4df6-ab1c-41d434390397')
 class IndexCredentialsByAuth(MapStringStringStringUuid):
     """
-    Index: (authmethod, realm_name, authid) -> credential_oid
-
+    * Database index table ``(authmethod, realm_name, authid) -> credential_oid``
     * Table type :class:`zlmdb.MapStringStringStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Credentials`
@@ -105,8 +98,7 @@ class IndexCredentialsByAuth(MapStringStringStringUuid):
 @table('ed0da771-e331-4d93-b50c-d371391cd7b9')
 class IndexCredentialsByPrincipal(MapUuidTimestampUuid):
     """
-    Index: (principal_oid, modified) -> credential_oid
-
+    * Database index table ``(principal_oid, modified) -> credential_oid``
     * Table type :class:`zlmdb.MapUuidIntUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Credentials`
@@ -119,19 +111,17 @@ class IndexCredentialsByPrincipal(MapUuidTimestampUuid):
 @table('341083bb-edeb-461c-a6d4-38dddcda6ec9', marshal=Role.marshal, parse=Role.parse)
 class Roles(MapUuidCbor):
     """
-    Table: role_oid -> role
-
+    * Database table: ``role_oid -> role``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.Role`.
+    * Record type :class:`cfxdb.mrealmschema.Role`.
     """
 
 
 @table('71b990d1-4525-44cd-9ef8-3569de8b4c80')
 class IndexRoleByName(MapStringUuid):
     """
-    Index: role_name -> role_oid
-
+    * Database index table ``role_name -> role_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Roles`
@@ -144,8 +134,7 @@ class IndexRoleByName(MapStringUuid):
 @table('f98ed35b-f8fb-47ba-81e1-3c014101464d', marshal=Permission.marshal, parse=Permission.parse)
 class Permissions(MapUuidCbor):
     """
-    Table: permission_oid -> permission
-
+    * Database table: ``permission_oid -> permission``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
     * Record type :class:`cfxdb.mrealm.Permission`.
@@ -155,8 +144,7 @@ class Permissions(MapUuidCbor):
 @table('6cdc21bf-353d-4477-8631-8eb039142ae9')
 class IndexPermissionByUri(MapUuidStringUuid):
     """
-    Index: (role_oid, uri) -> permission_oid
-
+    * Database index table ``(role_oid, uri) -> permission_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.Permissions`
@@ -171,8 +159,7 @@ class IndexPermissionByUri(MapUuidStringUuid):
        parse=ApplicationRealmRoleAssociation.parse)
 class ApplicationRealmRoleAssociations(MapUuidUuidCbor):
     """
-    Table: (arealm_oid, role_oid) -> arealm_role_association
-
+    * Database table: ``(arealm_oid, role_oid) -> arealm_role_association``
     * Table type :class:`zlmdb.MapUuidUuidCbor`
     * Key type :class:`uuid.UUID`
     * Record type :class:`cfxdb.mrealm.ApplicationRealmRoleAssociation`.
@@ -185,19 +172,17 @@ class ApplicationRealmRoleAssociations(MapUuidUuidCbor):
 @table('b054a230-c370-4c29-b5de-7e0148321b0a', marshal=RouterCluster.marshal, parse=RouterCluster.parse)
 class RouterClusters(MapUuidCbor):
     """
-    Table: routercluster_oid -> routercluster
-
+    * Database table: ``routercluster_oid -> routercluster``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.RouterCluster`.
+    * Record type :class:`cfxdb.mrealmschema.RouterCluster`.
     """
 
 
 @table('0c80c7a8-7536-4a74-8916-4922c0b72cb7')
 class IndexRouterClusterByName(MapStringUuid):
     """
-    Index: routercluster_name -> routercluster_oid
-
+    * Database index table ``routercluster_name -> routercluster_oid``
     * Table type :class:`zlmdb.MapStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.RouterClusters`
@@ -212,11 +197,10 @@ class IndexRouterClusterByName(MapStringUuid):
        parse=RouterClusterNodeMembership.parse)
 class RouterClusterNodeMemberships(MapUuidUuidCbor):
     """
-    Table: (cluster_oid, node_oid) -> cluster_node_membership
-
+    * Database table: ``(cluster_oid, node_oid) -> cluster_node_membership``
     * Table type :class:`zlmdb.MapUuidUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.RouterClusterNodeMemberships`.
+    * Record type :class:`cfxdb.mrealmschema.RouterClusterNodeMemberships`.
     """
 
 
@@ -228,19 +212,17 @@ class RouterClusterNodeMemberships(MapUuidUuidCbor):
        parse=RouterWorkerGroup.parse)
 class RouterWorkerGroups(MapUuidCbor):
     """
-    Table: workergroup_oid -> workergroup
-
+    * Database table: ``workergroup_oid -> workergroup``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.RouterWorkerGroup`.
+    * Record type :class:`cfxdb.mrealmschema.RouterWorkerGroup`.
     """
 
 
 @table('4bb8ec14-4820-4061-8b2c-d1841e2686e1')
 class IndexWorkerGroupByCluster(MapUuidStringUuid):
     """
-    Index: cluster_oid, workergroup_name -> workergroup_oid
-
+    * Database index table ``(cluster_oid, workergroup_name) -> workergroup_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroups`
@@ -255,19 +237,17 @@ class IndexWorkerGroupByCluster(MapUuidStringUuid):
        parse=RouterWorkerGroupClusterPlacement.parse)
 class RouterWorkerGroupClusterPlacements(MapUuidCbor):
     """
-    Table: placement_oid -> placement
-
+    * Database table: ``placement_oid -> placement``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.RouterWorkerGroupClusterPlacement`.
+    * Record type :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacement`.
     """
 
 
 @table('1a18739f-7224-4459-a446-6f1fedd760a7')
 class IndexClusterPlacementByWorkerName(MapUuidUuidUuidStringUuid):
     """
-    Index: (workergroup_oid, cluster_oid, node_oid, worker_name) -> placement_oid
-
+    * Database index table ``(workergroup_oid, cluster_oid, node_oid, worker_name) -> placement_oid``
     * Table type :class:`zlmdb.MapUuidUuidUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacements`
@@ -280,19 +260,17 @@ class IndexClusterPlacementByWorkerName(MapUuidUuidUuidStringUuid):
 @table('719d029f-e9d5-4b25-98e0-cf04d5a2648b', marshal=WebCluster.marshal, parse=WebCluster.parse)
 class WebClusters(MapUuidCbor):
     """
-    Table: webcluster_oid -> webcluster
-
+    * Database table: ``webcluster_oid -> webcluster``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.WebCluster`.
+    * Record type :class:`cfxdb.mrealmschema.WebCluster`.
     """
 
 
 @table('296c7d17-4769-4e40-8cb7-e6c394b93335')
 class IndexWebClusterByName(MapStringUuid):
     """
-    Index: webcluster_name -> webcluster_oid
-
+    * Database index table ``webcluster_name -> webcluster_oid``
     * Table type :class:`zlmdb.MapStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.WebClusters`
@@ -307,11 +285,10 @@ class IndexWebClusterByName(MapStringUuid):
        parse=WebClusterNodeMembership.parse)
 class WebClusterNodeMemberships(MapUuidUuidCbor):
     """
-    Table: (webcluster_oid, node_oid) -> webcluster_node_membership
-
+    * Database table: ``(webcluster_oid, node_oid) -> webcluster_node_membership``
     * Table type :class:`zlmdb.MapUuidUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.WebClusterNodeMembership`.
+    * Record type :class:`cfxdb.mrealmschema.WebClusterNodeMembership`.
     """
 
 
@@ -321,19 +298,17 @@ class WebClusterNodeMemberships(MapUuidUuidCbor):
 @table('a8803ca3-09a0-4d72-8728-2469de8d50ac', marshal=WebService.marshal, parse=WebService.parse)
 class WebServices(MapUuidCbor):
     """
-    Table: webservice_oid -> webservice
-
+    * Database table: ``webservice_oid -> webservice``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.WebService`.
+    * Record type :class:`cfxdb.mrealmschema.WebService`.
     """
 
 
 @table('d23d4dbb-5d5c-4ccc-b72a-0ff18363169f')
 class IndexWebClusterWebServices(MapUuidUuidUuid):
     """
-    Index: (webcluster_oid, webservice_oid) -> webservice_oid
-
+    * Database index table ``(webcluster_oid, webservice_oid) -> webservice_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.WebServices`
@@ -343,8 +318,7 @@ class IndexWebClusterWebServices(MapUuidUuidUuid):
 @table('f0b05bcf-f682-49bb-929e-ac252e9867fa')
 class IndexWebServiceByPath(MapUuidStringUuid):
     """
-    Index: (webcluster_oid, webservice_name) -> webservice_oid
-
+    * Database index table ``(webcluster_oid, webservice_name) -> webservice_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.WebServices`
@@ -354,8 +328,7 @@ class IndexWebServiceByPath(MapUuidStringUuid):
 @table('62d0841c-602e-473e-a6d5-3d8ce01e9e06')
 class IndexWebClusterPathToWebService(MapUuidStringUuid):
     """
-    Index: (webcluster_oid, path) -> webservice_oid
-
+    * Database index table ``(webcluster_oid, path) -> webservice_oid``
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.WebClusters`
@@ -368,19 +341,17 @@ class IndexWebClusterPathToWebService(MapUuidStringUuid):
 @table('e11680d5-e20c-40b1-97d9-380b5ace1cb3', marshal=(lambda x: x), parse=(lambda x: x))
 class Docs(MapUuidCbor):
     """
-    Table: doc_oid -> doc
-
+    * Database table: ``doc_oid -> doc``
     * Table type :class:`zlmdb.MapUuidCbor`
     * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealm.Doc`
+    * Record type :class:`cfxdb.mrealmschema.Doc`
     """
 
 
 @table('d1de0b8c-3b6d-488b-8778-5bac8528ab4b')
 class IndexObjectToDoc(MapSlotUuidUuid):
     """
-    Index: (object_slot, object_oid) -> doc_oid
-
+    * Database index table ``(object_slot, object_oid) -> doc_oid``
     * Table type :class:`zlmdb.MapSlotUuidUuid`
     * Key type :class:`typing.Tuple[int, uuid.UUID]`
     * Indexed table :class:`cfxdb.mrealmschema.Docs`
