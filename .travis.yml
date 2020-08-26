@@ -1,6 +1,5 @@
-# py3.7/travis: https://github.com/travis-ci/travis-ci/issues/9815#issue-336465122
 language: python
-python: 3.7
+python: 3.8
 dist: xenial
 
 cache:
@@ -29,21 +28,21 @@ matrix:
   fast_finish: true
 
   include:
-    - python: "3.7"
+    - python: "3.8"
       env: TOX_ENV=pytest
 
-    - python: "3.7"
+    - python: "3.8"
       env: TOX_ENV=flake8
 
-    - python: "3.7"
+    - python: "3.8"
       env: TOX_ENV=mypy
 
-    - python: "3.7"
+    - python: "3.8"
       env: TOX_ENV=yapf
 
     # https://docs.travis-ci.com/user/build-stages/matrix-expansion/
     - stage: deploy
-      python: "3.7"
+      python: "3.8"
       if: repo = crossbario/cfxdb AND branch = master AND type != pull_request
       #on:
       #  repo: crossbario/cfxdb
