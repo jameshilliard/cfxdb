@@ -56,6 +56,7 @@ class Cluster(ConfigurationElement):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
+                 owner_oid: Optional[UUID] = None,
                  changed: Optional[np.datetime64] = None,
                  _unknown=None):
         """
@@ -76,6 +77,7 @@ class Cluster(ConfigurationElement):
                                       _unknown=_unknown)
         self.name = name
         self.status = status
+        self.owner_oid = owner_oid
         self.changed = changed
 
     def __eq__(self, other):
@@ -86,6 +88,8 @@ class Cluster(ConfigurationElement):
         if other.name != self.name:
             return False
         if other.status != self.status:
+            return False
+        if other.owner_oid != self.owner_oid:
             return False
         if other.changed != self.changed:
             return False
@@ -108,6 +112,7 @@ class Cluster(ConfigurationElement):
         obj.update({
             'name': self.name,
             'status': STATUS_BY_CODE[self.status] if self.status else None,
+            'owner_oid': str(self.owner_oid) if self.owner_oid else None,
             'changed': int(self.changed) if self.changed else None,
         })
 
@@ -131,7 +136,7 @@ class Cluster(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = dict()
         for k in data:
-            if k not in ['name', 'status', 'changed']:
+            if k not in ['name', 'status', 'owner_oid', 'changed']:
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
@@ -140,6 +145,11 @@ class Cluster(ConfigurationElement):
         status = data.get('status', None)
         assert status is None or (type(status) == str)
         status = STATUS_BY_NAME.get(status, None)
+
+        owner_oid = data.get('owner_oid', None)
+        assert owner_oid is None or (type(owner_oid) == str)
+        if owner_oid:
+            owner_oid = UUID(owner_oid)
 
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
@@ -152,6 +162,7 @@ class Cluster(ConfigurationElement):
                       tags=obj.tags,
                       name=name,
                       status=status,
+                      owner_oid=owner_oid,
                       changed=changed,
                       _unknown=_unknown)
 

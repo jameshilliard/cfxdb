@@ -60,7 +60,7 @@ class ApplicationRealm(ConfigurationElement):
                  workergroup_oid: Optional[UUID] = None,
                  webcluster_oid: Optional[UUID] = None,
                  changed: Optional[np.datetime64] = None,
-                 owner: Optional[UUID] = None,
+                 owner_oid: Optional[UUID] = None,
                  _unknown=None):
         """
 
@@ -81,7 +81,7 @@ class ApplicationRealm(ConfigurationElement):
         :param webcluster_oid: When running, the web cluster to serve as a frontend layer for the application realm.
 
         :param changed: Timestamp when the application realm was last changed
-        :param owner: Owning user (object ID)
+        :param owner_oid: Owning user (object ID)
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.name = name
@@ -89,7 +89,7 @@ class ApplicationRealm(ConfigurationElement):
         self.workergroup_oid = workergroup_oid
         self.webcluster_oid = webcluster_oid
         self.changed = changed
-        self.owner = owner
+        self.owner_oid = owner_oid
 
         # private member with unknown/untouched data passing through
         self._unknown = _unknown
@@ -109,7 +109,7 @@ class ApplicationRealm(ConfigurationElement):
             return False
         if other.changed != self.changed:
             return False
-        if other.owner != self.owner:
+        if other.owner_oid != self.owner_oid:
             return False
         return True
 
@@ -139,8 +139,8 @@ class ApplicationRealm(ConfigurationElement):
             self.webcluster_oid = other.webcluster_oid
         if (not self.changed and other.changed) or overwrite:
             self.changed = other.changed
-        if (not self.owner and other.owner) or overwrite:
-            self.owner = other.owner
+        if (not self.owner_oid and other.owner_oid) or overwrite:
+            self.owner_oid = other.owner_oid
 
         # _unknown is not copied!
 
@@ -159,7 +159,7 @@ class ApplicationRealm(ConfigurationElement):
             'workergroup_oid': str(self.workergroup_oid) if self.workergroup_oid else None,
             'webcluster_oid': str(self.webcluster_oid) if self.webcluster_oid else None,
             'changed': int(self.changed) if self.changed else None,
-            'owner': str(self.owner) if self.owner else None,
+            'owner_oid': str(self.owner_oid) if self.owner_oid else None,
         })
 
         if self._unknown:
@@ -186,7 +186,9 @@ class ApplicationRealm(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['oid', 'name', 'status', 'workergroup_oid', 'webcluster_oid', 'owner', 'changed']:
+            if k not in [
+                    'oid', 'name', 'status', 'workergroup_oid', 'webcluster_oid', 'owner_oid', 'changed'
+            ]:
                 _unknown[k] = data[k]
 
         name = data.get('name', 'arealm-{}'.format(str(obj.oid)[:8]))
@@ -209,11 +211,11 @@ class ApplicationRealm(ConfigurationElement):
                 type(data['webcluster_oid']))
             webcluster_oid = UUID(data['webcluster_oid'])
 
-        owner = None
-        if 'owner' in data and data['owner'] is not None:
-            assert type(data['owner']) == str, 'owner must be a string, but was {}'.format(type(
-                data['owner']))
-            owner = UUID(data['owner'])
+        owner_oid = None
+        if 'owner_oid' in data and data['owner_oid'] is not None:
+            assert type(data['owner_oid']) == str, 'owner_oid must be a string, but was {}'.format(
+                type(data['owner_oid']))
+            owner_oid = UUID(data['owner_oid'])
 
         changed = data.get('changed', None)
         assert changed is None or type(changed) == int
@@ -228,7 +230,7 @@ class ApplicationRealm(ConfigurationElement):
                                workergroup_oid=workergroup_oid,
                                webcluster_oid=webcluster_oid,
                                status=status,
-                               owner=owner,
+                               owner_oid=owner_oid,
                                changed=changed,
                                _unknown=_unknown)
 

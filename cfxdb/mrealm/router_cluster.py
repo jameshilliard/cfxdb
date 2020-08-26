@@ -26,6 +26,7 @@ class RouterCluster(Cluster):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
+                 owner_oid: Optional[UUID] = None,
                  changed: Optional[np.datetime64] = None,
                  _unknown=None):
         """
@@ -45,6 +46,7 @@ class RouterCluster(Cluster):
                          tags=tags,
                          name=name,
                          status=status,
+                         owner_oid=owner_oid,
                          changed=changed)
 
     def __eq__(self, other):
@@ -97,6 +99,7 @@ class RouterCluster(Cluster):
                             tags=obj.tags,
                             name=obj.name,
                             status=obj.status,
+                            owner_oid=obj.owner_oid,
                             changed=obj.changed,
                             _unknown=_unknown)
 

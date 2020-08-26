@@ -25,6 +25,7 @@ class WebCluster(Cluster):
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
                  status: Optional[int] = None,
+                 owner_oid: Optional[UUID] = None,
                  changed: Optional[np.datetime64] = None,
                  tcp_version: Optional[int] = None,
                  tcp_port: Optional[int] = None,
@@ -92,6 +93,7 @@ class WebCluster(Cluster):
                          tags=tags,
                          name=name,
                          status=status,
+                         owner_oid=owner_oid,
                          changed=changed,
                          _unknown=_unknown)
         self.tcp_version = tcp_version
@@ -265,6 +267,7 @@ class WebCluster(Cluster):
                          tags=obj.tags,
                          name=obj.name,
                          status=obj.status,
+                         owner_oid=obj.owner_oid,
                          changed=obj.changed,
                          tcp_version=tcp_version,
                          tcp_port=tcp_port,
