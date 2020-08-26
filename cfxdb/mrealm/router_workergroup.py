@@ -111,7 +111,7 @@ class RouterWorkerGroup(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = dict()
         for k in data:
-            if k not in ['cluster_oid', 'name', 'status', 'changed']:
+            if k not in ['cluster_oid', 'name', 'scale', 'status', 'changed']:
                 _unknown[k] = data[k]
 
         cluster_oid = data.get('cluster_oid', None)
