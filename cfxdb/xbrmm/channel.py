@@ -205,7 +205,7 @@ class Channel(object):
             'close_mm_sig': bytes(self.close_mm_sig) if self.close_mm_sig else None,
             'close_del_sig': bytes(self.close_del_sig) if self.close_del_sig else None,
             'close_channel_seq': self.close_channel_seq,
-            'close_balance': self.close_balance,
+            'close_balance': pack_uint256(self.close_balance),
             'close_is_final': self.close_is_final,
             'closed_tx': bytes(self.closed_tx) if self.closed_tx else None,
         }
