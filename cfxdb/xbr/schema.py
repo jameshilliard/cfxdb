@@ -209,6 +209,8 @@ class Schema(object):
         schema.actors = db.attach_table(Actors)
         schema.idx_markets_by_actor = db.attach_table(IndexMarketsByActor)
 
+        # FIXME: we manually maintain the index, and hence must mark the pmap as an index manually
+        # schema.idx_markets_by_actor._index_attached_to = schema.actors
         # schema.actors.attach_index('idx1', schema.idx_markets_by_actor, lambda actor:
         #                            (actor.actor, actor.timestamp))
 

@@ -106,9 +106,9 @@ class Member(object):
 
     def marshal(self) -> dict:
         obj = {
-            'address': self.address,
+            'address': bytes(self.address) if self._address else None,
             'account_oid': self._account_oid.bytes if self._account_oid else None,
-            'timestamp': self.timestamp,
+            'timestamp': int(self.timestamp) if self.timestamp else None,
             'registered': self.registered,
             'eula': self.eula,
             'profile': self.profile,

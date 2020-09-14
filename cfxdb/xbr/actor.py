@@ -111,7 +111,7 @@ class Actor(object):
         # [uint8] (ethsig)
         self._signature = None
 
-    def marshal(self) -> dict:
+    def marshal(self):
         obj = {
             'timestamp': int(self.timestamp) if self.timestamp else None,
             'market': self.market.bytes if self.market else None,
@@ -119,7 +119,7 @@ class Actor(object):
             'actor_type': self.actor_type,
             'joined': pack_uint256(self.joined) if self.joined else None,
             'security': pack_uint256(self.security) if self.security else None,
-            'meta': self.meta,
+            'meta': bytes(self.meta) if self.meta else None,
             'tid': bytes(self.tid) if self.tid else None,
             'signature': bytes(self.signature) if self.signature else None,
         }

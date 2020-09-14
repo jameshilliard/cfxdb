@@ -82,10 +82,10 @@ class TokenApproval(object):
 
     def marshal(self) -> dict:
         obj = {
-            'tx_hash': self._tx_hash,
-            'block_hash': self._block_hash,
-            'from_address': self._owner_address,
-            'to_address': self._spender_address,
+            'tx_hash': bytes(self._tx_hash) if self._tx_hash else None,
+            'block_hash': bytes(self._block_hash) if self._block_hash else None,
+            'from_address': bytes(self._owner_address) if self._owner_address else None,
+            'to_address': bytes(self._spender_address) if self._spender_address else None,
             'value': self._value,
         }
         return obj
