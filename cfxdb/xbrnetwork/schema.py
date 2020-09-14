@@ -5,6 +5,8 @@
 #
 ##############################################################################
 
+import json
+
 from .account import Accounts, IndexAccountsByUsername, IndexAccountsByEmail, IndexAccountsByWallet
 from .userkey import UserKeys, IndexUserKeyByAccount
 from .vaction import VerifiedActions
@@ -48,8 +50,31 @@ class Schema(object):
     """
     Index "by pubkey" of user keys :class:`xbrnetwork.IndexUserKeyByAccount`.
     """
+
+    EXPORTED = None
+    """
+    """
     def __init__(self, db):
         self.db = db
+
+    def export(self, txn, fd):
+        """
+
+        :param txn:
+        :param fd:
+        :return:
+        """
+        recs = 0
+        db_data = {}
+        for table in self.EXPORTED:
+            table_data = []
+            for key, val in table.select(txn, return_keys=True, return_values=True):
+                table_data.append((key, val.marshal() if val else None))
+                recs += 1
+            db_data[table.__name__] = table_data
+        db_data = json.dumps(db_data, ensure_ascii=False)
+        fd.write(db_data)
+        return recs
 
     @staticmethod
     def attach(db):
@@ -81,5 +106,7 @@ class Schema(object):
         schema.idx_user_key_by_account = db.attach_table(IndexUserKeyByAccount)
         schema.user_keys.attach_index('idx1', schema.idx_user_key_by_account, lambda user_key:
                                       (user_key.owner, user_key.created))
+
+        schema.EXPORTED = [schema.accounts, schema.verified_actions, schema.user_keys]
 
         return schema

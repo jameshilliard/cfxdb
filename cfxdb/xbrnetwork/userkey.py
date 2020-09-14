@@ -156,6 +156,34 @@ class UserKeys(MapBytes32FlatBuffers):
     """
     Database table for user client keys.
     """
+    @staticmethod
+    def parse(data):
+        """
+
+        :param data:
+        :return:
+        """
+        pubkey = None
+        if 'pubkey' in data:
+            assert type(data['pubkey']) == bytes and len(data['pubkey']) == 32
+            pubkey = data['pubkey']
+
+        created = None
+        if 'created' in data:
+            assert type(data['created'] == int)
+            created = np.datetime64(data['created'], 'ns')
+
+        owner = None
+        if 'owner' in data:
+            assert type(data['owner'] == bytes and len(data['owner']) == 16)
+            owner = uuid.UUID(bytes=data['owner'])
+
+        obj = UserKey()
+        obj.pubkey = pubkey
+        obj.created = created
+        obj.owner = owner
+
+        return obj
 
 
 @table('68b736f8-27df-4e3e-b80f-1b855ae5596f')

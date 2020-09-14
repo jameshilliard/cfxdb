@@ -160,7 +160,7 @@ class Schema(object):
     is indexed by).
     """
 
-    transaction: Transactions
+    transactions: Transactions
     """
     """
 

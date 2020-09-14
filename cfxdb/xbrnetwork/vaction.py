@@ -186,13 +186,13 @@ class VerifiedAction(object):
 
     def marshal(self):
         obj = {
-            'oid': self.oid,
-            'created': self.created,
+            'oid': self.oid.bytes if self.oid else None,
+            'created': int(self.created) if self.created else None,
             'vtype': self.vtype,
             'vstatus': self.vstatus,
             'vcode': self.vcode,
-            'verified_oid': self.verified_oid,
-            'verified_data': self.verified_data,
+            'verified_oid': self.verified_oid.bytes if self.verified_oid.bytes else None,
+            'verified_data': cbor2.dumps(self.verified_data) if self.verified_data else None,
         }
         return obj
 
@@ -366,3 +366,55 @@ class VerifiedActions(MapUuidFlatBuffers):
     """
     Database table for verification/verified actions, eg on-boarding new XBR members.
     """
+    @staticmethod
+    def parse(data):
+        """
+
+        :param data:
+        :return:
+        """
+        oid = None
+        if 'oid' in data:
+            assert type(data['oid'] == bytes and len(data['oid']) == 16)
+            oid = uuid.UUID(bytes=data['oid'])
+
+        created = None
+        if 'created' in data:
+            assert type(data['created'] == int)
+            created = np.datetime64(data['created'], 'ns')
+
+        vtype = None
+        if 'vtype' in data:
+            assert type(data['vtype'] == int)
+            vtype = data['vtype']
+
+        vstatus = None
+        if 'vstatus' in data:
+            assert type(data['vstatus'] == int)
+            vstatus = data['vstatus']
+
+        vcode = None
+        if 'vcode' in data:
+            assert type(data['vcode'] == str)
+            vcode = data['vcode']
+
+        verified_oid = None
+        if 'verified_oid' in data:
+            assert type(data['verified_oid'] == bytes and len(data['verified_oid']) == 16)
+            verified_oid = uuid.UUID(bytes=data['verified_oid'])
+
+        verified_data = None
+        if 'verified_data' in data:
+            assert type(data['verified_data']) == bytes
+            verified_data = cbor2.loads(data['verified_data'])
+
+        obj = VerifiedAction()
+        obj.oid = oid
+        obj.created = created
+        obj.vtype = vtype
+        obj.vstatus = vstatus
+        obj.vcode = vcode
+        obj.verified_oid = verified_oid
+        obj.verified_data = verified_data
+
+        return obj

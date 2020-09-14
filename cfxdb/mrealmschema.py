@@ -6,7 +6,7 @@
 ##############################################################################
 
 from zlmdb import table
-from zlmdb import MapStringUuid, MapUuidCbor, MapSlotUuidUuid, MapUuidStringUuid, MapUuidUuidUuid
+from zlmdb import MapStringUuid, MapUuidCbor, MapUuidStringUuid, MapUuidUuidUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid, MapStringStringStringUuid, MapUuidTimestampUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
@@ -335,29 +335,6 @@ class IndexWebClusterPathToWebService(MapUuidStringUuid):
     """
 
 
-#
-# Docs metadata
-#
-@table('e11680d5-e20c-40b1-97d9-380b5ace1cb3', marshal=(lambda x: x), parse=(lambda x: x))
-class Docs(MapUuidCbor):
-    """
-    * Database table: ``doc_oid -> doc``
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Key type :class:`uuid.UUID`
-    * Record type :class:`cfxdb.mrealmschema.Doc`
-    """
-
-
-@table('d1de0b8c-3b6d-488b-8778-5bac8528ab4b')
-class IndexObjectToDoc(MapSlotUuidUuid):
-    """
-    * Database index table ``(object_slot, object_oid) -> doc_oid``
-    * Table type :class:`zlmdb.MapSlotUuidUuid`
-    * Key type :class:`typing.Tuple[int, uuid.UUID]`
-    * Indexed table :class:`cfxdb.mrealmschema.Docs`
-    """
-
-
 class MrealmSchema(object):
     """
     Management realm database schema.
@@ -540,25 +517,11 @@ class MrealmSchema(object):
     * Database table :class:`cfxdb.mrealmschema.IndexWebServiceByPath`
     """
 
-    idx_webcluster_path_to_service: IndexWebClusterPathToWebService
+    idx_webcluster_webservices: IndexWebClusterWebServices
     """
     Index on web service: by ...
 
-    * Database table :class:`cfxdb.mrealmschema.IndexWebClusterPathToWebService`
-    """
-
-    docs: Docs
-    """
-    Documentation attached to a database object.
-
-    * Database table :class:`cfxdb.mrealmschema.Docs`
-    """
-
-    idx_object_to_doc: IndexObjectToDoc
-    """
-    Index on documentation: by documented object ID
-
-    * Database table :class:`cfxdb.mrealmschema.IndexObjectToDoc`
+    * Database table :class:`cfxdb.mrealmschema.IndexWebClusterWebServices`
     """
 
     mnode_logs: MNodeLogs

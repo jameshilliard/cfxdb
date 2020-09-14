@@ -186,14 +186,14 @@ class Account(object):
 
     def marshal(self):
         obj = {
-            'oid': self.oid,
-            'created': self.created,
+            'oid': self.oid.bytes if self.oid else None,
+            'created': int(self.created) if self.created else None,
             'username': self.username,
             'email': self.email,
-            'email_verified': self.email_verified,
+            'email_verified': int(self.email_verified) if self.email_verified is not None else None,
             'wallet_type': self.wallet_type,
-            'wallet_address': self.wallet_address,
-            'registered': self.registered,
+            'wallet_address': bytes(self.wallet_address) if self.wallet_address else None,
+            'registered': int(self.registered) if self.registered else None,
             'eula': self.eula,
             'profile': self.profile,
             'level': self.level,
@@ -453,6 +453,82 @@ class Accounts(MapUuidFlatBuffers):
     """
     Database table for XBR member accounts.
     """
+    @staticmethod
+    def parse(data):
+        """
+
+        :param data:
+        :return:
+        """
+        oid = None
+        if 'oid' in data:
+            assert type(data['oid'] == bytes and len(data['oid']) == 16)
+            oid = uuid.UUID(bytes=data['oid'])
+
+        created = None
+        if 'created' in data:
+            assert type(data['created'] == int)
+            created = np.datetime64(data['created'], 'ns')
+
+        username = None
+        if 'username' in data:
+            assert type(data['username'] == str)
+            username = data['username']
+
+        email = None
+        if 'email' in data:
+            assert type(data['email'] == str)
+            email = data['email']
+
+        email_verified = None
+        if 'email_verified' in data:
+            assert type(data['email_verified'] == int)
+            email_verified = np.datetime64(data['email_verified'], 'ns')
+
+        wallet_type = None
+        if 'wallet_type' in data:
+            assert type(data['wallet_type'] == int)
+            wallet_type = data['wallet_type']
+
+        wallet_address = None
+        if 'wallet_address' in data:
+            assert type(data['wallet_address'] == bytes and len(data['wallet_address']) == 20)
+            wallet_address = data['wallet_address']
+
+        registered = None
+        if 'registered' in data:
+            assert type(data['registered'] == int)
+            registered = data['registered']
+
+        eula = None
+        if 'eula' in data:
+            assert type(data['eula'] == str)
+            eula = data['eula']
+
+        profile = None
+        if 'profile' in data:
+            assert type(data['profile'] == str)
+            profile = data['profile']
+
+        level = None
+        if 'level' in data:
+            assert type(data['level'] == int)
+            level = data['level']
+
+        obj = Account()
+        obj.oid = oid
+        obj.created = created
+        obj.username = username
+        obj.email = email
+        obj.email_verified = email_verified
+        obj.wallet_type = wallet_type
+        obj.wallet_address = wallet_address
+        obj.registered = registered
+        obj.eula = eula
+        obj.profile = profile
+        obj.level = level
+
+        return obj
 
 
 @table('760d42a0-110e-474b-ab85-6e2396af035d')
