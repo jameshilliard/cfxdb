@@ -1,7 +1,7 @@
 .. _XBRDB:
 
-XBR Database Schema
-===================
+XBR Market Maker
+================
 
 `schema.PaymentChannels`
 ------------------------

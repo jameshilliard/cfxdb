@@ -83,6 +83,15 @@ extensions = [
     'sphinxcontrib.spelling',
 ]
 
+intersphinx_mapping = {
+   'py3': ('https://docs.python.org/3', None),
+   'python': ('https://docs.python.org/3', None),
+   'rtd': ('https://docs.readthedocs.io/en/latest/', None),
+   'txaio': ('https://txaio.readthedocs.io/en/latest/', None),
+   'autobahn': ('https://autobahn.readthedocs.io/en/latest/', None),
+   'zlmdb': ('https://zlmdb.readthedocs.io/en/latest/', None),
+}
+
 # extensions not available on RTD
 if spelling is not None:
     extensions.append('sphinxcontrib.spelling')
@@ -99,8 +108,8 @@ templates_path = ['_templates']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# The suffix of source filenames.
 source_suffix = '.rst'
+master_doc = 'contents'
 
 # The encoding of source files.
 #source_encoding = 'utf-8-sig'
@@ -125,11 +134,15 @@ pygments_style = 'sphinx'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-intersphinx_mapping = {
-   'py3': ('https://docs.python.org/3', None),
-   'python': ('https://docs.python.org/3', None),
-   'rtd': ('https://docs.readthedocs.io/en/latest/', None),
-   'txaio': ('https://txaio.readthedocs.io/en/latest/', None),
-   'autobahn': ('https://autobahn.readthedocs.io/en/latest/', None),
-   'zlmdb': ('https://zlmdb.readthedocs.io/en/latest/', None),
+# Custom sidebar templates, maps document names to template names.
+# Show full, global TOC in sidebar
+# http://stackoverflow.com/a/19007358
+# http://sphinx-doc.org/config.html#confval-html_sidebars
+html_sidebars = {
+    '**': [
+        'globaltoc.html',
+        'relations.html',
+        'sourcelink.html',
+        'searchbox.html'
+    ],
 }

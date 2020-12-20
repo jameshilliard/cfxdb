@@ -66,8 +66,6 @@ echo ''
 export AWS_S3_BUCKET_NAME=crossbario.com
 export AWS_DEFAULT_REGION=eu-central-1
 
-# build and deploy latest docs: for now, this is hosted under
-# https://s3.eu-central-1.amazonaws.com/download.crossbario.com/docs/crossbar/index.html
 echo 'building and uploading docs ..'
 tox -c tox.ini -e sphinx
 aws s3 cp --recursive --acl public-read ./docs/_build s3://${AWS_S3_BUCKET_NAME}/docs/cfxdb
@@ -76,5 +74,5 @@ aws cloudfront create-invalidation --distribution-id E1FNQA2EBNGVQC --paths "/do
 echo ''
 echo 'docs uploaded to:'
 echo ''
-echo '      https://s3.eu-central-1.amazonaws.com/download.crossbario.com/docs/crossbar/index.html'
+echo '      https://crossbario.com/docs/cfxdb/'
 echo ''

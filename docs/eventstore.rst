@@ -1,7 +1,7 @@
 .. _EVENTSDB:
 
-Events Database Schema
-=======================
+Event Store
+===========
 
 `schema.Sessions`
 -----------------
