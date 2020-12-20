@@ -104,7 +104,7 @@ jobs:
 
     - name: Run unit tests (PyTest)
       run: |
-        tox -c tox.ini -e pytest-${{ matrix.python-version }}
+        tox -c tox.ini -e pytest
 
   deploy:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
