@@ -1,7 +1,7 @@
 Crossbar.io FX Database
 =======================
 
-| |Travis|
+| |Version| |Build Status| |Docs|
 
 **cfxdb** is a CrossbarFX Python support package with core database access classes
 written in native Python. The package allows direct in-memory data access from
@@ -15,8 +15,17 @@ Python programs (including Jupyter notebooks) to CrossbarFX edge node data:
 
 --------------
 
-*Copyright (C) 2018-2020 Crossbar.io Technologies GmbH. All rights reserved.
+*Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
 WAMP, Crossbar.io and XBR are trademarks of Crossbar.io Technologies GmbH.*
 
-.. |Travis| image:: https://api.travis-ci.com/crossbario/cfxdb.svg?branch=master
-   :target: https://travis-ci.com/crossbario/cfxdb
+.. |Version| image:: https://img.shields.io/pypi/v/cfxdb.svg
+   :target: https://pypi.python.org/pypi/cfxdb
+   :alt: Version
+
+.. |Build Status| image:: https://github.com/crossbario/cfxdb/workflows/main/badge.svg
+   :target: https://github.com/crossbario/cfxdb/actions?query=workflow%3Amain
+   :alt: Build Status
+
+.. |Docs| image:: https://img.shields.io/badge/docs-brightgreen.svg?style=flat
+   :target: https://crossbario.com/docs/cfxdb/index.html
+   :alt: Docs

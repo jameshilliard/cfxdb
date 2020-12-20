@@ -106,6 +106,35 @@ jobs:
       run: |
         tox -c tox.ini -e pytest
 
+  docs:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install OS package dependencies
+      run: |
+        sudo apt update
+        sudo apt install libenchant-dev libbz2-dev libsnappy-dev libunwind-dev
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+        architecture: 'x64'
+
+    - name: Install Python development packages
+      run: |
+        python -m pip install -U pip
+        pip install -U -r requirements-dev.txt
+
+    - name: Install Python package
+      run: |
+        pip install -r ./requirements.txt
+        pip install .
+
+    - name: Run Sphinx
+      run: tox -c tox.ini -e sphinx
+
   deploy:
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
