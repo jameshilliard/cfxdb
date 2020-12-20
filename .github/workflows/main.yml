@@ -131,11 +131,7 @@ jobs:
         echo BUILD_DATE=`date -u +"%Y-%m-%d"` >> $GITHUB_ENV
         echo CFXDB_VCS_REF=`git rev-parse --short ${GITHUB_SHA}` >> $GITHUB_ENV
         echo CFXDB_BUILD_ID=$(date --utc +%Y%m%d)-$(git rev-parse --short ${GITHUB_SHA}) >> $GITHUB_ENV
-<<<<<<< HEAD
-        echo CFXDB_VERSION=$(grep -E '^(__version__)' ./autobahn/_version.py | cut -d ' ' -f3 | sed -e 's|[u"'\'']||g') >> $GITHUB_ENV
-=======
         echo CFXDB_VERSION=$(grep -E '^(__version__)' ./cfxdb/_version.py | cut -d ' ' -f3 | sed -e 's|[u"'\'']||g') >> $GITHUB_ENV
->>>>>>> migrate-github-actions
 
     # - name: Set environment - 2
     #   run: |
