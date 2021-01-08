@@ -12,6 +12,7 @@ Python programs (including Jupyter notebooks) to CrossbarFX edge node data:
 * XBR market maker transactions database
 * XBR network backend database
 * WAMP session cache
+* custom user, embedded object databases
 
 --------------
 
