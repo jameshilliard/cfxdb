@@ -28,9 +28,9 @@ setup(
     license='proprietary',
     classifiers=['License :: Other/Proprietary License'],
     platforms=('Any'),
-    python_requires='>=3.6',
+    python_requires='>=3.7',
     install_requires=[
-        'zlmdb>=20.12.1',
+        'zlmdb>=21.2.1',
     ],
     packages=find_packages(),
     include_package_data=True,
