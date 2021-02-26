@@ -6,7 +6,9 @@
 ##############################################################################
 
 import os
+import sys
 import uuid
+from pprint import pprint
 from typing import List
 
 import cbor2
@@ -15,6 +17,9 @@ import numpy as np
 
 import zlmdb
 import cfxdb
+
+from autobahn.wamp.serializer import JsonObjectSerializer
+
 from cfxdb.xbrnetwork import Account, UserKey
 
 from txaio import time_ns
@@ -162,12 +167,23 @@ class Exporter(object):
                         click.style('{}.{}'.format(schema_name, table_name), fg='white', bold=True),
                         click.style(str(cnt) + ' records', fg='yellow')))
 
-    def export_database(self, filename, include_indexes=False, include_schemata=None, exclude_tables=None):
+    def export_database(self,
+                        filename=None,
+                        include_indexes=False,
+                        include_schemata=None,
+                        exclude_tables=None,
+                        use_json=False,
+                        quiet=False,
+                        use_binary_hex_encoding=False):
         """
 
         :param filename:
         :param include_indexes:
-        :return:
+        :param include_schemata:
+        :param exclude_tables:
+        :param use_json:
+        :param use_binary_hex_encoding:
+        :returns:
         """
         if include_schemata is None:
             schemata = sorted(self._schemata.keys())
@@ -200,28 +216,51 @@ class Exporter(object):
                                     result[schema_name] = {}
                                 result[schema_name][table_name] = recs
 
-        data = cbor2.dumps(result)
-        with open(filename, 'wb') as f:
-            f.write(data)
+        if use_json:
+            ser = JsonObjectSerializer(batched=False, use_binary_hex_encoding=use_binary_hex_encoding)
+            try:
+                data: bytes = ser.serialize(result)
+            except TypeError as e:
+                print(e)
+                pprint(result)
+                sys.exit(1)
+        else:
+            data: bytes = cbor2.dumps(result)
 
-        # data_recovered = cbor2.loads(data)
-        print('\nExported database [dbpath="{dbpath}", filename="{filename}", filesize={filesize}]:\n'.format(
-            dbpath=self._dbpath, filename=filename, filesize=len(data)))
+        if filename:
+            with open(filename, 'wb') as f:
+                f.write(data)
+        else:
+            sys.stdout.buffer.write(data)
 
-        for schema_name in result:
-            for table_name in result[schema_name]:
-                cnt = len(result[schema_name][table_name])
-                if cnt:
-                    print('{:.<52}: {}'.format(
-                        click.style('{}.{}'.format(schema_name, table_name), fg='white', bold=True),
-                        click.style(str(cnt) + ' records', fg='yellow')))
+        if not quiet:
+            print('\nExported database [dbpath="{dbpath}", filename="{filename}", filesize={filesize}]:\n'.
+                  format(dbpath=self._dbpath, filename=filename, filesize=len(data)))
+            for schema_name in result:
+                for table_name in result[schema_name]:
+                    cnt = len(result[schema_name][table_name])
+                    if cnt:
+                        print('{:.<52}: {}'.format(
+                            click.style('{}.{}'.format(schema_name, table_name), fg='white', bold=True),
+                            click.style(str(cnt) + ' records', fg='yellow')))
 
-    def import_database(self, filename, include_indexes=False, include_schemata=None, exclude_tables=None):
+    def import_database(self,
+                        filename=None,
+                        include_indexes=False,
+                        include_schemata=None,
+                        exclude_tables=None,
+                        use_json=False,
+                        quiet=False,
+                        use_binary_hex_encoding=False):
         """
 
         :param filename:
         :param include_indexes:
-        :return:
+        :param include_schemata:
+        :param exclude_tables:
+        :param use_json:
+        :param use_binary_hex_encoding:
+        :returns:
         """
         if include_schemata is None:
             schemata = sorted(self._schemata.keys())
@@ -235,13 +274,21 @@ class Exporter(object):
             assert type(exclude_tables) == list
             exclude_tables = set(exclude_tables)
 
-        with open(filename, 'rb') as f:
-            data = f.read()
+        if filename:
+            with open(filename, 'rb') as f:
+                data = f.read()
+        else:
+            data = sys.stdin.read()
+
+        if use_json:
+            ser = JsonObjectSerializer(batched=False, use_binary_hex_encoding=use_binary_hex_encoding)
+            db_data = ser.unserialize(data)[0]
+        else:
             db_data = cbor2.loads(data)
 
-        print(
-            '\nImporting database [dbpath="{dbpath}", filename="{filename}", filesize={filesize}]:\n'.format(
-                dbpath=self._dbpath, filename=filename, filesize=len(data)))
+        if not quiet:
+            print('\nImporting database [dbpath="{dbpath}", filename="{filename}", filesize={filesize}]:\n'.
+                  format(dbpath=self._dbpath, filename=filename, filesize=len(data)))
 
         with self._db.begin(write=True) as txn:
             for schema_name in schemata:
@@ -257,11 +304,12 @@ class Exporter(object):
                                     val = table.parse(val)
                                     table[txn, key] = val
                                     cnt += 1
-                                if cnt:
+                                if cnt and not quiet:
                                     print('{:.<52}: {}'.format(
                                         click.style('{}.{}'.format(schema_name, table_name),
                                                     fg='white',
                                                     bold=True), click.style(str(cnt) + ' records',
                                                                             fg='yellow')))
                             else:
-                                print('No data to import for {}.{}!'.format(schema_name, table_name))
+                                if not quiet:
+                                    print('No data to import for {}.{}!'.format(schema_name, table_name))

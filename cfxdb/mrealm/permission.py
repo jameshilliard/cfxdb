@@ -228,7 +228,8 @@ class Permission(ConfigurationElement):
         assert uri_check_level is None or (type(uri_check_level) == int and uri_check_level in range(3))
 
         match = data.get('match', None)
-        assert match is None or (type(match) == int and match in range(4))
+        assert match is None or (type(match) == int and match in range(4)), \
+            '"match" must be an integer [0, 3], but was "{}"'.format(match)
 
         allow_call = data.get('allow_call', None)
         assert allow_call is None or type(allow_call) == bool

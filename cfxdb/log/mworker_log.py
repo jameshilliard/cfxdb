@@ -300,7 +300,7 @@ class MWorkerLog(object):
             'mrealm_id': str(self.mrealm_id) if self.mrealm_id else None,
             'node_id': str(self.node_id) if self.node_id else None,
             'worker_id': self.worker_id,
-            'sent': self.sent,
+            'sent': int(self.sent) if self.sent else None,
             'seq': self.seq,
             'type': MWorkerLog.WORKER_TYPENAMES.get(self.type, None),
             'state': self.state,

@@ -241,7 +241,7 @@ class MNodeLog(object):
             'node_id': str(self.node_id) if self.node_id else None,
             'state': self.state,
             'session': self.session,
-            'sent': self.sent,
+            'sent': int(self.sent) if self.sent else None,
             'seq': self.seq,
             'workers': {
                 'controller': self.controllers,
