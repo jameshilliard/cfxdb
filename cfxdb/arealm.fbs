@@ -68,6 +68,12 @@ enum ApplicationRealmStatus: uint8
 /// WAMP permission (authorization of performing a WAMP action on a WAMP URI pattern).
 struct Permission
 {
+    /// URI or URI pattern to match for the permission to apply.
+    uri: string;
+
+    /// URI check level.
+    uri_check_level: UriCheckLevel;
+
     /// URI matching mode.
     match: MatchType;
 
