@@ -10,8 +10,6 @@ from datetime import datetime
 from pprint import pformat
 from typing import Optional, List
 
-import six
-
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.user.OrganizationType import OrganizationType
 
@@ -93,7 +91,7 @@ class Organization(ConfigurationElement):
     def marshal(self):
         obj = ConfigurationElement.marshal(self)
 
-        assert self.name is None or type(self.name) == six.text_type
+        assert self.name is None or type(self.name) == str
         assert self.otype is None or self.otype in Organization.OTYPES
         assert self.registered is None or isinstance(self.registered, datetime)
 
@@ -124,13 +122,13 @@ class Organization(ConfigurationElement):
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
-        assert name is None or type(name) == six.text_type
+        assert name is None or type(name) == str
 
         otype = data.get('otype', None)
         assert otype is None or otype in Organization.OTYPES
 
         registered = data.get('registered', None)
-        assert registered is None or type(registered) == float or type(registered) in six.integer_types
+        assert registered is None or type(registered) == float or type(registered) == int
         if registered:
             # registered = datetime.utcfromtimestamp(float(registered) / 1000000.)
             registered = datetime.fromtimestamp(float(registered) / 1000000.)

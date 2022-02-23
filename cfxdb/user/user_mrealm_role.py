@@ -6,9 +6,6 @@
 ##############################################################################
 
 from pprint import pformat
-
-import six
-
 from cfxdb.gen.user.UserRole import UserRole
 
 
@@ -43,7 +40,7 @@ class UserMrealmRole(object):
     def marshal(self):
         assert type(self.roles) == list
         for role in self.roles:
-            assert type(role) in six.integer_types
+            assert type(role) == int
             assert role in [UserRole.OWNER, UserRole.ADMIN, UserRole.USER, UserRole.GUEST]
 
         obj = {
@@ -72,7 +69,7 @@ class UserMrealmRole(object):
         assert type(roles) == list
 
         for role in roles:
-            assert type(role) in six.integer_types
+            assert type(role) == int
             assert role in [UserRole.OWNER, UserRole.ADMIN, UserRole.USER, UserRole.GUEST]
 
         obj = UserMrealmRole(roles=roles, _unknown=_unknown)

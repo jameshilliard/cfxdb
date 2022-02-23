@@ -10,8 +10,6 @@ import pprint
 from uuid import UUID
 from datetime import datetime
 
-import six
-
 from cfxdb.common import ConfigurationElement
 
 
@@ -153,23 +151,23 @@ class ManagementRealm(ConfigurationElement):
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
-        assert name is None or type(name) == six.text_type
+        assert name is None or type(name) == str
 
         owner = data.get('owner', None)
-        assert owner is None or type(owner) == six.text_type
+        assert owner is None or type(owner) == str
         if owner:
             owner = UUID(owner)
 
         created = data.get('created', None)
-        assert created is None or type(created) == float or type(created) in six.integer_types
+        assert created is None or type(created) == float or type(created) == int
         if created:
             created = datetime.utcfromtimestamp(float(created) / 1000000.)
 
         cf_router_worker = data.get('cf_router_worker', None)
-        assert cf_router_worker is None or type(cf_router_worker) == six.text_type
+        assert cf_router_worker is None or type(cf_router_worker) == str
 
         cf_container_worker = data.get('cf_container_worker', None)
-        assert cf_container_worker is None or type(cf_container_worker) == six.text_type
+        assert cf_container_worker is None or type(cf_container_worker) == str
 
         obj = ManagementRealm(oid=obj.oid,
                               label=obj.label,

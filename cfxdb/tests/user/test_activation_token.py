@@ -11,7 +11,7 @@ import binascii
 from datetime import datetime
 
 import pytest
-import cbor
+import cbor2
 import flatbuffers
 
 from autobahn import util
@@ -77,11 +77,11 @@ def test_token_fbs_roundtrip(token_fbs, builder):
 def test_token_cbor_roundtrip(token_cbor):
     # serialize to bytes (cbor) from python object
     obj = token_cbor.marshal()
-    data = cbor.dumps(obj)
+    data = cbor2.dumps(obj)
     assert len(data) == 212
 
     # create python object from bytes (cbor)
-    _obj = cbor.loads(data)
+    _obj = cbor2.loads(data)
     _token = ActivationToken.parse(_obj)
 
     # assert _token == token_cbor

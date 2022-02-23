@@ -357,8 +357,8 @@ class MNodeLog(object):
                     _mrealm_id = bytes(_mrealm_id)
                     assert type(_mrealm_id) == bytes, 'mrealm_id must be binary, was "{}"'.format(
                         type(_mrealm_id))
-                    assert len(_mrealm_id) == 16, 'mrealm_id must have length 16, was {} / {}: {}'.format(
-                        len(_mrealm_id), self._from_fbs.MrealmIdLength(), _mrealm_id)
+                    assert len(_mrealm_id) == 16, 'mrealm_id must have length 16, was {} / {}'.format(
+                        len(_mrealm_id), self._from_fbs.MrealmIdLength())
                     self._mrealm_id = uuid.UUID(bytes=_mrealm_id)
         return self._mrealm_id
 

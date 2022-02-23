@@ -13,7 +13,7 @@ from datetime import datetime
 
 import pytest
 
-import cbor
+import cbor2
 import flatbuffers
 
 import txaio
@@ -101,11 +101,11 @@ def test_token_fbs_roundtrip_perf(token_fbs, builder):
 def test_token_cbor_roundtrip_perf(token_cbor):
     # serialize to bytes (cbor) from python object
     obj = token_cbor.marshal()
-    data = cbor.dumps(obj)
+    data = cbor2.dumps(obj)
 
     # create python object from bytes (cbor)
     def loop():
-        _obj = cbor.loads(data)
+        _obj = cbor2.loads(data)
         _token = ActivationToken.parse(_obj)
         if True:
             assert _token.oid == token_cbor.oid
@@ -205,11 +205,11 @@ def test_user_fbs_roundtrip_perf(user_fbs, builder):
 def test_user_cbor_roundtrip_perf(user_cbor):
     # serialize to bytes (cbor) from python object
     obj = user_cbor.marshal()
-    data = cbor.dumps(obj)
+    data = cbor2.dumps(obj)
 
     # create python object from bytes (cbor)
     def loop():
-        _obj = cbor.loads(data)
+        _obj = cbor2.loads(data)
         _user = User.parse(_obj)
         if True:
             assert _user.oid == user_cbor.oid

@@ -8,8 +8,6 @@
 import uuid
 from datetime import datetime
 
-import six
-
 from cfxdb.gen.user import ActivationToken as ActivationTokenGenFbs
 from cfxdb.gen.user.ActivationStatus import ActivationStatus
 from cfxdb.gen.user.ActivationType import ActivationType
@@ -65,7 +63,7 @@ class ActivationTokenFbs(object):
 
     @atype.setter
     def atype(self, value):
-        assert type(value) in six.integer_types
+        assert type(value) == int
         assert value in [ActivationType.REGISTRATION, ActivationType.LOGIN]
 
         self._atype = value
@@ -79,7 +77,7 @@ class ActivationTokenFbs(object):
 
     @status.setter
     def status(self, value):
-        assert type(value) in six.integer_types
+        assert type(value) == int
         assert value in [ActivationStatus.PENDING, ActivationStatus.ACTIVE, ActivationStatus.EXPIRED]
 
         self._status = value
@@ -123,7 +121,7 @@ class ActivationTokenFbs(object):
 
     @code.setter
     def code(self, value):
-        assert type(value) == six.text_type
+        assert type(value) == str
 
         self._code = value
 
@@ -136,7 +134,7 @@ class ActivationTokenFbs(object):
 
     @email.setter
     def email(self, value):
-        assert type(value) == six.text_type
+        assert type(value) == str
 
         self._email = value
 
@@ -150,7 +148,7 @@ class ActivationTokenFbs(object):
     @pubkey.setter
     def pubkey(self, value):
         # hex string with 256 bit Ed25519 WAMP-cryptosign public key
-        assert type(value) == six.text_type
+        assert type(value) == str
         assert len(value) == 64
 
         self._pubkey = value

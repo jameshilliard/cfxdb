@@ -7,7 +7,7 @@
 
 import pprint
 
-import cbor
+import cbor2
 import flatbuffers
 
 from cfxdb.gen.eventstore import Publication as PublicationGen
@@ -231,7 +231,7 @@ class Publication(object):
         """
         if self._args is None and self._from_fbs:
             if self._from_fbs.ArgsLength():
-                self._args = cbor.loads(bytes(self._from_fbs.ArgsAsBytes()))
+                self._args = cbor2.loads(bytes(self._from_fbs.ArgsAsBytes()))
         return self._args
 
     @args.setter
@@ -249,7 +249,7 @@ class Publication(object):
         """
         if self._kwargs is None and self._from_fbs:
             if self._from_fbs.KwargsLength():
-                self._kwargs = cbor.loads(bytes(self._from_fbs.KwargsAsBytes()))
+                self._kwargs = cbor2.loads(bytes(self._from_fbs.KwargsAsBytes()))
         return self._kwargs
 
     @kwargs.setter
@@ -548,11 +548,11 @@ class Publication(object):
 
         args = self.args
         if args:
-            args = builder.CreateString(cbor.dumps(args))
+            args = builder.CreateString(cbor2.dumps(args))
 
         kwargs = self.kwargs
         if kwargs:
-            kwargs = builder.CreateString(cbor.dumps(kwargs))
+            kwargs = builder.CreateString(cbor2.dumps(kwargs))
 
         payload = self.payload
         if payload:

@@ -5,7 +5,6 @@
 #
 ##############################################################################
 
-import six
 import uuid
 import pprint
 from datetime import datetime
@@ -139,7 +138,7 @@ class TracedMessage(object):
         :return: dict
         """
         assert isinstance(self.oid, uuid.UUID)
-        assert type(self.name) == six.text_type
+        assert type(self.name) == str
         assert isinstance(self.created, datetime)
         assert isinstance(self.owner, uuid.UUID)
         assert self.cf_node is None or isinstance(self.cf_node, uuid.UUID)
@@ -189,29 +188,29 @@ class TracedMessage(object):
                 _unknown[k] = data[k]
 
         name = data.get('name', None)
-        assert name is None or type(name) == six.text_type
+        assert name is None or type(name) == str
 
         owner = data.get('owner', None)
-        assert type(owner) == six.text_type
+        assert type(owner) == str
         owner = uuid.UUID(owner)
 
         created = data.get('created', None)
-        assert created is None or type(created) == float or type(created) in six.integer_types
+        assert created is None or type(created) == float or type(created) == int
         if created:
             created = datetime.utcfromtimestamp(float(created) / 1000000.)
 
         cf_node = data.get('cf_node', None)
-        assert cf_node is None or type(cf_node) == six.text_type
+        assert cf_node is None or type(cf_node) == str
         if cf_node:
             cf_node = uuid.UUID(cf_node)
 
         cf_router_worker = data.get('cf_router_worker', None)
-        assert cf_router_worker is None or type(cf_router_worker) == six.text_type
+        assert cf_router_worker is None or type(cf_router_worker) == str
         if cf_router_worker:
             cf_router_worker = uuid.UUID(cf_router_worker)
 
         cf_container_worker = data.get('cf_container_worker', None)
-        assert cf_container_worker is None or type(cf_container_worker) == six.text_type
+        assert cf_container_worker is None or type(cf_container_worker) == str
         if cf_container_worker:
             cf_container_worker = uuid.UUID(cf_container_worker)
 

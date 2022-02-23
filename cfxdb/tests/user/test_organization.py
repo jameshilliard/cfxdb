@@ -10,7 +10,7 @@ from datetime import datetime
 
 import flatbuffers
 import pytest
-import cbor
+import cbor2
 import txaio
 
 from cfxdb.user import Organization, OrganizationFbs
@@ -87,11 +87,11 @@ def test_org_copy_fbs_to_cbor(org_fbs):
 def test_org_cbor_roundtrip(org_cbor):
     # serialize to bytes (cbor) from python object
     obj = org_cbor.marshal()
-    data = cbor.dumps(obj)
+    data = cbor2.dumps(obj)
     assert len(data) == 177
 
     # create python object from bytes (cbor)
-    _obj = cbor.loads(data)
+    _obj = cbor2.loads(data)
     _org = Organization.parse(_obj)
 
     # assert _org == org_cbor

@@ -11,7 +11,7 @@ import binascii
 from datetime import datetime
 
 import pytest
-import cbor
+import cbor2
 import flatbuffers
 
 import txaio
@@ -76,10 +76,10 @@ def test_user_fbs_roundtrip(user_fbs, builder):
 def test_user_cbor_roundtrip(user_cbor):
     # serialize to bytes (cbor) from python object
     obj = user_cbor.marshal()
-    data = cbor.dumps(obj)
+    data = cbor2.dumps(obj)
 
     # create python object from bytes (cbor)
-    _obj = cbor.loads(data)
+    _obj = cbor2.loads(data)
     _user = User.parse(_obj)
 
     # assert _user == user_cbor

@@ -7,7 +7,6 @@
 
 import web3
 import struct
-import six
 import uuid
 import pprint
 
@@ -80,6 +79,41 @@ class uint128(object):
     @value.setter
     def value(self, value):
         self._data = pack_uint128(value)
+
+    def serialize(self):
+        return self._data
+
+
+def unpack_uint64(data):
+    assert data is None or (type(data) == bytes and len(data) == 8)
+
+    if data:
+        return web3.Web3.toInt(data)
+    else:
+        return 0
+
+
+def pack_uint64(value):
+    assert value is None or (type(value) == int and value >= 0 and value < 2**64)
+
+    if value:
+        data = web3.Web3.toBytes(value)
+        return b'\x00' * (8 - len(data)) + data
+    else:
+        return b'\x00' * 8
+
+
+class uint64(object):
+    def __init__(self, data=None):
+        self._data = data or b'\x00' * 8
+
+    @property
+    def value(self):
+        return unpack_uint64(self._data)
+
+    @value.setter
+    def value(self, value):
+        self._data = pack_uint64(value)
 
     def serialize(self):
         return self._data
@@ -200,10 +234,9 @@ class ConfigurationElement(object):
 
     def marshal(self):
         assert self.oid is None or isinstance(self.oid, uuid.UUID)
-        assert self.label is None or type(self.label) == six.text_type
-        assert self.description is None or type(self.description) == six.text_type
-        assert self.tags is None or (type(self.tags) == list and type(tag) == six.text_type
-                                     for tag in self.tags)
+        assert self.label is None or type(self.label) == str
+        assert self.description is None or type(self.description) == str
+        assert self.tags is None or (type(self.tags) == list and type(tag) == str for tag in self.tags)
 
         obj = dict()
         obj['oid'] = str(self.oid) if self.oid else None
@@ -225,24 +258,24 @@ class ConfigurationElement(object):
 
         oid = None
         if 'oid' in data and data['oid'] is not None:
-            assert type(data['oid']) == six.text_type
+            assert type(data['oid']) == str
             oid = uuid.UUID(data['oid'])
 
         label = None
         if 'label' in data and data['label'] is not None:
-            assert type(data['label']) == six.text_type
+            assert type(data['label']) == str
             label = data['label']
 
         description = None
         if 'description' in data and data['description'] is not None:
-            assert type(data['description']) == six.text_type
+            assert type(data['description']) == str
             description = data['description']
 
         tags = None
         if 'tags' in data and data['tags'] is not None:
             assert type(data['tags']) == list
             for tag in data['tags']:
-                assert type(tag) == six.text_type
+                assert type(tag) == str
             tags = data['tags']
 
         obj = ConfigurationElement(oid=oid,

@@ -10,8 +10,6 @@ import uuid
 from datetime import datetime
 from pprint import pformat
 
-import six
-
 from cfxdb.gen import oid_t
 from cfxdb.gen.user import User as UserGenFbs
 
@@ -29,7 +27,7 @@ class UserFbs(object):
 
     # email: str
     # registered: datetime
-    # pubkey: six.text_type
+    # pubkey: str
 
     def __init__(self, from_fbs=None):
         self._from_fbs = from_fbs
@@ -112,7 +110,7 @@ class UserFbs(object):
 
     @label.setter
     def label(self, value):
-        assert type(value) == six.text_type
+        assert type(value) == str
 
         self._label = value
 
@@ -126,7 +124,7 @@ class UserFbs(object):
 
     @description.setter
     def description(self, value):
-        assert type(value) == six.text_type
+        assert type(value) == str
 
         self._description = value
 
@@ -144,7 +142,7 @@ class UserFbs(object):
     @tags.setter
     def tags(self, value):
         assert type(value) == list
-        assert (type(tag) == six.text_type for tag in value)
+        assert (type(tag) == str for tag in value)
 
         self._tags = value
 
@@ -158,7 +156,7 @@ class UserFbs(object):
 
     @email.setter
     def email(self, value):
-        assert type(value) == six.text_type
+        assert type(value) == str
 
         self._email = value
 
@@ -190,7 +188,7 @@ class UserFbs(object):
     @pubkey.setter
     def pubkey(self, value):
         # hex string with 256 bit Ed25519 WAMP-cryptosign public key
-        assert type(value) == six.text_type
+        assert type(value) == str
         assert len(value) == 64
 
         self._pubkey = value

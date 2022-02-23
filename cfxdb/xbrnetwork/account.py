@@ -184,6 +184,10 @@ class Account(object):
         # AccountLevel
         self._level = None
 
+        self._recovery_algo = None
+        self._recovery_data = None
+        self._recovery_salt = None
+
     def marshal(self):
         obj = {
             'oid': self.oid.bytes if self.oid else None,
@@ -197,11 +201,58 @@ class Account(object):
             'eula': self.eula,
             'profile': self.profile,
             'level': self.level,
+            'recovery_algo': self.recovery_algo,
+            'recovery_data': self.recovery_data,
+            'recovery_salt': self.recovery_salt,
         }
         return obj
 
     def __str__(self):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
+
+    @property
+    def recovery_algo(self) -> np.datetime64:
+        """
+        Timestamp (epoch time in ns) of initial creation of this record.
+        """
+        if self._created is None and self._from_fbs:
+            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+        return self._created
+
+    @recovery_algo.setter
+    def recovery_algo(self, value: np.datetime64):
+        assert value is None or isinstance(value, np.datetime64)
+        self._created = value
+
+    @property
+    def recovery_data(self) -> bytes:
+        """
+        Recovery backup data (usually encrypted according to the account backup recovery algo in use).
+        """
+        if self._recovery_data is None and self._from_fbs:
+            if self._from_fbs.RecoveryDataLength():
+                self._recovery_data = self._from_fbs.RecoveryDataAsBytes()
+        return self._recovery_data
+
+    @recovery_data.setter
+    def recovery_data(self, value: bytes):
+        assert value is None or type(value) == bytes
+        self._recovery_data = value
+
+    @property
+    def recovery_salt(self) -> bytes:
+        """
+        Salt used for encryption of recovery data.
+        """
+        if self._recovery_salt is None and self._from_fbs:
+            if self._from_fbs.RecoverySaltLength():
+                self._recovery_salt = self._from_fbs.RecoverySaltAsBytes()
+        return self._recovery_salt
+
+    @recovery_salt.setter
+    def recovery_salt(self, value: bytes):
+        assert value is None or type(value) == bytes
+        self._recovery_salt = value
 
     @property
     def oid(self) -> uuid.UUID:

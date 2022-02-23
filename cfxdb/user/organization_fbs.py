@@ -10,8 +10,6 @@ import uuid
 from datetime import datetime
 from pprint import pformat
 
-import six
-
 from cfxdb.gen import oid_t
 from cfxdb.gen.user import Organization as OrganizationGenFbs
 
@@ -112,7 +110,7 @@ class OrganizationFbs(object):
 
     @label.setter
     def label(self, value):
-        assert value is None or type(value) == six.text_type
+        assert value is None or type(value) == str
 
         self._label = value
 
@@ -126,7 +124,7 @@ class OrganizationFbs(object):
 
     @description.setter
     def description(self, value):
-        assert value is None or type(value) == six.text_type
+        assert value is None or type(value) == str
 
         self._description = value
 
@@ -143,7 +141,7 @@ class OrganizationFbs(object):
 
     @tags.setter
     def tags(self, value):
-        assert value is None or (type(value) == list and (type(tag) == six.text_type for tag in value))
+        assert value is None or (type(value) == list and (type(tag) == str for tag in value))
 
         self._tags = value
 
@@ -157,7 +155,7 @@ class OrganizationFbs(object):
 
     @name.setter
     def name(self, value):
-        assert value is None or type(value) == six.text_type
+        assert value is None or type(value) == str
 
         self._name = value
 
@@ -188,7 +186,7 @@ class OrganizationFbs(object):
 
     @otype.setter
     def otype(self, value):
-        assert value is None or type(value) in six.integer_types
+        assert value is None or type(value) == int
 
         self._otype = value
 

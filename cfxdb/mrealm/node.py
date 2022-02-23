@@ -9,8 +9,6 @@ import pprint
 from uuid import UUID
 from typing import Optional, List
 
-import six
-
 from cfxdb.common import ConfigurationElement
 
 
@@ -144,20 +142,20 @@ class Node(ConfigurationElement):
                 _unknown[k] = data[k]
 
         owner_oid = data.get('owner_oid', None)
-        assert owner_oid is None or type(owner_oid) == six.text_type
+        assert owner_oid is None or type(owner_oid) == str
         if owner_oid:
             owner_oid = UUID(owner_oid)
 
         pubkey = data.get('pubkey', None)
-        assert pubkey is None or (type(pubkey) == six.text_type and len(pubkey) == 64)
+        assert pubkey is None or (type(pubkey) == str and len(pubkey) == 64)
 
         mrealm_oid = data.get('mrealm_oid', None)
-        assert mrealm_oid is None or type(mrealm_oid) == six.text_type
+        assert mrealm_oid is None or type(mrealm_oid) == str
         if mrealm_oid:
             mrealm_oid = UUID(mrealm_oid)
 
         authid = data.get('authid', None)
-        assert authid is None or type(authid) == six.text_type
+        assert authid is None or type(authid) == str
 
         authextra = data.get('authextra', None)
         assert authextra is None or type(authextra) == dict

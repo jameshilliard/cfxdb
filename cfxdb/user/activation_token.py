@@ -9,8 +9,6 @@ import uuid
 from datetime import datetime
 from pprint import pformat
 
-import six
-
 from cfxdb.gen.user.ActivationStatus import ActivationStatus
 from cfxdb.gen.user.ActivationType import ActivationType
 
@@ -61,9 +59,9 @@ class ActivationToken(object):
         assert self.status in [ActivationStatus.EXPIRED, ActivationStatus.PENDING, ActivationStatus.ACTIVE]
         assert isinstance(self.created, datetime)
         assert self.completed is None or isinstance(self.completed, datetime)
-        assert self.code is None or type(self.code) == six.text_type
-        assert self.email is None or type(self.email) == six.text_type
-        assert self.pubkey is None or (type(self.pubkey) == six.text_type and len(self.pubkey) == 64)
+        assert self.code is None or type(self.code) == str
+        assert self.email is None or type(self.email) == str
+        assert self.pubkey is None or (type(self.pubkey) == str and len(self.pubkey) == 64)
         assert self._unknown is None or type(self._unknown) == dict
 
         created = float(self.created.timestamp()) * 1000000.
@@ -100,23 +98,23 @@ class ActivationToken(object):
                 _unknown[k] = val
 
         oid = data.get('oid', None)
-        assert type(oid) == six.text_type
+        assert type(oid) == str
         oid = uuid.UUID(oid)
 
         atype = data.get('atype', None)
-        assert type(atype) in six.integer_types
+        assert type(atype) == int
 
         status = data.get('status', None)
-        assert type(status) in six.integer_types
+        assert type(status) == int
 
         created = data.get('created', None)
-        assert type(created) == float or type(created) in six.integer_types
+        assert type(created) == float or type(created) == int
 
         created = datetime.fromtimestamp(float(created) / 1000000.)
         # created = datetime.utcfromtimestamp(float(created) / 1000000.)
 
         completed = data.get('completed', None)
-        assert completed is None or type(completed) == float or type(completed) in six.integer_types
+        assert completed is None or type(completed) == float or type(completed) == int
         if completed:
             # https://docs.python.org
             # /3/library/time.html#time.time_ns
@@ -126,13 +124,13 @@ class ActivationToken(object):
             # completed = datetime.utcfromtimestamp(float(completed) / 1000000.)
 
         code = data.get('code', None)
-        assert type(code) == six.text_type
+        assert type(code) == str
 
         email = data.get('email', None)
-        assert email is None or type(email) == six.text_type
+        assert email is None or type(email) == str
 
         pubkey = data.get('pubkey', None)
-        assert pubkey is None or type(pubkey) == six.text_type
+        assert pubkey is None or type(pubkey) == str
         if pubkey:
             assert len(pubkey) == 64
 

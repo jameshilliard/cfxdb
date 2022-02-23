@@ -10,8 +10,6 @@ from datetime import datetime
 from pprint import pformat
 from typing import Optional, List
 
-import six
-
 from cfxdb.common import ConfigurationElement
 
 
@@ -95,9 +93,9 @@ class User(ConfigurationElement):
     def marshal(self):
         obj = ConfigurationElement.marshal(self)
 
-        assert self.email is None or type(self.email) == six.text_type
+        assert self.email is None or type(self.email) == str
         assert self.registered is None or isinstance(self.registered, datetime)
-        assert self.pubkey is None or (type(self.pubkey) == six.text_type and len(self.pubkey) == 64)
+        assert self.pubkey is None or (type(self.pubkey) == str and len(self.pubkey) == 64)
 
         registered = int(self.registered.timestamp() * 1000000) if self.registered else None
         obj.update({
@@ -127,17 +125,17 @@ class User(ConfigurationElement):
                 _unknown[k] = val
 
         email = data.get('email', None)
-        assert email is None or type(email) == six.text_type
+        assert email is None or type(email) == str
 
         registered = data.get('registered', None)
-        assert registered is None or type(registered) == float or type(registered) in six.integer_types
+        assert registered is None or type(registered) == float or type(registered) == int
         if registered:
             # registered = datetime.utcfromtimestamp(float(registered) / 1000000.)
             registered = datetime.fromtimestamp(float(registered) / 1000000.)
 
         # hex string with 256 bit Ed25519 WAMP-cryptosign public key
         pubkey = data.get('pubkey', None)
-        assert pubkey is None or (type(pubkey) == six.text_type and len(pubkey) == 64)
+        assert pubkey is None or (type(pubkey) == str and len(pubkey) == 64)
 
         obj = User(oid=obj.oid,
                    label=obj.label,
