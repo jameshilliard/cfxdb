@@ -1,26 +1,21 @@
-LICENSE TERMS for CrossbarFX
-============================
+The MIT License (MIT)
 
-CrossbarFX – Copyright Crossbar.io Technologies GmbH – all rights reserved.
+Copyright (c) Crossbar.io Technologies GmbH
 
-Unless you have received this software under a more specific license from Crossbar.io Technologies GmbH or
-one of its subsidiaries – e.g. under a license as part of a commercial support package – the following
-license terms apply:
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This software is supplied exclusively for testing and evaluation purposes. It is under development and
-no warranties or assurances are made regarding its functionality or fitness for any specific purpose.
-Use at your own risk!
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-Crossbar.io Technologies GmbH grants you an unpaid, time-limited, non-exclusive, non-transferable license
-to use this software for testing and evaluation of its present functionality. This licensed use does not
-include use in production systems.
-
-Any use of XBR related functionality, such as but not limited to the XBR Market Maker part of CrossbarFX,
-requires the use of the "XBR Token" (if and when it will launch on the Ethereum mainnet) as the sole
-means of payment in XBR data markets run from CrossbarFX.
-
-Crossbar.io Technologies GmbH, or one of its subsidiaries, will from time to time release newer versions of
-this software. The license granted you for the use of this software expires two weeks after such a release
-of a newer version.
-
-2019/05/14
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
