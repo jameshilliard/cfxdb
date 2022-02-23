@@ -72,6 +72,6 @@ setup(
     ],
     packages=find_packages(),
     include_package_data=True,
-    data_files=[('.', ['LICENSE', 'LEGAL', 'README.rst'])],
+    data_files=[('.', ['LICENSE', 'README.rst'])],
     zip_safe=True
 )
