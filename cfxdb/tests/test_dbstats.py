@@ -59,3 +59,6 @@ def test_stats(db):
     # however, the DB is empty ..
     assert stats['pages'] == 1
     assert stats['free'] > 0.99
+
+    # GlobalSchema has 14 tables
+    assert stats['zlmdb_slots'] == 14
