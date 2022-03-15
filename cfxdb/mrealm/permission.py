@@ -268,7 +268,7 @@ class Permission(ConfigurationElement):
         allow_publish = data.get('allow_publish', None)
         assert allow_publish is None or type(allow_publish) == bool
 
-        allow_subscribe = data.get('allow_publish', None)
+        allow_subscribe = data.get('allow_subscribe', None)
         assert allow_subscribe is None or type(allow_subscribe) == bool
 
         disclose_caller = data.get('disclose_caller', None)
