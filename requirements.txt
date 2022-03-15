@@ -1,13 +1,16 @@
-autobahn[twisted,xbr,serialization]>=22.2.1
+git+https://github.com/crossbario/autobahn-python.git@master#egg=autobahn[twisted,xbr,serialization]
+# autobahn[twisted,xbr,serialization]>=22.2.1
+
 cbor2>=5.2.0
 flatbuffers>=2.0
 numpy>=1.21.5
 py-multihash>=0.2.3
 txaio>=22.2.1
 click>=7.1.2
+argon2>=0.1.10
 
 # git+https://github.com/ethereum/web3.py@v5.4.0#egg=web3
 web3>=5.25.0
 
-# git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
-zlmdb>=22.2.1
+git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
+# zlmdb>=22.3.1.dev1

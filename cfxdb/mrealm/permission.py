@@ -22,10 +22,19 @@ class Permission(ConfigurationElement):
     MATCH_TYPE_EXACT: int = 1
     MATCH_TYPE_PREFIX: int = 2
     MATCH_TYPE_WILDCARD: int = 3
+    MATCH_TYPES_TOSTR = {
+        0: None,
+        1: 'exact',
+        2: 'prefix',
+        3: 'wildcard',
+    }
+    MATCH_TYPES_FROMSTR = {val: key for key, val in MATCH_TYPES_TOSTR.items()}
 
     URI_CHECK_LEVEL_NONE: int = 0
     URI_CHECK_LEVEL_STRICT: int = 1
     URI_CHECK_LEVEL_LOOSE: int = 2
+    URI_CHECK_LEVELS_TOSTR = {0: None, 1: 'strict', 2: 'loose'}
+    URI_CHECK_LEVELS_FROMSTR = {val: key for key, val in URI_CHECK_LEVELS_TOSTR.items()}
 
     def __init__(self,
                  oid: Optional[UUID] = None,
@@ -169,20 +178,34 @@ class Permission(ConfigurationElement):
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
-            'oid': str(self.oid) if self.oid else None,
-            'role_oid': str(self.role_oid) if self.role_oid else None,
-            'uri': self.uri,
-            'uri_check_level': self.uri_check_level,
-            'match': self.match,
-            'allow_call': self.allow_call,
-            'allow_register': self.allow_register,
-            'allow_publish': self.allow_publish,
-            'allow_subscribe': self.allow_subscribe,
-            'disclose_caller': self.disclose_caller,
-            'disclose_publisher': self.disclose_publisher,
-            'cache': self.cache,
-            'created': int(self.created) if self.created else None,
-            'owner': str(self.owner) if self.owner else None,
+            'oid':
+            str(self.oid) if self.oid else None,
+            'role_oid':
+            str(self.role_oid) if self.role_oid else None,
+            'uri':
+            self.uri,
+            'uri_check_level':
+            Permission.URI_CHECK_LEVELS_TOSTR[self.uri_check_level] if self.uri_check_level else None,
+            'match':
+            Permission.MATCH_TYPES_TOSTR[self.match] if self.match else None,
+            'allow_call':
+            self.allow_call,
+            'allow_register':
+            self.allow_register,
+            'allow_publish':
+            self.allow_publish,
+            'allow_subscribe':
+            self.allow_subscribe,
+            'disclose_caller':
+            self.disclose_caller,
+            'disclose_publisher':
+            self.disclose_publisher,
+            'cache':
+            self.cache,
+            'created':
+            int(self.created) if self.created else None,
+            'owner':
+            str(self.owner) if self.owner else None,
         })
 
         if self._unknown:
@@ -225,11 +248,16 @@ class Permission(ConfigurationElement):
         assert uri is None or type(uri) == str
 
         uri_check_level = data.get('uri_check_level', None)
-        assert uri_check_level is None or (type(uri_check_level) == int and uri_check_level in range(3))
+        assert uri_check_level is None or type(uri_check_level) == str
+        if uri_check_level:
+            assert uri_check_level in Permission.URI_CHECK_LEVELS_FROMSTR
+            uri_check_level = Permission.URI_CHECK_LEVELS_FROMSTR[uri_check_level]
 
         match = data.get('match', None)
-        assert match is None or (type(match) == int and match in range(4)), \
-            '"match" must be an integer [0, 3], but was "{}"'.format(match)
+        assert match is None or type(match) == str
+        if match:
+            assert match in Permission.MATCH_TYPES_FROMSTR
+            match = Permission.MATCH_TYPES_FROMSTR[match]
 
         allow_call = data.get('allow_call', None)
         assert allow_call is None or type(allow_call) == bool
