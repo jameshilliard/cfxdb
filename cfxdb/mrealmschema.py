@@ -426,7 +426,7 @@ class MrealmSchema(object):
     * Database table :class:`cfxdb.mrealmschema.IndexApplicationRealmByWebCluster`
     """
 
-    arealm_role_associations: ApplicationRealmRoleAssociation
+    arealm_role_associations: ApplicationRealmRoleAssociations
     """
     Association of roles to application realms.
 
