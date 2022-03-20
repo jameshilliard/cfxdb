@@ -6,7 +6,7 @@
 ##############################################################################
 
 from zlmdb import table
-from zlmdb import MapStringUuid, MapUuidCbor, MapUuidStringUuid, MapUuidUuidUuid
+from zlmdb import MapStringUuid, MapUuidCbor, MapUuidStringUuid, MapUuidUuidUuid, MapUuidUuidUuidUuid
 from zlmdb import MapUuidUuidCbor, MapUuidUuidUuidStringUuid, MapStringStringStringUuid, MapUuidTimestampUuid
 
 from cfxdb.mrealm import RouterCluster, WebCluster, WebService, WebClusterNodeMembership, RouterClusterNodeMembership, RouterWorkerGroup, RouterWorkerGroupClusterPlacement
@@ -226,6 +226,16 @@ class IndexWorkerGroupByCluster(MapUuidStringUuid):
     * Table type :class:`zlmdb.MapUuidStringUuid`
     * Key type :class:`uuid.UUID`
     * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroups`
+    """
+
+
+@table('4c7d184b-2303-492d-822d-ed12516050a9')
+class IndexWorkerGroupByPlacement(MapUuidUuidUuidUuid):
+    """
+    * Database index table ``(cluster_oid, node_oid, placement_oid) -> workergroup_oid``
+    * Table type :class:`zlmdb.MapUuidUuidUuidUuid`
+    * Key type :class:`uuid.UUID`
+    * Indexed table :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacements`
     """
 
 
@@ -468,6 +478,13 @@ class MrealmSchema(object):
     * Database table :class:`cfxdb.mrealmschema.IndexWorkerGroupByCluster`
     """
 
+    idx_workergroup_by_placement: IndexWorkerGroupByPlacement
+    """
+    Index on worker groups: by placement.
+
+    * Database table :class:`cfxdb.mrealmschema.IndexWorkerGroupByPlacement`
+    """
+
     router_workergroup_placements: RouterWorkerGroupClusterPlacements
     """
     Router worker cluster placements.
@@ -615,10 +632,17 @@ class MrealmSchema(object):
         # router worker group placements
         schema.router_workergroup_placements = db.attach_table(RouterWorkerGroupClusterPlacements)
 
+        # index: (workergroup_oid, cluster_oid, node_oid, worker_name) -> placement_oid
         schema.idx_clusterplacement_by_workername = db.attach_table(IndexClusterPlacementByWorkerName)
         schema.router_workergroup_placements.attach_index(
             'idx1', schema.idx_clusterplacement_by_workername, lambda p:
             (p.worker_group_oid, p.cluster_oid, p.node_oid, p.worker_name))
+
+        # index: (cluster_oid, node_oid, worker_group_oid, placement_oid) -> placement_oid
+        schema.idx_workergroup_by_placement = db.attach_table(IndexWorkerGroupByPlacement)
+        schema.router_workergroup_placements.attach_index(
+            'idx2', schema.idx_workergroup_by_placement, lambda p:
+            (p.cluster_oid, p.node_oid, p.worker_group_oid, p.oid))
 
         # web clusters
         schema.webclusters = db.attach_table(WebClusters)
