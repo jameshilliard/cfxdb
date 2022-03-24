@@ -638,11 +638,10 @@ class MrealmSchema(object):
             'idx1', schema.idx_clusterplacement_by_workername, lambda p:
             (p.worker_group_oid, p.cluster_oid, p.node_oid, p.worker_name))
 
-        # index: (cluster_oid, node_oid, worker_group_oid, placement_oid) -> placement_oid
+        # index: (cluster_oid, node_oid, placement_oid) -> placement_oid
         schema.idx_workergroup_by_placement = db.attach_table(IndexWorkerGroupByPlacement)
-        schema.router_workergroup_placements.attach_index(
-            'idx2', schema.idx_workergroup_by_placement, lambda p:
-            (p.cluster_oid, p.node_oid, p.worker_group_oid, p.oid))
+        schema.router_workergroup_placements.attach_index('idx2', schema.idx_workergroup_by_placement,
+                                                          lambda p: (p.cluster_oid, p.node_oid, p.oid))
 
         # web clusters
         schema.webclusters = db.attach_table(WebClusters)

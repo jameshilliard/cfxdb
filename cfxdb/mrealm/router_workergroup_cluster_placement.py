@@ -162,7 +162,7 @@ class RouterWorkerGroupClusterPlacement(object):
             changed = np.datetime64(changed, 'ns')
 
         tcp_listening_port = data.get('tcp_listening_port', None)
-        assert tcp_listening_port is None or (type(tcp_listening_port) == int and tcp_listening_port > 0
+        assert tcp_listening_port is None or (type(tcp_listening_port) == int and tcp_listening_port >= 0
                                               and tcp_listening_port < 65536)
 
         obj = RouterWorkerGroupClusterPlacement(oid=oid,

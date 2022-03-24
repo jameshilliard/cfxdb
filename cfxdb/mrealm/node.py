@@ -23,6 +23,7 @@ class Node(ConfigurationElement):
                  tags: Optional[List[str]] = None,
                  owner_oid: Optional[UUID] = None,
                  pubkey: Optional[str] = None,
+                 cluster_ip: Optional[str] = None,
                  mrealm_oid: Optional[UUID] = None,
                  authid: Optional[str] = None,
                  authextra: Optional[dict] = None,
@@ -41,6 +42,8 @@ class Node(ConfigurationElement):
 
         :param pubkey: The WAMP-cryptosign node public key (32 bytes as HEX encoded string).
 
+        :param cluster_ip: The (private) clustering IP for incoming rlinks to connect to.
+
         :param mrealm_oid: The management realm the node will be joined on.
 
         :param authid: The WAMP ``authid`` the node will be authenticated as.
@@ -52,6 +55,7 @@ class Node(ConfigurationElement):
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
         self.owner_oid = owner_oid
         self.pubkey = pubkey
+        self.cluster_ip = cluster_ip
         self.mrealm_oid = mrealm_oid
         self.authid = authid
         self.authextra = authextra
@@ -64,6 +68,8 @@ class Node(ConfigurationElement):
         if other.owner_oid != self.owner_oid:
             return False
         if other.pubkey != self.pubkey:
+            return False
+        if other.cluster_ip != self.cluster_ip:
             return False
         if other.mrealm_oid != self.mrealm_oid:
             return False
@@ -93,6 +99,8 @@ class Node(ConfigurationElement):
             self.owner_oid = other.owner_oid
         if (not self.pubkey and other.pubkey) or overwrite:
             self.pubkey = other.pubkey
+        if (not self.cluster_ip and other.cluster_ip) or overwrite:
+            self.cluster_ip = other.cluster_ip
         if (not self.mrealm_oid and other.mrealm_oid) or overwrite:
             self.mrealm_oid = other.mrealm_oid
         if (not self.authid and other.authid) or overwrite:
@@ -113,6 +121,7 @@ class Node(ConfigurationElement):
         obj.update({
             'owner_oid': str(self.owner_oid) if self.owner_oid else None,
             'pubkey': self.pubkey,
+            'cluster_ip': self.cluster_ip,
             'mrealm_oid': str(self.mrealm_oid) if self.mrealm_oid else None,
             'authid': self.authid,
             'authextra': self.authextra,
@@ -138,7 +147,7 @@ class Node(ConfigurationElement):
         # future attributes (yet unknown) are not only ignored, but passed through!
         _unknown = {}
         for k in data:
-            if k not in ['owner_oid', 'pubkey', 'mrealm_oid', 'authid', 'authextra']:
+            if k not in ['owner_oid', 'pubkey', 'cluster_ip', 'mrealm_oid', 'authid', 'authextra']:
                 _unknown[k] = data[k]
 
         owner_oid = data.get('owner_oid', None)
@@ -148,6 +157,9 @@ class Node(ConfigurationElement):
 
         pubkey = data.get('pubkey', None)
         assert pubkey is None or (type(pubkey) == str and len(pubkey) == 64)
+
+        cluster_ip = data.get('cluster_ip', None)
+        assert cluster_ip is None or type(cluster_ip)
 
         mrealm_oid = data.get('mrealm_oid', None)
         assert mrealm_oid is None or type(mrealm_oid) == str
@@ -166,6 +178,7 @@ class Node(ConfigurationElement):
                    tags=obj.tags,
                    owner_oid=owner_oid,
                    pubkey=pubkey,
+                   cluster_ip=cluster_ip,
                    mrealm_oid=mrealm_oid,
                    authid=authid,
                    authextra=authextra,
