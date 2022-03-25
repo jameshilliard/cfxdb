@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
@@ -16,8 +16,8 @@ from cfxdb.mrealm.cluster import Cluster
 
 class RouterCluster(Cluster):
     """
-    A router cluster is able to run "data planes", which are groups of router workers kept in sync,
-    and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
+    A router cluster is able to run (application) realms, and is hosted on a groups of router workers
+    kept in sync and meshed via router-to-router links.
     """
     def __init__(self,
                  oid: Optional[UUID] = None,

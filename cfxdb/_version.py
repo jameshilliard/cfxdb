@@ -1,8 +1,8 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
-__version__ = '22.3.1.dev3'
+__version__ = '22.3.1.dev4'

@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
@@ -16,7 +16,7 @@ from cfxdb.mrealm.cluster import Cluster
 
 class WebCluster(Cluster):
     """
-    CFC Web Cluster database configuration object.
+    Web cluster database configuration object.
     """
     def __init__(self,
                  oid: Optional[UUID] = None,

@@ -1,15 +1,18 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
 import os
 import sys
 import uuid
+import json
 from pprint import pprint
-from typing import List
+from typing import List, Dict, Any
+
+from pygments import highlight, lexers, formatters
 
 import cbor2
 import click
@@ -25,6 +28,12 @@ from cfxdb.xbrnetwork import Account, UserKey
 from txaio import time_ns
 
 
+def pprint_json(data):
+    json_str = json.dumps(data, separators=(', ', ': '), sort_keys=True, indent=4, ensure_ascii=False)
+    console_str = highlight(json_str, lexers.JsonLexer(), formatters.Terminal256Formatter(style='fruity'))
+    print(console_str)
+
+
 class Exporter(object):
     """
     CFXDB database exporter.
@@ -38,35 +47,37 @@ class Exporter(object):
         self._db = zlmdb.Database(dbpath=self._dbpath, maxsize=2**30, readonly=False)
         self._db.__enter__()
 
-        self._meta = cfxdb.meta.Schema.attach(self._db)
-        self._globalschema = cfxdb.globalschema.GlobalSchema.attach(self._db)
-        self._mrealmschema = cfxdb.mrealmschema.MrealmSchema.attach(self._db)
-        self._xbr = cfxdb.xbr.Schema.attach(self._db)
-        self._xbrmm = cfxdb.xbrmm.Schema.attach(self._db)
-        self._xbrnetwork = cfxdb.xbrnetwork.Schema.attach(self._db)
-
-        self._schemata = {
-            'meta': self._meta,
-            'globalschema': self._globalschema,
-            'mrealmschema': self._mrealmschema,
-            'xbr': self._xbr,
-            'xbrmm': self._xbrmm,
-            'xbrnetwork': self._xbrnetwork,
-        }
-
+        self._schemata: Dict[str, Any] = {}
         self._schema_tables = {}
 
-        for schema_name, schema in self._schemata.items():
-            tables = {}
-            first = None
-            for k, v in schema.__annotations__.items():
-                for line in v.__doc__.splitlines():
-                    line = line.strip()
-                    if line != "":
-                        first = line[:80]
-                        break
-                tables[k] = first
-            self._schema_tables[schema_name] = tables
+        if False:
+            self._meta = cfxdb.meta.Schema.attach(self._db)
+            self._globalschema = cfxdb.globalschema.GlobalSchema.attach(self._db)
+            self._mrealmschema = cfxdb.mrealmschema.MrealmSchema.attach(self._db)
+            self._xbr = cfxdb.xbr.Schema.attach(self._db)
+            self._xbrmm = cfxdb.xbrmm.Schema.attach(self._db)
+            self._xbrnetwork = cfxdb.xbrnetwork.Schema.attach(self._db)
+
+            self._schemata = {
+                'meta': self._meta,
+                'globalschema': self._globalschema,
+                'mrealmschema': self._mrealmschema,
+                'xbr': self._xbr,
+                'xbrmm': self._xbrmm,
+                'xbrnetwork': self._xbrnetwork,
+            }
+            self._schema_tables = {}
+            for schema_name, schema in self._schemata.items():
+                tables = {}
+                first = None
+                for k, v in schema.__annotations__.items():
+                    for line in v.__doc__.splitlines():
+                        line = line.strip()
+                        if line != "":
+                            first = line[:80]
+                            break
+                    tables[k] = first
+                self._schema_tables[schema_name] = tables
 
     @property
     def dbpath(self) -> str:
@@ -132,40 +143,40 @@ class Exporter(object):
         :param include_description:
         :return:
         """
-        print('\nDatabase slots [dbpath="{dbpath}"]:\n'.format(dbpath=self._dbpath))
+        print(click.style('Database slots:\n', fg='white', bold=True))
         slots = self._db._get_slots()
         for slot_id in slots:
             slot = slots[slot_id]
+
+            with self._db.begin() as txn:
+                pmap = zlmdb.PersistentMap(slot.slot)
+                records = pmap.count(txn)
+
             if include_description:
-                print('   Slot {} using DB table class {}: {}'.format(
-                    click.style(str(slot_id), fg='white', bold=True), click.style(slot.name, fg='yellow'),
-                    slot.description))
+                print('   Table in slot {} ({}) with {} records is bound to class {}: {}'.format(
+                    click.style(str(slot.slot), fg='yellow', bold=True),
+                    click.style(str(slot_id), fg='white'), click.style(str(records), fg='yellow', bold=True),
+                    click.style(slot.name, fg='yellow'), slot.description))
             else:
-                print('   Slot {} using DB table class {}'.format(
-                    click.style(str(slot_id), fg='white', bold=True), click.style(slot.name, fg='yellow')))
+                print('   Table in slot {} ({}) with {} records is bound to class {}'.format(
+                    click.style(str(slot.slot), fg='yellow', bold=True), click.style(str(slot_id),
+                                                                                     fg='white'),
+                    click.style(str(records), fg='yellow', bold=True), click.style(slot.name, fg='yellow')))
         print('')
 
-    def print_stats(self):
+    def print_stats(self, include_slots=False):
         """
 
         :return:
         """
-        print('\nDatabase table statistics [dbpath="{dbpath}"]:\n'.format(dbpath=self._dbpath))
-        stats = {}
-        with self._db.begin() as txn:
-            for schema_name in self._schemata:
-                stats[schema_name] = {}
-                for table_name in self._schema_tables[schema_name]:
-                    table = self._schemata[schema_name].__dict__[table_name]
-                    cnt = table.count(txn)
-                    stats[schema_name][table_name] = cnt
-        for schema_name in stats:
-            for table_name in stats[schema_name]:
-                cnt = stats[schema_name][table_name]
-                if cnt:
-                    print('{:.<52}: {}'.format(
-                        click.style('{}.{}'.format(schema_name, table_name), fg='white', bold=True),
-                        click.style(str(cnt) + ' records', fg='yellow')))
+        print(click.style('Database statistics:\n', fg='white', bold=True))
+        pprint_json(self._db.stats(include_slots=include_slots))
+        print('')
+
+    def print_config(self):
+        print(click.style('Database configuration:\n', fg='white', bold=True))
+        pprint_json(self._db.config())
+        print('')
 
     def export_database(self,
                         filename=None,
@@ -235,7 +246,9 @@ class Exporter(object):
 
         if not quiet:
             print('\nExported database [dbpath="{dbpath}", filename="{filename}", filesize={filesize}]:\n'.
-                  format(dbpath=self._dbpath, filename=filename, filesize=len(data)))
+                  format(dbpath=click.style(self._dbpath, fg='yellow'),
+                         filename=click.style(filename, fg='yellow'),
+                         filesize=click.style(len(data), fg='yellow')))
             for schema_name in result:
                 for table_name in result[schema_name]:
                     cnt = len(result[schema_name][table_name])

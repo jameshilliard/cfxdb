@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
@@ -37,150 +37,105 @@ __all__ = (
 @table('1219e71c-a62c-415a-bd15-ddf45e3a658b', marshal=ManagementRealm.marshal, parse=ManagementRealm.parse)
 class ManagementRealms(MapUuidCbor):
     """
-    Table: oid -> mrealm.
-
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Record type :class:`cfxdb.mrealm.ManagementRealm`
+    Management realm database configuration object (``oid -> mrealm``).
     """
 
 
 @table('1d2e8045-ea2b-4456-be4a-7a234d3622d6')
 class IndexManagementRealmByName(MapStringUuid):
     """
-    Index: pubkey -> oid.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Nodes`
+    Index of management realms by name (``mrealm_name -> mrealm_oid``).
     """
 
 
 @table('ae89d956-273a-4ce3-b63d-52b07ae35742', marshal=Node.marshal, parse=Node.parse)
 class Nodes(MapUuidCbor):
     """
-    Table: oid -> node.
-
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Record type :class:`cfxdb.mrealm.Node`
+    Nodes paired with management realms (``node_oid -> node``).
     """
 
 
 @table('1336c623-5f38-4397-ad5b-2e6b716b57b0')
 class IndexNodesByPubkey(MapStringUuid):
     """
-    Index: pubkey -> node_oid.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Nodes`
+    Index of nodes by node public key (``node_pubkey -> node_oid``).
     """
 
 
 @table('6d071a33-0577-4f72-a2e1-11182f60ab9c')
 class IndexNodesByAuthid(MapUuidStringUuid):
     """
-    Index: (mrealm_oid, authid) -> node_oid.
-
-    * Table type :class:`zlmdb.MapUuidStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Nodes`
+    Index of nodes by management realm and node authid (``(mrealm_oid, authid) -> node_oid``).
     """
 
 
 @table('fa1ed0fc-304e-4f66-8092-d901df1735e4', marshal=User.marshal, parse=User.parse)
 class Users(MapUuidCbor):
     """
-    Users registered in this domain (master node).
-
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Record type :class:`cfxdb.user.User`
+    Users registered in this domain / master node (``user_oid -> user``).
     """
 
 
 @table('aa2754e5-a859-4986-8749-1299828dc6e1')
 class IndexUsersByName(MapStringUuid):
     """
-    Index (by name) on users table.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Users`
+    Index of users by name (``user_name -> user_oid``).
     """
 
 
 @table('882a24e4-90cc-4823-94fe-c1d938daffe6')
 class IndexUsersByPubkey(MapStringUuid):
     """
-    Index on Users: by pubkey.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Users`
+    Index of users by pubkey (``user_pubkey -> user_oid``).
     """
 
 
 @table('933447a3-dd79-4599-bd9a-e0d88d9b84cb')
 class IndexUsersByEmail(MapStringUuid):
     """
-    Index on Users: by email.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Users`
+    Index of users by email address (``user_email -> user_oid``).
     """
 
 
 @table('eccdfc57-5632-4ad4-9c2b-2ac11e9d389f', marshal=UserMrealmRole.marshal, parse=UserMrealmRole.parse)
 class UserMrealmRoles(MapUuidUuidCbor):
     """
-    User roles on management realms.
-
-    * Table type :class:`zlmdb.MapUuidUuidCbor`
-    * Record type :class:`cfxdb.user.UserMrealmRole`
+    User roles on management realms (``(mrealm_oid, role_oid) -> role``).
     """
 
 
 @table('c968886e-a2e2-490c-bc2a-6b684c3130f6', marshal=ActivationToken.marshal, parse=ActivationToken.parse)
 class ActivationTokens(MapUuidCbor):
     """
-    User activations.
-
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Record type :class:`cfxdb.user.ActivationToken`.
+    User activations (``activation_oid -> activation``).
     """
 
 
 @table('0f6a9014-2e39-4cfd-9f2b-f6ffd3d3deca')
 class IndexActivationTokensByAuthidPubkey(MapStringUuid):
     """
-    Index on ActivationTokens: by (authid, pubkey).
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.ActivationTokens`.
+    Index of activation tokes by user authid and pubkey (``(user_authid, user_pubkey) -> activation_oid``).
     """
 
 
 @table('ae2fe53f-f8ec-4484-8a8f-cabdf1b38358', marshal=Organization.marshal, parse=Organization.parse)
 class Organizations(MapUuidCbor):
     """
-    Organizations defined in this domain (master node).
-
-    * Table type :class:`zlmdb.MapUuidCbor`
-    * Record type :class:`cfxdb.user.Organization`.
+    Organizations defined in this domain / master node (``organization_oid -> organization``).
     """
 
 
 @table('3fb82ab2-430d-43a1-8200-fcd6355d0410')
 class IndexOrganizationsByName(MapStringUuid):
     """
-    Index (by name) on organizations table.
-
-    * Table type :class:`zlmdb.MapStringUuid`
-    * Indexed table :class:`cfxdb.globalschema.Organizations`.
+    Index of organizations by name (``organization_name -> organization_oid``).
     """
 
 
 @table('e38f7bf1-2514-400c-8c30-a979b2138503', build=MasterNodeUsage.build, cast=MasterNodeUsage.cast)
 class UsageRecords(MapTimestampUuidFlatBuffers):
     """
-    Usage metering records.
-
-    * Table type :class:`zlmdb.MapTimestampUuidFlatBuffers`
-    * Record type :class:`cfxdb.usage.MasterNodeUsage`.
+    Usage metering records (``(timestamp, usage_oid) -> usage_record``).
     """
 
 

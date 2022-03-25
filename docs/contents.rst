@@ -10,11 +10,7 @@ Site Contents
    :maxdepth: 3
 
    index
-   eventstore
-   grealm
-   mrealm
-   mrealm-arealm
-   mrealm-routercluster
-   mrealm-webcluster
-   xbr
-   xbrnetwork
+   router-database/index
+   management-realm/index
+   management-domain/index
+   management-network/index

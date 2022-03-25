@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
@@ -15,7 +15,7 @@ from cfxdb.common import ConfigurationElement
 
 class ManagementRealm(ConfigurationElement):
     """
-    CFC management realm database configuration object.
+    Management realm database configuration object.
     """
     def __init__(self,
                  oid: Optional[UUID] = None,

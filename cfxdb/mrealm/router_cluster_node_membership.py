@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#                        Crossbar.io FX
-#     Copyright (C) Crossbar.io Technologies GmbH. All rights reserved.
+#                        Crossbar.io Database
+#     Copyright (c) Crossbar.io Technologies GmbH. Licensed under MIT.
 #
 ##############################################################################
 
@@ -14,7 +14,7 @@ from cfxdb.mrealm.cluster_node_membership import ClusterNodeMembership
 
 class RouterClusterNodeMembership(ClusterNodeMembership):
     """
-    Information about membership of a managed node in a management realm to a "router cluster".
+    Membership of a managed node (paired within a management realm) to a router cluster.
     A router cluster is able to run "data planes", which are groups of router workers kept in sync,
     and meshed via router-to-router links. Finally, "(application) realms" can be started in data planes.
     """
