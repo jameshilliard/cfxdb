@@ -11,12 +11,16 @@ class MNodeLog(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMNodeLog(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MNodeLog()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMNodeLog(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MNodeLog
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -497,67 +501,259 @@ class MNodeLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-def MNodeLogStart(builder): builder.StartObject(60)
-def MNodeLogAddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
-def MNodeLogAddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
-def MNodeLogStartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MNodeLogAddPeriod(builder, period): builder.PrependUint32Slot(2, period, 0)
-def MNodeLogAddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
-def MNodeLogStartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MNodeLogAddState(builder, state): builder.PrependUint8Slot(4, state, 0)
-def MNodeLogAddSession(builder, session): builder.PrependUint64Slot(5, session, 0)
-def MNodeLogAddSent(builder, sent): builder.PrependUint64Slot(6, sent, 0)
-def MNodeLogAddSeq(builder, seq): builder.PrependUint64Slot(7, seq, 0)
-def MNodeLogAddControllers(builder, controllers): builder.PrependUint16Slot(8, controllers, 0)
-def MNodeLogAddRouters(builder, routers): builder.PrependUint16Slot(9, routers, 0)
-def MNodeLogAddContainers(builder, containers): builder.PrependUint16Slot(10, containers, 0)
-def MNodeLogAddGuests(builder, guests): builder.PrependUint16Slot(11, guests, 0)
-def MNodeLogAddProxies(builder, proxies): builder.PrependUint16Slot(12, proxies, 0)
-def MNodeLogAddMarketmakers(builder, marketmakers): builder.PrependUint16Slot(13, marketmakers, 0)
-def MNodeLogAddHostmonitors(builder, hostmonitors): builder.PrependUint16Slot(14, hostmonitors, 0)
-def MNodeLogAddCpuCtxSwitches(builder, cpuCtxSwitches): builder.PrependUint64Slot(15, cpuCtxSwitches, 0)
-def MNodeLogAddCpuFreq(builder, cpuFreq): builder.PrependFloat32Slot(16, cpuFreq, 0.0)
-def MNodeLogAddCpuGuest(builder, cpuGuest): builder.PrependFloat32Slot(17, cpuGuest, 0.0)
-def MNodeLogAddCpuGuestNice(builder, cpuGuestNice): builder.PrependFloat32Slot(18, cpuGuestNice, 0.0)
-def MNodeLogAddCpuIdle(builder, cpuIdle): builder.PrependFloat32Slot(19, cpuIdle, 0.0)
-def MNodeLogAddCpuInterrupts(builder, cpuInterrupts): builder.PrependUint64Slot(20, cpuInterrupts, 0)
-def MNodeLogAddCpuIowait(builder, cpuIowait): builder.PrependFloat32Slot(21, cpuIowait, 0.0)
-def MNodeLogAddCpuIrq(builder, cpuIrq): builder.PrependFloat32Slot(22, cpuIrq, 0.0)
-def MNodeLogAddCpuNice(builder, cpuNice): builder.PrependFloat32Slot(23, cpuNice, 0.0)
-def MNodeLogAddCpuSoftInterrupts(builder, cpuSoftInterrupts): builder.PrependUint64Slot(24, cpuSoftInterrupts, 0)
-def MNodeLogAddCpuSoftirq(builder, cpuSoftirq): builder.PrependFloat32Slot(25, cpuSoftirq, 0.0)
-def MNodeLogAddCpuSteal(builder, cpuSteal): builder.PrependFloat32Slot(26, cpuSteal, 0.0)
-def MNodeLogAddCpuSystem(builder, cpuSystem): builder.PrependFloat32Slot(27, cpuSystem, 0.0)
-def MNodeLogAddCpuUser(builder, cpuUser): builder.PrependFloat32Slot(28, cpuUser, 0.0)
-def MNodeLogAddDiskBusyTime(builder, diskBusyTime): builder.PrependUint64Slot(29, diskBusyTime, 0)
-def MNodeLogAddDiskReadBytes(builder, diskReadBytes): builder.PrependUint64Slot(30, diskReadBytes, 0)
-def MNodeLogAddDiskReadCount(builder, diskReadCount): builder.PrependUint64Slot(31, diskReadCount, 0)
-def MNodeLogAddDiskReadMergedCount(builder, diskReadMergedCount): builder.PrependUint64Slot(32, diskReadMergedCount, 0)
-def MNodeLogAddDiskReadTime(builder, diskReadTime): builder.PrependUint64Slot(33, diskReadTime, 0)
-def MNodeLogAddDiskWriteBytes(builder, diskWriteBytes): builder.PrependUint64Slot(34, diskWriteBytes, 0)
-def MNodeLogAddDiskWriteCount(builder, diskWriteCount): builder.PrependUint64Slot(35, diskWriteCount, 0)
-def MNodeLogAddDiskWriteMergedCount(builder, diskWriteMergedCount): builder.PrependUint64Slot(36, diskWriteMergedCount, 0)
-def MNodeLogAddDiskWriteTime(builder, diskWriteTime): builder.PrependUint64Slot(37, diskWriteTime, 0)
-def MNodeLogAddMemoryActive(builder, memoryActive): builder.PrependUint64Slot(38, memoryActive, 0)
-def MNodeLogAddMemoryAvailable(builder, memoryAvailable): builder.PrependUint64Slot(39, memoryAvailable, 0)
-def MNodeLogAddMemoryBuffers(builder, memoryBuffers): builder.PrependUint64Slot(40, memoryBuffers, 0)
-def MNodeLogAddMemoryCached(builder, memoryCached): builder.PrependUint64Slot(41, memoryCached, 0)
-def MNodeLogAddMemoryFree(builder, memoryFree): builder.PrependUint64Slot(42, memoryFree, 0)
-def MNodeLogAddMemoryInactive(builder, memoryInactive): builder.PrependUint64Slot(43, memoryInactive, 0)
-def MNodeLogAddMemoryPercent(builder, memoryPercent): builder.PrependFloat32Slot(44, memoryPercent, 0.0)
-def MNodeLogAddMemoryShared(builder, memoryShared): builder.PrependUint64Slot(45, memoryShared, 0)
-def MNodeLogAddMemorySlab(builder, memorySlab): builder.PrependUint64Slot(46, memorySlab, 0)
-def MNodeLogAddMemoryTotal(builder, memoryTotal): builder.PrependUint64Slot(47, memoryTotal, 0)
-def MNodeLogAddMemoryUsed(builder, memoryUsed): builder.PrependUint64Slot(48, memoryUsed, 0)
-def MNodeLogAddNetworkBytesRecv(builder, networkBytesRecv): builder.PrependUint64Slot(49, networkBytesRecv, 0)
-def MNodeLogAddNetworkBytesSent(builder, networkBytesSent): builder.PrependUint64Slot(50, networkBytesSent, 0)
-def MNodeLogAddNetworkConnectionAfInet(builder, networkConnectionAfInet): builder.PrependUint32Slot(51, networkConnectionAfInet, 0)
-def MNodeLogAddNetworkConnectionAfInet6(builder, networkConnectionAfInet6): builder.PrependUint32Slot(52, networkConnectionAfInet6, 0)
-def MNodeLogAddNetworkConnectionAfUnix(builder, networkConnectionAfUnix): builder.PrependUint32Slot(53, networkConnectionAfUnix, 0)
-def MNodeLogAddNetworkDropin(builder, networkDropin): builder.PrependUint32Slot(54, networkDropin, 0)
-def MNodeLogAddNetworkDropout(builder, networkDropout): builder.PrependUint32Slot(55, networkDropout, 0)
-def MNodeLogAddNetworkErrin(builder, networkErrin): builder.PrependUint32Slot(56, networkErrin, 0)
-def MNodeLogAddNetworkErrout(builder, networkErrout): builder.PrependUint32Slot(57, networkErrout, 0)
-def MNodeLogAddNetworkPacketsRecv(builder, networkPacketsRecv): builder.PrependUint64Slot(58, networkPacketsRecv, 0)
-def MNodeLogAddNetworkPacketsSent(builder, networkPacketsSent): builder.PrependUint64Slot(59, networkPacketsSent, 0)
-def MNodeLogEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(60)
+def MNodeLogStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
+def MNodeLogAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
+def MNodeLogAddNodeId(builder, nodeId):
+    """This method is deprecated. Please switch to AddNodeId."""
+    return AddNodeId(builder, nodeId)
+def StartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MNodeLogStartNodeIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartNodeIdVector(builder, numElems)
+def AddPeriod(builder, period): builder.PrependUint32Slot(2, period, 0)
+def MNodeLogAddPeriod(builder, period):
+    """This method is deprecated. Please switch to AddPeriod."""
+    return AddPeriod(builder, period)
+def AddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
+def MNodeLogAddMrealmId(builder, mrealmId):
+    """This method is deprecated. Please switch to AddMrealmId."""
+    return AddMrealmId(builder, mrealmId)
+def StartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MNodeLogStartMrealmIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMrealmIdVector(builder, numElems)
+def AddState(builder, state): builder.PrependUint8Slot(4, state, 0)
+def MNodeLogAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def AddSession(builder, session): builder.PrependUint64Slot(5, session, 0)
+def MNodeLogAddSession(builder, session):
+    """This method is deprecated. Please switch to AddSession."""
+    return AddSession(builder, session)
+def AddSent(builder, sent): builder.PrependUint64Slot(6, sent, 0)
+def MNodeLogAddSent(builder, sent):
+    """This method is deprecated. Please switch to AddSent."""
+    return AddSent(builder, sent)
+def AddSeq(builder, seq): builder.PrependUint64Slot(7, seq, 0)
+def MNodeLogAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def AddControllers(builder, controllers): builder.PrependUint16Slot(8, controllers, 0)
+def MNodeLogAddControllers(builder, controllers):
+    """This method is deprecated. Please switch to AddControllers."""
+    return AddControllers(builder, controllers)
+def AddRouters(builder, routers): builder.PrependUint16Slot(9, routers, 0)
+def MNodeLogAddRouters(builder, routers):
+    """This method is deprecated. Please switch to AddRouters."""
+    return AddRouters(builder, routers)
+def AddContainers(builder, containers): builder.PrependUint16Slot(10, containers, 0)
+def MNodeLogAddContainers(builder, containers):
+    """This method is deprecated. Please switch to AddContainers."""
+    return AddContainers(builder, containers)
+def AddGuests(builder, guests): builder.PrependUint16Slot(11, guests, 0)
+def MNodeLogAddGuests(builder, guests):
+    """This method is deprecated. Please switch to AddGuests."""
+    return AddGuests(builder, guests)
+def AddProxies(builder, proxies): builder.PrependUint16Slot(12, proxies, 0)
+def MNodeLogAddProxies(builder, proxies):
+    """This method is deprecated. Please switch to AddProxies."""
+    return AddProxies(builder, proxies)
+def AddMarketmakers(builder, marketmakers): builder.PrependUint16Slot(13, marketmakers, 0)
+def MNodeLogAddMarketmakers(builder, marketmakers):
+    """This method is deprecated. Please switch to AddMarketmakers."""
+    return AddMarketmakers(builder, marketmakers)
+def AddHostmonitors(builder, hostmonitors): builder.PrependUint16Slot(14, hostmonitors, 0)
+def MNodeLogAddHostmonitors(builder, hostmonitors):
+    """This method is deprecated. Please switch to AddHostmonitors."""
+    return AddHostmonitors(builder, hostmonitors)
+def AddCpuCtxSwitches(builder, cpuCtxSwitches): builder.PrependUint64Slot(15, cpuCtxSwitches, 0)
+def MNodeLogAddCpuCtxSwitches(builder, cpuCtxSwitches):
+    """This method is deprecated. Please switch to AddCpuCtxSwitches."""
+    return AddCpuCtxSwitches(builder, cpuCtxSwitches)
+def AddCpuFreq(builder, cpuFreq): builder.PrependFloat32Slot(16, cpuFreq, 0.0)
+def MNodeLogAddCpuFreq(builder, cpuFreq):
+    """This method is deprecated. Please switch to AddCpuFreq."""
+    return AddCpuFreq(builder, cpuFreq)
+def AddCpuGuest(builder, cpuGuest): builder.PrependFloat32Slot(17, cpuGuest, 0.0)
+def MNodeLogAddCpuGuest(builder, cpuGuest):
+    """This method is deprecated. Please switch to AddCpuGuest."""
+    return AddCpuGuest(builder, cpuGuest)
+def AddCpuGuestNice(builder, cpuGuestNice): builder.PrependFloat32Slot(18, cpuGuestNice, 0.0)
+def MNodeLogAddCpuGuestNice(builder, cpuGuestNice):
+    """This method is deprecated. Please switch to AddCpuGuestNice."""
+    return AddCpuGuestNice(builder, cpuGuestNice)
+def AddCpuIdle(builder, cpuIdle): builder.PrependFloat32Slot(19, cpuIdle, 0.0)
+def MNodeLogAddCpuIdle(builder, cpuIdle):
+    """This method is deprecated. Please switch to AddCpuIdle."""
+    return AddCpuIdle(builder, cpuIdle)
+def AddCpuInterrupts(builder, cpuInterrupts): builder.PrependUint64Slot(20, cpuInterrupts, 0)
+def MNodeLogAddCpuInterrupts(builder, cpuInterrupts):
+    """This method is deprecated. Please switch to AddCpuInterrupts."""
+    return AddCpuInterrupts(builder, cpuInterrupts)
+def AddCpuIowait(builder, cpuIowait): builder.PrependFloat32Slot(21, cpuIowait, 0.0)
+def MNodeLogAddCpuIowait(builder, cpuIowait):
+    """This method is deprecated. Please switch to AddCpuIowait."""
+    return AddCpuIowait(builder, cpuIowait)
+def AddCpuIrq(builder, cpuIrq): builder.PrependFloat32Slot(22, cpuIrq, 0.0)
+def MNodeLogAddCpuIrq(builder, cpuIrq):
+    """This method is deprecated. Please switch to AddCpuIrq."""
+    return AddCpuIrq(builder, cpuIrq)
+def AddCpuNice(builder, cpuNice): builder.PrependFloat32Slot(23, cpuNice, 0.0)
+def MNodeLogAddCpuNice(builder, cpuNice):
+    """This method is deprecated. Please switch to AddCpuNice."""
+    return AddCpuNice(builder, cpuNice)
+def AddCpuSoftInterrupts(builder, cpuSoftInterrupts): builder.PrependUint64Slot(24, cpuSoftInterrupts, 0)
+def MNodeLogAddCpuSoftInterrupts(builder, cpuSoftInterrupts):
+    """This method is deprecated. Please switch to AddCpuSoftInterrupts."""
+    return AddCpuSoftInterrupts(builder, cpuSoftInterrupts)
+def AddCpuSoftirq(builder, cpuSoftirq): builder.PrependFloat32Slot(25, cpuSoftirq, 0.0)
+def MNodeLogAddCpuSoftirq(builder, cpuSoftirq):
+    """This method is deprecated. Please switch to AddCpuSoftirq."""
+    return AddCpuSoftirq(builder, cpuSoftirq)
+def AddCpuSteal(builder, cpuSteal): builder.PrependFloat32Slot(26, cpuSteal, 0.0)
+def MNodeLogAddCpuSteal(builder, cpuSteal):
+    """This method is deprecated. Please switch to AddCpuSteal."""
+    return AddCpuSteal(builder, cpuSteal)
+def AddCpuSystem(builder, cpuSystem): builder.PrependFloat32Slot(27, cpuSystem, 0.0)
+def MNodeLogAddCpuSystem(builder, cpuSystem):
+    """This method is deprecated. Please switch to AddCpuSystem."""
+    return AddCpuSystem(builder, cpuSystem)
+def AddCpuUser(builder, cpuUser): builder.PrependFloat32Slot(28, cpuUser, 0.0)
+def MNodeLogAddCpuUser(builder, cpuUser):
+    """This method is deprecated. Please switch to AddCpuUser."""
+    return AddCpuUser(builder, cpuUser)
+def AddDiskBusyTime(builder, diskBusyTime): builder.PrependUint64Slot(29, diskBusyTime, 0)
+def MNodeLogAddDiskBusyTime(builder, diskBusyTime):
+    """This method is deprecated. Please switch to AddDiskBusyTime."""
+    return AddDiskBusyTime(builder, diskBusyTime)
+def AddDiskReadBytes(builder, diskReadBytes): builder.PrependUint64Slot(30, diskReadBytes, 0)
+def MNodeLogAddDiskReadBytes(builder, diskReadBytes):
+    """This method is deprecated. Please switch to AddDiskReadBytes."""
+    return AddDiskReadBytes(builder, diskReadBytes)
+def AddDiskReadCount(builder, diskReadCount): builder.PrependUint64Slot(31, diskReadCount, 0)
+def MNodeLogAddDiskReadCount(builder, diskReadCount):
+    """This method is deprecated. Please switch to AddDiskReadCount."""
+    return AddDiskReadCount(builder, diskReadCount)
+def AddDiskReadMergedCount(builder, diskReadMergedCount): builder.PrependUint64Slot(32, diskReadMergedCount, 0)
+def MNodeLogAddDiskReadMergedCount(builder, diskReadMergedCount):
+    """This method is deprecated. Please switch to AddDiskReadMergedCount."""
+    return AddDiskReadMergedCount(builder, diskReadMergedCount)
+def AddDiskReadTime(builder, diskReadTime): builder.PrependUint64Slot(33, diskReadTime, 0)
+def MNodeLogAddDiskReadTime(builder, diskReadTime):
+    """This method is deprecated. Please switch to AddDiskReadTime."""
+    return AddDiskReadTime(builder, diskReadTime)
+def AddDiskWriteBytes(builder, diskWriteBytes): builder.PrependUint64Slot(34, diskWriteBytes, 0)
+def MNodeLogAddDiskWriteBytes(builder, diskWriteBytes):
+    """This method is deprecated. Please switch to AddDiskWriteBytes."""
+    return AddDiskWriteBytes(builder, diskWriteBytes)
+def AddDiskWriteCount(builder, diskWriteCount): builder.PrependUint64Slot(35, diskWriteCount, 0)
+def MNodeLogAddDiskWriteCount(builder, diskWriteCount):
+    """This method is deprecated. Please switch to AddDiskWriteCount."""
+    return AddDiskWriteCount(builder, diskWriteCount)
+def AddDiskWriteMergedCount(builder, diskWriteMergedCount): builder.PrependUint64Slot(36, diskWriteMergedCount, 0)
+def MNodeLogAddDiskWriteMergedCount(builder, diskWriteMergedCount):
+    """This method is deprecated. Please switch to AddDiskWriteMergedCount."""
+    return AddDiskWriteMergedCount(builder, diskWriteMergedCount)
+def AddDiskWriteTime(builder, diskWriteTime): builder.PrependUint64Slot(37, diskWriteTime, 0)
+def MNodeLogAddDiskWriteTime(builder, diskWriteTime):
+    """This method is deprecated. Please switch to AddDiskWriteTime."""
+    return AddDiskWriteTime(builder, diskWriteTime)
+def AddMemoryActive(builder, memoryActive): builder.PrependUint64Slot(38, memoryActive, 0)
+def MNodeLogAddMemoryActive(builder, memoryActive):
+    """This method is deprecated. Please switch to AddMemoryActive."""
+    return AddMemoryActive(builder, memoryActive)
+def AddMemoryAvailable(builder, memoryAvailable): builder.PrependUint64Slot(39, memoryAvailable, 0)
+def MNodeLogAddMemoryAvailable(builder, memoryAvailable):
+    """This method is deprecated. Please switch to AddMemoryAvailable."""
+    return AddMemoryAvailable(builder, memoryAvailable)
+def AddMemoryBuffers(builder, memoryBuffers): builder.PrependUint64Slot(40, memoryBuffers, 0)
+def MNodeLogAddMemoryBuffers(builder, memoryBuffers):
+    """This method is deprecated. Please switch to AddMemoryBuffers."""
+    return AddMemoryBuffers(builder, memoryBuffers)
+def AddMemoryCached(builder, memoryCached): builder.PrependUint64Slot(41, memoryCached, 0)
+def MNodeLogAddMemoryCached(builder, memoryCached):
+    """This method is deprecated. Please switch to AddMemoryCached."""
+    return AddMemoryCached(builder, memoryCached)
+def AddMemoryFree(builder, memoryFree): builder.PrependUint64Slot(42, memoryFree, 0)
+def MNodeLogAddMemoryFree(builder, memoryFree):
+    """This method is deprecated. Please switch to AddMemoryFree."""
+    return AddMemoryFree(builder, memoryFree)
+def AddMemoryInactive(builder, memoryInactive): builder.PrependUint64Slot(43, memoryInactive, 0)
+def MNodeLogAddMemoryInactive(builder, memoryInactive):
+    """This method is deprecated. Please switch to AddMemoryInactive."""
+    return AddMemoryInactive(builder, memoryInactive)
+def AddMemoryPercent(builder, memoryPercent): builder.PrependFloat32Slot(44, memoryPercent, 0.0)
+def MNodeLogAddMemoryPercent(builder, memoryPercent):
+    """This method is deprecated. Please switch to AddMemoryPercent."""
+    return AddMemoryPercent(builder, memoryPercent)
+def AddMemoryShared(builder, memoryShared): builder.PrependUint64Slot(45, memoryShared, 0)
+def MNodeLogAddMemoryShared(builder, memoryShared):
+    """This method is deprecated. Please switch to AddMemoryShared."""
+    return AddMemoryShared(builder, memoryShared)
+def AddMemorySlab(builder, memorySlab): builder.PrependUint64Slot(46, memorySlab, 0)
+def MNodeLogAddMemorySlab(builder, memorySlab):
+    """This method is deprecated. Please switch to AddMemorySlab."""
+    return AddMemorySlab(builder, memorySlab)
+def AddMemoryTotal(builder, memoryTotal): builder.PrependUint64Slot(47, memoryTotal, 0)
+def MNodeLogAddMemoryTotal(builder, memoryTotal):
+    """This method is deprecated. Please switch to AddMemoryTotal."""
+    return AddMemoryTotal(builder, memoryTotal)
+def AddMemoryUsed(builder, memoryUsed): builder.PrependUint64Slot(48, memoryUsed, 0)
+def MNodeLogAddMemoryUsed(builder, memoryUsed):
+    """This method is deprecated. Please switch to AddMemoryUsed."""
+    return AddMemoryUsed(builder, memoryUsed)
+def AddNetworkBytesRecv(builder, networkBytesRecv): builder.PrependUint64Slot(49, networkBytesRecv, 0)
+def MNodeLogAddNetworkBytesRecv(builder, networkBytesRecv):
+    """This method is deprecated. Please switch to AddNetworkBytesRecv."""
+    return AddNetworkBytesRecv(builder, networkBytesRecv)
+def AddNetworkBytesSent(builder, networkBytesSent): builder.PrependUint64Slot(50, networkBytesSent, 0)
+def MNodeLogAddNetworkBytesSent(builder, networkBytesSent):
+    """This method is deprecated. Please switch to AddNetworkBytesSent."""
+    return AddNetworkBytesSent(builder, networkBytesSent)
+def AddNetworkConnectionAfInet(builder, networkConnectionAfInet): builder.PrependUint32Slot(51, networkConnectionAfInet, 0)
+def MNodeLogAddNetworkConnectionAfInet(builder, networkConnectionAfInet):
+    """This method is deprecated. Please switch to AddNetworkConnectionAfInet."""
+    return AddNetworkConnectionAfInet(builder, networkConnectionAfInet)
+def AddNetworkConnectionAfInet6(builder, networkConnectionAfInet6): builder.PrependUint32Slot(52, networkConnectionAfInet6, 0)
+def MNodeLogAddNetworkConnectionAfInet6(builder, networkConnectionAfInet6):
+    """This method is deprecated. Please switch to AddNetworkConnectionAfInet6."""
+    return AddNetworkConnectionAfInet6(builder, networkConnectionAfInet6)
+def AddNetworkConnectionAfUnix(builder, networkConnectionAfUnix): builder.PrependUint32Slot(53, networkConnectionAfUnix, 0)
+def MNodeLogAddNetworkConnectionAfUnix(builder, networkConnectionAfUnix):
+    """This method is deprecated. Please switch to AddNetworkConnectionAfUnix."""
+    return AddNetworkConnectionAfUnix(builder, networkConnectionAfUnix)
+def AddNetworkDropin(builder, networkDropin): builder.PrependUint32Slot(54, networkDropin, 0)
+def MNodeLogAddNetworkDropin(builder, networkDropin):
+    """This method is deprecated. Please switch to AddNetworkDropin."""
+    return AddNetworkDropin(builder, networkDropin)
+def AddNetworkDropout(builder, networkDropout): builder.PrependUint32Slot(55, networkDropout, 0)
+def MNodeLogAddNetworkDropout(builder, networkDropout):
+    """This method is deprecated. Please switch to AddNetworkDropout."""
+    return AddNetworkDropout(builder, networkDropout)
+def AddNetworkErrin(builder, networkErrin): builder.PrependUint32Slot(56, networkErrin, 0)
+def MNodeLogAddNetworkErrin(builder, networkErrin):
+    """This method is deprecated. Please switch to AddNetworkErrin."""
+    return AddNetworkErrin(builder, networkErrin)
+def AddNetworkErrout(builder, networkErrout): builder.PrependUint32Slot(57, networkErrout, 0)
+def MNodeLogAddNetworkErrout(builder, networkErrout):
+    """This method is deprecated. Please switch to AddNetworkErrout."""
+    return AddNetworkErrout(builder, networkErrout)
+def AddNetworkPacketsRecv(builder, networkPacketsRecv): builder.PrependUint64Slot(58, networkPacketsRecv, 0)
+def MNodeLogAddNetworkPacketsRecv(builder, networkPacketsRecv):
+    """This method is deprecated. Please switch to AddNetworkPacketsRecv."""
+    return AddNetworkPacketsRecv(builder, networkPacketsRecv)
+def AddNetworkPacketsSent(builder, networkPacketsSent): builder.PrependUint64Slot(59, networkPacketsSent, 0)
+def MNodeLogAddNetworkPacketsSent(builder, networkPacketsSent):
+    """This method is deprecated. Please switch to AddNetworkPacketsSent."""
+    return AddNetworkPacketsSent(builder, networkPacketsSent)
+def End(builder): return builder.EndObject()
+def MNodeLogEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

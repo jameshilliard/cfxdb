@@ -69,7 +69,8 @@ enum ApplicationRealmStatus: uint8
 struct Permission
 {
     /// URI or URI pattern to match for the permission to apply.
-    uri: string;
+    // FIXME: error: structs may contain only scalar or struct fields
+    // uri: string;
 
     /// URI check level.
     uri_check_level: UriCheckLevel;

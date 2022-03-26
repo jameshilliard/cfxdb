@@ -43,6 +43,7 @@ RouterWorkerGroup
 * :class:`cfxdb.mrealm.RouterWorkerGroup`
 * :class:`cfxdb.mrealmschema.RouterWorkerGroups`
 * :class:`cfxdb.mrealmschema.IndexWorkerGroupByCluster`
+* :class:`cfxdb.mrealmschema.IndexWorkerGroupByPlacement`
 * :class:`cfxdb.mrealm.RouterWorkerGroupClusterPlacement`
 * :class:`cfxdb.mrealmschema.RouterWorkerGroupClusterPlacements`
 * :class:`cfxdb.mrealmschema.IndexClusterPlacementByWorkerName`
@@ -58,6 +59,10 @@ RouterWorkerGroup
     :show-inheritance:
 
 .. autoclass:: cfxdb.mrealmschema.IndexWorkerGroupByCluster
+    :members:
+    :show-inheritance:
+
+.. autoclass:: cfxdb.mrealmschema.IndexWorkerGroupByPlacement
     :members:
     :show-inheritance:
 

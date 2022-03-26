@@ -11,12 +11,16 @@ class KeyValue(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsKeyValue(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = KeyValue()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsKeyValue(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # KeyValue
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -37,7 +41,19 @@ class KeyValue(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def KeyValueStart(builder): builder.StartObject(2)
-def KeyValueAddKey(builder, key): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(key), 0)
-def KeyValueAddValue(builder, value): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
-def KeyValueEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(2)
+def KeyValueStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddKey(builder, key): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(key), 0)
+def KeyValueAddKey(builder, key):
+    """This method is deprecated. Please switch to AddKey."""
+    return AddKey(builder, key)
+def AddValue(builder, value): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
+def KeyValueAddValue(builder, value):
+    """This method is deprecated. Please switch to AddValue."""
+    return AddValue(builder, value)
+def End(builder): return builder.EndObject()
+def KeyValueEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

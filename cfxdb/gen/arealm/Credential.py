@@ -11,12 +11,16 @@ class Credential(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsCredential(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Credential()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsCredential(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Credential
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -97,12 +101,39 @@ class Credential(object):
             return obj
         return None
 
-def CredentialStart(builder): builder.StartObject(6)
-def CredentialAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def CredentialAddAuthmethod(builder, authmethod): builder.PrependInt8Slot(1, authmethod, 0)
-def CredentialAddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
-def CredentialAddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
-def CredentialAddAuthconfig(builder, authconfig): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(authconfig), 0)
-def CredentialStartAuthconfigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def CredentialAddPrincipalOid(builder, principalOid): builder.PrependStructSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(principalOid), 0)
-def CredentialEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(6)
+def CredentialStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def CredentialAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddAuthmethod(builder, authmethod): builder.PrependInt8Slot(1, authmethod, 0)
+def CredentialAddAuthmethod(builder, authmethod):
+    """This method is deprecated. Please switch to AddAuthmethod."""
+    return AddAuthmethod(builder, authmethod)
+def AddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
+def CredentialAddRealm(builder, realm):
+    """This method is deprecated. Please switch to AddRealm."""
+    return AddRealm(builder, realm)
+def AddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
+def CredentialAddAuthid(builder, authid):
+    """This method is deprecated. Please switch to AddAuthid."""
+    return AddAuthid(builder, authid)
+def AddAuthconfig(builder, authconfig): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(authconfig), 0)
+def CredentialAddAuthconfig(builder, authconfig):
+    """This method is deprecated. Please switch to AddAuthconfig."""
+    return AddAuthconfig(builder, authconfig)
+def StartAuthconfigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def CredentialStartAuthconfigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAuthconfigVector(builder, numElems)
+def AddPrincipalOid(builder, principalOid): builder.PrependStructSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(principalOid), 0)
+def CredentialAddPrincipalOid(builder, principalOid):
+    """This method is deprecated. Please switch to AddPrincipalOid."""
+    return AddPrincipalOid(builder, principalOid)
+def End(builder): return builder.EndObject()
+def CredentialEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

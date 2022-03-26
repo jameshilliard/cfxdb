@@ -11,12 +11,16 @@ class TokenTransfer(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsTokenTransfer(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = TokenTransfer()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsTokenTransfer(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # TokenTransfer
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -161,15 +165,51 @@ class TokenTransfer(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         return o == 0
 
-def TokenTransferStart(builder): builder.StartObject(5)
-def TokenTransferAddTxHash(builder, txHash): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(txHash), 0)
-def TokenTransferStartTxHashVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenTransferAddBlockHash(builder, blockHash): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(blockHash), 0)
-def TokenTransferStartBlockHashVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenTransferAddFromAddress(builder, fromAddress): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(fromAddress), 0)
-def TokenTransferStartFromAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenTransferAddToAddress(builder, toAddress): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(toAddress), 0)
-def TokenTransferStartToAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenTransferAddValue(builder, value): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
-def TokenTransferStartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenTransferEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(5)
+def TokenTransferStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTxHash(builder, txHash): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(txHash), 0)
+def TokenTransferAddTxHash(builder, txHash):
+    """This method is deprecated. Please switch to AddTxHash."""
+    return AddTxHash(builder, txHash)
+def StartTxHashVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenTransferStartTxHashVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTxHashVector(builder, numElems)
+def AddBlockHash(builder, blockHash): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(blockHash), 0)
+def TokenTransferAddBlockHash(builder, blockHash):
+    """This method is deprecated. Please switch to AddBlockHash."""
+    return AddBlockHash(builder, blockHash)
+def StartBlockHashVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenTransferStartBlockHashVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartBlockHashVector(builder, numElems)
+def AddFromAddress(builder, fromAddress): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(fromAddress), 0)
+def TokenTransferAddFromAddress(builder, fromAddress):
+    """This method is deprecated. Please switch to AddFromAddress."""
+    return AddFromAddress(builder, fromAddress)
+def StartFromAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenTransferStartFromAddressVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartFromAddressVector(builder, numElems)
+def AddToAddress(builder, toAddress): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(toAddress), 0)
+def TokenTransferAddToAddress(builder, toAddress):
+    """This method is deprecated. Please switch to AddToAddress."""
+    return AddToAddress(builder, toAddress)
+def StartToAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenTransferStartToAddressVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartToAddressVector(builder, numElems)
+def AddValue(builder, value): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
+def TokenTransferAddValue(builder, value):
+    """This method is deprecated. Please switch to AddValue."""
+    return AddValue(builder, value)
+def StartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenTransferStartValueVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartValueVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def TokenTransferEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

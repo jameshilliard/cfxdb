@@ -11,12 +11,16 @@ class Role(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsRole(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Role()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsRole(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Role
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -67,7 +71,7 @@ class Role(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         if o != 0:
             x = self._tab.Vector(o)
-            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 8
+            x += flatbuffers.number_types.UOffsetTFlags.py_type(j) * 9
             from arealm.Permission import Permission
             obj = Permission()
             obj.Init(self._tab.Bytes, x)
@@ -115,14 +119,47 @@ class Role(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def RoleStart(builder): builder.StartObject(7)
-def RoleAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def RoleAddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
-def RoleAddOwner(builder, owner): builder.PrependStructSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
-def RoleAddName(builder, name): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def RoleAddPermissions(builder, permissions): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(permissions), 0)
-def RoleStartPermissionsVector(builder, numElems): return builder.StartVector(8, numElems, 1)
-def RoleAddPermissionUris(builder, permissionUris): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(permissionUris), 0)
-def RoleStartPermissionUrisVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def RoleAddAuthorizer(builder, authorizer): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(authorizer), 0)
-def RoleEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(7)
+def RoleStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def RoleAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
+def RoleAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddOwner(builder, owner): builder.PrependStructSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
+def RoleAddOwner(builder, owner):
+    """This method is deprecated. Please switch to AddOwner."""
+    return AddOwner(builder, owner)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def RoleAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddPermissions(builder, permissions): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(permissions), 0)
+def RoleAddPermissions(builder, permissions):
+    """This method is deprecated. Please switch to AddPermissions."""
+    return AddPermissions(builder, permissions)
+def StartPermissionsVector(builder, numElems): return builder.StartVector(9, numElems, 1)
+def RoleStartPermissionsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPermissionsVector(builder, numElems)
+def AddPermissionUris(builder, permissionUris): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(permissionUris), 0)
+def RoleAddPermissionUris(builder, permissionUris):
+    """This method is deprecated. Please switch to AddPermissionUris."""
+    return AddPermissionUris(builder, permissionUris)
+def StartPermissionUrisVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def RoleStartPermissionUrisVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPermissionUrisVector(builder, numElems)
+def AddAuthorizer(builder, authorizer): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(authorizer), 0)
+def RoleAddAuthorizer(builder, authorizer):
+    """This method is deprecated. Please switch to AddAuthorizer."""
+    return AddAuthorizer(builder, authorizer)
+def End(builder): return builder.EndObject()
+def RoleEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

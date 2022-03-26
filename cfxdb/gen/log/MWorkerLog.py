@@ -11,12 +11,16 @@ class MWorkerLog(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMWorkerLog(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MWorkerLog()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMWorkerLog(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MWorkerLog
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -427,57 +431,219 @@ class MWorkerLog(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-def MWorkerLogStart(builder): builder.StartObject(50)
-def MWorkerLogAddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
-def MWorkerLogAddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
-def MWorkerLogStartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MWorkerLogAddWorkerId(builder, workerId): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(workerId), 0)
-def MWorkerLogAddPeriod(builder, period): builder.PrependUint32Slot(3, period, 0)
-def MWorkerLogAddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
-def MWorkerLogStartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MWorkerLogAddType(builder, type): builder.PrependUint8Slot(5, type, 0)
-def MWorkerLogAddState(builder, state): builder.PrependUint8Slot(6, state, 0)
-def MWorkerLogAddSent(builder, sent): builder.PrependUint64Slot(7, sent, 0)
-def MWorkerLogAddSeq(builder, seq): builder.PrependUint64Slot(8, seq, 0)
-def MWorkerLogAddNumFds(builder, numFds): builder.PrependUint32Slot(9, numFds, 0)
-def MWorkerLogAddNumThreads(builder, numThreads): builder.PrependUint16Slot(10, numThreads, 0)
-def MWorkerLogAddNumCtxSwitchesInvoluntary(builder, numCtxSwitchesInvoluntary): builder.PrependUint64Slot(11, numCtxSwitchesInvoluntary, 0)
-def MWorkerLogAddNumCtxSwitchesInvoluntaryPerSec(builder, numCtxSwitchesInvoluntaryPerSec): builder.PrependUint32Slot(12, numCtxSwitchesInvoluntaryPerSec, 0)
-def MWorkerLogAddNumCtxSwitchesVoluntary(builder, numCtxSwitchesVoluntary): builder.PrependUint64Slot(13, numCtxSwitchesVoluntary, 0)
-def MWorkerLogAddNumCtxSwitchesVoluntaryPerSec(builder, numCtxSwitchesVoluntaryPerSec): builder.PrependUint32Slot(14, numCtxSwitchesVoluntaryPerSec, 0)
-def MWorkerLogAddCpuSystem(builder, cpuSystem): builder.PrependFloat32Slot(15, cpuSystem, 0.0)
-def MWorkerLogAddCpuSystemPerSec(builder, cpuSystemPerSec): builder.PrependFloat32Slot(16, cpuSystemPerSec, 0.0)
-def MWorkerLogAddCpuWait(builder, cpuWait): builder.PrependFloat32Slot(17, cpuWait, 0.0)
-def MWorkerLogAddCpuWaitPerSec(builder, cpuWaitPerSec): builder.PrependFloat32Slot(18, cpuWaitPerSec, 0.0)
-def MWorkerLogAddCpuUser(builder, cpuUser): builder.PrependFloat32Slot(19, cpuUser, 0.0)
-def MWorkerLogAddCpuUserPerSec(builder, cpuUserPerSec): builder.PrependFloat32Slot(20, cpuUserPerSec, 0.0)
-def MWorkerLogAddReadBytes(builder, readBytes): builder.PrependUint64Slot(21, readBytes, 0)
-def MWorkerLogAddReadBytesPerSec(builder, readBytesPerSec): builder.PrependUint64Slot(22, readBytesPerSec, 0)
-def MWorkerLogAddReadIos(builder, readIos): builder.PrependUint64Slot(23, readIos, 0)
-def MWorkerLogAddReadIosPerSec(builder, readIosPerSec): builder.PrependUint64Slot(24, readIosPerSec, 0)
-def MWorkerLogAddWriteBytes(builder, writeBytes): builder.PrependUint64Slot(25, writeBytes, 0)
-def MWorkerLogAddWriteBytesPerSec(builder, writeBytesPerSec): builder.PrependUint64Slot(26, writeBytesPerSec, 0)
-def MWorkerLogAddWriteIos(builder, writeIos): builder.PrependUint64Slot(27, writeIos, 0)
-def MWorkerLogAddWriteIosPerSec(builder, writeIosPerSec): builder.PrependUint64Slot(28, writeIosPerSec, 0)
-def MWorkerLogAddSentBytes(builder, sentBytes): builder.PrependUint64Slot(29, sentBytes, 0)
-def MWorkerLogAddSentBytesPerSec(builder, sentBytesPerSec): builder.PrependUint64Slot(30, sentBytesPerSec, 0)
-def MWorkerLogAddSentIos(builder, sentIos): builder.PrependUint64Slot(31, sentIos, 0)
-def MWorkerLogAddSentIosPerSec(builder, sentIosPerSec): builder.PrependUint64Slot(32, sentIosPerSec, 0)
-def MWorkerLogAddRecvBytes(builder, recvBytes): builder.PrependUint64Slot(33, recvBytes, 0)
-def MWorkerLogAddRecvBytesPerSec(builder, recvBytesPerSec): builder.PrependUint64Slot(34, recvBytesPerSec, 0)
-def MWorkerLogAddRecvIos(builder, recvIos): builder.PrependUint64Slot(35, recvIos, 0)
-def MWorkerLogAddRecvIosPerSec(builder, recvIosPerSec): builder.PrependUint64Slot(36, recvIosPerSec, 0)
-def MWorkerLogAddRouterRoles(builder, routerRoles): builder.PrependUint64Slot(37, routerRoles, 0)
-def MWorkerLogAddRouterSessions(builder, routerSessions): builder.PrependUint64Slot(38, routerSessions, 0)
-def MWorkerLogAddRecvCall(builder, recvCall): builder.PrependUint64Slot(39, recvCall, 0)
-def MWorkerLogAddRecvYield(builder, recvYield): builder.PrependUint64Slot(40, recvYield, 0)
-def MWorkerLogAddSentInvocation(builder, sentInvocation): builder.PrependUint64Slot(41, sentInvocation, 0)
-def MWorkerLogAddSentResult(builder, sentResult): builder.PrependUint64Slot(42, sentResult, 0)
-def MWorkerLogAddRecvPublish(builder, recvPublish): builder.PrependUint64Slot(43, recvPublish, 0)
-def MWorkerLogAddSentPublished(builder, sentPublished): builder.PrependUint64Slot(44, sentPublished, 0)
-def MWorkerLogAddSentEvent(builder, sentEvent): builder.PrependUint64Slot(45, sentEvent, 0)
-def MWorkerLogAddRecvRegister(builder, recvRegister): builder.PrependUint64Slot(46, recvRegister, 0)
-def MWorkerLogAddSentRegistered(builder, sentRegistered): builder.PrependUint64Slot(47, sentRegistered, 0)
-def MWorkerLogAddRecvSubscribe(builder, recvSubscribe): builder.PrependUint64Slot(48, recvSubscribe, 0)
-def MWorkerLogAddSentSubscribed(builder, sentSubscribed): builder.PrependUint64Slot(49, sentSubscribed, 0)
-def MWorkerLogEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(50)
+def MWorkerLogStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
+def MWorkerLogAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
+def MWorkerLogAddNodeId(builder, nodeId):
+    """This method is deprecated. Please switch to AddNodeId."""
+    return AddNodeId(builder, nodeId)
+def StartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MWorkerLogStartNodeIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartNodeIdVector(builder, numElems)
+def AddWorkerId(builder, workerId): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(workerId), 0)
+def MWorkerLogAddWorkerId(builder, workerId):
+    """This method is deprecated. Please switch to AddWorkerId."""
+    return AddWorkerId(builder, workerId)
+def AddPeriod(builder, period): builder.PrependUint32Slot(3, period, 0)
+def MWorkerLogAddPeriod(builder, period):
+    """This method is deprecated. Please switch to AddPeriod."""
+    return AddPeriod(builder, period)
+def AddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
+def MWorkerLogAddMrealmId(builder, mrealmId):
+    """This method is deprecated. Please switch to AddMrealmId."""
+    return AddMrealmId(builder, mrealmId)
+def StartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MWorkerLogStartMrealmIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMrealmIdVector(builder, numElems)
+def AddType(builder, type): builder.PrependUint8Slot(5, type, 0)
+def MWorkerLogAddType(builder, type):
+    """This method is deprecated. Please switch to AddType."""
+    return AddType(builder, type)
+def AddState(builder, state): builder.PrependUint8Slot(6, state, 0)
+def MWorkerLogAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def AddSent(builder, sent): builder.PrependUint64Slot(7, sent, 0)
+def MWorkerLogAddSent(builder, sent):
+    """This method is deprecated. Please switch to AddSent."""
+    return AddSent(builder, sent)
+def AddSeq(builder, seq): builder.PrependUint64Slot(8, seq, 0)
+def MWorkerLogAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def AddNumFds(builder, numFds): builder.PrependUint32Slot(9, numFds, 0)
+def MWorkerLogAddNumFds(builder, numFds):
+    """This method is deprecated. Please switch to AddNumFds."""
+    return AddNumFds(builder, numFds)
+def AddNumThreads(builder, numThreads): builder.PrependUint16Slot(10, numThreads, 0)
+def MWorkerLogAddNumThreads(builder, numThreads):
+    """This method is deprecated. Please switch to AddNumThreads."""
+    return AddNumThreads(builder, numThreads)
+def AddNumCtxSwitchesInvoluntary(builder, numCtxSwitchesInvoluntary): builder.PrependUint64Slot(11, numCtxSwitchesInvoluntary, 0)
+def MWorkerLogAddNumCtxSwitchesInvoluntary(builder, numCtxSwitchesInvoluntary):
+    """This method is deprecated. Please switch to AddNumCtxSwitchesInvoluntary."""
+    return AddNumCtxSwitchesInvoluntary(builder, numCtxSwitchesInvoluntary)
+def AddNumCtxSwitchesInvoluntaryPerSec(builder, numCtxSwitchesInvoluntaryPerSec): builder.PrependUint32Slot(12, numCtxSwitchesInvoluntaryPerSec, 0)
+def MWorkerLogAddNumCtxSwitchesInvoluntaryPerSec(builder, numCtxSwitchesInvoluntaryPerSec):
+    """This method is deprecated. Please switch to AddNumCtxSwitchesInvoluntaryPerSec."""
+    return AddNumCtxSwitchesInvoluntaryPerSec(builder, numCtxSwitchesInvoluntaryPerSec)
+def AddNumCtxSwitchesVoluntary(builder, numCtxSwitchesVoluntary): builder.PrependUint64Slot(13, numCtxSwitchesVoluntary, 0)
+def MWorkerLogAddNumCtxSwitchesVoluntary(builder, numCtxSwitchesVoluntary):
+    """This method is deprecated. Please switch to AddNumCtxSwitchesVoluntary."""
+    return AddNumCtxSwitchesVoluntary(builder, numCtxSwitchesVoluntary)
+def AddNumCtxSwitchesVoluntaryPerSec(builder, numCtxSwitchesVoluntaryPerSec): builder.PrependUint32Slot(14, numCtxSwitchesVoluntaryPerSec, 0)
+def MWorkerLogAddNumCtxSwitchesVoluntaryPerSec(builder, numCtxSwitchesVoluntaryPerSec):
+    """This method is deprecated. Please switch to AddNumCtxSwitchesVoluntaryPerSec."""
+    return AddNumCtxSwitchesVoluntaryPerSec(builder, numCtxSwitchesVoluntaryPerSec)
+def AddCpuSystem(builder, cpuSystem): builder.PrependFloat32Slot(15, cpuSystem, 0.0)
+def MWorkerLogAddCpuSystem(builder, cpuSystem):
+    """This method is deprecated. Please switch to AddCpuSystem."""
+    return AddCpuSystem(builder, cpuSystem)
+def AddCpuSystemPerSec(builder, cpuSystemPerSec): builder.PrependFloat32Slot(16, cpuSystemPerSec, 0.0)
+def MWorkerLogAddCpuSystemPerSec(builder, cpuSystemPerSec):
+    """This method is deprecated. Please switch to AddCpuSystemPerSec."""
+    return AddCpuSystemPerSec(builder, cpuSystemPerSec)
+def AddCpuWait(builder, cpuWait): builder.PrependFloat32Slot(17, cpuWait, 0.0)
+def MWorkerLogAddCpuWait(builder, cpuWait):
+    """This method is deprecated. Please switch to AddCpuWait."""
+    return AddCpuWait(builder, cpuWait)
+def AddCpuWaitPerSec(builder, cpuWaitPerSec): builder.PrependFloat32Slot(18, cpuWaitPerSec, 0.0)
+def MWorkerLogAddCpuWaitPerSec(builder, cpuWaitPerSec):
+    """This method is deprecated. Please switch to AddCpuWaitPerSec."""
+    return AddCpuWaitPerSec(builder, cpuWaitPerSec)
+def AddCpuUser(builder, cpuUser): builder.PrependFloat32Slot(19, cpuUser, 0.0)
+def MWorkerLogAddCpuUser(builder, cpuUser):
+    """This method is deprecated. Please switch to AddCpuUser."""
+    return AddCpuUser(builder, cpuUser)
+def AddCpuUserPerSec(builder, cpuUserPerSec): builder.PrependFloat32Slot(20, cpuUserPerSec, 0.0)
+def MWorkerLogAddCpuUserPerSec(builder, cpuUserPerSec):
+    """This method is deprecated. Please switch to AddCpuUserPerSec."""
+    return AddCpuUserPerSec(builder, cpuUserPerSec)
+def AddReadBytes(builder, readBytes): builder.PrependUint64Slot(21, readBytes, 0)
+def MWorkerLogAddReadBytes(builder, readBytes):
+    """This method is deprecated. Please switch to AddReadBytes."""
+    return AddReadBytes(builder, readBytes)
+def AddReadBytesPerSec(builder, readBytesPerSec): builder.PrependUint64Slot(22, readBytesPerSec, 0)
+def MWorkerLogAddReadBytesPerSec(builder, readBytesPerSec):
+    """This method is deprecated. Please switch to AddReadBytesPerSec."""
+    return AddReadBytesPerSec(builder, readBytesPerSec)
+def AddReadIos(builder, readIos): builder.PrependUint64Slot(23, readIos, 0)
+def MWorkerLogAddReadIos(builder, readIos):
+    """This method is deprecated. Please switch to AddReadIos."""
+    return AddReadIos(builder, readIos)
+def AddReadIosPerSec(builder, readIosPerSec): builder.PrependUint64Slot(24, readIosPerSec, 0)
+def MWorkerLogAddReadIosPerSec(builder, readIosPerSec):
+    """This method is deprecated. Please switch to AddReadIosPerSec."""
+    return AddReadIosPerSec(builder, readIosPerSec)
+def AddWriteBytes(builder, writeBytes): builder.PrependUint64Slot(25, writeBytes, 0)
+def MWorkerLogAddWriteBytes(builder, writeBytes):
+    """This method is deprecated. Please switch to AddWriteBytes."""
+    return AddWriteBytes(builder, writeBytes)
+def AddWriteBytesPerSec(builder, writeBytesPerSec): builder.PrependUint64Slot(26, writeBytesPerSec, 0)
+def MWorkerLogAddWriteBytesPerSec(builder, writeBytesPerSec):
+    """This method is deprecated. Please switch to AddWriteBytesPerSec."""
+    return AddWriteBytesPerSec(builder, writeBytesPerSec)
+def AddWriteIos(builder, writeIos): builder.PrependUint64Slot(27, writeIos, 0)
+def MWorkerLogAddWriteIos(builder, writeIos):
+    """This method is deprecated. Please switch to AddWriteIos."""
+    return AddWriteIos(builder, writeIos)
+def AddWriteIosPerSec(builder, writeIosPerSec): builder.PrependUint64Slot(28, writeIosPerSec, 0)
+def MWorkerLogAddWriteIosPerSec(builder, writeIosPerSec):
+    """This method is deprecated. Please switch to AddWriteIosPerSec."""
+    return AddWriteIosPerSec(builder, writeIosPerSec)
+def AddSentBytes(builder, sentBytes): builder.PrependUint64Slot(29, sentBytes, 0)
+def MWorkerLogAddSentBytes(builder, sentBytes):
+    """This method is deprecated. Please switch to AddSentBytes."""
+    return AddSentBytes(builder, sentBytes)
+def AddSentBytesPerSec(builder, sentBytesPerSec): builder.PrependUint64Slot(30, sentBytesPerSec, 0)
+def MWorkerLogAddSentBytesPerSec(builder, sentBytesPerSec):
+    """This method is deprecated. Please switch to AddSentBytesPerSec."""
+    return AddSentBytesPerSec(builder, sentBytesPerSec)
+def AddSentIos(builder, sentIos): builder.PrependUint64Slot(31, sentIos, 0)
+def MWorkerLogAddSentIos(builder, sentIos):
+    """This method is deprecated. Please switch to AddSentIos."""
+    return AddSentIos(builder, sentIos)
+def AddSentIosPerSec(builder, sentIosPerSec): builder.PrependUint64Slot(32, sentIosPerSec, 0)
+def MWorkerLogAddSentIosPerSec(builder, sentIosPerSec):
+    """This method is deprecated. Please switch to AddSentIosPerSec."""
+    return AddSentIosPerSec(builder, sentIosPerSec)
+def AddRecvBytes(builder, recvBytes): builder.PrependUint64Slot(33, recvBytes, 0)
+def MWorkerLogAddRecvBytes(builder, recvBytes):
+    """This method is deprecated. Please switch to AddRecvBytes."""
+    return AddRecvBytes(builder, recvBytes)
+def AddRecvBytesPerSec(builder, recvBytesPerSec): builder.PrependUint64Slot(34, recvBytesPerSec, 0)
+def MWorkerLogAddRecvBytesPerSec(builder, recvBytesPerSec):
+    """This method is deprecated. Please switch to AddRecvBytesPerSec."""
+    return AddRecvBytesPerSec(builder, recvBytesPerSec)
+def AddRecvIos(builder, recvIos): builder.PrependUint64Slot(35, recvIos, 0)
+def MWorkerLogAddRecvIos(builder, recvIos):
+    """This method is deprecated. Please switch to AddRecvIos."""
+    return AddRecvIos(builder, recvIos)
+def AddRecvIosPerSec(builder, recvIosPerSec): builder.PrependUint64Slot(36, recvIosPerSec, 0)
+def MWorkerLogAddRecvIosPerSec(builder, recvIosPerSec):
+    """This method is deprecated. Please switch to AddRecvIosPerSec."""
+    return AddRecvIosPerSec(builder, recvIosPerSec)
+def AddRouterRoles(builder, routerRoles): builder.PrependUint64Slot(37, routerRoles, 0)
+def MWorkerLogAddRouterRoles(builder, routerRoles):
+    """This method is deprecated. Please switch to AddRouterRoles."""
+    return AddRouterRoles(builder, routerRoles)
+def AddRouterSessions(builder, routerSessions): builder.PrependUint64Slot(38, routerSessions, 0)
+def MWorkerLogAddRouterSessions(builder, routerSessions):
+    """This method is deprecated. Please switch to AddRouterSessions."""
+    return AddRouterSessions(builder, routerSessions)
+def AddRecvCall(builder, recvCall): builder.PrependUint64Slot(39, recvCall, 0)
+def MWorkerLogAddRecvCall(builder, recvCall):
+    """This method is deprecated. Please switch to AddRecvCall."""
+    return AddRecvCall(builder, recvCall)
+def AddRecvYield(builder, recvYield): builder.PrependUint64Slot(40, recvYield, 0)
+def MWorkerLogAddRecvYield(builder, recvYield):
+    """This method is deprecated. Please switch to AddRecvYield."""
+    return AddRecvYield(builder, recvYield)
+def AddSentInvocation(builder, sentInvocation): builder.PrependUint64Slot(41, sentInvocation, 0)
+def MWorkerLogAddSentInvocation(builder, sentInvocation):
+    """This method is deprecated. Please switch to AddSentInvocation."""
+    return AddSentInvocation(builder, sentInvocation)
+def AddSentResult(builder, sentResult): builder.PrependUint64Slot(42, sentResult, 0)
+def MWorkerLogAddSentResult(builder, sentResult):
+    """This method is deprecated. Please switch to AddSentResult."""
+    return AddSentResult(builder, sentResult)
+def AddRecvPublish(builder, recvPublish): builder.PrependUint64Slot(43, recvPublish, 0)
+def MWorkerLogAddRecvPublish(builder, recvPublish):
+    """This method is deprecated. Please switch to AddRecvPublish."""
+    return AddRecvPublish(builder, recvPublish)
+def AddSentPublished(builder, sentPublished): builder.PrependUint64Slot(44, sentPublished, 0)
+def MWorkerLogAddSentPublished(builder, sentPublished):
+    """This method is deprecated. Please switch to AddSentPublished."""
+    return AddSentPublished(builder, sentPublished)
+def AddSentEvent(builder, sentEvent): builder.PrependUint64Slot(45, sentEvent, 0)
+def MWorkerLogAddSentEvent(builder, sentEvent):
+    """This method is deprecated. Please switch to AddSentEvent."""
+    return AddSentEvent(builder, sentEvent)
+def AddRecvRegister(builder, recvRegister): builder.PrependUint64Slot(46, recvRegister, 0)
+def MWorkerLogAddRecvRegister(builder, recvRegister):
+    """This method is deprecated. Please switch to AddRecvRegister."""
+    return AddRecvRegister(builder, recvRegister)
+def AddSentRegistered(builder, sentRegistered): builder.PrependUint64Slot(47, sentRegistered, 0)
+def MWorkerLogAddSentRegistered(builder, sentRegistered):
+    """This method is deprecated. Please switch to AddSentRegistered."""
+    return AddSentRegistered(builder, sentRegistered)
+def AddRecvSubscribe(builder, recvSubscribe): builder.PrependUint64Slot(48, recvSubscribe, 0)
+def MWorkerLogAddRecvSubscribe(builder, recvSubscribe):
+    """This method is deprecated. Please switch to AddRecvSubscribe."""
+    return AddRecvSubscribe(builder, recvSubscribe)
+def AddSentSubscribed(builder, sentSubscribed): builder.PrependUint64Slot(49, sentSubscribed, 0)
+def MWorkerLogAddSentSubscribed(builder, sentSubscribed):
+    """This method is deprecated. Please switch to AddSentSubscribed."""
+    return AddSentSubscribed(builder, sentSubscribed)
+def End(builder): return builder.EndObject()
+def MWorkerLogEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

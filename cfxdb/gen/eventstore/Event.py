@@ -11,12 +11,16 @@ class Event(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsEvent(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Event()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsEvent(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Event
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -69,11 +73,35 @@ class Event(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-def EventStart(builder): builder.StartObject(6)
-def EventAddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
-def EventAddSubscription(builder, subscription): builder.PrependUint64Slot(1, subscription, 0)
-def EventAddPublication(builder, publication): builder.PrependUint64Slot(2, publication, 0)
-def EventAddReceiver(builder, receiver): builder.PrependUint64Slot(3, receiver, 0)
-def EventAddRetained(builder, retained): builder.PrependBoolSlot(4, retained, 0)
-def EventAddAcknowledgedDelivery(builder, acknowledgedDelivery): builder.PrependBoolSlot(5, acknowledgedDelivery, 0)
-def EventEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(6)
+def EventStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
+def EventAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddSubscription(builder, subscription): builder.PrependUint64Slot(1, subscription, 0)
+def EventAddSubscription(builder, subscription):
+    """This method is deprecated. Please switch to AddSubscription."""
+    return AddSubscription(builder, subscription)
+def AddPublication(builder, publication): builder.PrependUint64Slot(2, publication, 0)
+def EventAddPublication(builder, publication):
+    """This method is deprecated. Please switch to AddPublication."""
+    return AddPublication(builder, publication)
+def AddReceiver(builder, receiver): builder.PrependUint64Slot(3, receiver, 0)
+def EventAddReceiver(builder, receiver):
+    """This method is deprecated. Please switch to AddReceiver."""
+    return AddReceiver(builder, receiver)
+def AddRetained(builder, retained): builder.PrependBoolSlot(4, retained, 0)
+def EventAddRetained(builder, retained):
+    """This method is deprecated. Please switch to AddRetained."""
+    return AddRetained(builder, retained)
+def AddAcknowledgedDelivery(builder, acknowledgedDelivery): builder.PrependBoolSlot(5, acknowledgedDelivery, 0)
+def EventAddAcknowledgedDelivery(builder, acknowledgedDelivery):
+    """This method is deprecated. Please switch to AddAcknowledgedDelivery."""
+    return AddAcknowledgedDelivery(builder, acknowledgedDelivery)
+def End(builder): return builder.EndObject()
+def EventEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

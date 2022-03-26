@@ -11,12 +11,16 @@ class MasterNodeUsage(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMasterNodeUsage(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MasterNodeUsage()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMasterNodeUsage(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MasterNodeUsage
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -389,45 +393,171 @@ class MasterNodeUsage(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-def MasterNodeUsageStart(builder): builder.StartObject(36)
-def MasterNodeUsageAddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
-def MasterNodeUsageAddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
-def MasterNodeUsageStartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MasterNodeUsageAddTimestampFrom(builder, timestampFrom): builder.PrependUint64Slot(2, timestampFrom, 0)
-def MasterNodeUsageAddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
-def MasterNodeUsageStartPubkeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MasterNodeUsageAddClientIpAddress(builder, clientIpAddress): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(clientIpAddress), 0)
-def MasterNodeUsageStartClientIpAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MasterNodeUsageAddClientIpVersion(builder, clientIpVersion): builder.PrependUint8Slot(5, clientIpVersion, 0)
-def MasterNodeUsageAddClientIpPort(builder, clientIpPort): builder.PrependUint16Slot(6, clientIpPort, 0)
-def MasterNodeUsageAddSeq(builder, seq): builder.PrependUint64Slot(7, seq, 0)
-def MasterNodeUsageAddSent(builder, sent): builder.PrependUint64Slot(8, sent, 0)
-def MasterNodeUsageAddProcessed(builder, processed): builder.PrependUint64Slot(9, processed, 0)
-def MasterNodeUsageAddStatus(builder, status): builder.PrependUint8Slot(10, status, 0)
-def MasterNodeUsageAddStatusMessage(builder, statusMessage): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(statusMessage), 0)
-def MasterNodeUsageAddMeteringId(builder, meteringId): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(meteringId), 0)
-def MasterNodeUsageStartMeteringIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MasterNodeUsageAddCount(builder, count): builder.PrependUint64Slot(13, count, 0)
-def MasterNodeUsageAddTotal(builder, total): builder.PrependUint64Slot(14, total, 0)
-def MasterNodeUsageAddNodes(builder, nodes): builder.PrependUint64Slot(15, nodes, 0)
-def MasterNodeUsageAddControllers(builder, controllers): builder.PrependUint64Slot(16, controllers, 0)
-def MasterNodeUsageAddHostmonitors(builder, hostmonitors): builder.PrependUint64Slot(17, hostmonitors, 0)
-def MasterNodeUsageAddRouters(builder, routers): builder.PrependUint64Slot(18, routers, 0)
-def MasterNodeUsageAddContainers(builder, containers): builder.PrependUint64Slot(19, containers, 0)
-def MasterNodeUsageAddGuests(builder, guests): builder.PrependUint64Slot(20, guests, 0)
-def MasterNodeUsageAddProxies(builder, proxies): builder.PrependUint64Slot(21, proxies, 0)
-def MasterNodeUsageAddMarketmakers(builder, marketmakers): builder.PrependUint64Slot(22, marketmakers, 0)
-def MasterNodeUsageAddSessions(builder, sessions): builder.PrependUint64Slot(23, sessions, 0)
-def MasterNodeUsageAddMsgsCall(builder, msgsCall): builder.PrependUint64Slot(24, msgsCall, 0)
-def MasterNodeUsageAddMsgsYield(builder, msgsYield): builder.PrependUint64Slot(25, msgsYield, 0)
-def MasterNodeUsageAddMsgsInvocation(builder, msgsInvocation): builder.PrependUint64Slot(26, msgsInvocation, 0)
-def MasterNodeUsageAddMsgsResult(builder, msgsResult): builder.PrependUint64Slot(27, msgsResult, 0)
-def MasterNodeUsageAddMsgsError(builder, msgsError): builder.PrependUint64Slot(28, msgsError, 0)
-def MasterNodeUsageAddMsgsPublish(builder, msgsPublish): builder.PrependUint64Slot(29, msgsPublish, 0)
-def MasterNodeUsageAddMsgsPublished(builder, msgsPublished): builder.PrependUint64Slot(30, msgsPublished, 0)
-def MasterNodeUsageAddMsgsEvent(builder, msgsEvent): builder.PrependUint64Slot(31, msgsEvent, 0)
-def MasterNodeUsageAddMsgsRegister(builder, msgsRegister): builder.PrependUint64Slot(32, msgsRegister, 0)
-def MasterNodeUsageAddMsgsRegistered(builder, msgsRegistered): builder.PrependUint64Slot(33, msgsRegistered, 0)
-def MasterNodeUsageAddMsgsSubscribe(builder, msgsSubscribe): builder.PrependUint64Slot(34, msgsSubscribe, 0)
-def MasterNodeUsageAddMsgsSubscribed(builder, msgsSubscribed): builder.PrependUint64Slot(35, msgsSubscribed, 0)
-def MasterNodeUsageEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(36)
+def MasterNodeUsageStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
+def MasterNodeUsageAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddMrealmId(builder, mrealmId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(mrealmId), 0)
+def MasterNodeUsageAddMrealmId(builder, mrealmId):
+    """This method is deprecated. Please switch to AddMrealmId."""
+    return AddMrealmId(builder, mrealmId)
+def StartMrealmIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MasterNodeUsageStartMrealmIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMrealmIdVector(builder, numElems)
+def AddTimestampFrom(builder, timestampFrom): builder.PrependUint64Slot(2, timestampFrom, 0)
+def MasterNodeUsageAddTimestampFrom(builder, timestampFrom):
+    """This method is deprecated. Please switch to AddTimestampFrom."""
+    return AddTimestampFrom(builder, timestampFrom)
+def AddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
+def MasterNodeUsageAddPubkey(builder, pubkey):
+    """This method is deprecated. Please switch to AddPubkey."""
+    return AddPubkey(builder, pubkey)
+def StartPubkeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MasterNodeUsageStartPubkeyVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPubkeyVector(builder, numElems)
+def AddClientIpAddress(builder, clientIpAddress): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(clientIpAddress), 0)
+def MasterNodeUsageAddClientIpAddress(builder, clientIpAddress):
+    """This method is deprecated. Please switch to AddClientIpAddress."""
+    return AddClientIpAddress(builder, clientIpAddress)
+def StartClientIpAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MasterNodeUsageStartClientIpAddressVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartClientIpAddressVector(builder, numElems)
+def AddClientIpVersion(builder, clientIpVersion): builder.PrependUint8Slot(5, clientIpVersion, 0)
+def MasterNodeUsageAddClientIpVersion(builder, clientIpVersion):
+    """This method is deprecated. Please switch to AddClientIpVersion."""
+    return AddClientIpVersion(builder, clientIpVersion)
+def AddClientIpPort(builder, clientIpPort): builder.PrependUint16Slot(6, clientIpPort, 0)
+def MasterNodeUsageAddClientIpPort(builder, clientIpPort):
+    """This method is deprecated. Please switch to AddClientIpPort."""
+    return AddClientIpPort(builder, clientIpPort)
+def AddSeq(builder, seq): builder.PrependUint64Slot(7, seq, 0)
+def MasterNodeUsageAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def AddSent(builder, sent): builder.PrependUint64Slot(8, sent, 0)
+def MasterNodeUsageAddSent(builder, sent):
+    """This method is deprecated. Please switch to AddSent."""
+    return AddSent(builder, sent)
+def AddProcessed(builder, processed): builder.PrependUint64Slot(9, processed, 0)
+def MasterNodeUsageAddProcessed(builder, processed):
+    """This method is deprecated. Please switch to AddProcessed."""
+    return AddProcessed(builder, processed)
+def AddStatus(builder, status): builder.PrependUint8Slot(10, status, 0)
+def MasterNodeUsageAddStatus(builder, status):
+    """This method is deprecated. Please switch to AddStatus."""
+    return AddStatus(builder, status)
+def AddStatusMessage(builder, statusMessage): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(statusMessage), 0)
+def MasterNodeUsageAddStatusMessage(builder, statusMessage):
+    """This method is deprecated. Please switch to AddStatusMessage."""
+    return AddStatusMessage(builder, statusMessage)
+def AddMeteringId(builder, meteringId): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(meteringId), 0)
+def MasterNodeUsageAddMeteringId(builder, meteringId):
+    """This method is deprecated. Please switch to AddMeteringId."""
+    return AddMeteringId(builder, meteringId)
+def StartMeteringIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MasterNodeUsageStartMeteringIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMeteringIdVector(builder, numElems)
+def AddCount(builder, count): builder.PrependUint64Slot(13, count, 0)
+def MasterNodeUsageAddCount(builder, count):
+    """This method is deprecated. Please switch to AddCount."""
+    return AddCount(builder, count)
+def AddTotal(builder, total): builder.PrependUint64Slot(14, total, 0)
+def MasterNodeUsageAddTotal(builder, total):
+    """This method is deprecated. Please switch to AddTotal."""
+    return AddTotal(builder, total)
+def AddNodes(builder, nodes): builder.PrependUint64Slot(15, nodes, 0)
+def MasterNodeUsageAddNodes(builder, nodes):
+    """This method is deprecated. Please switch to AddNodes."""
+    return AddNodes(builder, nodes)
+def AddControllers(builder, controllers): builder.PrependUint64Slot(16, controllers, 0)
+def MasterNodeUsageAddControllers(builder, controllers):
+    """This method is deprecated. Please switch to AddControllers."""
+    return AddControllers(builder, controllers)
+def AddHostmonitors(builder, hostmonitors): builder.PrependUint64Slot(17, hostmonitors, 0)
+def MasterNodeUsageAddHostmonitors(builder, hostmonitors):
+    """This method is deprecated. Please switch to AddHostmonitors."""
+    return AddHostmonitors(builder, hostmonitors)
+def AddRouters(builder, routers): builder.PrependUint64Slot(18, routers, 0)
+def MasterNodeUsageAddRouters(builder, routers):
+    """This method is deprecated. Please switch to AddRouters."""
+    return AddRouters(builder, routers)
+def AddContainers(builder, containers): builder.PrependUint64Slot(19, containers, 0)
+def MasterNodeUsageAddContainers(builder, containers):
+    """This method is deprecated. Please switch to AddContainers."""
+    return AddContainers(builder, containers)
+def AddGuests(builder, guests): builder.PrependUint64Slot(20, guests, 0)
+def MasterNodeUsageAddGuests(builder, guests):
+    """This method is deprecated. Please switch to AddGuests."""
+    return AddGuests(builder, guests)
+def AddProxies(builder, proxies): builder.PrependUint64Slot(21, proxies, 0)
+def MasterNodeUsageAddProxies(builder, proxies):
+    """This method is deprecated. Please switch to AddProxies."""
+    return AddProxies(builder, proxies)
+def AddMarketmakers(builder, marketmakers): builder.PrependUint64Slot(22, marketmakers, 0)
+def MasterNodeUsageAddMarketmakers(builder, marketmakers):
+    """This method is deprecated. Please switch to AddMarketmakers."""
+    return AddMarketmakers(builder, marketmakers)
+def AddSessions(builder, sessions): builder.PrependUint64Slot(23, sessions, 0)
+def MasterNodeUsageAddSessions(builder, sessions):
+    """This method is deprecated. Please switch to AddSessions."""
+    return AddSessions(builder, sessions)
+def AddMsgsCall(builder, msgsCall): builder.PrependUint64Slot(24, msgsCall, 0)
+def MasterNodeUsageAddMsgsCall(builder, msgsCall):
+    """This method is deprecated. Please switch to AddMsgsCall."""
+    return AddMsgsCall(builder, msgsCall)
+def AddMsgsYield(builder, msgsYield): builder.PrependUint64Slot(25, msgsYield, 0)
+def MasterNodeUsageAddMsgsYield(builder, msgsYield):
+    """This method is deprecated. Please switch to AddMsgsYield."""
+    return AddMsgsYield(builder, msgsYield)
+def AddMsgsInvocation(builder, msgsInvocation): builder.PrependUint64Slot(26, msgsInvocation, 0)
+def MasterNodeUsageAddMsgsInvocation(builder, msgsInvocation):
+    """This method is deprecated. Please switch to AddMsgsInvocation."""
+    return AddMsgsInvocation(builder, msgsInvocation)
+def AddMsgsResult(builder, msgsResult): builder.PrependUint64Slot(27, msgsResult, 0)
+def MasterNodeUsageAddMsgsResult(builder, msgsResult):
+    """This method is deprecated. Please switch to AddMsgsResult."""
+    return AddMsgsResult(builder, msgsResult)
+def AddMsgsError(builder, msgsError): builder.PrependUint64Slot(28, msgsError, 0)
+def MasterNodeUsageAddMsgsError(builder, msgsError):
+    """This method is deprecated. Please switch to AddMsgsError."""
+    return AddMsgsError(builder, msgsError)
+def AddMsgsPublish(builder, msgsPublish): builder.PrependUint64Slot(29, msgsPublish, 0)
+def MasterNodeUsageAddMsgsPublish(builder, msgsPublish):
+    """This method is deprecated. Please switch to AddMsgsPublish."""
+    return AddMsgsPublish(builder, msgsPublish)
+def AddMsgsPublished(builder, msgsPublished): builder.PrependUint64Slot(30, msgsPublished, 0)
+def MasterNodeUsageAddMsgsPublished(builder, msgsPublished):
+    """This method is deprecated. Please switch to AddMsgsPublished."""
+    return AddMsgsPublished(builder, msgsPublished)
+def AddMsgsEvent(builder, msgsEvent): builder.PrependUint64Slot(31, msgsEvent, 0)
+def MasterNodeUsageAddMsgsEvent(builder, msgsEvent):
+    """This method is deprecated. Please switch to AddMsgsEvent."""
+    return AddMsgsEvent(builder, msgsEvent)
+def AddMsgsRegister(builder, msgsRegister): builder.PrependUint64Slot(32, msgsRegister, 0)
+def MasterNodeUsageAddMsgsRegister(builder, msgsRegister):
+    """This method is deprecated. Please switch to AddMsgsRegister."""
+    return AddMsgsRegister(builder, msgsRegister)
+def AddMsgsRegistered(builder, msgsRegistered): builder.PrependUint64Slot(33, msgsRegistered, 0)
+def MasterNodeUsageAddMsgsRegistered(builder, msgsRegistered):
+    """This method is deprecated. Please switch to AddMsgsRegistered."""
+    return AddMsgsRegistered(builder, msgsRegistered)
+def AddMsgsSubscribe(builder, msgsSubscribe): builder.PrependUint64Slot(34, msgsSubscribe, 0)
+def MasterNodeUsageAddMsgsSubscribe(builder, msgsSubscribe):
+    """This method is deprecated. Please switch to AddMsgsSubscribe."""
+    return AddMsgsSubscribe(builder, msgsSubscribe)
+def AddMsgsSubscribed(builder, msgsSubscribed): builder.PrependUint64Slot(35, msgsSubscribed, 0)
+def MasterNodeUsageAddMsgsSubscribed(builder, msgsSubscribed):
+    """This method is deprecated. Please switch to AddMsgsSubscribed."""
+    return AddMsgsSubscribed(builder, msgsSubscribed)
+def End(builder): return builder.EndObject()
+def MasterNodeUsageEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

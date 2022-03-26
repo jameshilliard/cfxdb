@@ -10,12 +10,16 @@ class ManagementRealm(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsManagementRealm(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ManagementRealm()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsManagementRealm(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # ManagementRealm
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -121,16 +125,55 @@ class ManagementRealm(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def ManagementRealmStart(builder): builder.StartObject(10)
-def ManagementRealmAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def ManagementRealmAddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
-def ManagementRealmAddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
-def ManagementRealmAddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
-def ManagementRealmStartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def ManagementRealmAddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def ManagementRealmAddCreated(builder, created): builder.PrependUint64Slot(5, created, 0)
-def ManagementRealmAddOwner(builder, owner): builder.PrependStructSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
-def ManagementRealmAddCfNode(builder, cfNode): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(cfNode), 0)
-def ManagementRealmAddCfRouterWorker(builder, cfRouterWorker): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(cfRouterWorker), 0)
-def ManagementRealmAddCfContainerWorker(builder, cfContainerWorker): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(cfContainerWorker), 0)
-def ManagementRealmEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(10)
+def ManagementRealmStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def ManagementRealmAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
+def ManagementRealmAddLabel(builder, label):
+    """This method is deprecated. Please switch to AddLabel."""
+    return AddLabel(builder, label)
+def AddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
+def ManagementRealmAddDescription(builder, description):
+    """This method is deprecated. Please switch to AddDescription."""
+    return AddDescription(builder, description)
+def AddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
+def ManagementRealmAddTags(builder, tags):
+    """This method is deprecated. Please switch to AddTags."""
+    return AddTags(builder, tags)
+def StartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def ManagementRealmStartTagsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTagsVector(builder, numElems)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def ManagementRealmAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddCreated(builder, created): builder.PrependUint64Slot(5, created, 0)
+def ManagementRealmAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddOwner(builder, owner): builder.PrependStructSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
+def ManagementRealmAddOwner(builder, owner):
+    """This method is deprecated. Please switch to AddOwner."""
+    return AddOwner(builder, owner)
+def AddCfNode(builder, cfNode): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(cfNode), 0)
+def ManagementRealmAddCfNode(builder, cfNode):
+    """This method is deprecated. Please switch to AddCfNode."""
+    return AddCfNode(builder, cfNode)
+def AddCfRouterWorker(builder, cfRouterWorker): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(cfRouterWorker), 0)
+def ManagementRealmAddCfRouterWorker(builder, cfRouterWorker):
+    """This method is deprecated. Please switch to AddCfRouterWorker."""
+    return AddCfRouterWorker(builder, cfRouterWorker)
+def AddCfContainerWorker(builder, cfContainerWorker): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(cfContainerWorker), 0)
+def ManagementRealmAddCfContainerWorker(builder, cfContainerWorker):
+    """This method is deprecated. Please switch to AddCfContainerWorker."""
+    return AddCfContainerWorker(builder, cfContainerWorker)
+def End(builder): return builder.EndObject()
+def ManagementRealmEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

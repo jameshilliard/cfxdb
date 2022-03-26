@@ -10,12 +10,16 @@ class VerifiedAction(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsVerifiedAction(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = VerifiedAction()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsVerifiedAction(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # VerifiedAction
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -136,15 +140,51 @@ class VerifiedAction(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         return o == 0
 
-def VerifiedActionStart(builder): builder.StartObject(7)
-def VerifiedActionAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def VerifiedActionStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def VerifiedActionAddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
-def VerifiedActionAddVtype(builder, vtype): builder.PrependUint8Slot(2, vtype, 0)
-def VerifiedActionAddVstatus(builder, vstatus): builder.PrependUint8Slot(3, vstatus, 0)
-def VerifiedActionAddVcode(builder, vcode): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(vcode), 0)
-def VerifiedActionAddVerifiedOid(builder, verifiedOid): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(verifiedOid), 0)
-def VerifiedActionStartVerifiedOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def VerifiedActionAddVerifiedData(builder, verifiedData): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(verifiedData), 0)
-def VerifiedActionStartVerifiedDataVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def VerifiedActionEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(7)
+def VerifiedActionStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def VerifiedActionAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def StartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def VerifiedActionStartOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOidVector(builder, numElems)
+def AddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
+def VerifiedActionAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddVtype(builder, vtype): builder.PrependUint8Slot(2, vtype, 0)
+def VerifiedActionAddVtype(builder, vtype):
+    """This method is deprecated. Please switch to AddVtype."""
+    return AddVtype(builder, vtype)
+def AddVstatus(builder, vstatus): builder.PrependUint8Slot(3, vstatus, 0)
+def VerifiedActionAddVstatus(builder, vstatus):
+    """This method is deprecated. Please switch to AddVstatus."""
+    return AddVstatus(builder, vstatus)
+def AddVcode(builder, vcode): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(vcode), 0)
+def VerifiedActionAddVcode(builder, vcode):
+    """This method is deprecated. Please switch to AddVcode."""
+    return AddVcode(builder, vcode)
+def AddVerifiedOid(builder, verifiedOid): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(verifiedOid), 0)
+def VerifiedActionAddVerifiedOid(builder, verifiedOid):
+    """This method is deprecated. Please switch to AddVerifiedOid."""
+    return AddVerifiedOid(builder, verifiedOid)
+def StartVerifiedOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def VerifiedActionStartVerifiedOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartVerifiedOidVector(builder, numElems)
+def AddVerifiedData(builder, verifiedData): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(verifiedData), 0)
+def VerifiedActionAddVerifiedData(builder, verifiedData):
+    """This method is deprecated. Please switch to AddVerifiedData."""
+    return AddVerifiedData(builder, verifiedData)
+def StartVerifiedDataVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def VerifiedActionStartVerifiedDataVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartVerifiedDataVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def VerifiedActionEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

@@ -11,12 +11,16 @@ class User(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsUser(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = User()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsUser(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # User
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -94,13 +98,43 @@ class User(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def UserStart(builder): builder.StartObject(7)
-def UserAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def UserAddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
-def UserAddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
-def UserAddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
-def UserStartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def UserAddEmail(builder, email): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(email), 0)
-def UserAddRegistered(builder, registered): builder.PrependUint64Slot(5, registered, 0)
-def UserAddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
-def UserEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(7)
+def UserStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def UserAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
+def UserAddLabel(builder, label):
+    """This method is deprecated. Please switch to AddLabel."""
+    return AddLabel(builder, label)
+def AddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
+def UserAddDescription(builder, description):
+    """This method is deprecated. Please switch to AddDescription."""
+    return AddDescription(builder, description)
+def AddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
+def UserAddTags(builder, tags):
+    """This method is deprecated. Please switch to AddTags."""
+    return AddTags(builder, tags)
+def StartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def UserStartTagsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTagsVector(builder, numElems)
+def AddEmail(builder, email): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(email), 0)
+def UserAddEmail(builder, email):
+    """This method is deprecated. Please switch to AddEmail."""
+    return AddEmail(builder, email)
+def AddRegistered(builder, registered): builder.PrependUint64Slot(5, registered, 0)
+def UserAddRegistered(builder, registered):
+    """This method is deprecated. Please switch to AddRegistered."""
+    return AddRegistered(builder, registered)
+def AddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
+def UserAddPubkey(builder, pubkey):
+    """This method is deprecated. Please switch to AddPubkey."""
+    return AddPubkey(builder, pubkey)
+def End(builder): return builder.EndObject()
+def UserEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

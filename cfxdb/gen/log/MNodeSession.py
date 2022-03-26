@@ -10,12 +10,16 @@ class MNodeSession(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMNodeSession(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MNodeSession()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMNodeSession(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MNodeSession
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -108,13 +112,43 @@ class MNodeSession(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-def MNodeSessionStart(builder): builder.StartObject(6)
-def MNodeSessionAddLeft(builder, left): builder.PrependUint64Slot(0, left, 0)
-def MNodeSessionAddSession(builder, session): builder.PrependUint64Slot(1, session, 0)
-def MNodeSessionAddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
-def MNodeSessionStartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MNodeSessionAddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
-def MNodeSessionStartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MNodeSessionAddJoined(builder, joined): builder.PrependUint64Slot(4, joined, 0)
-def MNodeSessionAddLastHeartbeat(builder, lastHeartbeat): builder.PrependUint64Slot(5, lastHeartbeat, 0)
-def MNodeSessionEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(6)
+def MNodeSessionStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddLeft(builder, left): builder.PrependUint64Slot(0, left, 0)
+def MNodeSessionAddLeft(builder, left):
+    """This method is deprecated. Please switch to AddLeft."""
+    return AddLeft(builder, left)
+def AddSession(builder, session): builder.PrependUint64Slot(1, session, 0)
+def MNodeSessionAddSession(builder, session):
+    """This method is deprecated. Please switch to AddSession."""
+    return AddSession(builder, session)
+def AddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
+def MNodeSessionAddRunId(builder, runId):
+    """This method is deprecated. Please switch to AddRunId."""
+    return AddRunId(builder, runId)
+def StartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MNodeSessionStartRunIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRunIdVector(builder, numElems)
+def AddNodeId(builder, nodeId): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(nodeId), 0)
+def MNodeSessionAddNodeId(builder, nodeId):
+    """This method is deprecated. Please switch to AddNodeId."""
+    return AddNodeId(builder, nodeId)
+def StartNodeIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MNodeSessionStartNodeIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartNodeIdVector(builder, numElems)
+def AddJoined(builder, joined): builder.PrependUint64Slot(4, joined, 0)
+def MNodeSessionAddJoined(builder, joined):
+    """This method is deprecated. Please switch to AddJoined."""
+    return AddJoined(builder, joined)
+def AddLastHeartbeat(builder, lastHeartbeat): builder.PrependUint64Slot(5, lastHeartbeat, 0)
+def MNodeSessionAddLastHeartbeat(builder, lastHeartbeat):
+    """This method is deprecated. Please switch to AddLastHeartbeat."""
+    return AddLastHeartbeat(builder, lastHeartbeat)
+def End(builder): return builder.EndObject()
+def MNodeSessionEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

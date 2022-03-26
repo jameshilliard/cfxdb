@@ -11,12 +11,16 @@ class ApplicationRealmRole(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsApplicationRealmRole(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ApplicationRealmRole()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsApplicationRealmRole(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # ApplicationRealmRole
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -45,7 +49,19 @@ class ApplicationRealmRole(object):
             return obj
         return None
 
-def ApplicationRealmRoleStart(builder): builder.StartObject(2)
-def ApplicationRealmRoleAddRoleOid(builder, roleOid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(roleOid), 0)
-def ApplicationRealmRoleAddArealmOid(builder, arealmOid): builder.PrependStructSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(arealmOid), 0)
-def ApplicationRealmRoleEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(2)
+def ApplicationRealmRoleStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddRoleOid(builder, roleOid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(roleOid), 0)
+def ApplicationRealmRoleAddRoleOid(builder, roleOid):
+    """This method is deprecated. Please switch to AddRoleOid."""
+    return AddRoleOid(builder, roleOid)
+def AddArealmOid(builder, arealmOid): builder.PrependStructSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(arealmOid), 0)
+def ApplicationRealmRoleAddArealmOid(builder, arealmOid):
+    """This method is deprecated. Please switch to AddArealmOid."""
+    return AddArealmOid(builder, arealmOid)
+def End(builder): return builder.EndObject()
+def ApplicationRealmRoleEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

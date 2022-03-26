@@ -11,12 +11,16 @@ class Publication(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsPublication(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Publication()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsPublication(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Publication
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -345,34 +349,127 @@ class Publication(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-def PublicationStart(builder): builder.StartObject(19)
-def PublicationAddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
-def PublicationAddPublication(builder, publication): builder.PrependUint64Slot(1, publication, 0)
-def PublicationAddPublisher(builder, publisher): builder.PrependUint64Slot(2, publisher, 0)
-def PublicationAddTopic(builder, topic): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(topic), 0)
-def PublicationAddArgs(builder, args): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(args), 0)
-def PublicationStartArgsVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PublicationAddKwargs(builder, kwargs): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(kwargs), 0)
-def PublicationStartKwargsVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PublicationAddPayload(builder, payload): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(payload), 0)
-def PublicationStartPayloadVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PublicationAddAcknowledge(builder, acknowledge): builder.PrependBoolSlot(7, acknowledge, 0)
-def PublicationAddRetain(builder, retain): builder.PrependBoolSlot(8, retain, 0)
-def PublicationAddExcludeMe(builder, excludeMe): builder.PrependBoolSlot(9, excludeMe, 0)
-def PublicationAddExclude(builder, exclude): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(exclude), 0)
-def PublicationStartExcludeVector(builder, numElems): return builder.StartVector(8, numElems, 8)
-def PublicationAddExcludeAuthid(builder, excludeAuthid): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(excludeAuthid), 0)
-def PublicationStartExcludeAuthidVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def PublicationAddExcludeAuthrole(builder, excludeAuthrole): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(excludeAuthrole), 0)
-def PublicationStartExcludeAuthroleVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def PublicationAddEligible(builder, eligible): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(eligible), 0)
-def PublicationStartEligibleVector(builder, numElems): return builder.StartVector(8, numElems, 8)
-def PublicationAddEligibleAuthid(builder, eligibleAuthid): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(eligibleAuthid), 0)
-def PublicationStartEligibleAuthidVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def PublicationAddEligibleAuthrole(builder, eligibleAuthrole): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(eligibleAuthrole), 0)
-def PublicationStartEligibleAuthroleVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def PublicationAddEncAlgo(builder, encAlgo): builder.PrependUint8Slot(16, encAlgo, 0)
-def PublicationAddEncKey(builder, encKey): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(encKey), 0)
-def PublicationStartEncKeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def PublicationAddEncSerializer(builder, encSerializer): builder.PrependUint8Slot(18, encSerializer, 0)
-def PublicationEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(19)
+def PublicationStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(0, timestamp, 0)
+def PublicationAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddPublication(builder, publication): builder.PrependUint64Slot(1, publication, 0)
+def PublicationAddPublication(builder, publication):
+    """This method is deprecated. Please switch to AddPublication."""
+    return AddPublication(builder, publication)
+def AddPublisher(builder, publisher): builder.PrependUint64Slot(2, publisher, 0)
+def PublicationAddPublisher(builder, publisher):
+    """This method is deprecated. Please switch to AddPublisher."""
+    return AddPublisher(builder, publisher)
+def AddTopic(builder, topic): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(topic), 0)
+def PublicationAddTopic(builder, topic):
+    """This method is deprecated. Please switch to AddTopic."""
+    return AddTopic(builder, topic)
+def AddArgs(builder, args): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(args), 0)
+def PublicationAddArgs(builder, args):
+    """This method is deprecated. Please switch to AddArgs."""
+    return AddArgs(builder, args)
+def StartArgsVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def PublicationStartArgsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartArgsVector(builder, numElems)
+def AddKwargs(builder, kwargs): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(kwargs), 0)
+def PublicationAddKwargs(builder, kwargs):
+    """This method is deprecated. Please switch to AddKwargs."""
+    return AddKwargs(builder, kwargs)
+def StartKwargsVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def PublicationStartKwargsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartKwargsVector(builder, numElems)
+def AddPayload(builder, payload): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(payload), 0)
+def PublicationAddPayload(builder, payload):
+    """This method is deprecated. Please switch to AddPayload."""
+    return AddPayload(builder, payload)
+def StartPayloadVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def PublicationStartPayloadVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPayloadVector(builder, numElems)
+def AddAcknowledge(builder, acknowledge): builder.PrependBoolSlot(7, acknowledge, 0)
+def PublicationAddAcknowledge(builder, acknowledge):
+    """This method is deprecated. Please switch to AddAcknowledge."""
+    return AddAcknowledge(builder, acknowledge)
+def AddRetain(builder, retain): builder.PrependBoolSlot(8, retain, 0)
+def PublicationAddRetain(builder, retain):
+    """This method is deprecated. Please switch to AddRetain."""
+    return AddRetain(builder, retain)
+def AddExcludeMe(builder, excludeMe): builder.PrependBoolSlot(9, excludeMe, 0)
+def PublicationAddExcludeMe(builder, excludeMe):
+    """This method is deprecated. Please switch to AddExcludeMe."""
+    return AddExcludeMe(builder, excludeMe)
+def AddExclude(builder, exclude): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(exclude), 0)
+def PublicationAddExclude(builder, exclude):
+    """This method is deprecated. Please switch to AddExclude."""
+    return AddExclude(builder, exclude)
+def StartExcludeVector(builder, numElems): return builder.StartVector(8, numElems, 8)
+def PublicationStartExcludeVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartExcludeVector(builder, numElems)
+def AddExcludeAuthid(builder, excludeAuthid): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(excludeAuthid), 0)
+def PublicationAddExcludeAuthid(builder, excludeAuthid):
+    """This method is deprecated. Please switch to AddExcludeAuthid."""
+    return AddExcludeAuthid(builder, excludeAuthid)
+def StartExcludeAuthidVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def PublicationStartExcludeAuthidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartExcludeAuthidVector(builder, numElems)
+def AddExcludeAuthrole(builder, excludeAuthrole): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(excludeAuthrole), 0)
+def PublicationAddExcludeAuthrole(builder, excludeAuthrole):
+    """This method is deprecated. Please switch to AddExcludeAuthrole."""
+    return AddExcludeAuthrole(builder, excludeAuthrole)
+def StartExcludeAuthroleVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def PublicationStartExcludeAuthroleVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartExcludeAuthroleVector(builder, numElems)
+def AddEligible(builder, eligible): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(eligible), 0)
+def PublicationAddEligible(builder, eligible):
+    """This method is deprecated. Please switch to AddEligible."""
+    return AddEligible(builder, eligible)
+def StartEligibleVector(builder, numElems): return builder.StartVector(8, numElems, 8)
+def PublicationStartEligibleVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartEligibleVector(builder, numElems)
+def AddEligibleAuthid(builder, eligibleAuthid): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(eligibleAuthid), 0)
+def PublicationAddEligibleAuthid(builder, eligibleAuthid):
+    """This method is deprecated. Please switch to AddEligibleAuthid."""
+    return AddEligibleAuthid(builder, eligibleAuthid)
+def StartEligibleAuthidVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def PublicationStartEligibleAuthidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartEligibleAuthidVector(builder, numElems)
+def AddEligibleAuthrole(builder, eligibleAuthrole): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(eligibleAuthrole), 0)
+def PublicationAddEligibleAuthrole(builder, eligibleAuthrole):
+    """This method is deprecated. Please switch to AddEligibleAuthrole."""
+    return AddEligibleAuthrole(builder, eligibleAuthrole)
+def StartEligibleAuthroleVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def PublicationStartEligibleAuthroleVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartEligibleAuthroleVector(builder, numElems)
+def AddEncAlgo(builder, encAlgo): builder.PrependUint8Slot(16, encAlgo, 0)
+def PublicationAddEncAlgo(builder, encAlgo):
+    """This method is deprecated. Please switch to AddEncAlgo."""
+    return AddEncAlgo(builder, encAlgo)
+def AddEncKey(builder, encKey): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(encKey), 0)
+def PublicationAddEncKey(builder, encKey):
+    """This method is deprecated. Please switch to AddEncKey."""
+    return AddEncKey(builder, encKey)
+def StartEncKeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def PublicationStartEncKeyVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartEncKeyVector(builder, numElems)
+def AddEncSerializer(builder, encSerializer): builder.PrependUint8Slot(18, encSerializer, 0)
+def PublicationAddEncSerializer(builder, encSerializer):
+    """This method is deprecated. Please switch to AddEncSerializer."""
+    return AddEncSerializer(builder, encSerializer)
+def End(builder): return builder.EndObject()
+def PublicationEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

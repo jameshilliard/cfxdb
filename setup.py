@@ -39,7 +39,7 @@ with open('README.rst') as f:
 setup(
     name='cfxdb',
     version=__version__,  # noqa
-    description='Crossbar.io database schemata, based on zLMDB',
+    description='Crossbar.io Database, based on zLMDB',
     long_description=docstr,
     license='MIT License',
     author='Crossbar.io Technologies GmbH',
@@ -68,7 +68,10 @@ setup(
     platforms=('Any'),
     python_requires='>=3.7',
     install_requires=[
-        'zlmdb>=21.2.1',
+        'zlmdb>=22.3.1',
+        'autobahn[twisted,xbr,serialization]>=22.3.1',
+        'web3>=5.28.0',
+        'argon2>=0.1.10'
     ],
     packages=find_packages(),
     include_package_data=True,

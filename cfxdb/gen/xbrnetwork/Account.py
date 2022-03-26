@@ -11,12 +11,16 @@ class Account(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsAccount(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Account()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsAccount(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Account
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -169,19 +173,67 @@ class Account(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-def AccountStart(builder): builder.StartObject(11)
-def AccountAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def AccountStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AccountAddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
-def AccountAddUsername(builder, username): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(username), 0)
-def AccountAddEmail(builder, email): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(email), 0)
-def AccountAddEmailVerified(builder, emailVerified): builder.PrependUint64Slot(4, emailVerified, 0)
-def AccountAddWalletType(builder, walletType): builder.PrependUint8Slot(5, walletType, 0)
-def AccountAddWalletAddress(builder, walletAddress): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(walletAddress), 0)
-def AccountStartWalletAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AccountAddRegistered(builder, registered): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(registered), 0)
-def AccountStartRegisteredVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AccountAddEula(builder, eula): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(eula), 0)
-def AccountAddProfile(builder, profile): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(profile), 0)
-def AccountAddLevel(builder, level): builder.PrependUint8Slot(10, level, 0)
-def AccountEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(11)
+def AccountStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def AccountAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def StartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AccountStartOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOidVector(builder, numElems)
+def AddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
+def AccountAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddUsername(builder, username): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(username), 0)
+def AccountAddUsername(builder, username):
+    """This method is deprecated. Please switch to AddUsername."""
+    return AddUsername(builder, username)
+def AddEmail(builder, email): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(email), 0)
+def AccountAddEmail(builder, email):
+    """This method is deprecated. Please switch to AddEmail."""
+    return AddEmail(builder, email)
+def AddEmailVerified(builder, emailVerified): builder.PrependUint64Slot(4, emailVerified, 0)
+def AccountAddEmailVerified(builder, emailVerified):
+    """This method is deprecated. Please switch to AddEmailVerified."""
+    return AddEmailVerified(builder, emailVerified)
+def AddWalletType(builder, walletType): builder.PrependUint8Slot(5, walletType, 0)
+def AccountAddWalletType(builder, walletType):
+    """This method is deprecated. Please switch to AddWalletType."""
+    return AddWalletType(builder, walletType)
+def AddWalletAddress(builder, walletAddress): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(walletAddress), 0)
+def AccountAddWalletAddress(builder, walletAddress):
+    """This method is deprecated. Please switch to AddWalletAddress."""
+    return AddWalletAddress(builder, walletAddress)
+def StartWalletAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AccountStartWalletAddressVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartWalletAddressVector(builder, numElems)
+def AddRegistered(builder, registered): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(registered), 0)
+def AccountAddRegistered(builder, registered):
+    """This method is deprecated. Please switch to AddRegistered."""
+    return AddRegistered(builder, registered)
+def StartRegisteredVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AccountStartRegisteredVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRegisteredVector(builder, numElems)
+def AddEula(builder, eula): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(eula), 0)
+def AccountAddEula(builder, eula):
+    """This method is deprecated. Please switch to AddEula."""
+    return AddEula(builder, eula)
+def AddProfile(builder, profile): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(profile), 0)
+def AccountAddProfile(builder, profile):
+    """This method is deprecated. Please switch to AddProfile."""
+    return AddProfile(builder, profile)
+def AddLevel(builder, level): builder.PrependUint8Slot(10, level, 0)
+def AccountAddLevel(builder, level):
+    """This method is deprecated. Please switch to AddLevel."""
+    return AddLevel(builder, level)
+def End(builder): return builder.EndObject()
+def AccountEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

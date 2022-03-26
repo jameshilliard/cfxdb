@@ -11,12 +11,16 @@ class Api(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsApi(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Api()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsApi(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Api
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -185,18 +189,63 @@ class Api(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
         return o == 0
 
-def ApiStart(builder): builder.StartObject(8)
-def ApiAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def ApiStartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ApiAddCatalogOid(builder, catalogOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(catalogOid), 0)
-def ApiStartCatalogOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ApiAddTimestamp(builder, timestamp): builder.PrependUint64Slot(2, timestamp, 0)
-def ApiAddPublished(builder, published): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(published), 0)
-def ApiStartPublishedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ApiAddSchema(builder, schema): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(schema), 0)
-def ApiAddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
-def ApiAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
-def ApiStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ApiAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
-def ApiStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ApiEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(8)
+def ApiStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def ApiAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def StartOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiStartOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOidVector(builder, numElems)
+def AddCatalogOid(builder, catalogOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(catalogOid), 0)
+def ApiAddCatalogOid(builder, catalogOid):
+    """This method is deprecated. Please switch to AddCatalogOid."""
+    return AddCatalogOid(builder, catalogOid)
+def StartCatalogOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiStartCatalogOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCatalogOidVector(builder, numElems)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(2, timestamp, 0)
+def ApiAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddPublished(builder, published): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(published), 0)
+def ApiAddPublished(builder, published):
+    """This method is deprecated. Please switch to AddPublished."""
+    return AddPublished(builder, published)
+def StartPublishedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiStartPublishedVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPublishedVector(builder, numElems)
+def AddSchema(builder, schema): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(schema), 0)
+def ApiAddSchema(builder, schema):
+    """This method is deprecated. Please switch to AddSchema."""
+    return AddSchema(builder, schema)
+def AddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
+def ApiAddMeta(builder, meta):
+    """This method is deprecated. Please switch to AddMeta."""
+    return AddMeta(builder, meta)
+def AddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def ApiAddTid(builder, tid):
+    """This method is deprecated. Please switch to AddTid."""
+    return AddTid(builder, tid)
+def StartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiStartTidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTidVector(builder, numElems)
+def AddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def ApiAddSignature(builder, signature):
+    """This method is deprecated. Please switch to AddSignature."""
+    return AddSignature(builder, signature)
+def StartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ApiStartSignatureVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartSignatureVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def ApiEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

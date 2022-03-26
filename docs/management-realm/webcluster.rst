@@ -44,7 +44,7 @@ WebService
 * :class:`cfxdb.mrealm.WebService`
 * :class:`cfxdb.mrealmschema.WebServices`
 * :class:`cfxdb.mrealmschema.IndexWebServiceByPath`
-* :class:`cfxdb.mrealmschema.IndexWebClusterPathToWebService`
+* :class:`cfxdb.mrealmschema.IndexWebClusterWebServices`
 
 -------
 
@@ -60,6 +60,6 @@ WebService
     :members:
     :show-inheritance:
 
-.. autoclass:: cfxdb.mrealmschema.IndexWebClusterPathToWebService
+.. autoclass:: cfxdb.mrealmschema.IndexWebClusterWebServices
     :members:
     :show-inheritance:

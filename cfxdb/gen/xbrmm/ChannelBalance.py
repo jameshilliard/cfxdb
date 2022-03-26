@@ -11,12 +11,16 @@ class ChannelBalance(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsChannelBalance(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ChannelBalance()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsChannelBalance(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # ChannelBalance
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -85,10 +89,31 @@ class ChannelBalance(object):
             return self._tab.Get(flatbuffers.number_types.Uint32Flags, o + self._tab.Pos)
         return 0
 
-def ChannelBalanceStart(builder): builder.StartObject(3)
-def ChannelBalanceAddRemaining(builder, remaining): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(remaining), 0)
-def ChannelBalanceStartRemainingVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelBalanceAddInflight(builder, inflight): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(inflight), 0)
-def ChannelBalanceStartInflightVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelBalanceAddSeq(builder, seq): builder.PrependUint32Slot(2, seq, 0)
-def ChannelBalanceEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(3)
+def ChannelBalanceStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddRemaining(builder, remaining): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(remaining), 0)
+def ChannelBalanceAddRemaining(builder, remaining):
+    """This method is deprecated. Please switch to AddRemaining."""
+    return AddRemaining(builder, remaining)
+def StartRemainingVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelBalanceStartRemainingVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRemainingVector(builder, numElems)
+def AddInflight(builder, inflight): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(inflight), 0)
+def ChannelBalanceAddInflight(builder, inflight):
+    """This method is deprecated. Please switch to AddInflight."""
+    return AddInflight(builder, inflight)
+def StartInflightVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelBalanceStartInflightVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartInflightVector(builder, numElems)
+def AddSeq(builder, seq): builder.PrependUint32Slot(2, seq, 0)
+def ChannelBalanceAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def End(builder): return builder.EndObject()
+def ChannelBalanceEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

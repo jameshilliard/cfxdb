@@ -11,12 +11,16 @@ class Tag(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsTag(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Tag()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsTag(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Tag
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -113,12 +117,39 @@ class Tag(object):
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
 
-def TagStart(builder): builder.StartObject(4)
-def TagAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
-def TagStartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TagAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
-def TagStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TagAddTagOid(builder, tagOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(tagOid), 0)
-def TagStartTagOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TagAddAttached(builder, attached): builder.PrependUint64Slot(3, attached, 0)
-def TagEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(4)
+def TagStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
+def TagAddTableOid(builder, tableOid):
+    """This method is deprecated. Please switch to AddTableOid."""
+    return AddTableOid(builder, tableOid)
+def StartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TagStartTableOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTableOidVector(builder, numElems)
+def AddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
+def TagAddObjectOid(builder, objectOid):
+    """This method is deprecated. Please switch to AddObjectOid."""
+    return AddObjectOid(builder, objectOid)
+def StartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TagStartObjectOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartObjectOidVector(builder, numElems)
+def AddTagOid(builder, tagOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(tagOid), 0)
+def TagAddTagOid(builder, tagOid):
+    """This method is deprecated. Please switch to AddTagOid."""
+    return AddTagOid(builder, tagOid)
+def StartTagOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TagStartTagOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTagOidVector(builder, numElems)
+def AddAttached(builder, attached): builder.PrependUint64Slot(3, attached, 0)
+def TagAddAttached(builder, attached):
+    """This method is deprecated. Please switch to AddAttached."""
+    return AddAttached(builder, attached)
+def End(builder): return builder.EndObject()
+def TagEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

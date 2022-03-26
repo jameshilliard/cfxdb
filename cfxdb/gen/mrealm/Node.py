@@ -10,12 +10,16 @@ class Node(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsNode(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Node()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsNode(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Node
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -130,16 +134,55 @@ class Node(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
         return o == 0
 
-def NodeStart(builder): builder.StartObject(9)
-def NodeAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def NodeAddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
-def NodeAddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
-def NodeAddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
-def NodeStartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def NodeAddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def NodeAddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
-def NodeAddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
-def NodeAddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
-def NodeAddAuthextra(builder, authextra): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(authextra), 0)
-def NodeStartAuthextraVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def NodeEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(9)
+def NodeStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def NodeAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
+def NodeAddLabel(builder, label):
+    """This method is deprecated. Please switch to AddLabel."""
+    return AddLabel(builder, label)
+def AddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
+def NodeAddDescription(builder, description):
+    """This method is deprecated. Please switch to AddDescription."""
+    return AddDescription(builder, description)
+def AddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
+def NodeAddTags(builder, tags):
+    """This method is deprecated. Please switch to AddTags."""
+    return AddTags(builder, tags)
+def StartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def NodeStartTagsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTagsVector(builder, numElems)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def NodeAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddPubkey(builder, pubkey): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(pubkey), 0)
+def NodeAddPubkey(builder, pubkey):
+    """This method is deprecated. Please switch to AddPubkey."""
+    return AddPubkey(builder, pubkey)
+def AddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
+def NodeAddRealm(builder, realm):
+    """This method is deprecated. Please switch to AddRealm."""
+    return AddRealm(builder, realm)
+def AddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
+def NodeAddAuthid(builder, authid):
+    """This method is deprecated. Please switch to AddAuthid."""
+    return AddAuthid(builder, authid)
+def AddAuthextra(builder, authextra): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(authextra), 0)
+def NodeAddAuthextra(builder, authextra):
+    """This method is deprecated. Please switch to AddAuthextra."""
+    return AddAuthextra(builder, authextra)
+def StartAuthextraVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def NodeStartAuthextraVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAuthextraVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def NodeEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

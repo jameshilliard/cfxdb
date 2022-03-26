@@ -11,12 +11,16 @@ class Market(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMarket(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Market()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMarket(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Market
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -333,29 +337,107 @@ class Market(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
         return o == 0
 
-def MarketStart(builder): builder.StartObject(14)
-def MarketAddMarket(builder, market): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(market), 0)
-def MarketStartMarketVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
-def MarketAddCreated(builder, created): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(created), 0)
-def MarketStartCreatedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddSeq(builder, seq): builder.PrependUint32Slot(3, seq, 0)
-def MarketAddOwner(builder, owner): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
-def MarketStartOwnerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddCoin(builder, coin): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(coin), 0)
-def MarketStartCoinVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddTerms(builder, terms): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(terms), 0)
-def MarketAddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
-def MarketAddMaker(builder, maker): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(maker), 0)
-def MarketStartMakerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddProviderSecurity(builder, providerSecurity): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(providerSecurity), 0)
-def MarketStartProviderSecurityVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddConsumerSecurity(builder, consumerSecurity): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(consumerSecurity), 0)
-def MarketStartConsumerSecurityVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddMarketFee(builder, marketFee): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(marketFee), 0)
-def MarketStartMarketFeeVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
-def MarketStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
-def MarketStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MarketEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(14)
+def MarketStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddMarket(builder, market): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(market), 0)
+def MarketAddMarket(builder, market):
+    """This method is deprecated. Please switch to AddMarket."""
+    return AddMarket(builder, market)
+def StartMarketVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartMarketVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMarketVector(builder, numElems)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(1, timestamp, 0)
+def MarketAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddCreated(builder, created): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(created), 0)
+def MarketAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def StartCreatedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartCreatedVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCreatedVector(builder, numElems)
+def AddSeq(builder, seq): builder.PrependUint32Slot(3, seq, 0)
+def MarketAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def AddOwner(builder, owner): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
+def MarketAddOwner(builder, owner):
+    """This method is deprecated. Please switch to AddOwner."""
+    return AddOwner(builder, owner)
+def StartOwnerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartOwnerVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOwnerVector(builder, numElems)
+def AddCoin(builder, coin): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(coin), 0)
+def MarketAddCoin(builder, coin):
+    """This method is deprecated. Please switch to AddCoin."""
+    return AddCoin(builder, coin)
+def StartCoinVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartCoinVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCoinVector(builder, numElems)
+def AddTerms(builder, terms): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(terms), 0)
+def MarketAddTerms(builder, terms):
+    """This method is deprecated. Please switch to AddTerms."""
+    return AddTerms(builder, terms)
+def AddMeta(builder, meta): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(meta), 0)
+def MarketAddMeta(builder, meta):
+    """This method is deprecated. Please switch to AddMeta."""
+    return AddMeta(builder, meta)
+def AddMaker(builder, maker): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(maker), 0)
+def MarketAddMaker(builder, maker):
+    """This method is deprecated. Please switch to AddMaker."""
+    return AddMaker(builder, maker)
+def StartMakerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartMakerVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMakerVector(builder, numElems)
+def AddProviderSecurity(builder, providerSecurity): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(providerSecurity), 0)
+def MarketAddProviderSecurity(builder, providerSecurity):
+    """This method is deprecated. Please switch to AddProviderSecurity."""
+    return AddProviderSecurity(builder, providerSecurity)
+def StartProviderSecurityVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartProviderSecurityVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartProviderSecurityVector(builder, numElems)
+def AddConsumerSecurity(builder, consumerSecurity): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(consumerSecurity), 0)
+def MarketAddConsumerSecurity(builder, consumerSecurity):
+    """This method is deprecated. Please switch to AddConsumerSecurity."""
+    return AddConsumerSecurity(builder, consumerSecurity)
+def StartConsumerSecurityVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartConsumerSecurityVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartConsumerSecurityVector(builder, numElems)
+def AddMarketFee(builder, marketFee): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(marketFee), 0)
+def MarketAddMarketFee(builder, marketFee):
+    """This method is deprecated. Please switch to AddMarketFee."""
+    return AddMarketFee(builder, marketFee)
+def StartMarketFeeVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartMarketFeeVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMarketFeeVector(builder, numElems)
+def AddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def MarketAddTid(builder, tid):
+    """This method is deprecated. Please switch to AddTid."""
+    return AddTid(builder, tid)
+def StartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartTidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTidVector(builder, numElems)
+def AddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def MarketAddSignature(builder, signature):
+    """This method is deprecated. Please switch to AddSignature."""
+    return AddSignature(builder, signature)
+def StartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MarketStartSignatureVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartSignatureVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def MarketEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

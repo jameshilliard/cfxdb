@@ -451,12 +451,12 @@ class Offer(object):
             OfferGen.OfferStartCategoriesKeyVector(builder, len(categories_keys))
             for _key in categories_keys:
                 builder.PrependUOffsetTRelative(_key)
-            categories_keys_vec = builder.EndVector(len(categories_keys))
+            categories_keys_vec = builder.EndVector()
 
             OfferGen.OfferStartCategoriesValueVector(builder, len(categories_values))
             for _value in categories_values:
                 builder.PrependUOffsetTRelative(_value)
-            categories_values_vec = builder.EndVector(len(categories_values))
+            categories_values_vec = builder.EndVector()
 
         OfferGen.OfferStart(builder)
 

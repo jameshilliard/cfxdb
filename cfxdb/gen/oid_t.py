@@ -9,6 +9,10 @@ np = import_numpy()
 class oid_t(object):
     __slots__ = ['_tab']
 
+    @classmethod
+    def SizeOf(cls):
+        return 16
+
     # oid_t
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)

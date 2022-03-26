@@ -11,12 +11,16 @@ class Transaction(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsTransaction(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Transaction()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsTransaction(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Transaction
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -441,38 +445,143 @@ class Transaction(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(42))
         return o == 0
 
-def TransactionStart(builder): builder.StartObject(20)
-def TransactionAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
-def TransactionStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
-def TransactionAddCreatedPaymentChannelSeq(builder, createdPaymentChannelSeq): builder.PrependUint32Slot(2, createdPaymentChannelSeq, 0)
-def TransactionAddCreatedPayingChannelSeq(builder, createdPayingChannelSeq): builder.PrependUint32Slot(3, createdPayingChannelSeq, 0)
-def TransactionAddOffer(builder, offer): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(offer), 0)
-def TransactionStartOfferVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddAmount(builder, amount): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(amount), 0)
-def TransactionStartAmountVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPaymentChannel(builder, paymentChannel): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(paymentChannel), 0)
-def TransactionStartPaymentChannelVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPayingChannel(builder, payingChannel): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(payingChannel), 0)
-def TransactionStartPayingChannelVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddState(builder, state): builder.PrependUint8Slot(8, state, 0)
-def TransactionAddCompleted(builder, completed): builder.PrependUint64Slot(9, completed, 0)
-def TransactionAddCompletedPaymentChannelSeq(builder, completedPaymentChannelSeq): builder.PrependUint32Slot(10, completedPaymentChannelSeq, 0)
-def TransactionAddCompletedPayingChannelSeq(builder, completedPayingChannelSeq): builder.PrependUint32Slot(11, completedPayingChannelSeq, 0)
-def TransactionAddKey(builder, key): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(key), 0)
-def TransactionStartKeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddBuyerPubkey(builder, buyerPubkey): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(buyerPubkey), 0)
-def TransactionStartBuyerPubkeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPaymentChannelAfter(builder, paymentChannelAfter): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(paymentChannelAfter), 0)
-def TransactionStartPaymentChannelAfterVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPayingChannelAfter(builder, payingChannelAfter): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(payingChannelAfter), 0)
-def TransactionStartPayingChannelAfterVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPaymentMmSig(builder, paymentMmSig): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(paymentMmSig), 0)
-def TransactionStartPaymentMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPaymentDelSig(builder, paymentDelSig): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(paymentDelSig), 0)
-def TransactionStartPaymentDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPayingMmSig(builder, payingMmSig): builder.PrependUOffsetTRelativeSlot(18, flatbuffers.number_types.UOffsetTFlags.py_type(payingMmSig), 0)
-def TransactionStartPayingMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionAddPayingDelSig(builder, payingDelSig): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(payingDelSig), 0)
-def TransactionStartPayingDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TransactionEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(20)
+def TransactionStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def TransactionAddTid(builder, tid):
+    """This method is deprecated. Please switch to AddTid."""
+    return AddTid(builder, tid)
+def StartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartTidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTidVector(builder, numElems)
+def AddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
+def TransactionAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddCreatedPaymentChannelSeq(builder, createdPaymentChannelSeq): builder.PrependUint32Slot(2, createdPaymentChannelSeq, 0)
+def TransactionAddCreatedPaymentChannelSeq(builder, createdPaymentChannelSeq):
+    """This method is deprecated. Please switch to AddCreatedPaymentChannelSeq."""
+    return AddCreatedPaymentChannelSeq(builder, createdPaymentChannelSeq)
+def AddCreatedPayingChannelSeq(builder, createdPayingChannelSeq): builder.PrependUint32Slot(3, createdPayingChannelSeq, 0)
+def TransactionAddCreatedPayingChannelSeq(builder, createdPayingChannelSeq):
+    """This method is deprecated. Please switch to AddCreatedPayingChannelSeq."""
+    return AddCreatedPayingChannelSeq(builder, createdPayingChannelSeq)
+def AddOffer(builder, offer): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(offer), 0)
+def TransactionAddOffer(builder, offer):
+    """This method is deprecated. Please switch to AddOffer."""
+    return AddOffer(builder, offer)
+def StartOfferVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartOfferVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOfferVector(builder, numElems)
+def AddAmount(builder, amount): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(amount), 0)
+def TransactionAddAmount(builder, amount):
+    """This method is deprecated. Please switch to AddAmount."""
+    return AddAmount(builder, amount)
+def StartAmountVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartAmountVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAmountVector(builder, numElems)
+def AddPaymentChannel(builder, paymentChannel): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(paymentChannel), 0)
+def TransactionAddPaymentChannel(builder, paymentChannel):
+    """This method is deprecated. Please switch to AddPaymentChannel."""
+    return AddPaymentChannel(builder, paymentChannel)
+def StartPaymentChannelVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPaymentChannelVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPaymentChannelVector(builder, numElems)
+def AddPayingChannel(builder, payingChannel): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(payingChannel), 0)
+def TransactionAddPayingChannel(builder, payingChannel):
+    """This method is deprecated. Please switch to AddPayingChannel."""
+    return AddPayingChannel(builder, payingChannel)
+def StartPayingChannelVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPayingChannelVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPayingChannelVector(builder, numElems)
+def AddState(builder, state): builder.PrependUint8Slot(8, state, 0)
+def TransactionAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def AddCompleted(builder, completed): builder.PrependUint64Slot(9, completed, 0)
+def TransactionAddCompleted(builder, completed):
+    """This method is deprecated. Please switch to AddCompleted."""
+    return AddCompleted(builder, completed)
+def AddCompletedPaymentChannelSeq(builder, completedPaymentChannelSeq): builder.PrependUint32Slot(10, completedPaymentChannelSeq, 0)
+def TransactionAddCompletedPaymentChannelSeq(builder, completedPaymentChannelSeq):
+    """This method is deprecated. Please switch to AddCompletedPaymentChannelSeq."""
+    return AddCompletedPaymentChannelSeq(builder, completedPaymentChannelSeq)
+def AddCompletedPayingChannelSeq(builder, completedPayingChannelSeq): builder.PrependUint32Slot(11, completedPayingChannelSeq, 0)
+def TransactionAddCompletedPayingChannelSeq(builder, completedPayingChannelSeq):
+    """This method is deprecated. Please switch to AddCompletedPayingChannelSeq."""
+    return AddCompletedPayingChannelSeq(builder, completedPayingChannelSeq)
+def AddKey(builder, key): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(key), 0)
+def TransactionAddKey(builder, key):
+    """This method is deprecated. Please switch to AddKey."""
+    return AddKey(builder, key)
+def StartKeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartKeyVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartKeyVector(builder, numElems)
+def AddBuyerPubkey(builder, buyerPubkey): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(buyerPubkey), 0)
+def TransactionAddBuyerPubkey(builder, buyerPubkey):
+    """This method is deprecated. Please switch to AddBuyerPubkey."""
+    return AddBuyerPubkey(builder, buyerPubkey)
+def StartBuyerPubkeyVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartBuyerPubkeyVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartBuyerPubkeyVector(builder, numElems)
+def AddPaymentChannelAfter(builder, paymentChannelAfter): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(paymentChannelAfter), 0)
+def TransactionAddPaymentChannelAfter(builder, paymentChannelAfter):
+    """This method is deprecated. Please switch to AddPaymentChannelAfter."""
+    return AddPaymentChannelAfter(builder, paymentChannelAfter)
+def StartPaymentChannelAfterVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPaymentChannelAfterVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPaymentChannelAfterVector(builder, numElems)
+def AddPayingChannelAfter(builder, payingChannelAfter): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(payingChannelAfter), 0)
+def TransactionAddPayingChannelAfter(builder, payingChannelAfter):
+    """This method is deprecated. Please switch to AddPayingChannelAfter."""
+    return AddPayingChannelAfter(builder, payingChannelAfter)
+def StartPayingChannelAfterVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPayingChannelAfterVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPayingChannelAfterVector(builder, numElems)
+def AddPaymentMmSig(builder, paymentMmSig): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(paymentMmSig), 0)
+def TransactionAddPaymentMmSig(builder, paymentMmSig):
+    """This method is deprecated. Please switch to AddPaymentMmSig."""
+    return AddPaymentMmSig(builder, paymentMmSig)
+def StartPaymentMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPaymentMmSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPaymentMmSigVector(builder, numElems)
+def AddPaymentDelSig(builder, paymentDelSig): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(paymentDelSig), 0)
+def TransactionAddPaymentDelSig(builder, paymentDelSig):
+    """This method is deprecated. Please switch to AddPaymentDelSig."""
+    return AddPaymentDelSig(builder, paymentDelSig)
+def StartPaymentDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPaymentDelSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPaymentDelSigVector(builder, numElems)
+def AddPayingMmSig(builder, payingMmSig): builder.PrependUOffsetTRelativeSlot(18, flatbuffers.number_types.UOffsetTFlags.py_type(payingMmSig), 0)
+def TransactionAddPayingMmSig(builder, payingMmSig):
+    """This method is deprecated. Please switch to AddPayingMmSig."""
+    return AddPayingMmSig(builder, payingMmSig)
+def StartPayingMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPayingMmSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPayingMmSigVector(builder, numElems)
+def AddPayingDelSig(builder, payingDelSig): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(payingDelSig), 0)
+def TransactionAddPayingDelSig(builder, payingDelSig):
+    """This method is deprecated. Please switch to AddPayingDelSig."""
+    return AddPayingDelSig(builder, payingDelSig)
+def StartPayingDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TransactionStartPayingDelSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartPayingDelSigVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def TransactionEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

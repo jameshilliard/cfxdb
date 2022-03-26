@@ -11,12 +11,16 @@ class Doc(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsDoc(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Doc()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsDoc(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Doc
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -129,14 +133,47 @@ class Doc(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(14))
         return o == 0
 
-def DocStart(builder): builder.StartObject(6)
-def DocAddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def DocAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
-def DocStartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def DocAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
-def DocStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def DocAddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
-def DocAddFormat(builder, format): builder.PrependUint8Slot(4, format, 0)
-def DocAddDocument(builder, document): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(document), 0)
-def DocStartDocumentVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def DocEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(6)
+def DocStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def DocAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
+def DocAddTableOid(builder, tableOid):
+    """This method is deprecated. Please switch to AddTableOid."""
+    return AddTableOid(builder, tableOid)
+def StartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def DocStartTableOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTableOidVector(builder, numElems)
+def AddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
+def DocAddObjectOid(builder, objectOid):
+    """This method is deprecated. Please switch to AddObjectOid."""
+    return AddObjectOid(builder, objectOid)
+def StartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def DocStartObjectOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartObjectOidVector(builder, numElems)
+def AddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
+def DocAddModified(builder, modified):
+    """This method is deprecated. Please switch to AddModified."""
+    return AddModified(builder, modified)
+def AddFormat(builder, format): builder.PrependUint8Slot(4, format, 0)
+def DocAddFormat(builder, format):
+    """This method is deprecated. Please switch to AddFormat."""
+    return AddFormat(builder, format)
+def AddDocument(builder, document): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(document), 0)
+def DocAddDocument(builder, document):
+    """This method is deprecated. Please switch to AddDocument."""
+    return AddDocument(builder, document)
+def StartDocumentVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def DocStartDocumentVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartDocumentVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def DocEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

@@ -11,12 +11,16 @@ class Attribute(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsAttribute(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Attribute()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsAttribute(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Attribute
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -121,13 +125,43 @@ class Attribute(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(12))
         return o == 0
 
-def AttributeStart(builder): builder.StartObject(5)
-def AttributeAddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
-def AttributeStartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AttributeAddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
-def AttributeStartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AttributeAddAttribute(builder, attribute): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(attribute), 0)
-def AttributeAddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
-def AttributeAddValue(builder, value): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
-def AttributeStartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def AttributeEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(5)
+def AttributeStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddTableOid(builder, tableOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(tableOid), 0)
+def AttributeAddTableOid(builder, tableOid):
+    """This method is deprecated. Please switch to AddTableOid."""
+    return AddTableOid(builder, tableOid)
+def StartTableOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AttributeStartTableOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTableOidVector(builder, numElems)
+def AddObjectOid(builder, objectOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(objectOid), 0)
+def AttributeAddObjectOid(builder, objectOid):
+    """This method is deprecated. Please switch to AddObjectOid."""
+    return AddObjectOid(builder, objectOid)
+def StartObjectOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AttributeStartObjectOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartObjectOidVector(builder, numElems)
+def AddAttribute(builder, attribute): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(attribute), 0)
+def AttributeAddAttribute(builder, attribute):
+    """This method is deprecated. Please switch to AddAttribute."""
+    return AddAttribute(builder, attribute)
+def AddModified(builder, modified): builder.PrependUint64Slot(3, modified, 0)
+def AttributeAddModified(builder, modified):
+    """This method is deprecated. Please switch to AddModified."""
+    return AddModified(builder, modified)
+def AddValue(builder, value): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
+def AttributeAddValue(builder, value):
+    """This method is deprecated. Please switch to AddValue."""
+    return AddValue(builder, value)
+def StartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def AttributeStartValueVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartValueVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def AttributeEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

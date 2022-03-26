@@ -11,12 +11,16 @@ class TokenBalance(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsTokenBalance(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = TokenBalance()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsTokenBalance(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # TokenBalance
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -77,9 +81,27 @@ class TokenBalance(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(6))
         return o == 0
 
-def TokenBalanceStart(builder): builder.StartObject(2)
-def TokenBalanceAddOwnerAddress(builder, ownerAddress): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(ownerAddress), 0)
-def TokenBalanceStartOwnerAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenBalanceAddValue(builder, value): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
-def TokenBalanceStartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def TokenBalanceEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(2)
+def TokenBalanceStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOwnerAddress(builder, ownerAddress): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(ownerAddress), 0)
+def TokenBalanceAddOwnerAddress(builder, ownerAddress):
+    """This method is deprecated. Please switch to AddOwnerAddress."""
+    return AddOwnerAddress(builder, ownerAddress)
+def StartOwnerAddressVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenBalanceStartOwnerAddressVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOwnerAddressVector(builder, numElems)
+def AddValue(builder, value): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(value), 0)
+def TokenBalanceAddValue(builder, value):
+    """This method is deprecated. Please switch to AddValue."""
+    return AddValue(builder, value)
+def StartValueVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def TokenBalanceStartValueVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartValueVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def TokenBalanceEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

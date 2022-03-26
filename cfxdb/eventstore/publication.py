@@ -572,7 +572,7 @@ class Publication(object):
             PublicationGen.PublicationStartExcludeAuthidVector(builder, len(exclude))
             for session in reversed(exclude):
                 builder.PrependUint64(session)
-            exclude = builder.EndVector(len(exclude))
+            exclude = builder.EndVector()
 
         # exclude_authid: [string]
         exclude_authid = self.exclude_authid
@@ -583,7 +583,7 @@ class Publication(object):
             PublicationGen.PublicationStartExcludeAuthidVector(builder, len(_exclude_authid))
             for o in reversed(_exclude_authid):
                 builder.PrependUOffsetTRelative(o)
-            exclude_authid = builder.EndVector(len(_exclude_authid))
+            exclude_authid = builder.EndVector()
 
         # exclude_authrole: [string]
         exclude_authrole = self.exclude_authrole
@@ -594,7 +594,7 @@ class Publication(object):
             PublicationGen.PublicationStartExcludeAuthroleVector(builder, len(_exclude_authrole))
             for o in reversed(_exclude_authrole):
                 builder.PrependUOffsetTRelative(o)
-            exclude_authrole = builder.EndVector(len(_exclude_authrole))
+            exclude_authrole = builder.EndVector()
 
         # eligible: [int]
         eligible = self.eligible
@@ -602,7 +602,7 @@ class Publication(object):
             PublicationGen.PublicationStartEligibleAuthidVector(builder, len(eligible))
             for session in reversed(eligible):
                 builder.PrependUint64(session)
-            eligible = builder.EndVector(len(eligible))
+            eligible = builder.EndVector()
 
         # eligible_authid: [string]
         eligible_authid = self.eligible_authid
@@ -613,7 +613,7 @@ class Publication(object):
             PublicationGen.PublicationStartEligibleAuthidVector(builder, len(_eligible_authid))
             for o in reversed(_eligible_authid):
                 builder.PrependUOffsetTRelative(o)
-            eligible_authid = builder.EndVector(len(_eligible_authid))
+            eligible_authid = builder.EndVector()
 
         # eligible_authrole: [string]
         eligible_authrole = self.eligible_authrole
@@ -624,7 +624,7 @@ class Publication(object):
             PublicationGen.PublicationStartEligibleAuthroleVector(builder, len(_eligible_authrole))
             for o in reversed(_eligible_authrole):
                 builder.PrependUOffsetTRelative(o)
-            eligible_authrole = builder.EndVector(len(_eligible_authrole))
+            eligible_authrole = builder.EndVector()
 
         # now start and build a new object ..
         PublicationGen.PublicationStart(builder)

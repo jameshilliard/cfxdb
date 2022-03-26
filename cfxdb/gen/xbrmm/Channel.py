@@ -11,12 +11,16 @@ class Channel(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsChannel(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Channel()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsChannel(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Channel
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -497,42 +501,159 @@ class Channel(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(46))
         return o == 0
 
-def ChannelStart(builder): builder.StartObject(22)
-def ChannelAddMarketOid(builder, marketOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(marketOid), 0)
-def ChannelStartMarketOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddMemberOid(builder, memberOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(memberOid), 0)
-def ChannelStartMemberOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddChannelOid(builder, channelOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(channelOid), 0)
-def ChannelStartChannelOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddTimestamp(builder, timestamp): builder.PrependUint64Slot(3, timestamp, 0)
-def ChannelAddOpenAt(builder, openAt): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(openAt), 0)
-def ChannelStartOpenAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddSeq(builder, seq): builder.PrependUint32Slot(5, seq, 0)
-def ChannelAddChannelType(builder, channelType): builder.PrependUint8Slot(6, channelType, 0)
-def ChannelAddMarketmaker(builder, marketmaker): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(marketmaker), 0)
-def ChannelStartMarketmakerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddActor(builder, actor): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(actor), 0)
-def ChannelStartActorVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddDelegate(builder, delegate): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(delegate), 0)
-def ChannelStartDelegateVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddRecipient(builder, recipient): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(recipient), 0)
-def ChannelStartRecipientVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddAmount(builder, amount): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(amount), 0)
-def ChannelStartAmountVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddTimeout(builder, timeout): builder.PrependUint32Slot(12, timeout, 0)
-def ChannelAddState(builder, state): builder.PrependUint8Slot(13, state, 0)
-def ChannelAddClosingAt(builder, closingAt): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(closingAt), 0)
-def ChannelStartClosingAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddClosedAt(builder, closedAt): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(closedAt), 0)
-def ChannelStartClosedAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddCloseMmSig(builder, closeMmSig): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(closeMmSig), 0)
-def ChannelStartCloseMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddCloseDelSig(builder, closeDelSig): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(closeDelSig), 0)
-def ChannelStartCloseDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddCloseChannelSeq(builder, closeChannelSeq): builder.PrependUint32Slot(18, closeChannelSeq, 0)
-def ChannelAddCloseBalance(builder, closeBalance): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(closeBalance), 0)
-def ChannelStartCloseBalanceVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelAddCloseIsFinal(builder, closeIsFinal): builder.PrependBoolSlot(20, closeIsFinal, 0)
-def ChannelAddClosedTx(builder, closedTx): builder.PrependUOffsetTRelativeSlot(21, flatbuffers.number_types.UOffsetTFlags.py_type(closedTx), 0)
-def ChannelStartClosedTxVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ChannelEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(22)
+def ChannelStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddMarketOid(builder, marketOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(marketOid), 0)
+def ChannelAddMarketOid(builder, marketOid):
+    """This method is deprecated. Please switch to AddMarketOid."""
+    return AddMarketOid(builder, marketOid)
+def StartMarketOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartMarketOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMarketOidVector(builder, numElems)
+def AddMemberOid(builder, memberOid): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(memberOid), 0)
+def ChannelAddMemberOid(builder, memberOid):
+    """This method is deprecated. Please switch to AddMemberOid."""
+    return AddMemberOid(builder, memberOid)
+def StartMemberOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartMemberOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMemberOidVector(builder, numElems)
+def AddChannelOid(builder, channelOid): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(channelOid), 0)
+def ChannelAddChannelOid(builder, channelOid):
+    """This method is deprecated. Please switch to AddChannelOid."""
+    return AddChannelOid(builder, channelOid)
+def StartChannelOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartChannelOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartChannelOidVector(builder, numElems)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(3, timestamp, 0)
+def ChannelAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddOpenAt(builder, openAt): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(openAt), 0)
+def ChannelAddOpenAt(builder, openAt):
+    """This method is deprecated. Please switch to AddOpenAt."""
+    return AddOpenAt(builder, openAt)
+def StartOpenAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartOpenAtVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartOpenAtVector(builder, numElems)
+def AddSeq(builder, seq): builder.PrependUint32Slot(5, seq, 0)
+def ChannelAddSeq(builder, seq):
+    """This method is deprecated. Please switch to AddSeq."""
+    return AddSeq(builder, seq)
+def AddChannelType(builder, channelType): builder.PrependUint8Slot(6, channelType, 0)
+def ChannelAddChannelType(builder, channelType):
+    """This method is deprecated. Please switch to AddChannelType."""
+    return AddChannelType(builder, channelType)
+def AddMarketmaker(builder, marketmaker): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(marketmaker), 0)
+def ChannelAddMarketmaker(builder, marketmaker):
+    """This method is deprecated. Please switch to AddMarketmaker."""
+    return AddMarketmaker(builder, marketmaker)
+def StartMarketmakerVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartMarketmakerVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMarketmakerVector(builder, numElems)
+def AddActor(builder, actor): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(actor), 0)
+def ChannelAddActor(builder, actor):
+    """This method is deprecated. Please switch to AddActor."""
+    return AddActor(builder, actor)
+def StartActorVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartActorVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartActorVector(builder, numElems)
+def AddDelegate(builder, delegate): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(delegate), 0)
+def ChannelAddDelegate(builder, delegate):
+    """This method is deprecated. Please switch to AddDelegate."""
+    return AddDelegate(builder, delegate)
+def StartDelegateVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartDelegateVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartDelegateVector(builder, numElems)
+def AddRecipient(builder, recipient): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(recipient), 0)
+def ChannelAddRecipient(builder, recipient):
+    """This method is deprecated. Please switch to AddRecipient."""
+    return AddRecipient(builder, recipient)
+def StartRecipientVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartRecipientVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRecipientVector(builder, numElems)
+def AddAmount(builder, amount): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(amount), 0)
+def ChannelAddAmount(builder, amount):
+    """This method is deprecated. Please switch to AddAmount."""
+    return AddAmount(builder, amount)
+def StartAmountVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartAmountVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAmountVector(builder, numElems)
+def AddTimeout(builder, timeout): builder.PrependUint32Slot(12, timeout, 0)
+def ChannelAddTimeout(builder, timeout):
+    """This method is deprecated. Please switch to AddTimeout."""
+    return AddTimeout(builder, timeout)
+def AddState(builder, state): builder.PrependUint8Slot(13, state, 0)
+def ChannelAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def AddClosingAt(builder, closingAt): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(closingAt), 0)
+def ChannelAddClosingAt(builder, closingAt):
+    """This method is deprecated. Please switch to AddClosingAt."""
+    return AddClosingAt(builder, closingAt)
+def StartClosingAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartClosingAtVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartClosingAtVector(builder, numElems)
+def AddClosedAt(builder, closedAt): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(closedAt), 0)
+def ChannelAddClosedAt(builder, closedAt):
+    """This method is deprecated. Please switch to AddClosedAt."""
+    return AddClosedAt(builder, closedAt)
+def StartClosedAtVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartClosedAtVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartClosedAtVector(builder, numElems)
+def AddCloseMmSig(builder, closeMmSig): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(closeMmSig), 0)
+def ChannelAddCloseMmSig(builder, closeMmSig):
+    """This method is deprecated. Please switch to AddCloseMmSig."""
+    return AddCloseMmSig(builder, closeMmSig)
+def StartCloseMmSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartCloseMmSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCloseMmSigVector(builder, numElems)
+def AddCloseDelSig(builder, closeDelSig): builder.PrependUOffsetTRelativeSlot(17, flatbuffers.number_types.UOffsetTFlags.py_type(closeDelSig), 0)
+def ChannelAddCloseDelSig(builder, closeDelSig):
+    """This method is deprecated. Please switch to AddCloseDelSig."""
+    return AddCloseDelSig(builder, closeDelSig)
+def StartCloseDelSigVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartCloseDelSigVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCloseDelSigVector(builder, numElems)
+def AddCloseChannelSeq(builder, closeChannelSeq): builder.PrependUint32Slot(18, closeChannelSeq, 0)
+def ChannelAddCloseChannelSeq(builder, closeChannelSeq):
+    """This method is deprecated. Please switch to AddCloseChannelSeq."""
+    return AddCloseChannelSeq(builder, closeChannelSeq)
+def AddCloseBalance(builder, closeBalance): builder.PrependUOffsetTRelativeSlot(19, flatbuffers.number_types.UOffsetTFlags.py_type(closeBalance), 0)
+def ChannelAddCloseBalance(builder, closeBalance):
+    """This method is deprecated. Please switch to AddCloseBalance."""
+    return AddCloseBalance(builder, closeBalance)
+def StartCloseBalanceVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartCloseBalanceVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCloseBalanceVector(builder, numElems)
+def AddCloseIsFinal(builder, closeIsFinal): builder.PrependBoolSlot(20, closeIsFinal, 0)
+def ChannelAddCloseIsFinal(builder, closeIsFinal):
+    """This method is deprecated. Please switch to AddCloseIsFinal."""
+    return AddCloseIsFinal(builder, closeIsFinal)
+def AddClosedTx(builder, closedTx): builder.PrependUOffsetTRelativeSlot(21, flatbuffers.number_types.UOffsetTFlags.py_type(closedTx), 0)
+def ChannelAddClosedTx(builder, closedTx):
+    """This method is deprecated. Please switch to AddClosedTx."""
+    return AddClosedTx(builder, closedTx)
+def StartClosedTxVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ChannelStartClosedTxVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartClosedTxVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def ChannelEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

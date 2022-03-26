@@ -11,12 +11,16 @@ class Consent(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsConsent(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Consent()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsConsent(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Consent
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -257,24 +261,87 @@ class Consent(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-def ConsentStart(builder): builder.StartObject(12)
-def ConsentAddMarketOid(builder, marketOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(marketOid), 0)
-def ConsentStartMarketOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddMember(builder, member): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(member), 0)
-def ConsentStartMemberVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddDelegate(builder, delegate): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(delegate), 0)
-def ConsentStartDelegateVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddDelegateType(builder, delegateType): builder.PrependUint8Slot(3, delegateType, 0)
-def ConsentAddCatalogOid(builder, catalogOid): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(catalogOid), 0)
-def ConsentStartCatalogOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddTimestamp(builder, timestamp): builder.PrependUint64Slot(5, timestamp, 0)
-def ConsentAddUpdated(builder, updated): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(updated), 0)
-def ConsentStartUpdatedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddConsent(builder, consent): builder.PrependBoolSlot(7, consent, 0)
-def ConsentAddServicePrefix(builder, servicePrefix): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(servicePrefix), 0)
-def ConsentAddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
-def ConsentStartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
-def ConsentStartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def ConsentAddSynced(builder, synced): builder.PrependBoolSlot(11, synced, 0)
-def ConsentEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(12)
+def ConsentStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddMarketOid(builder, marketOid): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(marketOid), 0)
+def ConsentAddMarketOid(builder, marketOid):
+    """This method is deprecated. Please switch to AddMarketOid."""
+    return AddMarketOid(builder, marketOid)
+def StartMarketOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartMarketOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMarketOidVector(builder, numElems)
+def AddMember(builder, member): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(member), 0)
+def ConsentAddMember(builder, member):
+    """This method is deprecated. Please switch to AddMember."""
+    return AddMember(builder, member)
+def StartMemberVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartMemberVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartMemberVector(builder, numElems)
+def AddDelegate(builder, delegate): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(delegate), 0)
+def ConsentAddDelegate(builder, delegate):
+    """This method is deprecated. Please switch to AddDelegate."""
+    return AddDelegate(builder, delegate)
+def StartDelegateVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartDelegateVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartDelegateVector(builder, numElems)
+def AddDelegateType(builder, delegateType): builder.PrependUint8Slot(3, delegateType, 0)
+def ConsentAddDelegateType(builder, delegateType):
+    """This method is deprecated. Please switch to AddDelegateType."""
+    return AddDelegateType(builder, delegateType)
+def AddCatalogOid(builder, catalogOid): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(catalogOid), 0)
+def ConsentAddCatalogOid(builder, catalogOid):
+    """This method is deprecated. Please switch to AddCatalogOid."""
+    return AddCatalogOid(builder, catalogOid)
+def StartCatalogOidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartCatalogOidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartCatalogOidVector(builder, numElems)
+def AddTimestamp(builder, timestamp): builder.PrependUint64Slot(5, timestamp, 0)
+def ConsentAddTimestamp(builder, timestamp):
+    """This method is deprecated. Please switch to AddTimestamp."""
+    return AddTimestamp(builder, timestamp)
+def AddUpdated(builder, updated): builder.PrependUOffsetTRelativeSlot(6, flatbuffers.number_types.UOffsetTFlags.py_type(updated), 0)
+def ConsentAddUpdated(builder, updated):
+    """This method is deprecated. Please switch to AddUpdated."""
+    return AddUpdated(builder, updated)
+def StartUpdatedVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartUpdatedVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartUpdatedVector(builder, numElems)
+def AddConsent(builder, consent): builder.PrependBoolSlot(7, consent, 0)
+def ConsentAddConsent(builder, consent):
+    """This method is deprecated. Please switch to AddConsent."""
+    return AddConsent(builder, consent)
+def AddServicePrefix(builder, servicePrefix): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(servicePrefix), 0)
+def ConsentAddServicePrefix(builder, servicePrefix):
+    """This method is deprecated. Please switch to AddServicePrefix."""
+    return AddServicePrefix(builder, servicePrefix)
+def AddTid(builder, tid): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(tid), 0)
+def ConsentAddTid(builder, tid):
+    """This method is deprecated. Please switch to AddTid."""
+    return AddTid(builder, tid)
+def StartTidVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartTidVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTidVector(builder, numElems)
+def AddSignature(builder, signature): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(signature), 0)
+def ConsentAddSignature(builder, signature):
+    """This method is deprecated. Please switch to AddSignature."""
+    return AddSignature(builder, signature)
+def StartSignatureVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def ConsentStartSignatureVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartSignatureVector(builder, numElems)
+def AddSynced(builder, synced): builder.PrependBoolSlot(11, synced, 0)
+def ConsentAddSynced(builder, synced):
+    """This method is deprecated. Please switch to AddSynced."""
+    return AddSynced(builder, synced)
+def End(builder): return builder.EndObject()
+def ConsentEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

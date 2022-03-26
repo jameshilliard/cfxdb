@@ -10,12 +10,16 @@ class WebCluster(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsWebCluster(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = WebCluster()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsWebCluster(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # WebCluster
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -239,30 +243,111 @@ class WebCluster(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-def WebClusterStart(builder): builder.StartObject(22)
-def WebClusterAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def WebClusterAddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
-def WebClusterAddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
-def WebClusterAddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
-def WebClusterStartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def WebClusterAddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def WebClusterAddStatus(builder, status): builder.PrependUint8Slot(5, status, 0)
-def WebClusterAddTcpVersion(builder, tcpVersion): builder.PrependInt8Slot(6, tcpVersion, 0)
-def WebClusterAddTcpPort(builder, tcpPort): builder.PrependUint16Slot(7, tcpPort, 0)
-def WebClusterAddTcpShared(builder, tcpShared): builder.PrependBoolSlot(8, tcpShared, 0)
-def WebClusterAddTcpInterface(builder, tcpInterface): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(tcpInterface), 0)
-def WebClusterAddTcpBacklog(builder, tcpBacklog): builder.PrependInt32Slot(10, tcpBacklog, 0)
-def WebClusterAddTlsKey(builder, tlsKey): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(tlsKey), 0)
-def WebClusterAddTlsCertificate(builder, tlsCertificate): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCertificate), 0)
-def WebClusterAddTlsChainCertificates(builder, tlsChainCertificates): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(tlsChainCertificates), 0)
-def WebClusterStartTlsChainCertificatesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def WebClusterAddTlsCaCertificates(builder, tlsCaCertificates): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCaCertificates), 0)
-def WebClusterStartTlsCaCertificatesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def WebClusterAddTlsCiphers(builder, tlsCiphers): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCiphers), 0)
-def WebClusterAddTlsDhparam(builder, tlsDhparam): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(tlsDhparam), 0)
-def WebClusterAddHttpClientTimeout(builder, httpClientTimeout): builder.PrependInt32Slot(17, httpClientTimeout, 0)
-def WebClusterAddHttpHsts(builder, httpHsts): builder.PrependBoolSlot(18, httpHsts, 0)
-def WebClusterAddHttpHstsMaxAge(builder, httpHstsMaxAge): builder.PrependInt32Slot(19, httpHstsMaxAge, 0)
-def WebClusterAddHttpAccessLog(builder, httpAccessLog): builder.PrependBoolSlot(20, httpAccessLog, 0)
-def WebClusterAddHttpDisplayTracebacks(builder, httpDisplayTracebacks): builder.PrependBoolSlot(21, httpDisplayTracebacks, 0)
-def WebClusterEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(22)
+def WebClusterStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def WebClusterAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddLabel(builder, label): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(label), 0)
+def WebClusterAddLabel(builder, label):
+    """This method is deprecated. Please switch to AddLabel."""
+    return AddLabel(builder, label)
+def AddDescription(builder, description): builder.PrependUOffsetTRelativeSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(description), 0)
+def WebClusterAddDescription(builder, description):
+    """This method is deprecated. Please switch to AddDescription."""
+    return AddDescription(builder, description)
+def AddTags(builder, tags): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(tags), 0)
+def WebClusterAddTags(builder, tags):
+    """This method is deprecated. Please switch to AddTags."""
+    return AddTags(builder, tags)
+def StartTagsVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def WebClusterStartTagsVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTagsVector(builder, numElems)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def WebClusterAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddStatus(builder, status): builder.PrependUint8Slot(5, status, 0)
+def WebClusterAddStatus(builder, status):
+    """This method is deprecated. Please switch to AddStatus."""
+    return AddStatus(builder, status)
+def AddTcpVersion(builder, tcpVersion): builder.PrependInt8Slot(6, tcpVersion, 0)
+def WebClusterAddTcpVersion(builder, tcpVersion):
+    """This method is deprecated. Please switch to AddTcpVersion."""
+    return AddTcpVersion(builder, tcpVersion)
+def AddTcpPort(builder, tcpPort): builder.PrependUint16Slot(7, tcpPort, 0)
+def WebClusterAddTcpPort(builder, tcpPort):
+    """This method is deprecated. Please switch to AddTcpPort."""
+    return AddTcpPort(builder, tcpPort)
+def AddTcpShared(builder, tcpShared): builder.PrependBoolSlot(8, tcpShared, 0)
+def WebClusterAddTcpShared(builder, tcpShared):
+    """This method is deprecated. Please switch to AddTcpShared."""
+    return AddTcpShared(builder, tcpShared)
+def AddTcpInterface(builder, tcpInterface): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(tcpInterface), 0)
+def WebClusterAddTcpInterface(builder, tcpInterface):
+    """This method is deprecated. Please switch to AddTcpInterface."""
+    return AddTcpInterface(builder, tcpInterface)
+def AddTcpBacklog(builder, tcpBacklog): builder.PrependInt32Slot(10, tcpBacklog, 0)
+def WebClusterAddTcpBacklog(builder, tcpBacklog):
+    """This method is deprecated. Please switch to AddTcpBacklog."""
+    return AddTcpBacklog(builder, tcpBacklog)
+def AddTlsKey(builder, tlsKey): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(tlsKey), 0)
+def WebClusterAddTlsKey(builder, tlsKey):
+    """This method is deprecated. Please switch to AddTlsKey."""
+    return AddTlsKey(builder, tlsKey)
+def AddTlsCertificate(builder, tlsCertificate): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCertificate), 0)
+def WebClusterAddTlsCertificate(builder, tlsCertificate):
+    """This method is deprecated. Please switch to AddTlsCertificate."""
+    return AddTlsCertificate(builder, tlsCertificate)
+def AddTlsChainCertificates(builder, tlsChainCertificates): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(tlsChainCertificates), 0)
+def WebClusterAddTlsChainCertificates(builder, tlsChainCertificates):
+    """This method is deprecated. Please switch to AddTlsChainCertificates."""
+    return AddTlsChainCertificates(builder, tlsChainCertificates)
+def StartTlsChainCertificatesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def WebClusterStartTlsChainCertificatesVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTlsChainCertificatesVector(builder, numElems)
+def AddTlsCaCertificates(builder, tlsCaCertificates): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCaCertificates), 0)
+def WebClusterAddTlsCaCertificates(builder, tlsCaCertificates):
+    """This method is deprecated. Please switch to AddTlsCaCertificates."""
+    return AddTlsCaCertificates(builder, tlsCaCertificates)
+def StartTlsCaCertificatesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def WebClusterStartTlsCaCertificatesVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartTlsCaCertificatesVector(builder, numElems)
+def AddTlsCiphers(builder, tlsCiphers): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(tlsCiphers), 0)
+def WebClusterAddTlsCiphers(builder, tlsCiphers):
+    """This method is deprecated. Please switch to AddTlsCiphers."""
+    return AddTlsCiphers(builder, tlsCiphers)
+def AddTlsDhparam(builder, tlsDhparam): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(tlsDhparam), 0)
+def WebClusterAddTlsDhparam(builder, tlsDhparam):
+    """This method is deprecated. Please switch to AddTlsDhparam."""
+    return AddTlsDhparam(builder, tlsDhparam)
+def AddHttpClientTimeout(builder, httpClientTimeout): builder.PrependInt32Slot(17, httpClientTimeout, 0)
+def WebClusterAddHttpClientTimeout(builder, httpClientTimeout):
+    """This method is deprecated. Please switch to AddHttpClientTimeout."""
+    return AddHttpClientTimeout(builder, httpClientTimeout)
+def AddHttpHsts(builder, httpHsts): builder.PrependBoolSlot(18, httpHsts, 0)
+def WebClusterAddHttpHsts(builder, httpHsts):
+    """This method is deprecated. Please switch to AddHttpHsts."""
+    return AddHttpHsts(builder, httpHsts)
+def AddHttpHstsMaxAge(builder, httpHstsMaxAge): builder.PrependInt32Slot(19, httpHstsMaxAge, 0)
+def WebClusterAddHttpHstsMaxAge(builder, httpHstsMaxAge):
+    """This method is deprecated. Please switch to AddHttpHstsMaxAge."""
+    return AddHttpHstsMaxAge(builder, httpHstsMaxAge)
+def AddHttpAccessLog(builder, httpAccessLog): builder.PrependBoolSlot(20, httpAccessLog, 0)
+def WebClusterAddHttpAccessLog(builder, httpAccessLog):
+    """This method is deprecated. Please switch to AddHttpAccessLog."""
+    return AddHttpAccessLog(builder, httpAccessLog)
+def AddHttpDisplayTracebacks(builder, httpDisplayTracebacks): builder.PrependBoolSlot(21, httpDisplayTracebacks, 0)
+def WebClusterAddHttpDisplayTracebacks(builder, httpDisplayTracebacks):
+    """This method is deprecated. Please switch to AddHttpDisplayTracebacks."""
+    return AddHttpDisplayTracebacks(builder, httpDisplayTracebacks)
+def End(builder): return builder.EndObject()
+def WebClusterEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

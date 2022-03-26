@@ -11,12 +11,16 @@ class Session(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsSession(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Session()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsSession(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # Session
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -69,11 +73,35 @@ class Session(object):
             return self._tab.String(o + self._tab.Pos)
         return None
 
-def SessionStart(builder): builder.StartObject(6)
-def SessionAddSession(builder, session): builder.PrependUint64Slot(0, session, 0)
-def SessionAddJoinedAt(builder, joinedAt): builder.PrependUint64Slot(1, joinedAt, 0)
-def SessionAddLeftAt(builder, leftAt): builder.PrependUint64Slot(2, leftAt, 0)
-def SessionAddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
-def SessionAddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
-def SessionAddAuthrole(builder, authrole): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(authrole), 0)
-def SessionEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(6)
+def SessionStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddSession(builder, session): builder.PrependUint64Slot(0, session, 0)
+def SessionAddSession(builder, session):
+    """This method is deprecated. Please switch to AddSession."""
+    return AddSession(builder, session)
+def AddJoinedAt(builder, joinedAt): builder.PrependUint64Slot(1, joinedAt, 0)
+def SessionAddJoinedAt(builder, joinedAt):
+    """This method is deprecated. Please switch to AddJoinedAt."""
+    return AddJoinedAt(builder, joinedAt)
+def AddLeftAt(builder, leftAt): builder.PrependUint64Slot(2, leftAt, 0)
+def SessionAddLeftAt(builder, leftAt):
+    """This method is deprecated. Please switch to AddLeftAt."""
+    return AddLeftAt(builder, leftAt)
+def AddRealm(builder, realm): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(realm), 0)
+def SessionAddRealm(builder, realm):
+    """This method is deprecated. Please switch to AddRealm."""
+    return AddRealm(builder, realm)
+def AddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(4, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
+def SessionAddAuthid(builder, authid):
+    """This method is deprecated. Please switch to AddAuthid."""
+    return AddAuthid(builder, authid)
+def AddAuthrole(builder, authrole): builder.PrependUOffsetTRelativeSlot(5, flatbuffers.number_types.UOffsetTFlags.py_type(authrole), 0)
+def SessionAddAuthrole(builder, authrole):
+    """This method is deprecated. Please switch to AddAuthrole."""
+    return AddAuthrole(builder, authrole)
+def End(builder): return builder.EndObject()
+def SessionEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

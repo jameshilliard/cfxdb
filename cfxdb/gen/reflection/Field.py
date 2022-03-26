@@ -10,12 +10,16 @@ class Field(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsField(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Field()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsField(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     @classmethod
     def FieldBufferHasIdentifier(cls, buf, offset, size_prefixed=False):
         return flatbuffers.util.BufferHasIdentifier(buf, offset, b"\x42\x46\x42\x53", size_prefixed=size_prefixed)
@@ -136,18 +140,63 @@ class Field(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         return o == 0
 
-def FieldStart(builder): builder.StartObject(11)
-def FieldAddName(builder, name): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def FieldAddType(builder, type): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(type), 0)
-def FieldAddId(builder, id): builder.PrependUint16Slot(2, id, 0)
-def FieldAddOffset(builder, offset): builder.PrependUint16Slot(3, offset, 0)
-def FieldAddDefaultInteger(builder, defaultInteger): builder.PrependInt64Slot(4, defaultInteger, 0)
-def FieldAddDefaultReal(builder, defaultReal): builder.PrependFloat64Slot(5, defaultReal, 0.0)
-def FieldAddDeprecated(builder, deprecated): builder.PrependBoolSlot(6, deprecated, 0)
-def FieldAddRequired(builder, required): builder.PrependBoolSlot(7, required, 0)
-def FieldAddKey(builder, key): builder.PrependBoolSlot(8, key, 0)
-def FieldAddAttributes(builder, attributes): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(attributes), 0)
-def FieldStartAttributesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def FieldAddDocumentation(builder, documentation): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(documentation), 0)
-def FieldStartDocumentationVector(builder, numElems): return builder.StartVector(4, numElems, 4)
-def FieldEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(11)
+def FieldStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def FieldAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddType(builder, type): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(type), 0)
+def FieldAddType(builder, type):
+    """This method is deprecated. Please switch to AddType."""
+    return AddType(builder, type)
+def AddId(builder, id): builder.PrependUint16Slot(2, id, 0)
+def FieldAddId(builder, id):
+    """This method is deprecated. Please switch to AddId."""
+    return AddId(builder, id)
+def AddOffset(builder, offset): builder.PrependUint16Slot(3, offset, 0)
+def FieldAddOffset(builder, offset):
+    """This method is deprecated. Please switch to AddOffset."""
+    return AddOffset(builder, offset)
+def AddDefaultInteger(builder, defaultInteger): builder.PrependInt64Slot(4, defaultInteger, 0)
+def FieldAddDefaultInteger(builder, defaultInteger):
+    """This method is deprecated. Please switch to AddDefaultInteger."""
+    return AddDefaultInteger(builder, defaultInteger)
+def AddDefaultReal(builder, defaultReal): builder.PrependFloat64Slot(5, defaultReal, 0.0)
+def FieldAddDefaultReal(builder, defaultReal):
+    """This method is deprecated. Please switch to AddDefaultReal."""
+    return AddDefaultReal(builder, defaultReal)
+def AddDeprecated(builder, deprecated): builder.PrependBoolSlot(6, deprecated, 0)
+def FieldAddDeprecated(builder, deprecated):
+    """This method is deprecated. Please switch to AddDeprecated."""
+    return AddDeprecated(builder, deprecated)
+def AddRequired(builder, required): builder.PrependBoolSlot(7, required, 0)
+def FieldAddRequired(builder, required):
+    """This method is deprecated. Please switch to AddRequired."""
+    return AddRequired(builder, required)
+def AddKey(builder, key): builder.PrependBoolSlot(8, key, 0)
+def FieldAddKey(builder, key):
+    """This method is deprecated. Please switch to AddKey."""
+    return AddKey(builder, key)
+def AddAttributes(builder, attributes): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(attributes), 0)
+def FieldAddAttributes(builder, attributes):
+    """This method is deprecated. Please switch to AddAttributes."""
+    return AddAttributes(builder, attributes)
+def StartAttributesVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def FieldStartAttributesVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAttributesVector(builder, numElems)
+def AddDocumentation(builder, documentation): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(documentation), 0)
+def FieldAddDocumentation(builder, documentation):
+    """This method is deprecated. Please switch to AddDocumentation."""
+    return AddDocumentation(builder, documentation)
+def StartDocumentationVector(builder, numElems): return builder.StartVector(4, numElems, 4)
+def FieldStartDocumentationVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartDocumentationVector(builder, numElems)
+def End(builder): return builder.EndObject()
+def FieldEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

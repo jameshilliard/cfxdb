@@ -10,12 +10,16 @@ class MRealmRun(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMRealmRun(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MRealmRun()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMRealmRun(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MRealmRun
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -72,10 +76,31 @@ class MRealmRun(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-def MRealmRunStart(builder): builder.StartObject(4)
-def MRealmRunAddEnded(builder, ended): builder.PrependUint64Slot(0, ended, 0)
-def MRealmRunAddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
-def MRealmRunStartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MRealmRunAddStarted(builder, started): builder.PrependUint64Slot(2, started, 0)
-def MRealmRunAddState(builder, state): builder.PrependUint8Slot(3, state, 0)
-def MRealmRunEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(4)
+def MRealmRunStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddEnded(builder, ended): builder.PrependUint64Slot(0, ended, 0)
+def MRealmRunAddEnded(builder, ended):
+    """This method is deprecated. Please switch to AddEnded."""
+    return AddEnded(builder, ended)
+def AddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
+def MRealmRunAddRunId(builder, runId):
+    """This method is deprecated. Please switch to AddRunId."""
+    return AddRunId(builder, runId)
+def StartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MRealmRunStartRunIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRunIdVector(builder, numElems)
+def AddStarted(builder, started): builder.PrependUint64Slot(2, started, 0)
+def MRealmRunAddStarted(builder, started):
+    """This method is deprecated. Please switch to AddStarted."""
+    return AddStarted(builder, started)
+def AddState(builder, state): builder.PrependUint8Slot(3, state, 0)
+def MRealmRunAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def End(builder): return builder.EndObject()
+def MRealmRunEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

@@ -10,12 +10,16 @@ class Type(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsType(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = Type()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsType(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     @classmethod
     def TypeBufferHasIdentifier(cls, buf, offset, size_prefixed=False):
         return flatbuffers.util.BufferHasIdentifier(buf, offset, b"\x42\x46\x42\x53", size_prefixed=size_prefixed)
@@ -52,9 +56,27 @@ class Type(object):
             return self._tab.Get(flatbuffers.number_types.Uint16Flags, o + self._tab.Pos)
         return 0
 
-def TypeStart(builder): builder.StartObject(4)
-def TypeAddBaseType(builder, baseType): builder.PrependInt8Slot(0, baseType, 0)
-def TypeAddElement(builder, element): builder.PrependInt8Slot(1, element, 0)
-def TypeAddIndex(builder, index): builder.PrependInt32Slot(2, index, -1)
-def TypeAddFixedLength(builder, fixedLength): builder.PrependUint16Slot(3, fixedLength, 0)
-def TypeEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(4)
+def TypeStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddBaseType(builder, baseType): builder.PrependInt8Slot(0, baseType, 0)
+def TypeAddBaseType(builder, baseType):
+    """This method is deprecated. Please switch to AddBaseType."""
+    return AddBaseType(builder, baseType)
+def AddElement(builder, element): builder.PrependInt8Slot(1, element, 0)
+def TypeAddElement(builder, element):
+    """This method is deprecated. Please switch to AddElement."""
+    return AddElement(builder, element)
+def AddIndex(builder, index): builder.PrependInt32Slot(2, index, -1)
+def TypeAddIndex(builder, index):
+    """This method is deprecated. Please switch to AddIndex."""
+    return AddIndex(builder, index)
+def AddFixedLength(builder, fixedLength): builder.PrependUint16Slot(3, fixedLength, 0)
+def TypeAddFixedLength(builder, fixedLength):
+    """This method is deprecated. Please switch to AddFixedLength."""
+    return AddFixedLength(builder, fixedLength)
+def End(builder): return builder.EndObject()
+def TypeEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

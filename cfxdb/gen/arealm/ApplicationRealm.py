@@ -11,12 +11,16 @@ class ApplicationRealm(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsApplicationRealm(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = ApplicationRealm()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsApplicationRealm(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # ApplicationRealm
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -93,13 +97,43 @@ class ApplicationRealm(object):
             return bool(self._tab.Get(flatbuffers.number_types.BoolFlags, o + self._tab.Pos))
         return False
 
-def ApplicationRealmStart(builder): builder.StartObject(8)
-def ApplicationRealmAddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
-def ApplicationRealmAddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
-def ApplicationRealmAddOwner(builder, owner): builder.PrependStructSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
-def ApplicationRealmAddName(builder, name): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
-def ApplicationRealmAddEventDispatchingChunkSize(builder, eventDispatchingChunkSize): builder.PrependUint32Slot(4, eventDispatchingChunkSize, 0)
-def ApplicationRealmAddUriCheck(builder, uriCheck): builder.PrependInt8Slot(5, uriCheck, 0)
-def ApplicationRealmAddEnableMetaApi(builder, enableMetaApi): builder.PrependBoolSlot(6, enableMetaApi, 0)
-def ApplicationRealmAddBridgeMetaApi(builder, bridgeMetaApi): builder.PrependBoolSlot(7, bridgeMetaApi, 0)
-def ApplicationRealmEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(8)
+def ApplicationRealmStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddOid(builder, oid): builder.PrependStructSlot(0, flatbuffers.number_types.UOffsetTFlags.py_type(oid), 0)
+def ApplicationRealmAddOid(builder, oid):
+    """This method is deprecated. Please switch to AddOid."""
+    return AddOid(builder, oid)
+def AddCreated(builder, created): builder.PrependUint64Slot(1, created, 0)
+def ApplicationRealmAddCreated(builder, created):
+    """This method is deprecated. Please switch to AddCreated."""
+    return AddCreated(builder, created)
+def AddOwner(builder, owner): builder.PrependStructSlot(2, flatbuffers.number_types.UOffsetTFlags.py_type(owner), 0)
+def ApplicationRealmAddOwner(builder, owner):
+    """This method is deprecated. Please switch to AddOwner."""
+    return AddOwner(builder, owner)
+def AddName(builder, name): builder.PrependUOffsetTRelativeSlot(3, flatbuffers.number_types.UOffsetTFlags.py_type(name), 0)
+def ApplicationRealmAddName(builder, name):
+    """This method is deprecated. Please switch to AddName."""
+    return AddName(builder, name)
+def AddEventDispatchingChunkSize(builder, eventDispatchingChunkSize): builder.PrependUint32Slot(4, eventDispatchingChunkSize, 0)
+def ApplicationRealmAddEventDispatchingChunkSize(builder, eventDispatchingChunkSize):
+    """This method is deprecated. Please switch to AddEventDispatchingChunkSize."""
+    return AddEventDispatchingChunkSize(builder, eventDispatchingChunkSize)
+def AddUriCheck(builder, uriCheck): builder.PrependInt8Slot(5, uriCheck, 0)
+def ApplicationRealmAddUriCheck(builder, uriCheck):
+    """This method is deprecated. Please switch to AddUriCheck."""
+    return AddUriCheck(builder, uriCheck)
+def AddEnableMetaApi(builder, enableMetaApi): builder.PrependBoolSlot(6, enableMetaApi, 0)
+def ApplicationRealmAddEnableMetaApi(builder, enableMetaApi):
+    """This method is deprecated. Please switch to AddEnableMetaApi."""
+    return AddEnableMetaApi(builder, enableMetaApi)
+def AddBridgeMetaApi(builder, bridgeMetaApi): builder.PrependBoolSlot(7, bridgeMetaApi, 0)
+def ApplicationRealmAddBridgeMetaApi(builder, bridgeMetaApi):
+    """This method is deprecated. Please switch to AddBridgeMetaApi."""
+    return AddBridgeMetaApi(builder, bridgeMetaApi)
+def End(builder): return builder.EndObject()
+def ApplicationRealmEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)

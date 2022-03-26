@@ -225,7 +225,7 @@ class OrganizationFbs(object):
             for o in reversed(_tags):
                 builder.PrependUOffsetTRelative(o)
 
-            tags = builder.EndVector(len(_tags))
+            tags = builder.EndVector()
 
         # now start and build a new object ..
         OrganizationGenFbs.OrganizationStart(builder)

@@ -11,12 +11,16 @@ class MasterRun(object):
     __slots__ = ['_tab']
 
     @classmethod
-    def GetRootAsMasterRun(cls, buf, offset):
+    def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
         x = MasterRun()
         x.Init(buf, n + offset)
         return x
 
+    @classmethod
+    def GetRootAsMasterRun(cls, buf, offset=0):
+        """This method is deprecated. Please switch to GetRootAs."""
+        return cls.GetRootAs(buf, offset)
     # MasterRun
     def Init(self, buf, pos):
         self._tab = flatbuffers.table.Table(buf, pos)
@@ -73,10 +77,31 @@ class MasterRun(object):
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, o + self._tab.Pos)
         return 0
 
-def MasterRunStart(builder): builder.StartObject(4)
-def MasterRunAddEnded(builder, ended): builder.PrependUint64Slot(0, ended, 0)
-def MasterRunAddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
-def MasterRunStartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
-def MasterRunAddStarted(builder, started): builder.PrependUint64Slot(2, started, 0)
-def MasterRunAddState(builder, state): builder.PrependUint8Slot(3, state, 0)
-def MasterRunEnd(builder): return builder.EndObject()
+def Start(builder): builder.StartObject(4)
+def MasterRunStart(builder):
+    """This method is deprecated. Please switch to Start."""
+    return Start(builder)
+def AddEnded(builder, ended): builder.PrependUint64Slot(0, ended, 0)
+def MasterRunAddEnded(builder, ended):
+    """This method is deprecated. Please switch to AddEnded."""
+    return AddEnded(builder, ended)
+def AddRunId(builder, runId): builder.PrependUOffsetTRelativeSlot(1, flatbuffers.number_types.UOffsetTFlags.py_type(runId), 0)
+def MasterRunAddRunId(builder, runId):
+    """This method is deprecated. Please switch to AddRunId."""
+    return AddRunId(builder, runId)
+def StartRunIdVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def MasterRunStartRunIdVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartRunIdVector(builder, numElems)
+def AddStarted(builder, started): builder.PrependUint64Slot(2, started, 0)
+def MasterRunAddStarted(builder, started):
+    """This method is deprecated. Please switch to AddStarted."""
+    return AddStarted(builder, started)
+def AddState(builder, state): builder.PrependUint8Slot(3, state, 0)
+def MasterRunAddState(builder, state):
+    """This method is deprecated. Please switch to AddState."""
+    return AddState(builder, state)
+def End(builder): return builder.EndObject()
+def MasterRunEnd(builder):
+    """This method is deprecated. Please switch to End."""
+    return End(builder)
