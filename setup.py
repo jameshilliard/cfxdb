@@ -35,6 +35,13 @@ with open('cfxdb/_version.py') as f:
 with open('README.rst') as f:
     docstr = f.read()
 
+extras_require = {
+    'dev': []
+}
+
+with open('requirements-dev.txt') as f:
+    for line in f.read().splitlines():
+        extras_require['dev'].append(line.strip())
 
 setup(
     name='cfxdb',
@@ -73,6 +80,7 @@ setup(
         'web3>=5.28.0',
         'argon2>=0.1.10'
     ],
+    extras_require=extras_require,
     packages=find_packages(),
     include_package_data=True,
     data_files=[('.', ['LICENSE', 'README.rst'])],
