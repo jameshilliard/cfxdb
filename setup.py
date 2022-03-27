@@ -58,14 +58,13 @@ with open(reqs) as f:
                     extras_require[parts[1]] = []
                 extras_require[parts[1]].append(parts[0])
             else:
-                name = parts[0]
-                # do NOT (!) touch this!
+                name = parts[0].strip()
+                # do NOT (!) touch this! add dependency to either install_requires or dependency_links
+                # depending on whether a git+ URL is used or not (eg plain PyPI)
                 # https://mike.zwobble.org/2013/05/adding-git-or-hg-or-svn-dependencies-in-setup-py/
                 if name.startswith('git+'):
                     dependency_links.append(name)
-                    pkgname = name.split('=')[1]
-                    install_requires.append(pkgname)
-                else:
+                elif name != '':
                     install_requires.append(name)
 
 with open('requirements-dev.txt') as f:

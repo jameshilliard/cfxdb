@@ -31,6 +31,6 @@ WAMP, Crossbar.io and XBR are trademarks of Crossbar.io Technologies GmbH.*
    :target: https://github.com/crossbario/cfxdb/actions?query=workflow%3Adeploy
    :alt: Deploy
 
-.. |Docs| image:: https://img.shields.io/badge/docs-brightgreen.svg?style=flat
-   :target: https://crossbario.com/docs/cfxdb/index.html
+.. |Docs| image:: https://readthedocs.org/projects/cfxdb/badge/?version=latest
+   :target: https://cfxdb.readthedocs.io/en/latest/
    :alt: Docs
