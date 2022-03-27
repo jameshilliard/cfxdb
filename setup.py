@@ -35,9 +35,38 @@ with open('cfxdb/_version.py') as f:
 with open('README.rst') as f:
     docstr = f.read()
 
+# we read requirements from requirements*.txt files down below
+install_requires = []
 extras_require = {
     'dev': []
 }
+
+reqs = 'requirements.txt'
+
+# https://mike.zwobble.org/2013/05/adding-git-or-hg-or-svn-dependencies-in-setup-py/
+dependency_links = []
+
+with open(reqs) as f:
+    for line in f.read().splitlines():
+        line = line.strip()
+        if not line.startswith('#'):
+            parts = line.strip().split(';')
+            if len(parts) > 1:
+                parts[0] = parts[0].strip()
+                parts[1] = ':{}'.format(parts[1].strip())
+                if parts[1] not in extras_require:
+                    extras_require[parts[1]] = []
+                extras_require[parts[1]].append(parts[0])
+            else:
+                name = parts[0]
+                # do NOT (!) touch this!
+                # https://mike.zwobble.org/2013/05/adding-git-or-hg-or-svn-dependencies-in-setup-py/
+                if name.startswith('git+'):
+                    dependency_links.append(name)
+                    pkgname = name.split('=')[1]
+                    install_requires.append(pkgname)
+                else:
+                    install_requires.append(name)
 
 with open('requirements-dev.txt') as f:
     for line in f.read().splitlines():
@@ -74,13 +103,14 @@ setup(
                  "Topic :: Software Development :: Object Brokering"],
     platforms=('Any'),
     python_requires='>=3.7',
-    install_requires=[
-        'zlmdb>=22.3.1',
-        'autobahn[twisted,xbr,serialization]>=22.3.1',
-        'web3>=5.28.0',
-        'argon2>=0.1.10'
-    ],
+
+    install_requires=install_requires,
+
+    # https://mike.zwobble.org/2013/05/adding-git-or-hg-or-svn-dependencies-in-setup-py/
+    dependency_links=dependency_links,
+
     extras_require=extras_require,
+
     packages=find_packages(),
     # this flag will make files from MANIFEST.in go into _source_ distributions only
     include_package_data=True,
