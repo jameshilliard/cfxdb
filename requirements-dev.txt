@@ -23,3 +23,4 @@ pyyaml>=4.2b4
 mypy>=0.610; python_version >= '3.4' and platform_python_implementation != 'PyPy'
 twisted>=18.7.0
 txaio>=22.2.1
+zlmdb
