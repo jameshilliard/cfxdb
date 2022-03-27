@@ -82,7 +82,8 @@ setup(
     ],
     extras_require=extras_require,
     packages=find_packages(),
+    # this flag will make files from MANIFEST.in go into _source_ distributions only
     include_package_data=True,
-    data_files=[('.', ['LICENSE', 'README.rst'])],
+    data_files=[('.', ['LICENSE', 'README.rst', 'requirements.txt', 'requirements-dev.txt'])],
     zip_safe=True
 )
