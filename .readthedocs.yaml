@@ -1,14 +1,15 @@
 version: 2
 
+# https://docs.readthedocs.io/en/stable/config-file/v2.html
+
 python:
    version: 3.8
-   #install:
-   #   - requirements: requirements-rtd.txt
    install:
+      - method: pip
+        path: .
       - method: pip
         path: .
         extra_requirements:
           - dev
-
 build:
     image: latest
