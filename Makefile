@@ -76,6 +76,8 @@ test_xbr_roundtrip:
 test_single:
 	pytest -v -s ./cfxdb/tests/test_user.py::test_user_fbs_roundtrip
 
+test_cookiestore:
+	pytest -v -s ./cfxdb/tests/cookiestore/test_cookie.py
 
 # auto-format code - WARNING: this my change files, in-place!
 # use "pip install yapf==0.29.0"

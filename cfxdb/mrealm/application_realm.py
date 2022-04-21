@@ -5,7 +5,7 @@
 #
 ##############################################################################
 
-from typing import Optional, List
+from typing import Optional, List, Any, Dict
 from uuid import UUID
 import pprint
 
@@ -59,9 +59,10 @@ class ApplicationRealm(ConfigurationElement):
                  status: Optional[int] = None,
                  workergroup_oid: Optional[UUID] = None,
                  webcluster_oid: Optional[UUID] = None,
+                 datamarket_oid: Optional[UUID] = None,
                  changed: Optional[np.datetime64] = None,
                  owner_oid: Optional[UUID] = None,
-                 _unknown=None):
+                 _unknown: Optional[Any] = None):
         """
 
         :param oid: Object ID of application realm
@@ -76,11 +77,17 @@ class ApplicationRealm(ConfigurationElement):
 
         :param status: Status of application realm.
 
-        :param workergroup_oid: When running, router cluster worker group this application realm is running on.
+        :param workergroup_oid: When running, router cluster worker group this application
+            realm is running on.
 
-        :param webcluster_oid: When running, the web cluster to serve as a frontend layer for the application realm.
+        :param webcluster_oid: When running, the web cluster to serve as a frontend layer
+            for the application realm.
+
+        :param datamarket_oid: When this application realm is to be federated with nodes paired
+            to a different management realm (master node) or run by different operators.
 
         :param changed: Timestamp when the application realm was last changed
+
         :param owner_oid: Owning user (object ID)
         """
         ConfigurationElement.__init__(self, oid=oid, label=label, description=description, tags=tags)
@@ -88,13 +95,14 @@ class ApplicationRealm(ConfigurationElement):
         self.status = status
         self.workergroup_oid = workergroup_oid
         self.webcluster_oid = webcluster_oid
+        self.datamarket_oid = datamarket_oid
         self.changed = changed
         self.owner_oid = owner_oid
 
         # private member with unknown/untouched data passing through
         self._unknown = _unknown
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any) -> bool:
         if not isinstance(other, self.__class__):
             return False
         if not ConfigurationElement.__eq__(self, other):
@@ -107,25 +115,26 @@ class ApplicationRealm(ConfigurationElement):
             return False
         if other.webcluster_oid != self.webcluster_oid:
             return False
+        if other.datamarket_oid != self.datamarket_oid:
+            return False
         if other.changed != self.changed:
             return False
         if other.owner_oid != self.owner_oid:
             return False
         return True
 
-    def __ne__(self, other):
+    def __ne__(self, other: Any) -> bool:
         return not self.__eq__(other)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return pprint.pformat(self.marshal())
 
-    def copy(self, other, overwrite=False):
+    def copy(self, other: 'ApplicationRealm', overwrite: bool = False):
         """
         Copy over other object.
 
         :param other: Other application realm to copy data from.
-        :type other: instance of :class:`ManagementRealm`
-        :return:
+        :param overwrite: Overwrite members already set.
         """
         ConfigurationElement.copy(self, other, overwrite=overwrite)
 
@@ -137,6 +146,8 @@ class ApplicationRealm(ConfigurationElement):
             self.workergroup_oid = other.workergroup_oid
         if (not self.webcluster_oid and other.webcluster_oid) or overwrite:
             self.webcluster_oid = other.webcluster_oid
+        if (not self.datamarket_oid and other.datamarket_oid) or overwrite:
+            self.datamarket_oid = other.datamarket_oid
         if (not self.changed and other.changed) or overwrite:
             self.changed = other.changed
         if (not self.owner_oid and other.owner_oid) or overwrite:
@@ -144,22 +155,30 @@ class ApplicationRealm(ConfigurationElement):
 
         # _unknown is not copied!
 
-    def marshal(self):
+    def marshal(self) -> Dict[str, Any]:
         """
         Marshal this object to a generic host language object.
-
-        :return: dict
         """
         obj = ConfigurationElement.marshal(self)
 
         obj.update({
-            'oid': str(self.oid) if self.oid else None,
-            'name': self.name,
-            'status': self.STATUS_BY_CODE.get(self.status, None),
-            'workergroup_oid': str(self.workergroup_oid) if self.workergroup_oid else None,
-            'webcluster_oid': str(self.webcluster_oid) if self.webcluster_oid else None,
-            'changed': int(self.changed) if self.changed else None,
-            'owner_oid': str(self.owner_oid) if self.owner_oid else None,
+            'oid':
+            str(self.oid) if self.oid else None,
+            'name':
+            self.name,
+            'status':
+            ApplicationRealm.STATUS_BY_CODE[self.status]
+            if self.status in ApplicationRealm.STATUS_BY_CODE else None,
+            'workergroup_oid':
+            str(self.workergroup_oid) if self.workergroup_oid else None,
+            'webcluster_oid':
+            str(self.webcluster_oid) if self.webcluster_oid else None,
+            'datamarket_oid':
+            str(self.datamarket_oid) if self.datamarket_oid else None,
+            'changed':
+            int(self.changed) if self.changed else None,
+            'owner_oid':
+            str(self.owner_oid) if self.owner_oid else None,
         })
 
         if self._unknown:
@@ -169,14 +188,12 @@ class ApplicationRealm(ConfigurationElement):
         return obj
 
     @staticmethod
-    def parse(data):
+    def parse(data: Dict[str, Any]) -> 'ApplicationRealm':
         """
         Parse generic host language object into an object of this class.
 
         :param data: Generic host language object
-        :type data: dict
-
-        :return: instance of :class:`ApplicationRealm`
+        :returns: New instance of this class.
         """
         assert type(data) == dict
 
@@ -196,7 +213,7 @@ class ApplicationRealm(ConfigurationElement):
 
         status = data.get('status', None)
         assert status is None or (type(status) == str)
-        status = ApplicationRealm.STATUS_BY_NAME.get(status, None)
+        status = ApplicationRealm.STATUS_BY_NAME[status] if status in ApplicationRealm.STATUS_BY_NAME else None
 
         workergroup_oid = None
         if 'workergroup_oid' in data and data['workergroup_oid'] is not None:
@@ -210,6 +227,12 @@ class ApplicationRealm(ConfigurationElement):
             assert type(data['webcluster_oid']) == str, 'webcluster_oid must be a string, but was {}'.format(
                 type(data['webcluster_oid']))
             webcluster_oid = UUID(data['webcluster_oid'])
+
+        datamarket_oid = None
+        if 'datamarket_oid' in data and data['datamarket_oid'] is not None:
+            assert type(data['datamarket_oid']) == str, 'datamarket_oid must be a string, but was {}'.format(
+                type(data['datamarket_oid']))
+            datamarket_oid = UUID(data['datamarket_oid'])
 
         owner_oid = None
         if 'owner_oid' in data and data['owner_oid'] is not None:
@@ -229,6 +252,7 @@ class ApplicationRealm(ConfigurationElement):
                                name=name,
                                workergroup_oid=workergroup_oid,
                                webcluster_oid=webcluster_oid,
+                               datamarket_oid=datamarket_oid,
                                status=status,
                                owner_oid=owner_oid,
                                changed=changed,

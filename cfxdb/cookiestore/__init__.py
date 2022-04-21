@@ -5,4 +5,6 @@
 #
 ##############################################################################
 
-__version__ = '22.4.1.dev2'
+from cfxdb.cookiestore.cookie import Cookie
+
+__all__ = ('Cookie', )
