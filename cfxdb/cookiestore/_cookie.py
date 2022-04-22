@@ -434,7 +434,7 @@ class Cookies(MapUuidFlatBuffers):
 
 
 @table('65e1d8c1-fa8b-459d-ae43-cb320d28cc97')
-class CookiesByValue(MapStringUuid):
+class IndexCookiesByValue(MapStringUuid):
     """
     Index: cookie_value -> cookie_oid
     """

@@ -5,6 +5,7 @@
 #
 ##############################################################################
 
-from cfxdb.cookiestore.cookie import Cookie
+from cfxdb.cookiestore._cookie import Cookie, Cookies, IndexCookiesByValue
+from cfxdb.cookiestore._schema import CookieStoreSchema
 
-__all__ = ('Cookie', )
+__all__ = ('Cookie', 'Cookies', 'IndexCookiesByValue', 'CookieStoreSchema')
