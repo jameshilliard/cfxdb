@@ -106,7 +106,7 @@ build_fbs_python:
 
 fix_fbs_python:
 	# those are not generated, but required
-	touch $(FBS_OUTPUT)/__init__.py
+	find $(FBS_OUTPUT) -type d -exec touch {}/__init__.py \;
 
 	# FIXME: wrong import:
 	# "from oid_t import oid_t" => "from ..oid_t import oid_t"

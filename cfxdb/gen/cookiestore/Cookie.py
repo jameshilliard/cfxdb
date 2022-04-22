@@ -6,7 +6,7 @@ import flatbuffers
 from flatbuffers.compat import import_numpy
 np = import_numpy()
 
-# This table stores persistent cookies, as used in WAMP-Cookie authentication by router and proxy workers.
+# Persistent cookies, as used in WAMP-Cookie authentication by router and proxy workers.
 class Cookie(object):
     __slots__ = ['_tab']
 
