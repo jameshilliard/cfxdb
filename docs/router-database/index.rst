@@ -5,3 +5,6 @@ Router Database
     :maxdepth: 3
 
     eventstore
+    cookiestore
+    sessionstore
+    callstore

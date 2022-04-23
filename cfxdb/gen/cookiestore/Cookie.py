@@ -121,10 +121,46 @@ class Cookie(object):
         o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(16))
         return o == 0
 
+    # The Crossbar.io worker (within the node) the cookie was authenticated on (if any).
+    # Cookie
+    def AuthenticatedOnWorker(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        if o != 0:
+            return self._tab.String(o + self._tab.Pos)
+        return None
+
+    # The client transport information for the connection the cookie was authenticated in (if any).
+    # Cookie
+    def AuthenticatedTransportInfo(self, j):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            a = self._tab.Vector(o)
+            return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
+        return 0
+
+    # Cookie
+    def AuthenticatedTransportInfoAsNumpy(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
+        return 0
+
+    # Cookie
+    def AuthenticatedTransportInfoLength(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            return self._tab.VectorLen(o)
+        return 0
+
+    # Cookie
+    def AuthenticatedTransportInfoIsNone(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        return o == 0
+
     # The WAMP session ID of the original authenticating session.
     # Cookie
     def AuthenticatedSession(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(18))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
@@ -132,7 +168,7 @@ class Cookie(object):
     # Timestamp when the original authenticating session was welcome by the router. Epoch time in ns.
     # Cookie
     def AuthenticatedJoinedAt(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
         if o != 0:
             return self._tab.Get(flatbuffers.number_types.Uint64Flags, o + self._tab.Pos)
         return 0
@@ -140,7 +176,7 @@ class Cookie(object):
     # The (original) WAMP authentication method, after which the client was authenticated before setting this cookie.
     # Cookie
     def AuthenticatedAuthmethod(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(22))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
@@ -148,7 +184,7 @@ class Cookie(object):
     # The WAMP authid a cookie-authenticating session is to be assigned.
     # Cookie
     def Authid(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
@@ -156,7 +192,15 @@ class Cookie(object):
     # The WAMP authrole a cookie-authenticating session is to join under.
     # Cookie
     def Authrole(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(26))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        if o != 0:
+            return self._tab.String(o + self._tab.Pos)
+        return None
+
+    # The WAMP authmethod a cookie-authenticating session is to join under.
+    # Cookie
+    def Authmethod(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
@@ -164,7 +208,7 @@ class Cookie(object):
     # The WAMP realm a cookie-authenticating session is to join.
     # Cookie
     def Authrealm(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(28))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
         if o != 0:
             return self._tab.String(o + self._tab.Pos)
         return None
@@ -172,7 +216,7 @@ class Cookie(object):
     # The WAMP authentication extra data to be returned to the client performing cookie-based authentication.
     # Cookie
     def Authextra(self, j):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         if o != 0:
             a = self._tab.Vector(o)
             return self._tab.Get(flatbuffers.number_types.Uint8Flags, a + flatbuffers.number_types.UOffsetTFlags.py_type(j * 1))
@@ -180,24 +224,24 @@ class Cookie(object):
 
     # Cookie
     def AuthextraAsNumpy(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         if o != 0:
             return self._tab.GetVectorAsNumpy(flatbuffers.number_types.Uint8Flags, o)
         return 0
 
     # Cookie
     def AuthextraLength(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         if o != 0:
             return self._tab.VectorLen(o)
         return 0
 
     # Cookie
     def AuthextraIsNone(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         return o == 0
 
-def Start(builder): builder.StartObject(14)
+def Start(builder): builder.StartObject(17)
 def CookieStart(builder):
     """This method is deprecated. Please switch to Start."""
     return Start(builder)
@@ -237,31 +281,47 @@ def StartAuthenticatedOnNodeVector(builder, numElems): return builder.StartVecto
 def CookieStartAuthenticatedOnNodeVector(builder, numElems):
     """This method is deprecated. Please switch to Start."""
     return StartAuthenticatedOnNodeVector(builder, numElems)
-def AddAuthenticatedSession(builder, authenticatedSession): builder.PrependUint64Slot(7, authenticatedSession, 0)
+def AddAuthenticatedOnWorker(builder, authenticatedOnWorker): builder.PrependUOffsetTRelativeSlot(7, flatbuffers.number_types.UOffsetTFlags.py_type(authenticatedOnWorker), 0)
+def CookieAddAuthenticatedOnWorker(builder, authenticatedOnWorker):
+    """This method is deprecated. Please switch to AddAuthenticatedOnWorker."""
+    return AddAuthenticatedOnWorker(builder, authenticatedOnWorker)
+def AddAuthenticatedTransportInfo(builder, authenticatedTransportInfo): builder.PrependUOffsetTRelativeSlot(8, flatbuffers.number_types.UOffsetTFlags.py_type(authenticatedTransportInfo), 0)
+def CookieAddAuthenticatedTransportInfo(builder, authenticatedTransportInfo):
+    """This method is deprecated. Please switch to AddAuthenticatedTransportInfo."""
+    return AddAuthenticatedTransportInfo(builder, authenticatedTransportInfo)
+def StartAuthenticatedTransportInfoVector(builder, numElems): return builder.StartVector(1, numElems, 1)
+def CookieStartAuthenticatedTransportInfoVector(builder, numElems):
+    """This method is deprecated. Please switch to Start."""
+    return StartAuthenticatedTransportInfoVector(builder, numElems)
+def AddAuthenticatedSession(builder, authenticatedSession): builder.PrependUint64Slot(9, authenticatedSession, 0)
 def CookieAddAuthenticatedSession(builder, authenticatedSession):
     """This method is deprecated. Please switch to AddAuthenticatedSession."""
     return AddAuthenticatedSession(builder, authenticatedSession)
-def AddAuthenticatedJoinedAt(builder, authenticatedJoinedAt): builder.PrependUint64Slot(8, authenticatedJoinedAt, 0)
+def AddAuthenticatedJoinedAt(builder, authenticatedJoinedAt): builder.PrependUint64Slot(10, authenticatedJoinedAt, 0)
 def CookieAddAuthenticatedJoinedAt(builder, authenticatedJoinedAt):
     """This method is deprecated. Please switch to AddAuthenticatedJoinedAt."""
     return AddAuthenticatedJoinedAt(builder, authenticatedJoinedAt)
-def AddAuthenticatedAuthmethod(builder, authenticatedAuthmethod): builder.PrependUOffsetTRelativeSlot(9, flatbuffers.number_types.UOffsetTFlags.py_type(authenticatedAuthmethod), 0)
+def AddAuthenticatedAuthmethod(builder, authenticatedAuthmethod): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(authenticatedAuthmethod), 0)
 def CookieAddAuthenticatedAuthmethod(builder, authenticatedAuthmethod):
     """This method is deprecated. Please switch to AddAuthenticatedAuthmethod."""
     return AddAuthenticatedAuthmethod(builder, authenticatedAuthmethod)
-def AddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(10, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
+def AddAuthid(builder, authid): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(authid), 0)
 def CookieAddAuthid(builder, authid):
     """This method is deprecated. Please switch to AddAuthid."""
     return AddAuthid(builder, authid)
-def AddAuthrole(builder, authrole): builder.PrependUOffsetTRelativeSlot(11, flatbuffers.number_types.UOffsetTFlags.py_type(authrole), 0)
+def AddAuthrole(builder, authrole): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(authrole), 0)
 def CookieAddAuthrole(builder, authrole):
     """This method is deprecated. Please switch to AddAuthrole."""
     return AddAuthrole(builder, authrole)
-def AddAuthrealm(builder, authrealm): builder.PrependUOffsetTRelativeSlot(12, flatbuffers.number_types.UOffsetTFlags.py_type(authrealm), 0)
+def AddAuthmethod(builder, authmethod): builder.PrependUOffsetTRelativeSlot(14, flatbuffers.number_types.UOffsetTFlags.py_type(authmethod), 0)
+def CookieAddAuthmethod(builder, authmethod):
+    """This method is deprecated. Please switch to AddAuthmethod."""
+    return AddAuthmethod(builder, authmethod)
+def AddAuthrealm(builder, authrealm): builder.PrependUOffsetTRelativeSlot(15, flatbuffers.number_types.UOffsetTFlags.py_type(authrealm), 0)
 def CookieAddAuthrealm(builder, authrealm):
     """This method is deprecated. Please switch to AddAuthrealm."""
     return AddAuthrealm(builder, authrealm)
-def AddAuthextra(builder, authextra): builder.PrependUOffsetTRelativeSlot(13, flatbuffers.number_types.UOffsetTFlags.py_type(authextra), 0)
+def AddAuthextra(builder, authextra): builder.PrependUOffsetTRelativeSlot(16, flatbuffers.number_types.UOffsetTFlags.py_type(authextra), 0)
 def CookieAddAuthextra(builder, authextra):
     """This method is deprecated. Please switch to AddAuthextra."""
     return AddAuthextra(builder, authextra)

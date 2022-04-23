@@ -1,0 +1,7 @@
+// Crossbar.io Database (cfxdb) - Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+
+include "common.fbs";
+
+namespace sessionstore;
+
+// FIXME

@@ -29,6 +29,12 @@ table Cookie
     /// The Crossbar.io node (within the management domain) the cookie was authenticated on (if any).
     authenticated_on_node: [uint8] (uuid);
 
+    /// The Crossbar.io worker (within the node) the cookie was authenticated on (if any).
+    authenticated_on_worker: string;
+
+    /// The client transport information for the connection the cookie was authenticated in (if any).
+    authenticated_transport_info: [uint8] (cbor);
+
     /// The WAMP session ID of the original authenticating session.
     authenticated_session: uint64;
 
@@ -43,6 +49,9 @@ table Cookie
 
     /// The WAMP authrole a cookie-authenticating session is to join under.
     authrole: string;
+
+    /// The WAMP authmethod a cookie-authenticating session is to join under.
+    authmethod: string;
 
     /// The WAMP realm a cookie-authenticating session is to join.
     authrealm: string;

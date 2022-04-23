@@ -41,8 +41,16 @@ class _CookieGen(CookieGen.Cookie):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def AuthenticatedTransportInfoAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(20))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
     def AuthExtraAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(30))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(36))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -78,6 +86,12 @@ class Cookie(object):
         # [uint8] (uuid)
         self._authenticated_on_node = None
 
+        # string
+        self._authenticated_on_worker = None
+
+        # [uint8] (cbor)
+        self._authenticated_transport_info = None
+
         # uint64
         self._authenticated_session = None
 
@@ -94,6 +108,9 @@ class Cookie(object):
         self._authrole = None
 
         # string
+        self._authmethod = None
+
+        # string
         self._authrealm = None
 
         # [uint8] (cbor)
@@ -108,6 +125,8 @@ class Cookie(object):
             'value': self.value,
             'authenticated': int(self.authenticated) if self.authenticated else None,
             'authenticated_on_node': self.authenticated_on_node.bytes if self.authenticated_on_node else None,
+            'authenticated_on_worker': self.authenticated_on_worker,
+            'authenticated_transport_info': self.authenticated_transport_info,
             'authenticated_session': self.authenticated_session,
             'authenticated_joined_at':
             int(self.authenticated_joined_at) if self.authenticated_joined_at else None,
@@ -115,7 +134,6 @@ class Cookie(object):
             'authid': self.authid,
             'authrole': self.authrole,
             'authrealm': self.authrealm,
-            # 'authextra': cbor2.dumps(self.authextra) if self.authextra else None,
             'authextra': self.authextra,
         }
         return obj
@@ -156,7 +174,8 @@ class Cookie(object):
     @property
     def max_age(self) -> int:
         """
-        WAMP session ID of the caller that originally placed this offer.
+        Cookie maximum age (lifetime of the cookie in seconds, see http://tools.ietf.org/html/rfc6265#page-20),
+            e.g. ``604800"``.
         """
         if self._max_age is None and self._from_fbs:
             self._max_age = self._from_fbs.MaxAge()
@@ -214,7 +233,7 @@ class Cookie(object):
     @property
     def authenticated_on_node(self) -> uuid.UUID:
         """
-        Database ID of this cookie record.
+        The Crossbar.io node (within the management domain) the cookie was authenticated on (if any).
         """
         if self._authenticated_on_node is None and self._from_fbs:
             if self._from_fbs.AuthenticatedOnNodeLength():
@@ -226,6 +245,39 @@ class Cookie(object):
     def authenticated_on_node(self, value: uuid.UUID):
         assert value is None or isinstance(value, uuid.UUID)
         self._authenticated_on_node = value
+
+    @property
+    def authenticated_on_worker(self) -> str:
+        """
+        The Crossbar.io worker (within the node) the cookie was authenticated on (if any).
+        """
+        if self._authenticated_on_worker is None and self._from_fbs:
+            _authenticated_on_worker = self._from_fbs.AuthenticatedOnWorker()
+            if _authenticated_on_worker:
+                self._authenticated_on_worker = _authenticated_on_worker.decode('utf8')
+        return self._authenticated_on_worker
+
+    @authenticated_on_worker.setter
+    def authenticated_on_worker(self, value: str):
+        self._authenticated_on_worker = value
+
+    @property
+    def authenticated_transport_info(self) -> dict:
+        """
+        The client transport information for the connection the cookie was authenticated in (if any).
+        """
+        if self._authenticated_transport_info is None and self._from_fbs:
+            _authenticated_transport_info = self._from_fbs.AuthenticatedTransportInfoAsBytes()
+            if _authenticated_transport_info:
+                self._authenticated_transport_info = cbor2.loads(_authenticated_transport_info)
+            else:
+                self._authenticated_transport_info = {}
+        return self._authenticated_transport_info
+
+    @authenticated_transport_info.setter
+    def authenticated_transport_info(self, value: Optional[Dict[str, Any]]):
+        assert value is None or type(value) == dict
+        self._authenticated_transport_info = value
 
     @property
     def authenticated_session(self) -> int:
@@ -301,6 +353,21 @@ class Cookie(object):
         self._authrole = value
 
     @property
+    def authmethod(self) -> str:
+        """
+        The WAMP authmethod a cookie-authenticating session is to join under.
+        """
+        if self._authmethod is None and self._from_fbs:
+            _authmethod = self._from_fbs.Authmethod()
+            if _authmethod:
+                self._authmethod = _authmethod.decode('utf8')
+        return self._authmethod
+
+    @authmethod.setter
+    def authmethod(self, value: str):
+        self._authmethod = value
+
+    @property
     def authrealm(self) -> str:
         """
         The WAMP realm a cookie-authenticating session is to join.
@@ -355,6 +422,14 @@ class Cookie(object):
         if authenticated_on_node:
             authenticated_on_node = builder.CreateString(authenticated_on_node)
 
+        authenticated_on_worker = self.authenticated_on_worker
+        if authenticated_on_worker:
+            authenticated_on_worker = builder.CreateString(authenticated_on_worker)
+
+        authenticated_transport_info = self.authenticated_transport_info
+        if authenticated_transport_info:
+            authenticated_transport_info = builder.CreateString(cbor2.dumps(authenticated_transport_info))
+
         authenticated_authmethod = self.authenticated_authmethod
         if authenticated_authmethod:
             authenticated_authmethod = builder.CreateString(authenticated_authmethod)
@@ -366,6 +441,10 @@ class Cookie(object):
         authrole = self.authrole
         if authrole:
             authrole = builder.CreateString(authrole)
+
+        authmethod = self.authmethod
+        if authmethod:
+            authmethod = builder.CreateString(authmethod)
 
         authrealm = self.authrealm
         if authrealm:
@@ -398,6 +477,12 @@ class Cookie(object):
         if authenticated_on_node:
             CookieGen.CookieAddAuthenticatedOnNode(builder, authenticated_on_node)
 
+        if authenticated_on_worker:
+            CookieGen.CookieAddAuthenticatedOnWorker(builder, authenticated_on_worker)
+
+        if authenticated_transport_info:
+            CookieGen.CookieAddAuthenticatedTransportInfo(builder, authenticated_transport_info)
+
         if self.authenticated_session:
             CookieGen.CookieAddAuthenticatedSession(builder, self.authenticated_session)
 
@@ -412,6 +497,9 @@ class Cookie(object):
 
         if authrole:
             CookieGen.CookieAddAuthrole(builder, authrole)
+
+        if authmethod:
+            CookieGen.CookieAddAuthmethod(builder, authmethod)
 
         if authrealm:
             CookieGen.CookieAddAuthrealm(builder, authrealm)

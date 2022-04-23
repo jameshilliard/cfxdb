@@ -29,11 +29,14 @@ def fill_cookie(cookie):
     cookie.value = util.newid(24)
     cookie.authenticated = np.datetime64(time_ns(), 'ns')
     cookie.authenticated_on_node = uuid.uuid4()
+    cookie.authenticated_on_worker = random.choice(['worker1', 'worker2', 'worker3'])
+    cookie.authenticated_transport_info = {'xoo': 'yar', 'zaz': [9, 8, 7]}
     cookie.authenticated_session = util.id()
     cookie.authenticated_joined_at = np.datetime64(time_ns(), 'ns')
     cookie.authenticated_authmethod = random.choice(['meth1', 'meth2', 'meth3'])
     cookie.authid = util.generate_token(4, 3)
     cookie.authrole = random.choice(['role1', 'role2', 'role3'])
+    cookie.authmethod = random.choice(['method1', 'method2', 'method3'])
     cookie.authrealm = random.choice(['realm1', 'realm2', 'realm3'])
     cookie.authextra = {'foo': 'bar', 'baz': [1, 2, 3]}
 
@@ -46,11 +49,14 @@ def fill_cookie_empty(cookie):
     cookie.value = None
     cookie.authenticated = None
     cookie.authenticated_on_node = None
+    cookie.authenticated_on_worker = None
+    cookie.authenticated_transport_info = None
     cookie.authenticated_session = None
     cookie.authenticated_joined_at = None
     cookie.authenticated_authmethod = None
     cookie.authid = None
     cookie.authrole = None
+    cookie.authmethod = None
     cookie.authrealm = None
     cookie.authextra = None
 
@@ -73,7 +79,7 @@ def test_cookie_roundtrip(cookie, builder):
     obj = cookie.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) == 296
+    assert len(data) == 360
 
     # create python object from bytes (flatbuffes)
     _cookie = Cookie.cast(data)
@@ -85,11 +91,14 @@ def test_cookie_roundtrip(cookie, builder):
     assert _cookie.value == cookie.value
     assert _cookie.authenticated == cookie.authenticated
     assert _cookie.authenticated_on_node == cookie.authenticated_on_node
+    assert _cookie.authenticated_on_worker == cookie.authenticated_on_worker
+    assert _cookie.authenticated_transport_info == cookie.authenticated_transport_info
     assert _cookie.authenticated_session == cookie.authenticated_session
     assert _cookie.authenticated_joined_at == cookie.authenticated_joined_at
     assert _cookie.authenticated_authmethod == cookie.authenticated_authmethod
     assert _cookie.authid == cookie.authid
     assert _cookie.authrole == cookie.authrole
+    assert _cookie.authmethod == cookie.authmethod
     assert _cookie.authrealm == cookie.authrealm
     assert _cookie.authextra == cookie.authextra
 
@@ -116,11 +125,14 @@ def test_cookie_empty(builder):
     assert _cookie.value is None
     assert _cookie.authenticated == unix_zero
     assert _cookie.authenticated_on_node is None
+    assert _cookie.authenticated_on_worker is None
+    assert _cookie.authenticated_transport_info == {}
     assert _cookie.authenticated_session == 0
     assert _cookie.authenticated_joined_at == unix_zero
     assert _cookie.authenticated_authmethod is None
     assert _cookie.authid is None
     assert _cookie.authrole is None
+    assert _cookie.authmethod is None
     assert _cookie.authrealm is None
     assert _cookie.authextra == {}
 
@@ -141,11 +153,14 @@ def test_cookie_roundtrip_perf(cookie, builder):
         assert _cookie.value == cookie.value
         assert _cookie.authenticated == cookie.authenticated
         assert _cookie.authenticated_on_node == cookie.authenticated_on_node
+        assert _cookie.authenticated_on_worker == cookie.authenticated_on_worker
+        assert _cookie.authenticated_transport_info == cookie.authenticated_transport_info
         assert _cookie.authenticated_session == cookie.authenticated_session
         assert _cookie.authenticated_joined_at == cookie.authenticated_joined_at
         assert _cookie.authenticated_authmethod == cookie.authenticated_authmethod
         assert _cookie.authid == cookie.authid
         assert _cookie.authrole == cookie.authrole
+        assert _cookie.authmethod == cookie.authmethod
         assert _cookie.authrealm == cookie.authrealm
         assert _cookie.authextra == cookie.authextra
 
