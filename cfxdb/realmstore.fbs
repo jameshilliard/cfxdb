@@ -1,0 +1,57 @@
+// Crossbar.io Database (cfxdb) - Copyright (c) Crossbar.io Technologies GmbH. All rights reserved.
+
+include "common.fbs";
+
+namespace realmstore;
+
+/// This table stores WAMP sessions and serves as an anchor for all usage related data.
+table AppSession
+{
+    /// OID of the application realm this session is/was joined on.
+    arealm_oid: [uint8] (uuid);
+
+    /// Unlimited time, globally unique, long-term OID of this session. The pair of WAMP session ID and join time ``(session, joined_at)`` bidirectionally maps to session ``oid``.
+    oid: [uint8] (uuid);
+
+    /// The WAMP session_id of the session.
+    session: uint64;
+
+    /// Timestamp when the session was joined by the router. Epoch time in ns.
+    joined_at: uint64 (timestamp);
+
+    /// Timestamp when the session left the router. Epoch time in ns.
+    left_at: uint64 (timestamp);
+
+    /// OID of the node of the router worker hosting this session.
+    node_oid: [uint8] (uuid);
+
+    /// Name (management realm WAMP authid) of the node of the router worker hosting this session.
+    node_authid: string;
+
+    /// Local worker name of the router worker hosting this session.
+    worker_name: string;
+
+    /// Local worker PID of the router worker hosting this session.
+    worker_pid: int32;
+
+    /// Session transport information.
+    transport: [uint8] (cbor);
+
+    /// The WAMP realm (name) the session is/was joined on.
+    realm: string;
+
+    /// The WAMP authid the session was authenticated under.
+    authid: string;
+
+    /// The WAMP authrole the session was authenticated under.
+    authrole: string;
+
+    /// The WAMP authmethod uses to authenticate the session.
+    authmethod: string;
+
+    /// The WAMP authprovider that was handling the session authentication.
+    authprovider: string;
+
+    /// The WAMP authextra as provided to the authenticated session.
+    authextra: [uint8] (cbor);
+}
