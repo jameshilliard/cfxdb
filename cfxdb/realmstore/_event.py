@@ -7,7 +7,9 @@
 
 import pprint
 
-from cfxdb.gen.eventstore import Event as EventGen
+from zlmdb import table, MapOidTimestampFlatBuffers
+
+from cfxdb.gen.realmstore import Event as EventGen
 
 
 class Event(object):
@@ -163,3 +165,13 @@ class Event(object):
         final = EventGen.EventEnd(builder)
 
         return final
+
+
+@table('40a9df31-6065-496f-809f-027a1879654c', build=Event.build, cast=Event.cast)
+class Events(MapOidTimestampFlatBuffers):
+    """
+    Persisted events archive.
+
+
+    Map :class:`zlmdb.MapOid3FlatBuffers` from ``(subscription, time_ns)`` to :class:`cfxdb.eventstore.Event`.
+    """

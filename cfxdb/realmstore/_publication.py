@@ -10,7 +10,9 @@ import pprint
 import cbor2
 import flatbuffers
 
-from cfxdb.gen.eventstore import Publication as PublicationGen
+from zlmdb import table, MapOidFlatBuffers
+
+from cfxdb.gen.realmstore import Publication as PublicationGen
 
 
 class _Publication(PublicationGen.Publication):
@@ -678,3 +680,12 @@ class Publication(object):
         final = PublicationGen.PublicationEnd(builder)
 
         return final
+
+
+@table('dd04931a-753b-4fde-8140-d66b93519c73', build=Publication.build, cast=Publication.cast)
+class Publications(MapOidFlatBuffers):
+    """
+    Persisted publications archive.
+
+    Map :class:`zlmdb.MapOidFlatBuffers` from ``publication`` to :class:`cfxdb.eventstore.Publication`.
+    """

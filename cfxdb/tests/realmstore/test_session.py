@@ -17,7 +17,7 @@ from txaio import with_twisted, time_ns  # noqa
 
 from autobahn import util
 from autobahn.wamp.types import TransportDetails
-from cfxdb.realmstore import AppSession
+from cfxdb.realmstore import Session
 
 DATA1 = {
     'authextra': {
@@ -108,26 +108,26 @@ DATA1 = {
 }
 
 
-def fill_app_session(app_session):
+def fill_session(session):
     _td1 = TransportDetails.parse(DATA1['transport'])
     _td2 = TransportDetails.parse(DATA1['authextra']['transport'])
 
-    app_session.arealm_oid = uuid.uuid4()
-    app_session.oid = uuid.uuid4()
-    app_session.session = util.id()
-    app_session.joined_at = np.datetime64(time_ns() - 723 * 10**9, 'ns')
-    app_session.left_at = np.datetime64(time_ns(), 'ns')
-    app_session.node_oid = uuid.uuid4()
-    app_session.node_authid = 'intel-nuci7'
-    app_session.worker_name = 'router1'
-    app_session.worker_pid = 28797
-    app_session.transport = _td1.marshal()
-    app_session.realm = 'realm-{}'.format(uuid.uuid4())
-    app_session.authid = util.generate_serial_number()
-    app_session.authrole = random.choice(['admin', 'user*', 'guest', 'anon*'])
-    app_session.authmethod = random.choice(['wampcra', 'cookie', 'anonymous-proxy'])
-    app_session.authprovider = random.choice(['static', 'dynamic'])
-    app_session.authextra = {
+    session.arealm_oid = uuid.uuid4()
+    session.oid = uuid.uuid4()
+    session.session = util.id()
+    session.joined_at = np.datetime64(time_ns() - 723 * 10**9, 'ns')
+    session.left_at = np.datetime64(time_ns(), 'ns')
+    session.node_oid = uuid.uuid4()
+    session.node_authid = 'intel-nuci7'
+    session.worker_name = 'router1'
+    session.worker_pid = 28797
+    session.transport = _td1.marshal()
+    session.realm = 'realm-{}'.format(uuid.uuid4())
+    session.authid = util.generate_serial_number()
+    session.authrole = random.choice(['admin', 'user*', 'guest', 'anon*'])
+    session.authmethod = random.choice(['wampcra', 'cookie', 'anonymous-proxy'])
+    session.authprovider = random.choice(['static', 'dynamic'])
+    session.authextra = {
         'transport': _td2.marshal(),
         'x_cb_node': DATA1['authextra'].get('x_cb_node', None),
         'x_cb_peer': DATA1['authextra'].get('x_cb_peer', None),
@@ -143,67 +143,67 @@ def builder():
 
 
 @pytest.fixture(scope='function')
-def app_session():
-    _app_session = AppSession()
-    fill_app_session(_app_session)
-    return _app_session
+def session():
+    _session = Session()
+    fill_session(_session)
+    return _session
 
 
-def test_app_session_roundtrip(app_session, builder):
+def test_session_roundtrip(session, builder):
     # serialize to bytes (flatbuffers) from python object
-    obj = app_session.build(builder)
+    obj = session.build(builder)
     builder.Finish(obj)
     data = builder.Output()
     assert len(data) in [1584, 1592]
 
     # create python object from bytes (flatbuffers)
-    _app_session = AppSession.cast(data)
+    _session = Session.cast(data)
 
-    assert _app_session.arealm_oid == app_session.arealm_oid
-    assert _app_session.oid == app_session.oid
-    assert _app_session.session == app_session.session
-    assert _app_session.joined_at == app_session.joined_at
-    assert _app_session.left_at == app_session.left_at
-    assert _app_session.node_oid == app_session.node_oid
-    assert _app_session.node_authid == app_session.node_authid
-    assert _app_session.worker_name == app_session.worker_name
-    assert _app_session.worker_pid == app_session.worker_pid
-    assert _app_session.transport == app_session.transport
-    assert _app_session.realm == app_session.realm
-    assert _app_session.authid == app_session.authid
-    assert _app_session.authrole == app_session.authrole
-    assert _app_session.authmethod == app_session.authmethod
-    assert _app_session.authprovider == app_session.authprovider
-    assert _app_session.authextra == app_session.authextra
+    assert _session.arealm_oid == session.arealm_oid
+    assert _session.oid == session.oid
+    assert _session.session == session.session
+    assert _session.joined_at == session.joined_at
+    assert _session.left_at == session.left_at
+    assert _session.node_oid == session.node_oid
+    assert _session.node_authid == session.node_authid
+    assert _session.worker_name == session.worker_name
+    assert _session.worker_pid == session.worker_pid
+    assert _session.transport == session.transport
+    assert _session.realm == session.realm
+    assert _session.authid == session.authid
+    assert _session.authrole == session.authrole
+    assert _session.authmethod == session.authmethod
+    assert _session.authprovider == session.authprovider
+    assert _session.authextra == session.authextra
 
 
-def test_app_session_roundtrip_perf(app_session, builder):
-    obj = app_session.build(builder)
+def test_session_roundtrip_perf(session, builder):
+    obj = session.build(builder)
     builder.Finish(obj)
     data = builder.Output()
     scratch = {'session': 0}
 
     def loop():
-        _app_session = AppSession.cast(data)
+        _session = Session.cast(data)
         if True:
-            assert _app_session.arealm_oid == app_session.arealm_oid
-            assert _app_session.oid == app_session.oid
-            assert _app_session.session == app_session.session
-            assert _app_session.joined_at == app_session.joined_at
-            assert _app_session.left_at == app_session.left_at
-            assert _app_session.node_oid == app_session.node_oid
-            assert _app_session.node_authid == app_session.node_authid
-            assert _app_session.worker_name == app_session.worker_name
-            assert _app_session.worker_pid == app_session.worker_pid
-            assert _app_session.transport == app_session.transport
-            assert _app_session.realm == app_session.realm
-            assert _app_session.authid == app_session.authid
-            assert _app_session.authrole == app_session.authrole
-            assert _app_session.authmethod == app_session.authmethod
-            assert _app_session.authprovider == app_session.authprovider
-            assert _app_session.authextra == app_session.authextra
+            assert _session.arealm_oid == session.arealm_oid
+            assert _session.oid == session.oid
+            assert _session.session == session.session
+            assert _session.joined_at == session.joined_at
+            assert _session.left_at == session.left_at
+            assert _session.node_oid == session.node_oid
+            assert _session.node_authid == session.node_authid
+            assert _session.worker_name == session.worker_name
+            assert _session.worker_pid == session.worker_pid
+            assert _session.transport == session.transport
+            assert _session.realm == session.realm
+            assert _session.authid == session.authid
+            assert _session.authrole == session.authrole
+            assert _session.authmethod == session.authmethod
+            assert _session.authprovider == session.authprovider
+            assert _session.authextra == session.authextra
 
-            scratch['session'] += app_session.session
+            scratch['session'] += session.session
 
     N = 5
     M = 100000

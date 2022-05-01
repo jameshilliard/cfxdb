@@ -4,7 +4,5 @@ Router Database
 .. toctree::
     :maxdepth: 3
 
-    eventstore
+    realmstore
     cookiestore
-    sessionstore
-    callstore

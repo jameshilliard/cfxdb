@@ -16,7 +16,7 @@ from txaio import time_ns
 from autobahn import util
 import zlmdb
 
-from cfxdb.eventstore import Event
+from cfxdb.realmstore import Event
 
 zlmdb.TABLES_BY_UUID = {}
 

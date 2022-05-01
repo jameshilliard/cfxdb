@@ -1,20 +1,28 @@
-Event Store
+Realm Store
 ===========
 
 .. contents:: :local:
 
 -------------
 
+RealmStore
+----------
+
+.. autoclass:: cfxdb.realmstore.RealmStore
+    :members:
+
+-------------
 
 Session
 -------
 
-* :class:`cfxdb.eventstore.Session`
-* :class:`cfxdb.schema.Sessions`
+* :class:`cfxdb.realmstore.Session`
+* :class:`cfxdb.realmstore.Sessions`
+* :class:`cfxdb.realmstore.IndexSessionsBySessionId`
 
 -------
 
-.. autoclass:: cfxdb.eventstore.Session
+.. autoclass:: cfxdb.realmstore.Session
     :members:
     :undoc-members:
         session,
@@ -25,7 +33,11 @@ Session
         authrole
     :member-order: bysource
 
-.. autoclass:: cfxdb.schema.Sessions
+.. autoclass:: cfxdb.realmstore.Sessions
+    :members:
+    :show-inheritance:
+
+.. autoclass:: cfxdb.realmstore.IndexSessionsBySessionId
     :members:
     :show-inheritance:
 
@@ -33,12 +45,12 @@ Session
 Publication
 -----------
 
-* :class:`cfxdb.eventstore.Publication`
-* :class:`cfxdb.schema.Publications`
+* :class:`cfxdb.realmstore.Publication`
+* :class:`cfxdb.realmstore.Publications`
 
 -------
 
-.. autoclass:: cfxdb.eventstore.Publication
+.. autoclass:: cfxdb.realmstore.Publication
     :members:
     :undoc-members:
         timestamp,
@@ -62,20 +74,20 @@ Publication
         enc_serializer
     :member-order: bysource
 
-.. autoclass:: cfxdb.schema.Publications
+.. autoclass:: cfxdb.realmstore.Publications
     :members:
     :show-inheritance:
 
 
-Publication
------------
+Event
+-----
 
-* :class:`cfxdb.eventstore.Event`
-* :class:`cfxdb.schema.Events`
+* :class:`cfxdb.realmstore.Event`
+* :class:`cfxdb.realmstore.Events`
 
 -------
 
-.. autoclass:: cfxdb.eventstore.Event
+.. autoclass:: cfxdb.realmstore.Event
     :members:
     :undoc-members:
         timestamp,
@@ -86,6 +98,6 @@ Publication
         acknowledged_delivery
     :member-order: bysource
 
-.. autoclass:: cfxdb.schema.Events
+.. autoclass:: cfxdb.realmstore.Events
     :members:
     :show-inheritance:

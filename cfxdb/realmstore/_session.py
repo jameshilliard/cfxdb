@@ -13,14 +13,15 @@ import pprint
 import flatbuffers
 import numpy as np
 
-from cfxdb.gen.realmstore import AppSession as AppSessionGen
+from zlmdb import table, MapUuidFlatBuffers, MapUint64TimestampUuid
+from cfxdb.gen.realmstore import Session as SessionGen
 
 
-class _AppSessionGen(AppSessionGen.AppSession):
+class _SessionGen(SessionGen.Session):
     @classmethod
     def GetRootAs(cls, buf, offset=0):
         n = flatbuffers.encode.Get(flatbuffers.packer.uoffset, buf, offset)
-        x = _AppSessionGen()
+        x = _SessionGen()
         x.Init(buf, n + offset)
         return x
 
@@ -65,7 +66,7 @@ class _AppSessionGen(AppSessionGen.AppSession):
         return None
 
 
-class AppSession(object):
+class Session(object):
     """
     Persisted session database object.
     """
@@ -90,7 +91,7 @@ class AppSession(object):
         '_authextra',
     )
 
-    def __init__(self, from_fbs: Optional[_AppSessionGen] = None):
+    def __init__(self, from_fbs: Optional[_SessionGen] = None):
         self._from_fbs = from_fbs
 
         # [uint8] (uuid)
@@ -409,8 +410,8 @@ class AppSession(object):
         self._authextra = value
 
     @staticmethod
-    def cast(buf) -> 'AppSession':
-        return AppSession(_AppSessionGen.GetRootAsAppSession(buf, 0))
+    def cast(buf) -> 'Session':
+        return Session(_SessionGen.GetRootAsSession(buf, 0))
 
     def build(self, builder):
 
@@ -462,56 +463,72 @@ class AppSession(object):
         if authextra:
             authextra = builder.CreateString(cbor2.dumps(authextra))
 
-        AppSessionGen.AppSessionStart(builder)
+        SessionGen.SessionStart(builder)
 
         if arealm_oid:
-            AppSessionGen.AppSessionAddArealmOid(builder, arealm_oid)
+            SessionGen.SessionAddArealmOid(builder, arealm_oid)
 
         if oid:
-            AppSessionGen.AppSessionAddOid(builder, oid)
+            SessionGen.SessionAddOid(builder, oid)
 
         if self.session:
-            AppSessionGen.AppSessionAddSession(builder, self.session)
+            SessionGen.SessionAddSession(builder, self.session)
 
         if self.joined_at:
-            AppSessionGen.AppSessionAddJoinedAt(builder, int(self.joined_at))
+            SessionGen.SessionAddJoinedAt(builder, int(self.joined_at))
 
         if self.left_at:
-            AppSessionGen.AppSessionAddLeftAt(builder, int(self.left_at))
+            SessionGen.SessionAddLeftAt(builder, int(self.left_at))
 
         if node_oid:
-            AppSessionGen.AppSessionAddNodeOid(builder, node_oid)
+            SessionGen.SessionAddNodeOid(builder, node_oid)
 
         if node_authid:
-            AppSessionGen.AppSessionAddNodeAuthid(builder, node_authid)
+            SessionGen.SessionAddNodeAuthid(builder, node_authid)
 
         if worker_name:
-            AppSessionGen.AppSessionAddWorkerName(builder, worker_name)
+            SessionGen.SessionAddWorkerName(builder, worker_name)
 
         if self.worker_pid:
-            AppSessionGen.AppSessionAddWorkerPid(builder, self.worker_pid)
+            SessionGen.SessionAddWorkerPid(builder, self.worker_pid)
 
         if transport:
-            AppSessionGen.AppSessionAddTransport(builder, transport)
+            SessionGen.SessionAddTransport(builder, transport)
 
         if realm:
-            AppSessionGen.AppSessionAddRealm(builder, realm)
+            SessionGen.SessionAddRealm(builder, realm)
 
         if authid:
-            AppSessionGen.AppSessionAddAuthid(builder, authid)
+            SessionGen.SessionAddAuthid(builder, authid)
 
         if authrole:
-            AppSessionGen.AppSessionAddAuthrole(builder, authrole)
+            SessionGen.SessionAddAuthrole(builder, authrole)
 
         if authmethod:
-            AppSessionGen.AppSessionAddAuthmethod(builder, authmethod)
+            SessionGen.SessionAddAuthmethod(builder, authmethod)
 
         if authprovider:
-            AppSessionGen.AppSessionAddAuthprovider(builder, authprovider)
+            SessionGen.SessionAddAuthprovider(builder, authprovider)
 
         if authextra:
-            AppSessionGen.AppSessionAddAuthextra(builder, authextra)
+            SessionGen.SessionAddAuthextra(builder, authextra)
 
-        final = AppSessionGen.AppSessionEnd(builder)
+        final = SessionGen.SessionEnd(builder)
 
         return final
+
+
+@table('403ecc06-f564-4ea9-92f2-c4c13bd2ba5a', build=Session.build, cast=Session.cast)
+class Sessions(MapUuidFlatBuffers):
+    """
+    Persisted session information table.
+
+    Map :class:`zlmdb.MapUuidFlatBuffers` from ``session_oid`` to :class:`cfxdb.realmstore.Session`
+    """
+
+
+@table('0ea1ea1a-45f2-4352-a4a0-1fafff099c96')
+class IndexSessionsBySessionId(MapUint64TimestampUuid):
+    """
+    Index: ``(sessionid, joined_at) -> session_oid``
+    """
