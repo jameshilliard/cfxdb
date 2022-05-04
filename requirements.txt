@@ -1,4 +1,4 @@
-autobahn[twisted,xbr,serialization]>=22.3.2
-zlmdb>=22.3.1
+autobahn[twisted,xbr,serialization]>=22.4.1
+zlmdb>=22.4.1
 web3>=5.28.0
 argon2_cffi>=20.1.0
