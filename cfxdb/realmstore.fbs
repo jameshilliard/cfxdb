@@ -81,8 +81,23 @@ table Session
     /// Local worker PID of the router worker hosting this session.
     worker_pid: int32;
 
-    /// Session transport information.
+    /// Session transport information, the incoming frontend client connection in proxy-router setups. This is also returned as part of authextra to the client.
     transport: [uint8] (cbor);
+
+    /// From proxy (in proxy-router cluster setups): OID of the node of the proxy worker hosting this session.
+    proxy_node_oid: [uint8] (uuid);
+
+    /// From proxy (in proxy-router cluster setups): Name (management realm WAMP authid) of the node of the proxy worker hosting this session.
+    proxy_node_authid: string;
+
+    /// From proxy (in proxy-router cluster setups): Local worker name of the proxy worker hosting this session.
+    proxy_worker_name: string;
+
+    /// From proxy (in proxy-router cluster setups): Local worker PID of the proxy worker hosting this session.
+    proxy_worker_pid: int32;
+
+    /// From proxy (in proxy-router cluster setups): Session transport information, the transport from the proxy to the backend router.
+    proxy_transport: [uint8] (cbor);
 
     /// The WAMP realm (name) the session is/was joined on.
     realm: string;

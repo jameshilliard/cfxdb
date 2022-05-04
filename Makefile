@@ -79,6 +79,9 @@ test_single:
 test_cookiestore:
 	pytest -v -s ./cfxdb/tests/cookiestore/test_cookie.py
 
+test_realmstore:
+	pytest -v -s ./cfxdb/tests/realmstore/test_session.py
+
 # auto-format code - WARNING: this my change files, in-place!
 # use "pip install yapf==0.29.0"
 autoformat:

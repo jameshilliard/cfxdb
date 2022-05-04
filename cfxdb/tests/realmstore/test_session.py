@@ -107,10 +107,31 @@ DATA1 = {
     }
 }
 
+DATA2 = {
+    'channel_framing': 'rawsocket',
+    'channel_id': {},
+    'channel_serializer': 'cbor',
+    'channel_type': 'tcp',
+    'http_cbtid': None,
+    'http_headers_received': None,
+    'http_headers_sent': None,
+    'is_secure': False,
+    'is_server': None,
+    'own': None,
+    'own_fd': -1,
+    'own_pid': 14017,
+    'own_tid': 14017,
+    'peer': 'unix',
+    'peer_cert': None,
+    'websocket_extensions_in_use': None,
+    'websocket_protocol': 'wamp.2.cbor'
+}
+
 
 def fill_session(session):
     _td1 = TransportDetails.parse(DATA1['transport'])
     _td2 = TransportDetails.parse(DATA1['authextra']['transport'])
+    _td3 = TransportDetails.parse(DATA2)
 
     session.arealm_oid = uuid.uuid4()
     session.oid = uuid.uuid4()
@@ -122,6 +143,11 @@ def fill_session(session):
     session.worker_name = 'router1'
     session.worker_pid = 28797
     session.transport = _td1.marshal()
+    session.proxy_node_oid = uuid.uuid4()
+    session.proxy_node_authid = 'intel-nuci7'
+    session.proxy_worker_name = 'proxy1'
+    session.proxy_worker_pid = 30992
+    session.proxy_transport = _td3.marshal()
     session.realm = 'realm-{}'.format(uuid.uuid4())
     session.authid = util.generate_serial_number()
     session.authrole = random.choice(['admin', 'user*', 'guest', 'anon*'])
@@ -154,7 +180,7 @@ def test_session_roundtrip(session, builder):
     obj = session.build(builder)
     builder.Finish(obj)
     data = builder.Output()
-    assert len(data) in [1584, 1592]
+    assert len(data) in [1944, 1952]
 
     # create python object from bytes (flatbuffers)
     _session = Session.cast(data)
@@ -169,6 +195,11 @@ def test_session_roundtrip(session, builder):
     assert _session.worker_name == session.worker_name
     assert _session.worker_pid == session.worker_pid
     assert _session.transport == session.transport
+    assert _session.proxy_node_oid == session.proxy_node_oid
+    assert _session.proxy_node_authid == session.proxy_node_authid
+    assert _session.proxy_worker_name == session.proxy_worker_name
+    assert _session.proxy_worker_pid == session.proxy_worker_pid
+    assert _session.proxy_transport == session.proxy_transport
     assert _session.realm == session.realm
     assert _session.authid == session.authid
     assert _session.authrole == session.authrole
@@ -196,6 +227,11 @@ def test_session_roundtrip_perf(session, builder):
             assert _session.worker_name == session.worker_name
             assert _session.worker_pid == session.worker_pid
             assert _session.transport == session.transport
+            assert _session.proxy_node_oid == session.proxy_node_oid
+            assert _session.proxy_node_authid == session.proxy_node_authid
+            assert _session.proxy_worker_name == session.proxy_worker_name
+            assert _session.proxy_worker_pid == session.proxy_worker_pid
+            assert _session.proxy_transport == session.proxy_transport
             assert _session.realm == session.realm
             assert _session.authid == session.authid
             assert _session.authrole == session.authrole

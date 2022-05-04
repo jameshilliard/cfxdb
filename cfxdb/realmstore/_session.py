@@ -57,8 +57,24 @@ class _SessionGen(SessionGen.Session):
             return memoryview(self._tab.Bytes)[_off:_off + _len]
         return None
 
+    def ProxyNodeOidAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(24))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
+    def ProxyTransportAsBytes(self):
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(32))
+        if o != 0:
+            _off = self._tab.Vector(o)
+            _len = self._tab.VectorLen(o)
+            return memoryview(self._tab.Bytes)[_off:_off + _len]
+        return None
+
     def AuthextraAsBytes(self):
-        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(34))
+        o = flatbuffers.number_types.UOffsetTFlags.py_type(self._tab.Offset(44))
         if o != 0:
             _off = self._tab.Vector(o)
             _len = self._tab.VectorLen(o)
@@ -83,6 +99,11 @@ class Session(object):
         '_worker_name',
         '_worker_pid',
         '_transport',
+        '_proxy_node_oid',
+        '_proxy_node_authid',
+        '_proxy_worker_name',
+        '_proxy_worker_pid',
+        '_proxy_transport',
         '_realm',
         '_authid',
         '_authrole',
@@ -124,6 +145,21 @@ class Session(object):
         # [uint8] (cbor)
         self._transport: Optional[Dict[str, Any]] = None
 
+        # [uint8] (uuid)
+        self._proxy_node_oid: Optional[uuid.UUID] = None
+
+        # string
+        self._proxy_node_authid: Optional[str] = None
+
+        # string
+        self._proxy_worker_name: Optional[str] = None
+
+        # int32
+        self._proxy_worker_pid: Optional[int] = None
+
+        # [uint8] (cbor)
+        self._proxy_transport: Optional[Dict[str, Any]] = None
+
         # string
         self._realm: Optional[str] = None
 
@@ -154,6 +190,11 @@ class Session(object):
             'worker_name': self.worker_name,
             'worker_pid': self.worker_pid,
             'transport': self.transport,
+            'proxy_node_oid': self.proxy_node_oid.bytes if self.proxy_node_oid else None,
+            'proxy_node_authid': self.proxy_node_authid,
+            'proxy_worker_name': self.proxy_worker_name,
+            'proxy_worker_pid': self.proxy_worker_pid,
+            'proxy_transport': self.proxy_transport,
             'realm': self.realm,
             'authid': self.authid,
             'authrole': self.authrole,
@@ -318,6 +359,83 @@ class Session(object):
         self._transport = value
 
     @property
+    def proxy_node_oid(self) -> Optional[uuid.UUID]:
+        """
+        From proxy (in proxy-router cluster setups): OID of the node of the proxy worker hosting this session.
+        """
+        if self._proxy_node_oid is None and self._from_fbs:
+            if self._from_fbs.ProxyNodeOidLength():
+                _proxy_node_oid = self._from_fbs.ProxyNodeOidAsBytes()
+                self._proxy_node_oid = uuid.UUID(bytes=bytes(_proxy_node_oid))
+        return self._proxy_node_oid
+
+    @proxy_node_oid.setter
+    def proxy_node_oid(self, value: Optional[uuid.UUID]):
+        assert value is None or isinstance(value, uuid.UUID)
+        self._proxy_node_oid = value
+
+    @property
+    def proxy_node_authid(self) -> Optional[str]:
+        """
+        From proxy (in proxy-router cluster setups): Name (management realm WAMP authid) of the node of the proxy worker hosting this session.
+        """
+        if self._proxy_node_authid is None and self._from_fbs:
+            _proxy_node_authid = self._from_fbs.ProxyNodeAuthid()
+            if _proxy_node_authid:
+                self._proxy_node_authid = _proxy_node_authid.decode('utf8')
+        return self._proxy_node_authid
+
+    @proxy_node_authid.setter
+    def proxy_node_authid(self, value: Optional[str]):
+        self._proxy_node_authid = value
+
+    @property
+    def proxy_worker_name(self) -> Optional[str]:
+        """
+        From proxy (in proxy-router cluster setups): Local worker name of the proxy worker hosting this session.
+        """
+        if self._proxy_worker_name is None and self._from_fbs:
+            _proxy_worker_name = self._from_fbs.ProxyWorkerName()
+            if _proxy_worker_name:
+                self._proxy_worker_name = _proxy_worker_name.decode('utf8')
+        return self._proxy_worker_name
+
+    @proxy_worker_name.setter
+    def proxy_worker_name(self, value: Optional[str]):
+        self._proxy_worker_name = value
+
+    @property
+    def proxy_worker_pid(self) -> Optional[int]:
+        """
+        From proxy (in proxy-router cluster setups): Local worker PID of the proxy worker hosting this session.
+        """
+        if self._proxy_worker_pid is None and self._from_fbs:
+            self._proxy_worker_pid = self._from_fbs.ProxyWorkerPid()
+        return self._proxy_worker_pid
+
+    @proxy_worker_pid.setter
+    def proxy_worker_pid(self, value: Optional[int]):
+        self._proxy_worker_pid = value
+
+    @property
+    def proxy_transport(self) -> Optional[Dict[str, Any]]:
+        """
+        From proxy (in proxy-router cluster setups): Session transport information, the transport from the proxy to the backend router.
+        """
+        if self._proxy_transport is None and self._from_fbs:
+            _proxy_transport = self._from_fbs.ProxyTransportAsBytes()
+            if _proxy_transport:
+                self._proxy_transport = cbor2.loads(_proxy_transport)
+            else:
+                self._proxy_transport = {}
+        return self._proxy_transport
+
+    @proxy_transport.setter
+    def proxy_transport(self, value: Optional[Dict[str, Any]]):
+        assert value is None or type(value) == dict
+        self._proxy_transport = value
+
+    @property
     def realm(self) -> Optional[str]:
         """
         The WAMP realm the session is/was joined on.
@@ -439,6 +557,22 @@ class Session(object):
         if transport:
             transport = builder.CreateString(cbor2.dumps(transport))
 
+        proxy_node_oid = self.proxy_node_oid.bytes if self.proxy_node_oid else None
+        if proxy_node_oid:
+            proxy_node_oid = builder.CreateString(proxy_node_oid)
+
+        proxy_node_authid = self.proxy_node_authid
+        if proxy_node_authid:
+            proxy_node_authid = builder.CreateString(proxy_node_authid)
+
+        proxy_worker_name = self.proxy_worker_name
+        if proxy_worker_name:
+            proxy_worker_name = builder.CreateString(proxy_worker_name)
+
+        proxy_transport = self.proxy_transport
+        if proxy_transport:
+            proxy_transport = builder.CreateString(cbor2.dumps(proxy_transport))
+
         realm = self.realm
         if realm:
             realm = builder.CreateString(realm)
@@ -494,6 +628,21 @@ class Session(object):
 
         if transport:
             SessionGen.SessionAddTransport(builder, transport)
+
+        if proxy_node_oid:
+            SessionGen.SessionAddProxyNodeOid(builder, proxy_node_oid)
+
+        if proxy_node_authid:
+            SessionGen.SessionAddProxyNodeAuthid(builder, proxy_node_authid)
+
+        if proxy_worker_name:
+            SessionGen.SessionAddProxyWorkerName(builder, proxy_worker_name)
+
+        if self.proxy_worker_pid:
+            SessionGen.SessionAddProxyWorkerPid(builder, self.proxy_worker_pid)
+
+        if proxy_transport:
+            SessionGen.SessionAddProxyTransport(builder, proxy_transport)
 
         if realm:
             SessionGen.SessionAddRealm(builder, realm)
