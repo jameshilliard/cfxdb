@@ -38,7 +38,8 @@ with open('README.rst') as f:
 # we read requirements from requirements*.txt files down below
 install_requires = []
 extras_require = {
-    'dev': []
+    'dev': [],
+    'xbr': []
 }
 
 reqs = 'requirements.txt'
@@ -70,6 +71,10 @@ with open(reqs) as f:
 with open('requirements-dev.txt') as f:
     for line in f.read().splitlines():
         extras_require['dev'].append(line.strip())
+
+with open('requirements-xbr.txt') as f:
+    for line in f.read().splitlines():
+        extras_require['xbr'].append(line.strip())
 
 setup(
     name='cfxdb',
@@ -113,6 +118,6 @@ setup(
     packages=find_packages(),
     # this flag will make files from MANIFEST.in go into _source_ distributions only
     include_package_data=True,
-    data_files=[('.', ['LICENSE', 'README.rst', 'requirements.txt', 'requirements-dev.txt'])],
+    data_files=[('.', ['LICENSE', 'README.rst', 'requirements.txt', 'requirements-dev.txt', 'requirements-xbr.txt'])],
     zip_safe=True
 )
