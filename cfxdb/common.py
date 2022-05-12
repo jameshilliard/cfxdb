@@ -5,118 +5,122 @@
 #
 ##############################################################################
 
-import web3
+try:
+    import web3
+except ImportError:
+    web3 = None
 import struct
 import uuid
 import pprint
 
 
-def unpack_uint256(data):
-    assert data is None or type(data) == bytes, 'data must by bytes, was {}'.format(type(data))
-    if data and type(data) == bytes:
-        assert len(data) == 32, 'data must be bytes[32], but was bytes[{}]'.format(len(data))
+if web3:
+    def unpack_uint256(data):
+        assert data is None or type(data) == bytes, 'data must by bytes, was {}'.format(type(data))
+        if data and type(data) == bytes:
+            assert len(data) == 32, 'data must be bytes[32], but was bytes[{}]'.format(len(data))
 
-    if data:
-        return web3.Web3.toInt(data)
-    else:
-        return 0
-
-
-def pack_uint256(value):
-    assert value is None or (type(value) == int and value >= 0
-                             and value < 2**256), 'value must be uint256, but was {}'.format(value)
-
-    if value:
-        data = web3.Web3.toBytes(value)
-        return b'\x00' * (32 - len(data)) + data
-    else:
-        return b'\x00' * 32
+        if data:
+            return web3.Web3.toInt(data)
+        else:
+            return 0
 
 
-class uint256(object):
-    def __init__(self, data=None):
-        self._data = data or b'\x00' * 32
+    def pack_uint256(value):
+        assert value is None or (type(value) == int and value >= 0
+                                 and value < 2**256), 'value must be uint256, but was {}'.format(value)
 
-    @property
-    def value(self):
-        return unpack_uint256(self._data)
-
-    @value.setter
-    def value(self, value):
-        self._data = pack_uint256(value)
-
-    def serialize(self):
-        return self._data
+        if value:
+            data = web3.Web3.toBytes(value)
+            return b'\x00' * (32 - len(data)) + data
+        else:
+            return b'\x00' * 32
 
 
-def unpack_uint128(data):
-    assert data is None or (type(data) == bytes and len(data) == 16)
+    class uint256(object):
+        def __init__(self, data=None):
+            self._data = data or b'\x00' * 32
 
-    if data:
-        return web3.Web3.toInt(data)
-    else:
-        return 0
+        @property
+        def value(self):
+            return unpack_uint256(self._data)
 
+        @value.setter
+        def value(self, value):
+            self._data = pack_uint256(value)
 
-def pack_uint128(value):
-    assert value is None or (type(value) == int and value >= 0 and value < 2**128)
-
-    if value:
-        data = web3.Web3.toBytes(value)
-        return b'\x00' * (16 - len(data)) + data
-    else:
-        return b'\x00' * 16
+        def serialize(self):
+            return self._data
 
 
-class uint128(object):
-    def __init__(self, data=None):
-        self._data = data or b'\x00' * 16
+    def unpack_uint128(data):
+        assert data is None or (type(data) == bytes and len(data) == 16)
 
-    @property
-    def value(self):
-        return unpack_uint128(self._data)
-
-    @value.setter
-    def value(self, value):
-        self._data = pack_uint128(value)
-
-    def serialize(self):
-        return self._data
+        if data:
+            return web3.Web3.toInt(data)
+        else:
+            return 0
 
 
-def unpack_uint64(data):
-    assert data is None or (type(data) == bytes and len(data) == 8)
+    def pack_uint128(value):
+        assert value is None or (type(value) == int and value >= 0 and value < 2**128)
 
-    if data:
-        return web3.Web3.toInt(data)
-    else:
-        return 0
-
-
-def pack_uint64(value):
-    assert value is None or (type(value) == int and value >= 0 and value < 2**64)
-
-    if value:
-        data = web3.Web3.toBytes(value)
-        return b'\x00' * (8 - len(data)) + data
-    else:
-        return b'\x00' * 8
+        if value:
+            data = web3.Web3.toBytes(value)
+            return b'\x00' * (16 - len(data)) + data
+        else:
+            return b'\x00' * 16
 
 
-class uint64(object):
-    def __init__(self, data=None):
-        self._data = data or b'\x00' * 8
+    class uint128(object):
+        def __init__(self, data=None):
+            self._data = data or b'\x00' * 16
 
-    @property
-    def value(self):
-        return unpack_uint64(self._data)
+        @property
+        def value(self):
+            return unpack_uint128(self._data)
 
-    @value.setter
-    def value(self, value):
-        self._data = pack_uint64(value)
+        @value.setter
+        def value(self, value):
+            self._data = pack_uint128(value)
 
-    def serialize(self):
-        return self._data
+        def serialize(self):
+            return self._data
+
+
+    def unpack_uint64(data):
+        assert data is None or (type(data) == bytes and len(data) == 8)
+
+        if data:
+            return web3.Web3.toInt(data)
+        else:
+            return 0
+
+
+    def pack_uint64(value):
+        assert value is None or (type(value) == int and value >= 0 and value < 2**64)
+
+        if value:
+            data = web3.Web3.toBytes(value)
+            return b'\x00' * (8 - len(data)) + data
+        else:
+            return b'\x00' * 8
+
+
+    class uint64(object):
+        def __init__(self, data=None):
+            self._data = data or b'\x00' * 8
+
+        @property
+        def value(self):
+            return unpack_uint64(self._data)
+
+        @value.setter
+        def value(self, value):
+            self._data = pack_uint64(value)
+
+        def serialize(self):
+            return self._data
 
 
 class address(object):
