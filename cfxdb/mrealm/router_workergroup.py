@@ -9,10 +9,9 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
 from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
+from zlmdb import datetime64
 
 
 class RouterWorkerGroup(ConfigurationElement):
@@ -28,7 +27,7 @@ class RouterWorkerGroup(ConfigurationElement):
                  name: Optional[str] = None,
                  scale: Optional[int] = None,
                  status: Optional[int] = None,
-                 changed: Optional[np.datetime64] = None,
+                 changed: Optional[datetime64] = None,
                  _unknown=None):
         """
 
@@ -132,7 +131,7 @@ class RouterWorkerGroup(ConfigurationElement):
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
         if changed:
-            changed = np.datetime64(changed, 'ns')
+            changed = datetime64(changed)
 
         obj = RouterWorkerGroup(oid=obj.oid,
                                 label=obj.label,

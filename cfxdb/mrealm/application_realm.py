@@ -9,10 +9,9 @@ from typing import Optional, List, Any, Dict
 from uuid import UUID
 import pprint
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.arealm.ApplicationRealmStatus import ApplicationRealmStatus
+from zlmdb import datetime64
 
 
 class ApplicationRealm(ConfigurationElement):
@@ -60,7 +59,7 @@ class ApplicationRealm(ConfigurationElement):
                  workergroup_oid: Optional[UUID] = None,
                  webcluster_oid: Optional[UUID] = None,
                  datamarket_oid: Optional[UUID] = None,
-                 changed: Optional[np.datetime64] = None,
+                 changed: Optional[datetime64] = None,
                  owner_oid: Optional[UUID] = None,
                  _unknown: Optional[Any] = None):
         """
@@ -243,7 +242,7 @@ class ApplicationRealm(ConfigurationElement):
         changed = data.get('changed', None)
         assert changed is None or type(changed) == int
         if changed:
-            changed = np.datetime64(changed, 'ns')
+            changed = datetime64(changed)
 
         obj = ApplicationRealm(oid=obj.oid,
                                label=obj.label,

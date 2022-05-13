@@ -10,8 +10,6 @@ import random
 import timeit
 import uuid
 
-import numpy as np
-
 import txaio
 txaio.use_twisted()  # noqa
 
@@ -20,13 +18,14 @@ import flatbuffers
 import pytest
 
 from cfxdb.xbrmm import Channel
+from zlmdb import datetime64
 
 
 def fill_channel(channel):
     channel.market_oid = uuid.uuid4()
     channel.member_oid = uuid.uuid4()
     channel.channel_oid = uuid.uuid4()
-    channel.timestamp = np.datetime64(time_ns(), 'ns')
+    channel.timestamp = datetime64(time_ns())
     channel.open_at = random.randint(1, 2**256 - 1)
     channel.seq = random.randint(1, 2**32 - 1)
     channel.channel_type = random.randint(1, 2)

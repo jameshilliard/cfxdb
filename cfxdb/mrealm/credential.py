@@ -10,9 +10,8 @@ import pprint
 import binascii
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb._exception import InvalidConfigException
+from zlmdb import datetime64
 
 
 class Credential(object):
@@ -21,7 +20,7 @@ class Credential(object):
     """
     def __init__(self,
                  oid: Optional[UUID] = None,
-                 created: Optional[np.datetime64] = None,
+                 created: Optional[datetime64] = None,
                  authmethod: Optional[str] = None,
                  authid: Optional[str] = None,
                  realm: Optional[str] = None,
@@ -153,7 +152,7 @@ class Credential(object):
         created = data.get('created', None)
         assert created is None or type(created) == int
         if created:
-            created = np.datetime64(created, 'ns')
+            created = datetime64(created)
 
         authmethod = data.get('authmethod', None)
         assert authmethod is None or type(authmethod) == str

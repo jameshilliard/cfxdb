@@ -15,17 +15,17 @@ txaio.use_twisted()  # noqa
 
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbr import Member
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 
 def fill_member(member):
     member.address = os.urandom(20)
     member.account_oid = uuid.uuid4()
-    member.timestamp = np.datetime64(time_ns(), 'ns')
+    member.timestamp = datetime64(time_ns())
     member.registered = random.randint(0, 2**256 - 1)
     member.eula = _gen_ipfs_hash()
     member.profile = _gen_ipfs_hash()

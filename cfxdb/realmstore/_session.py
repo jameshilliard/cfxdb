@@ -11,9 +11,8 @@ from typing import Optional, Dict, Any
 import pprint
 
 import flatbuffers
-import numpy as np
 
-from zlmdb import table, MapUuidFlatBuffers, MapUint64TimestampUuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapUint64TimestampUuid
 from cfxdb.gen.realmstore import Session as SessionGen
 
 
@@ -125,10 +124,10 @@ class Session(object):
         self._session: Optional[int] = None
 
         # uint64 (timestamp)
-        self._joined_at: Optional[np.datetime64] = None
+        self._joined_at: Optional[datetime64] = None
 
         # uint64 (timestamp)
-        self._left_at: Optional[np.datetime64] = None
+        self._left_at: Optional[datetime64] = None
 
         # [uint8] (uuid)
         self._node_oid: Optional[uuid.UUID] = None
@@ -254,31 +253,31 @@ class Session(object):
         self._session = value
 
     @property
-    def joined_at(self) -> Optional[np.datetime64]:
+    def joined_at(self) -> Optional[datetime64]:
         """
         Timestamp when the session was joined by the router. Epoch time in ns.
         """
         if self._joined_at is None and self._from_fbs:
-            self._joined_at = np.datetime64(self._from_fbs.JoinedAt(), 'ns')
+            self._joined_at = datetime64(self._from_fbs.JoinedAt())
         return self._joined_at
 
     @joined_at.setter
-    def joined_at(self, value: Optional[np.datetime64]):
-        assert value is None or isinstance(value, np.datetime64)
+    def joined_at(self, value: Optional[datetime64]):
+        assert value is None or isinstance(value, datetime64)
         self._joined_at = value
 
     @property
-    def left_at(self) -> Optional[np.datetime64]:
+    def left_at(self) -> Optional[datetime64]:
         """
         Timestamp when the session left the router. Epoch time in ns.
         """
         if self._left_at is None and self._from_fbs:
-            self._left_at = np.datetime64(self._from_fbs.LeftAt(), 'ns')
+            self._left_at = datetime64(self._from_fbs.LeftAt())
         return self._left_at
 
     @left_at.setter
-    def left_at(self, value: Optional[np.datetime64]):
-        assert value is None or isinstance(value, np.datetime64)
+    def left_at(self, value: Optional[datetime64]):
+        assert value is None or isinstance(value, datetime64)
         self._left_at = value
 
     @property

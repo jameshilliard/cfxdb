@@ -11,13 +11,13 @@ import uuid
 import timeit
 
 import flatbuffers
-import numpy as np
 
 from txaio import with_twisted, time_ns  # noqa
 
 from autobahn import util
 from autobahn.wamp.types import TransportDetails
 from cfxdb.realmstore import Session
+from zlmdb import datetime64
 
 DATA1 = {
     'authextra': {
@@ -136,8 +136,8 @@ def fill_session(session):
     session.arealm_oid = uuid.uuid4()
     session.oid = uuid.uuid4()
     session.session = util.id()
-    session.joined_at = np.datetime64(time_ns() - 723 * 10**9, 'ns')
-    session.left_at = np.datetime64(time_ns(), 'ns')
+    session.joined_at = datetime64(time_ns() - 723 * 10**9)
+    session.left_at = datetime64(time_ns())
     session.node_oid = uuid.uuid4()
     session.node_authid = 'intel-nuci7'
     session.worker_name = 'router1'

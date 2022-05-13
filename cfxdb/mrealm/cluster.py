@@ -9,10 +9,9 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
 from cfxdb.gen.mrealm.ClusterStatus import ClusterStatus
+from zlmdb import datetime64
 
 STATUS_BY_CODE = {
     ClusterStatus.NONE: 'NONE',
@@ -57,7 +56,7 @@ class Cluster(ConfigurationElement):
                  name: Optional[str] = None,
                  status: Optional[int] = None,
                  owner_oid: Optional[UUID] = None,
-                 changed: Optional[np.datetime64] = None,
+                 changed: Optional[datetime64] = None,
                  _unknown=None):
         """
 
@@ -154,7 +153,7 @@ class Cluster(ConfigurationElement):
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
         if changed:
-            changed = np.datetime64(changed, 'ns')
+            changed = datetime64(changed)
 
         obj = Cluster(oid=obj.oid,
                       label=obj.label,

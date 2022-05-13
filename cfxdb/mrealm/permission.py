@@ -9,9 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
+from zlmdb import datetime64
 
 
 class Permission(ConfigurationElement):
@@ -52,7 +51,7 @@ class Permission(ConfigurationElement):
                  disclose_caller: Optional[bool] = None,
                  disclose_publisher: Optional[bool] = None,
                  cache: Optional[bool] = None,
-                 created: Optional[np.datetime64] = None,
+                 created: Optional[datetime64] = None,
                  owner: Optional[UUID] = None,
                  _unknown=None):
         """
@@ -283,7 +282,7 @@ class Permission(ConfigurationElement):
         created = data.get('created', None)
         assert created is None or type(created) == int
         if created:
-            created = np.datetime64(created, 'ns')
+            created = datetime64(created)
 
         owner = data.get('owner', None)
         assert owner is None or type(owner) == str

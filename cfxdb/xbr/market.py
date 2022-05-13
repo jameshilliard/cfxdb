@@ -8,10 +8,9 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbr import Market as MarketGen
-from zlmdb import table, MapUuidFlatBuffers, MapBytes20TimestampUuid, MapBytes20Uuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapBytes20TimestampUuid, MapBytes20Uuid
 
 
 class _MarketGen(MarketGen.Market):
@@ -196,17 +195,17 @@ class Market(object):
         self._market = value
 
     @property
-    def timestamp(self) -> np.datetime64:
+    def timestamp(self) -> datetime64:
         """
         Database transaction time (epoch time in ns) of insert or last update.
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def timestamp(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property

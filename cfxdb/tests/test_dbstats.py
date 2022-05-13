@@ -12,7 +12,6 @@ import shutil
 import tempfile
 from txaio import time_ns
 
-import numpy as np
 import pytest
 
 import txaio
@@ -22,12 +21,13 @@ import zlmdb
 
 from cfxdb.globalschema import GlobalSchema
 from cfxdb.usage import MasterNodeUsage
+from zlmdb import datetime64
 
 
 def fill_usage(usage):
-    usage.timestamp = np.datetime64(time_ns(), 'ns')
+    usage.timestamp = datetime64(time_ns())
     usage.mrealm_id = uuid.uuid4()
-    usage.timestamp_from = np.datetime64(usage.timestamp - np.timedelta64(10, 'm'), 'ns')
+    usage.timestamp_from = datetime64(int(usage.timestamp) - (10 * 60000000000))
     usage.pubkey = os.urandom(32)
 
     usage.client_ip_version = random.choice([4, 6])
@@ -38,8 +38,8 @@ def fill_usage(usage):
     usage.client_ip_port = random.randint(1, 2**16 - 1)
 
     usage.seq = random.randint(0, 1000000)
-    usage.sent = np.datetime64(time_ns() - random.randint(0, 10**10), 'ns')
-    usage.processed = np.datetime64(time_ns() + random.randint(0, 10**10), 'ns')
+    usage.sent = datetime64(time_ns() - random.randint(0, 10**10))
+    usage.processed = datetime64(time_ns() + random.randint(0, 10**10))
     usage.status = random.randint(0, 3)
     usage.status_message = 'hello world {}'.format(uuid.uuid4())
     usage.metering_id = uuid.uuid4()

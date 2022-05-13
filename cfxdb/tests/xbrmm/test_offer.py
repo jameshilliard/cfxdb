@@ -16,15 +16,15 @@ txaio.use_twisted()  # noqa
 from autobahn import util
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbrmm import Offer
+from zlmdb import datetime64
 
 
 def fill_offer(offer):
     now = time_ns()
-    offer.timestamp = np.datetime64(now, 'ns')
+    offer.timestamp = datetime64(now)
     offer.offer = uuid.uuid4()
     offer.seller = os.urandom(20)
     offer.seller_session_id = random.randint(0, 2**53)
@@ -32,14 +32,14 @@ def fill_offer(offer):
     offer.key = uuid.uuid4()
     offer.api = uuid.uuid4()
     offer.uri = 'com.example.something.add2'
-    offer.valid_from = np.datetime64(now, 'ns')
+    offer.valid_from = datetime64(now)
     offer.signature = os.urandom(64)
     offer.price = random.randint(0, 2**256 - 1)
     offer.categories = {
         'xtile': '{:05}'.format(random.randint(0, 99999)),
         'ytile': '{:05}'.format(random.randint(0, 99999)),
     }
-    offer.expires = np.datetime64(now + 60 * 60 * 10**9, 'ns')
+    offer.expires = datetime64(now + 60 * 60 * 10**9)
     offer.copies = 1000
     offer.remaining = random.randint(0, 1000)
 
@@ -115,7 +115,7 @@ def test_offer_empty(builder):
     # create python object from bytes (flatbuffes)
     _offer = Offer.cast(data)
 
-    unix_zero = np.datetime64(0, 'ns')
+    unix_zero = datetime64(0)
 
     assert _offer.timestamp == unix_zero
     assert _offer.offer is None

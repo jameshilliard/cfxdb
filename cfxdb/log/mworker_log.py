@@ -9,10 +9,10 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.gen.log import MWorkerLog as MWorkerLogGen
+from zlmdb import datetime64
 
 
 class _MWorkerLogGen(MWorkerLogGen.MWorkerLog):
@@ -234,12 +234,12 @@ class MWorkerLog(object):
         assert 'type' in heartbeat and type(heartbeat['type']) == str
 
         obj = MWorkerLog()
-        obj._timestamp = np.datetime64(time_ns(), 'ns')
+        obj._timestamp = datetime64(time_ns())
         obj._period = heartbeat.get('period', None)
         obj._mrealm_id = mrealm_id
         obj._node_id = node_id
         obj._worker_id = worker_id
-        obj._sent = np.datetime64(heartbeat['timestamp'], 'ns') if heartbeat.get('timestamp', None) else None
+        obj._sent = datetime64(heartbeat['timestamp']) if heartbeat.get('timestamp', None) else None
         obj._seq = heartbeat.get('seq', None)
         obj._type = MWorkerLog.WORKER_TYPES.get(heartbeat.get('type', None), None)
         obj._state = heartbeat.get('state', None)
@@ -361,12 +361,12 @@ class MWorkerLog(object):
     @property
     def timestamp(self):
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
     def timestamp(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property
@@ -444,12 +444,12 @@ class MWorkerLog(object):
     @property
     def sent(self):
         if self._sent is None and self._from_fbs:
-            self._sent = np.datetime64(self._from_fbs.Sent(), 'ns')
+            self._sent = datetime64(self._from_fbs.Sent())
         return self._sent
 
     @sent.setter
     def sent(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._sent = value
 
     @property

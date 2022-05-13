@@ -10,9 +10,8 @@ from uuid import UUID
 
 import cbor2
 import flatbuffers
-import numpy as np
 from cfxdb.gen.meta import Attribute as AttributeGen
-from zlmdb import table, MapUuidUuidStringFlatBuffers
+from zlmdb import datetime64, table, MapUuidUuidStringFlatBuffers
 
 
 class _AttributeGen(AttributeGen.Attribute):
@@ -137,17 +136,17 @@ class Attribute(object):
         self._attribute = value
 
     @property
-    def modified(self) -> np.datetime64:
+    def modified(self) -> datetime64:
         """
         Timestamp when the attribute was last modified (or first created).
         """
         if self._modified is None and self._from_fbs:
-            self._modified = np.datetime64(self._from_fbs.Modified(), 'ns')
+            self._modified = datetime64(self._from_fbs.Modified())
         return self._modified
 
     @modified.setter
-    def modified(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def modified(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._modified = value
 
     @property

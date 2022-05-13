@@ -9,10 +9,9 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from autobahn.xbr import unpack_uint256, pack_uint256
 from cfxdb.gen.xbrnetwork import Account as AccountGen
-from zlmdb import table, MapUuidFlatBuffers, MapStringUuid, MapBytes20Uuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapStringUuid, MapBytes20Uuid
 
 
 class _AccountGen(AccountGen.Account):
@@ -211,17 +210,17 @@ class Account(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def recovery_algo(self) -> np.datetime64:
+    def recovery_algo(self) -> datetime64:
         """
         Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @recovery_algo.setter
-    def recovery_algo(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def recovery_algo(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -273,17 +272,17 @@ class Account(object):
         self._oid = value
 
     @property
-    def created(self) -> np.datetime64:
+    def created(self) -> datetime64:
         """
         Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @created.setter
-    def created(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def created(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -319,17 +318,17 @@ class Account(object):
         self._email = value
 
     @property
-    def email_verified(self) -> np.datetime64:
+    def email_verified(self) -> datetime64:
         """
         Timestamp (epoch time in ns) when the user email was (last) verified or 0 if unverified.
         """
         if self._email_verified is None and self._from_fbs:
-            self._email_verified = np.datetime64(self._from_fbs.EmailVerified(), 'ns')
+            self._email_verified = datetime64(self._from_fbs.EmailVerified())
         return self._email_verified
 
     @email_verified.setter
-    def email_verified(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def email_verified(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._email_verified = value
 
     @property
@@ -519,7 +518,7 @@ class Accounts(MapUuidFlatBuffers):
         created = None
         if 'created' in data:
             assert type(data['created'] == int)
-            created = np.datetime64(data['created'], 'ns')
+            created = datetime64(data['created'])
 
         username = None
         if 'username' in data:
@@ -534,7 +533,7 @@ class Accounts(MapUuidFlatBuffers):
         email_verified = None
         if 'email_verified' in data:
             assert type(data['email_verified'] == int)
-            email_verified = np.datetime64(data['email_verified'], 'ns')
+            email_verified = datetime64(data['email_verified'])
 
         wallet_type = None
         if 'wallet_type' in data:

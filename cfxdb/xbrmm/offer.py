@@ -9,10 +9,9 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbrmm import Offer as OfferGen
-from zlmdb import table, MapUuidFlatBuffers, MapUuidUuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapUuidUuid
 
 
 class _OfferGen(OfferGen.Offer):
@@ -161,17 +160,17 @@ class Offer(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def timestamp(self) -> np.datetime64:
+    def timestamp(self) -> datetime64:
         """
         Offer transaction time (epoch time in ns)
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def timestamp(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property
@@ -284,17 +283,17 @@ class Offer(object):
         self._uri = value
 
     @property
-    def valid_from(self) -> np.datetime64:
+    def valid_from(self) -> datetime64:
         """
         Timestamp from which the offer is valid (epoch time in ns).
         """
         if self._valid_from is None and self._from_fbs:
-            self._valid_from = np.datetime64(self._from_fbs.ValidFrom(), 'ns')
+            self._valid_from = datetime64(self._from_fbs.ValidFrom())
         return self._valid_from
 
     @valid_from.setter
-    def valid_from(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def valid_from(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._valid_from = value
 
     @property
@@ -355,17 +354,17 @@ class Offer(object):
         self._categories = values
 
     @property
-    def expires(self) -> np.datetime64:
+    def expires(self) -> datetime64:
         """
         Optional data at which this offer expires (epoch time in ns).
         """
         if self._expires is None and self._from_fbs:
-            self._expires = np.datetime64(self._from_fbs.Expires(), 'ns')
+            self._expires = datetime64(self._from_fbs.Expires())
         return self._expires
 
     @expires.setter
-    def expires(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def expires(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._expires = value
 
     @property

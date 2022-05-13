@@ -9,11 +9,10 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from cfxdb import unpack_uint256, pack_uint256
 from cfxdb.gen.xbr import Member as MemberGen
 from cfxdb.gen.xbr.MemberLevel import MemberLevel
-from zlmdb import table, MapBytes20FlatBuffers
+from zlmdb import datetime64, table, MapBytes20FlatBuffers
 
 
 class _MemberGen(MemberGen.Member):
@@ -155,17 +154,17 @@ class Member(object):
         self._account_oid = value
 
     @property
-    def timestamp(self) -> np.datetime64:
+    def timestamp(self) -> datetime64:
         """
         Database transaction time (epoch time in ns) of insert or last update.
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def timestamp(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property
