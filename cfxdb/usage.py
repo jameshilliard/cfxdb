@@ -9,7 +9,8 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
+
+from zlmdb import datetime64
 
 from txaio import time_ns
 
@@ -170,16 +171,16 @@ class MasterNodeUsage(object):
             timestamp) == int, '"timestamp" must have type int, but was "{}"'.format(type(timestamp))
         if timestamp is None:
             # set current time as default
-            obj._timestamp = np.datetime64(time_ns(), 'ns')
+            obj._timestamp = datetime64(time_ns())
         else:
             # set the value contained in the parsed data
-            obj._timestamp = np.datetime64(timestamp, 'ns')
+            obj._timestamp = datetime64(timestamp)
 
         timestamp_from = data.get('timestamp_from', None)
         assert timestamp_from is None or type(
             timestamp_from) == int, '"timestamp_from" must have type int, but was "{}"'.format(
                 type(timestamp_from))
-        obj._timestamp_from = np.datetime64(timestamp_from, 'ns') if timestamp_from is not None else None
+        obj._timestamp_from = datetime64(timestamp_from) if timestamp_from is not None else None
 
         mrealm_id = data.get('mrealm_id', None)
         assert mrealm_id is None or type(
@@ -227,12 +228,12 @@ class MasterNodeUsage(object):
         sent = data.get('sent', None)
         assert sent is None or type(sent) == int, '"sent" must have type int, but was "{}"'.format(type(sent))
         if sent is not None:
-            obj._sent = np.datetime64(sent, 'ns') if sent else None
+            obj._sent = datetime64(sent) if sent else None
 
         processed = data.get('processed', None)
         assert processed is None or type(
             processed) == int, '"processed" must have type int, but was "{}"'.format(type(processed))
-        obj._processed = np.datetime64(processed, 'ns') if processed else None
+        obj._processed = datetime64(processed) if processed else None
 
         status = data.get('status', 0)
         assert status is None or (type(status) == int
@@ -352,12 +353,12 @@ class MasterNodeUsage(object):
         :return: Timestamp when usage was recorded (at the node of recording).
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
     def timestamp(self, value):
-        assert isinstance(value, np.datetime64)
+        assert isinstance(value, datetime64)
         self._timestamp = value
 
     @property
@@ -367,12 +368,12 @@ class MasterNodeUsage(object):
         :return:
         """
         if self._timestamp_from is None and self._from_fbs:
-            self._timestamp_from = np.datetime64(self._from_fbs.TimestampFrom(), 'ns')
+            self._timestamp_from = datetime64(self._from_fbs.TimestampFrom())
         return self._timestamp_from
 
     @timestamp_from.setter
     def timestamp_from(self, value):
-        assert isinstance(value, np.datetime64)
+        assert isinstance(value, datetime64)
         self._timestamp_from = value
 
     @property
@@ -495,12 +496,12 @@ class MasterNodeUsage(object):
         :return:
         """
         if self._sent is None and self._from_fbs:
-            self._sent = np.datetime64(self._from_fbs.Sent(), 'ns')
+            self._sent = datetime64(self._from_fbs.Sent())
         return self._sent
 
     @sent.setter
     def sent(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._sent = value
 
     @property
@@ -510,12 +511,12 @@ class MasterNodeUsage(object):
         :return:
         """
         if self._processed is None and self._from_fbs:
-            self._processed = np.datetime64(self._from_fbs.Processed(), 'ns')
+            self._processed = datetime64(self._from_fbs.Processed())
         return self._processed
 
     @processed.setter
     def processed(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._processed = value
 
     @property
@@ -934,13 +935,13 @@ class MasterNodeUsage(object):
         MasterNodeUsageGen.MasterNodeUsageStart(builder)
 
         if self.timestamp is not None:
-            MasterNodeUsageGen.MasterNodeUsageAddTimestamp(builder, self.timestamp.astype('long'))
+            MasterNodeUsageGen.MasterNodeUsageAddTimestamp(builder, int(self.timestamp))
 
         if mrealm_id:
             MasterNodeUsageGen.MasterNodeUsageAddMrealmId(builder, mrealm_id)
 
         if self.timestamp_from is not None:
-            MasterNodeUsageGen.MasterNodeUsageAddTimestampFrom(builder, self.timestamp_from.astype('long'))
+            MasterNodeUsageGen.MasterNodeUsageAddTimestampFrom(builder, int(self.timestamp_from))
 
         if pubkey:
             MasterNodeUsageGen.MasterNodeUsageAddPubkey(builder, pubkey)
@@ -958,10 +959,10 @@ class MasterNodeUsage(object):
             MasterNodeUsageGen.MasterNodeUsageAddSeq(builder, self.seq)
 
         if self.sent is not None:
-            MasterNodeUsageGen.MasterNodeUsageAddSent(builder, self.sent.astype('long'))
+            MasterNodeUsageGen.MasterNodeUsageAddSent(builder, int(self.sent))
 
         if self.processed is not None:
-            MasterNodeUsageGen.MasterNodeUsageAddProcessed(builder, self.processed.astype('long'))
+            MasterNodeUsageGen.MasterNodeUsageAddProcessed(builder, int(self.processed))
 
         if self.status:
             MasterNodeUsageGen.MasterNodeUsageAddStatus(builder, self.status)

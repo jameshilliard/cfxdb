@@ -11,7 +11,6 @@ import pytest
 import timeit
 import uuid
 
-import numpy as np
 import flatbuffers
 
 import zlmdb
@@ -23,6 +22,7 @@ from txaio import time_ns
 
 from cfxdb.xbr.api import Api
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 zlmdb.TABLES_BY_UUID = {}
 
@@ -30,7 +30,7 @@ zlmdb.TABLES_BY_UUID = {}
 def fill_api(api):
     api.oid = uuid.uuid4()
     api.catalog_oid = uuid.uuid4()
-    api.timestamp = np.datetime64(time_ns(), 'ns')
+    api.timestamp = datetime64(time_ns())
     api.published = random.randint(0, 2**256 - 1)
     api.schema = _gen_ipfs_hash()
     api.meta = _gen_ipfs_hash()

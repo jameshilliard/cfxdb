@@ -11,9 +11,8 @@ from typing import Optional, Dict, Any
 
 import cbor2
 import flatbuffers
-import numpy as np
 
-from zlmdb import table, MapUuidFlatBuffers, MapStringUuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapStringUuid
 from cfxdb.gen.cookiestore import Cookie as CookieGen
 
 
@@ -158,17 +157,17 @@ class Cookie(object):
         self._oid = value
 
     @property
-    def created(self) -> np.datetime64:
+    def created(self) -> datetime64:
         """
         Timestamp when the cookie was created. Epoch time in ns.
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @created.setter
-    def created(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def created(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -217,17 +216,17 @@ class Cookie(object):
         self._value = value
 
     @property
-    def authenticated(self) -> np.datetime64:
+    def authenticated(self) -> datetime64:
         """
         Timestamp when the cookie was authenticated (if any). Epoch time in ns.
         """
         if self._authenticated is None and self._from_fbs:
-            self._authenticated = np.datetime64(self._from_fbs.Authenticated(), 'ns')
+            self._authenticated = datetime64(self._from_fbs.Authenticated())
         return self._authenticated
 
     @authenticated.setter
-    def authenticated(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def authenticated(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._authenticated = value
 
     @property
@@ -294,17 +293,17 @@ class Cookie(object):
         self._authenticated_session = value
 
     @property
-    def authenticated_joined_at(self) -> np.datetime64:
+    def authenticated_joined_at(self) -> datetime64:
         """
         Timestamp when the original authenticating session was welcome by the router. Epoch time in ns.
         """
         if self._authenticated_joined_at is None and self._from_fbs:
-            self._authenticated_joined_at = np.datetime64(self._from_fbs.AuthenticatedJoinedAt(), 'ns')
+            self._authenticated_joined_at = datetime64(self._from_fbs.AuthenticatedJoinedAt())
         return self._authenticated_joined_at
 
     @authenticated_joined_at.setter
-    def authenticated_joined_at(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def authenticated_joined_at(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._authenticated_joined_at = value
 
     @property

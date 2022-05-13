@@ -11,7 +11,6 @@ import pytest
 import timeit
 import uuid
 
-import numpy as np
 import flatbuffers
 
 import zlmdb
@@ -23,13 +22,14 @@ from txaio import time_ns
 
 from cfxdb.xbr.catalog import Catalog
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 zlmdb.TABLES_BY_UUID = {}
 
 
 def fill_catalog(catalog):
     catalog.oid = uuid.uuid4()
-    catalog.timestamp = np.datetime64(time_ns(), 'ns')
+    catalog.timestamp = datetime64(time_ns())
     catalog.seq = random.randint(1, 2**32 - 1)
     catalog.owner = os.urandom(20)
     catalog.terms = _gen_ipfs_hash()

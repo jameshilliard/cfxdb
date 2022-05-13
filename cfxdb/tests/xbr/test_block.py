@@ -12,14 +12,14 @@ import timeit
 from txaio import with_twisted  # noqa
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbr import Block
+from zlmdb import datetime64
 
 
 def fill_block(block: Block):
-    block.timestamp = np.datetime64(time_ns(), 'ns')
+    block.timestamp = datetime64(time_ns())
     block.block_number = random.randint(0, 2**256 - 1)
     block.block_hash = os.urandom(32)
     block.cnt_events = random.randint(1, 2**32 - 1)

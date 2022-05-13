@@ -1,8 +1,8 @@
-git+https://github.com/crossbario/autobahn-python.git@master#egg=autobahn[twisted,xbr,serialization]
+git+https://github.com/jameshilliard/autobahn-python.git@datetime64#egg=autobahn[twisted,xbr,serialization]
 # autobahn[twisted,xbr,serialization]>=22.3.2
 
-git+https://github.com/crossbario/zlmdb.git@master#egg=zlmdb
-# zlmdb>=22.3.1
+git+https://github.com/jameshilliard/zlmdb.git@datetime64-type#egg=zlmdb
+# zlmdb>=22.4.1
 
 web3>=5.28.0
 argon2_cffi>=20.1.0

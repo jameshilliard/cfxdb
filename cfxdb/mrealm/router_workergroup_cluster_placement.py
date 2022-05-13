@@ -9,9 +9,8 @@ import uuid
 import pprint
 from typing import Optional
 
-import numpy as np
-
 from cfxdb.mrealm.types import STATUS_BY_CODE, STATUS_BY_NAME
+from zlmdb import datetime64
 
 
 class RouterWorkerGroupClusterPlacement(object):
@@ -26,7 +25,7 @@ class RouterWorkerGroupClusterPlacement(object):
                  node_oid: Optional[uuid.UUID] = None,
                  worker_name: Optional[str] = None,
                  status: Optional[int] = None,
-                 changed: Optional[np.datetime64] = None,
+                 changed: Optional[datetime64] = None,
                  tcp_listening_port: Optional[int] = None,
                  _unknown: Optional[dict] = None):
         """
@@ -159,7 +158,7 @@ class RouterWorkerGroupClusterPlacement(object):
         changed = data.get('changed', None)
         assert changed is None or (type(changed) == int)
         if changed:
-            changed = np.datetime64(changed, 'ns')
+            changed = datetime64(changed)
 
         tcp_listening_port = data.get('tcp_listening_port', None)
         assert tcp_listening_port is None or (type(tcp_listening_port) == int

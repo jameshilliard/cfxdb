@@ -9,9 +9,8 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from cfxdb.gen.xbrnetwork import UserKey as UserKeyGen
-from zlmdb import table, MapBytes32FlatBuffers, MapUuidTimestampBytes32
+from zlmdb import datetime64, table, MapBytes32FlatBuffers, MapUuidTimestampBytes32
 
 
 class _UserKeyGen(UserKeyGen.UserKey):
@@ -90,17 +89,17 @@ class UserKey(object):
         self._pubkey = value
 
     @property
-    def created(self) -> np.datetime64:
+    def created(self) -> datetime64:
         """
         Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @created.setter
-    def created(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def created(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -171,7 +170,7 @@ class UserKeys(MapBytes32FlatBuffers):
         created = None
         if 'created' in data:
             assert type(data['created'] == int)
-            created = np.datetime64(data['created'], 'ns')
+            created = datetime64(data['created'])
 
         owner = None
         if 'owner' in data:

@@ -8,10 +8,9 @@
 import pprint
 
 import flatbuffers
-import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbr import Block as BlockGen
-from zlmdb import table, MapBytes32FlatBuffers
+from zlmdb import datetime64, table, MapBytes32FlatBuffers
 
 
 class _BlockGen(BlockGen.Block):
@@ -76,17 +75,17 @@ class Block(object):
         return '\n{}\n'.format(pprint.pformat(self.marshal()))
 
     @property
-    def timestamp(self) -> np.datetime64:
+    def timestamp(self) -> datetime64:
         """
         Timestamp when record was inserted (Unix epoch time in ns).
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def timestamp(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property

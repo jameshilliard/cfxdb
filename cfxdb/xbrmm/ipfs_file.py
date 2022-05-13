@@ -8,8 +8,7 @@
 import pprint
 
 import flatbuffers
-import numpy as np
-from zlmdb import table, MapStringFlatBuffers
+from zlmdb import datetime64, table, MapStringFlatBuffers
 
 from cfxdb.gen.xbrmm import IPFSFile as IPFSFileGen
 
@@ -96,17 +95,17 @@ class IPFSFile:
         self._retries = value
 
     @property
-    def errored_at(self) -> np.datetime64:
+    def errored_at(self) -> datetime64:
         """
         Time of last time when downloaded errorred.
         """
         if self._errored_at is None and self._from_fbs:
-            self._errored_at = np.datetime64(self._from_fbs.ErroredAt(), 'ns')
+            self._errored_at = datetime64(self._from_fbs.ErroredAt())
         return self._errored_at
 
     @errored_at.setter
-    def errored_at(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def errored_at(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._errored_at = value
 
     @staticmethod

@@ -9,10 +9,10 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.gen.log import MNodeLog as MNodeLogGen
+from zlmdb import datetime64
 
 
 class _MNodeLogGen(MNodeLogGen.MNodeLog):
@@ -158,11 +158,11 @@ class MNodeLog(object):
         obj = MNodeLog()
         obj._mrealm_id = mrealm_id
         obj._node_id = node_id
-        obj._timestamp = np.datetime64(time_ns(), 'ns')
+        obj._timestamp = datetime64(time_ns())
         obj._period = heartbeat.get('period', None)
         obj._state = heartbeat.get('state', None)
         obj._session = heartbeat.get('session', None)
-        obj._sent = np.datetime64(heartbeat['timestamp'], 'ns') if heartbeat.get('timestamp', None) else None
+        obj._sent = datetime64(heartbeat['timestamp']) if heartbeat.get('timestamp', None) else None
         obj._seq = heartbeat.get('seq', None)
 
         workers = heartbeat.get('workers', {})
@@ -316,12 +316,12 @@ class MNodeLog(object):
     @property
     def timestamp(self):
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
     def timestamp(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property
@@ -392,12 +392,12 @@ class MNodeLog(object):
     @property
     def sent(self):
         if self._sent is None and self._from_fbs:
-            self._sent = np.datetime64(self._from_fbs.Sent(), 'ns')
+            self._sent = datetime64(self._from_fbs.Sent())
         return self._sent
 
     @sent.setter
     def sent(self, value):
-        assert value is None or isinstance(value, np.datetime64)
+        assert value is None or isinstance(value, datetime64)
         self._sent = value
 
     @property

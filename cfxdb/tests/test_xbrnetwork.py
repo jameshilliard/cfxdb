@@ -11,7 +11,6 @@ import random
 import timeit
 import pytest
 
-import numpy as np
 import flatbuffers
 
 import zlmdb
@@ -22,6 +21,7 @@ txaio.use_twisted()  # noqa
 from txaio import time_ns
 from autobahn.util import generate_activation_code
 from cfxdb.xbrnetwork import Account, VerifiedAction, UserKey
+from zlmdb import datetime64
 
 from cfxdb.tests._util import _gen_ipfs_hash
 
@@ -42,10 +42,10 @@ def builder():
 def fill_account(account):
     now = time_ns()
     account.oid = uuid.uuid4()
-    account.created = np.datetime64(now, 'ns')
+    account.created = datetime64(now)
     account.username = 'user{}'.format(random.randint(0, 1000))
     account.email = '{}@example.com'.format(account.username)
-    account.email_verified = np.datetime64(now + random.randint(10 * 10**9, 60 * 10**9), 'ns')
+    account.email_verified = datetime64(now + random.randint(10 * 10**9, 60 * 10**9))
     account.wallet_type = random.randint(1, 3)
     account.wallet_address = os.urandom(20)
     account.registered = random.randint(0, 2**256 - 1)
@@ -132,7 +132,7 @@ def test_account_roundtrip_perf(account, builder):
 
 def fill_vaction(vaction):
     vaction.oid = uuid.uuid4()
-    vaction.created = np.datetime64(time_ns(), 'ns')
+    vaction.created = datetime64(time_ns())
     vaction.vtype = random.randint(1, 4)
     vaction.vstatus = random.randint(1, 4)
     vaction.vcode = generate_activation_code()
@@ -215,7 +215,7 @@ def test_vaction_roundtrip_perf(vaction, builder):
 
 def fill_userkey(userkey):
     userkey.pubkey = os.urandom(32)
-    userkey.created = np.datetime64(time_ns(), 'ns')
+    userkey.created = datetime64(time_ns())
     userkey.owner = uuid.uuid4()
 
 

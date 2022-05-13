@@ -15,16 +15,16 @@ txaio.use_twisted()  # noqa
 
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbr import Market
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 
 def fill_market(market):
     market.market = uuid.uuid4()
-    market.timestamp = np.datetime64(time_ns(), 'ns')
+    market.timestamp = datetime64(time_ns())
     market.seq = random.randint(1, 2**32 - 1)
     market.owner = os.urandom(20)
     market.coin = os.urandom(20)

@@ -10,9 +10,8 @@ import uuid
 
 import cbor2
 import flatbuffers
-import numpy as np
 from cfxdb.gen.xbrnetwork import VerifiedAction as VerifiedActionGen
-from zlmdb import table, MapUuidFlatBuffers
+from zlmdb import datetime64, table, MapUuidFlatBuffers
 
 
 class _VerifiedActionGen(VerifiedActionGen.VerifiedAction):
@@ -218,17 +217,17 @@ class VerifiedAction(object):
         self._oid = value
 
     @property
-    def created(self) -> np.datetime64:
+    def created(self) -> datetime64:
         """
         Timestamp (epoch time in ns) of initial creation of this record.
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @created.setter
-    def created(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def created(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -381,7 +380,7 @@ class VerifiedActions(MapUuidFlatBuffers):
         created = None
         if 'created' in data:
             assert type(data['created'] == int)
-            created = np.datetime64(data['created'], 'ns')
+            created = datetime64(data['created'])
 
         vtype = None
         if 'vtype' in data:

@@ -9,10 +9,9 @@ import pprint
 import uuid
 
 import flatbuffers
-import numpy as np
 from cfxdb import pack_uint256, unpack_uint256
 from cfxdb.gen.xbrmm import Transaction as TransactionGen
-from zlmdb import table, MapUuidFlatBuffers
+from zlmdb import datetime64, table, MapUuidFlatBuffers
 
 
 class _TransactionGen(TransactionGen.Transaction):
@@ -267,17 +266,17 @@ class Transaction(object):
         self._tid = value
 
     @property
-    def created(self) -> np.datetime64:
+    def created(self) -> datetime64:
         """
         Creation time of the transaction (epoch time in ns).
         """
         if self._created is None and self._from_fbs:
-            self._created = np.datetime64(self._from_fbs.Created(), 'ns')
+            self._created = datetime64(self._from_fbs.Created())
         return self._created
 
     @created.setter
-    def created(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def created(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._created = value
 
     @property
@@ -387,17 +386,17 @@ class Transaction(object):
         self._state = value
 
     @property
-    def completed(self) -> np.datetime64:
+    def completed(self) -> datetime64:
         """
         Completion time of the transaction (epoch time in ns)
         """
         if self._completed is None and self._from_fbs:
-            self._completed = np.datetime64(self._from_fbs.Completed(), 'ns')
+            self._completed = datetime64(self._from_fbs.Completed())
         return self._completed
 
     @completed.setter
-    def completed(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def completed(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._completed = value
 
     @property

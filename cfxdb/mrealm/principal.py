@@ -9,9 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
+from zlmdb import datetime64
 
 
 class Principal(ConfigurationElement):
@@ -166,7 +165,7 @@ class Principal(ConfigurationElement):
         modified = data.get('modified', None)
         assert modified is None or type(modified) == int
         if modified:
-            modified = np.datetime64(modified, 'ns')
+            modified = datetime64(modified)
 
         arealm_oid = data.get('arealm_oid', None)
         assert arealm_oid is None or type(arealm_oid) == str

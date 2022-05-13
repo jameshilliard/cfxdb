@@ -9,9 +9,8 @@ from typing import Optional, List
 import pprint
 from uuid import UUID
 
-import numpy as np
-
 from cfxdb.common import ConfigurationElement
+from zlmdb import datetime64
 
 
 class Role(ConfigurationElement):
@@ -25,7 +24,7 @@ class Role(ConfigurationElement):
                  description: Optional[str] = None,
                  tags: Optional[List[str]] = None,
                  name: Optional[str] = None,
-                 created: Optional[np.datetime64] = None,
+                 created: Optional[datetime64] = None,
                  owner: Optional[UUID] = None,
                  _unknown=None):
         """
@@ -143,7 +142,7 @@ class Role(ConfigurationElement):
         created = data.get('created', None)
         assert created is None or type(created) == int
         if created:
-            created = np.datetime64(created, 'ns')
+            created = datetime64(created)
 
         obj = Role(oid=obj.oid,
                    label=obj.label,

@@ -11,7 +11,6 @@ import pytest
 import timeit
 import uuid
 
-import numpy as np
 import flatbuffers
 
 import zlmdb
@@ -23,6 +22,7 @@ from txaio import time_ns
 
 from cfxdb.xbr.consent import Consent
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 zlmdb.TABLES_BY_UUID = {}
 
@@ -33,7 +33,7 @@ def fill_consent(consent):
     consent.delegate = os.urandom(20)
     consent.delegate_type = random.randint(1, 3)
     consent.catalog_oid = uuid.uuid4()
-    consent.timestamp = np.datetime64(time_ns(), 'ns')
+    consent.timestamp = datetime64(time_ns())
     consent.updated = random.randint(1, 2**256 - 1)
     consent.consent = True
     consent.synced = True

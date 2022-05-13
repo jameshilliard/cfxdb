@@ -15,24 +15,24 @@ txaio.use_twisted()  # noqa
 from autobahn import util
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.cookiestore import Cookie
+from zlmdb import datetime64
 
 
 def fill_cookie(cookie):
     cookie.oid = uuid.uuid4()
-    cookie.created = np.datetime64(time_ns(), 'ns')
+    cookie.created = datetime64(time_ns())
     cookie.max_age = random.randint(1, 10**10)
     cookie.name = random.choice(['cbtid1', 'cbtid2', 'cbtid3'])
     cookie.value = util.newid(24)
-    cookie.authenticated = np.datetime64(time_ns(), 'ns')
+    cookie.authenticated = datetime64(time_ns())
     cookie.authenticated_on_node = uuid.uuid4()
     cookie.authenticated_on_worker = random.choice(['worker1', 'worker2', 'worker3'])
     cookie.authenticated_transport_info = {'xoo': 'yar', 'zaz': [9, 8, 7]}
     cookie.authenticated_session = util.id()
-    cookie.authenticated_joined_at = np.datetime64(time_ns(), 'ns')
+    cookie.authenticated_joined_at = datetime64(time_ns())
     cookie.authenticated_authmethod = random.choice(['meth1', 'meth2', 'meth3'])
     cookie.authid = util.generate_token(4, 3)
     cookie.authrole = random.choice(['role1', 'role2', 'role3'])
@@ -116,7 +116,7 @@ def test_cookie_empty(builder):
     # create python object from bytes (flatbuffes)
     _cookie = Cookie.cast(data)
 
-    unix_zero = np.datetime64(0, 'ns')
+    unix_zero = datetime64(0)
 
     assert _cookie.oid is None
     assert _cookie.created == unix_zero

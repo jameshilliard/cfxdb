@@ -8,13 +8,12 @@
 import pprint
 
 from uuid import UUID
-import numpy as np
 
 import flatbuffers
 from cfxdb import unpack_uint256, pack_uint256
 from cfxdb.gen.xbrmm import ChannelType as ChannelTypeGen, ChannelState as ChannelStateGen, \
     Channel as ChannelGen, ChannelBalance as ChannelBalanceGen
-from zlmdb import table, MapUuidFlatBuffers, MapBytes20TimestampUuid
+from zlmdb import datetime64, table, MapUuidFlatBuffers, MapBytes20TimestampUuid
 
 ChannelType = ChannelTypeGen.ChannelType
 ChannelState = ChannelStateGen.ChannelState
@@ -263,17 +262,17 @@ class Channel(object):
         self._channel_oid = value
 
     @property
-    def timestamp(self) -> np.datetime64:
+    def timestamp(self) -> datetime64:
         """
         Database transaction time (epoch time in ns) of insert or last update.
         """
         if self._timestamp is None and self._from_fbs:
-            self._timestamp = np.datetime64(self._from_fbs.Timestamp(), 'ns')
+            self._timestamp = datetime64(self._from_fbs.Timestamp())
         return self._timestamp
 
     @timestamp.setter
-    def timestamp(self, value: np.datetime64):
-        assert value is None or isinstance(value, np.datetime64)
+    def timestamp(self, value: datetime64):
+        assert value is None or isinstance(value, datetime64)
         self._timestamp = value
 
     @property

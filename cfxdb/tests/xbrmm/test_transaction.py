@@ -15,16 +15,16 @@ txaio.use_twisted()  # noqa
 
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbrmm import Transaction
+from zlmdb import datetime64
 
 
 def fill_transaction(transaction):
     now = time_ns()
     transaction.tid = uuid.uuid4()
-    transaction.created = np.datetime64(now, 'ns')
+    transaction.created = datetime64(now)
     transaction.created_payment_channel_seq = random.randint(1, 1000)
     transaction.created_paying_channel_seq = random.randint(1, 1000)
     transaction.offer = uuid.uuid4()
@@ -32,7 +32,7 @@ def fill_transaction(transaction):
     transaction.payment_channel = uuid.uuid4()
     transaction.paying_channel = uuid.uuid4()
     transaction.state = random.randint(1, 3)
-    transaction.completed = np.datetime64(now, 'ns')
+    transaction.completed = datetime64(now)
     transaction.completed_payment_channel_seq = random.randint(1, 1000)
     transaction.completed_paying_channel_seq = random.randint(1, 1000)
     transaction.key = uuid.uuid4()
@@ -126,7 +126,7 @@ def test_transaction_empty(builder):
     # create python object from bytes (flatbuffes)
     transaction2 = Transaction.cast(data)
 
-    unix_zero = np.datetime64(0, 'ns')
+    unix_zero = datetime64(0)
 
     assert transaction2.tid is None
     assert transaction2.created == unix_zero

@@ -15,18 +15,18 @@ txaio.use_twisted()  # noqa
 
 import flatbuffers
 import pytest
-import numpy as np
 from txaio import time_ns
 
 from cfxdb.xbr import Actor
 from cfxdb.tests._util import _gen_ipfs_hash
+from zlmdb import datetime64
 
 
 def fill_actor(actor):
     actor.actor = os.urandom(20)
     actor.actor_type = random.randint(1, 2)
     actor.market = uuid.uuid4()
-    actor.timestamp = np.datetime64(time_ns(), 'ns')
+    actor.timestamp = datetime64(time_ns())
     actor.joined = random.randint(0, 2**256 - 1)
     actor.security = random.randint(0, 2**256 - 1)
     actor.meta = _gen_ipfs_hash()
